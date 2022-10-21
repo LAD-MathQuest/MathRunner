@@ -35,8 +35,6 @@ class GameObject(pygame.sprite.Sprite):
 #------------------------------------------------------------------------------#
 class Player(GameObject):
 
-    speed = 5
-
     #--------------------------------------------------------------------------#
     def __init__(self, world, gameObjectParam ):
 
@@ -44,6 +42,8 @@ class Player(GameObject):
 
         self.rect.centerx = int( (GameObject.track_right+GameObject.track_left)/2 )
         self.rect.bottom  = int(0.99*GameObject.track_bottom)
+
+        self.speed = world.player_speed
 
     #--------------------------------------------------------------------------#
     def update(self):
@@ -53,11 +53,11 @@ class Player(GameObject):
         if pressed_keys[K_q] or pressed_keys[K_ESCAPE]:
             pygame.event.post(pygame.event.Event(QUIT))
 
-        if pressed_keys[K_LEFT] and self.rect.left-Player.speed > GameObject.track_left:
-            self.rect.move_ip( -Player.speed, 0 )
+        if pressed_keys[K_LEFT] and self.rect.left-self.speed > GameObject.track_left:
+            self.rect.move_ip( -self.speed, 0 )
 
-        if pressed_keys[K_RIGHT] and self.rect.right+Player.speed < GameObject.track_right:
-            self.rect.move_ip( Player.speed, 0 )
+        if pressed_keys[K_RIGHT] and self.rect.right+self.speed < GameObject.track_right:
+            self.rect.move_ip( self.speed, 0 )
 
 #------------------------------------------------------------------------------#
 class ScrollingObject(GameObject):

@@ -8,6 +8,7 @@ import time
 
 from   world  import World
 import objects
+from   onscreentext import OnScreenText
 
 #------------------------------------------------------------------------------#
 class Engine:
@@ -16,20 +17,22 @@ class Engine:
     def __init__( self, world ):
 
         self.world = world
-
+        
         # Create the display background
         self.display = pygame.display.set_mode( world.size, pygame.FULLSCREEN )
 
-        self.font = pygame.font.SysFont( self.world.ost_font, self.world.ost_small )
-        
+        # Create the on screen text to show the score
+        self.ost = OnScreenText( world.ost_area, 3, 2, world.ost_fgcolor, world.ost_bgcolor )
+        self.ost.column_width( ['Velocidade: ', '000 000'] )
+
         self.event_game_over      = pygame.USEREVENT + 1
         self.event_increase_speed = pygame.USEREVENT + 2
         self.event_new_enemy      = pygame.USEREVENT + 3
         self.event_new_treasure   = pygame.USEREVENT + 4
     
-        pygame.time.set_timer( self.event_increase_speed, 2000 )
-        pygame.time.set_timer( self.event_new_enemy,       500 )
-        pygame.time.set_timer( self.event_new_treasure,   3777 )
+        pygame.time.set_timer( self.event_increase_speed, 1000 )
+        pygame.time.set_timer( self.event_new_enemy,    self.world.enemies_min_time )
+        pygame.time.set_timer( self.event_new_treasure, self.world.treasures_min_time )
 
     #--------------------------------------------------------------------------#
     def wait( self ):
@@ -87,26 +90,17 @@ class Engine:
         self.display.blit( self.world.background, (0,0) )
 
         # Writing the score
+        self.display.fill( self.ost.bgcolor, self.ost.area )
+        self.ost.draw( self.display, 0, 0, 'Pontos:'     )
+        self.ost.draw( self.display, 1, 0, 'Velocidade:' )
+        self.ost.draw( self.display, 2, 0, 'Tempo:'      )
+
         score = self.world.score_treasure * self.treasures       \
               + self.world.score_kill     * objects.Enemy.killed
 
-        score_str  = f'pontos: {score}'
-        score_surf = self.font.render( score_str, True, self.world.ost_color )
-
-        pos = score_surf.get_rect()
-
-        pos.left = int( 0.05 * self.world.size[0])
-        pos.top  = int( 0.10 * self.world.size[1])
-
-        self.display.blit( score_surf, pos )
-
-        # Writing the speed
-        speed_str  = f'velocidade: {objects.ScrollingObject.speed:.2f}'
-        speed_surf = self.font.render( speed_str, True, self.world.ost_color )
-
-        pos.top = pos.bottom + int( 0.01 * self.world.size[1])
-
-        self.display.blit( speed_surf, pos )
+        self.ost.draw( self.display, 0, 1, f'{score}', '>' )
+        self.ost.draw( self.display, 1, 1, f'{objects.ScrollingObject.speed:.2f}', '>' )
+        self.ost.draw( self.display, 2, 1, '?', '>' )
 
         objects.GameObject.sprites.draw( self.display )
         pygame.display.update()
@@ -114,13 +108,14 @@ class Engine:
     #--------------------------------------------------------------------------#
     def game_over( self ):
         
-        font = pygame.font.SysFont( self.world.ost_font, self.world.ost_large)
-        game_over = font.render("Game Over", True, (150,0,0) )
+        size = self.display.get_rect().height // 6
+        font = pygame.freetype.Font( None, size )
 
-        rect = game_over.get_rect()
+        self.display.fill( (60,60,60), None, BLEND_MULT )
+
+        rect = font.get_rect( 'Game Over' )
         rect.center = self.display.get_rect().center
-
-        self.display.blit( game_over, rect ) 
+        font.render_to( self.display, rect, None, (200,20,20) )
 
         pygame.display.update()
 
@@ -161,9 +156,15 @@ class Engine:
     #--------------------------------------------------------------------------#
     def new_enemy( self ):
         objects.Enemy( self.world, self.world.paramEnemy )
+        # pygame.time.set_timer( self.event_new_treasure,    \
+        #       random.randint( self.world.enemies_min_time, \
+        #                       self.world.enemies_max_time) )
 
     #--------------------------------------------------------------------------#
     def new_treasure( self ):
         objects.Treasure( self.world, self.world.paramTreasure )
+        # pygame.time.set_timer( self.event_new_treasure,       \
+        #        random.randint( self.world.treasures_min_time, \
+        #                        self.world.treasures_max_time) )
 
 #------------------------------------------------------------------------------#

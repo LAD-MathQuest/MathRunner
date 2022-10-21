@@ -27,6 +27,6 @@ while True:
 
     engine.new_enemy()
 
-    engine.game_loop()
+    engine.game_loop() 
 
 #------------------------------------------------------------------------------#
