@@ -50,14 +50,13 @@ class Player(GameObject):
 
         pressed_keys = pygame.key.get_pressed()
 
-        if pressed_keys[K_q] or pressed_keys[K_ESCAPE]:
-            pygame.event.post(pygame.event.Event(QUIT))
+        if pressed_keys[K_LEFT] or pressed_keys[K_a]:
+            if self.rect.left-self.speed > GameObject.track_left:
+              self.rect.move_ip( -self.speed, 0 )
 
-        if pressed_keys[K_LEFT] and self.rect.left-self.speed > GameObject.track_left:
-            self.rect.move_ip( -self.speed, 0 )
-
-        if pressed_keys[K_RIGHT] and self.rect.right+self.speed < GameObject.track_right:
-            self.rect.move_ip( self.speed, 0 )
+        elif pressed_keys[K_RIGHT] or pressed_keys[K_d]:
+            if self.rect.right+self.speed < GameObject.track_right:
+                self.rect.move_ip( self.speed, 0 )
 
 #------------------------------------------------------------------------------#
 class ScrollingObject(GameObject):

@@ -1,8 +1,6 @@
 #------------------------------------------------------------------------------#
 
-import sys
 import pygame
-from   pygame.locals import *
 import random
 import time
 
@@ -25,7 +23,7 @@ class Engine:
         self.ost = OnScreenText( world.ost_area, 3, 2, world.ost_fgcolor, world.ost_bgcolor )
         self.ost.column_width( ['Velocidade: ', '000 000'] )
 
-        self.event_game_over      = pygame.USEREVENT + 1
+        self.event_restart        = pygame.USEREVENT + 1
         self.event_increase_speed = pygame.USEREVENT + 2
         self.event_new_enemy      = pygame.USEREVENT + 3
         self.event_new_treasure   = pygame.USEREVENT + 4
@@ -38,11 +36,16 @@ class Engine:
     def wait( self ):
         while True:
             for event in pygame.event.get():
-                if event.type == QUIT:
-                    pygame.event.post( pygame.event.Event(QUIT) )
-                    return
-                if event.type == KEYDOWN:
-                    return
+        
+                if event.type == pygame.QUIT:
+                    return False
+
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_q or \
+                       event.key == pygame.K_ESCAPE:
+                        return False
+                    else:
+                        return True
 
     #--------------------------------------------------------------------------#
     def game_loop( self ):
@@ -52,12 +55,12 @@ class Engine:
         while True:
             for event in pygame.event.get():
         
-                if event.type == QUIT:
+                if event.type == pygame.QUIT:
                     pygame.quit()
-                    sys.exit()
+                    return False
         
-                elif event.type == self.event_game_over:
-                    return
+                elif event.type == self.event_restart:
+                    return True
         
                 elif event.type == self.event_increase_speed:
                     self.increase_speed()
@@ -67,6 +70,16 @@ class Engine:
         
                 elif event.type == self.event_new_treasure:
                     self.new_treasure()
+
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_q        or \
+                       event.key == pygame.K_ESCAPE:
+                        pygame.quit()
+                        return False
+                    elif event.key == pygame.K_h      or \
+                         event.key == pygame.K_F1     or \
+                         event.key == pygame.K_SPACE:
+                        self.show_help()
         
             self.update()
             clock.tick( self.world.fps )
@@ -82,7 +95,12 @@ class Engine:
         # Create initial sprites
         self.player = objects.Player( self.world, self.world.paramPlayer )
         self.draw()
-        self.wait()
+
+        if self.wait():
+            self.new_enemy()
+            return True
+        else:
+            return False
 
     #--------------------------------------------------------------------------#
     def draw( self ):
@@ -107,11 +125,11 @@ class Engine:
         
     #--------------------------------------------------------------------------#
     def game_over( self ):
+
+        self.display.fill( (60,60,60), None, pygame.BLEND_MULT )
         
         size = self.display.get_rect().height // 6
         font = pygame.freetype.Font( None, size )
-
-        self.display.fill( (60,60,60), None, BLEND_MULT )
 
         rect = font.get_rect( 'Game Over' )
         rect.center = self.display.get_rect().center
@@ -122,9 +140,45 @@ class Engine:
         for entity in objects.GameObject.sprites:
             entity.kill() 
 
-        self.wait()
-        
-        pygame.event.post( pygame.event.Event(self.event_game_over) )
+        if self.wait():
+            pygame.event.clear()
+            pygame.event.post( pygame.event.Event(self.event_restart) )
+        else:
+            pygame.event.clear()
+            pygame.event.post( pygame.event.Event(pygame.QUIT) )
+
+    #--------------------------------------------------------------------------#
+    def show_help( self ):
+
+        info = [ [ '<-  ou  a',          'Mover para a esquerda'  ], \
+                 [ '->  ou  d',          'Mover para a direita'   ], \
+                 [ 'F1,  h  ou  espaço', 'Pausar e mostrar ajuda' ], \
+                 [ 'q  ou  esc',         'Sair'                   ]  ]
+
+        n_lin = len(info)
+
+        self.display.fill( (60,60,60), None, pygame.BLEND_MULT )
+
+        w = self.display.get_rect().width
+        h = self.display.get_rect().height
+
+        area = pygame.Rect( 0, 0, w//3, h//4 )
+        area.center = self.display.get_rect().center
+
+        color = (255,255,255)
+
+        ost = OnScreenText( area, 2*n_lin, 2, color, None )
+        ost.column_width( [ 'M'*12, 'M'*25 ] )
+
+        for ii in range(n_lin):
+            ost.draw( self.display, 2*ii, 0, info[ii][0] )
+            ost.draw( self.display, 2*ii, 1, info[ii][1] )
+
+        pygame.display.update()
+
+        if not self.wait():
+            pygame.event.clear()
+            pygame.event.post( pygame.event.Event(pygame.QUIT) )
 
     #--------------------------------------------------------------------------#
     def update( self ):

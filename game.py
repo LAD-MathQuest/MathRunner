@@ -2,6 +2,8 @@
 #------------------------------------------------------------------------------#
 
 import os
+import sys
+
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
 import pygame
@@ -10,23 +12,33 @@ from world  import World
 from engine import Engine
 
 #------------------------------------------------------------------------------#
+def run_game( world ):
 
-pygame.init()
+    pygame.init()
+    
+    pygame.mouse.set_visible( False )
+    
+    info = pygame.display.Info()
+    
+    world.init( (info.current_w, info.current_h) )
 
-pygame.mouse.set_visible( False )
+    engine = Engine( world )
+    
+    while True:
+    
+        if not engine.start():
+            break
+    
+        if not engine.game_loop():
+            break
 
-info = pygame.display.Info()
+#------------------------------------------------------------------------------#
+if __name__ == '__main__':
 
-world = World((info.current_w, info.current_h))
+    world = World()
 
-engine = Engine( world )
+    run_game( world )
 
-while True:
-
-    engine.start()
-
-    engine.new_enemy()
-
-    engine.game_loop() 
+    sys.exit()
 
 #------------------------------------------------------------------------------#
