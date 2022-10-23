@@ -1,18 +1,15 @@
 #!/usr/bin/python
 #------------------------------------------------------------------------------#
 
-import os
+import __init__
 import sys
-
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
-
 import pygame
 
 from world  import World
 from engine import Engine
 
 #------------------------------------------------------------------------------#
-def run_game( world ):
+def run( world ):
 
     pygame.init()
     
@@ -37,7 +34,7 @@ if __name__ == '__main__':
 
     world = World()
 
-    run_game( world )
+    run( world )
 
     sys.exit()
 
