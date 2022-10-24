@@ -1,26 +1,23 @@
-#!/usr/bin/python
 #------------------------------------------------------------------------------#
 
-import __init__
 import sys
 
-from world    import World
-from game.run import run
+from world.world import World
+import game.game as game
+import ui.ui     as ui
 
 #------------------------------------------------------------------------------#
-if __name__ == '__main__':
+def main( argv ):
 
-    N = len(sys.argv)
+    N = len(argv)
 
     if N > 2:
-        sys.exit('Parâmetros demais')
+        sys.exit('Too many parameters!')
 
     elif N == 2:
-        run( World() )
+        sys.exit( game.main( World() ) )
 
     else:
-        print('Interface gráfica')
-
-    sys.exit()
+        sys.exit( ui.main( sys.argv ) )
 
 #------------------------------------------------------------------------------#

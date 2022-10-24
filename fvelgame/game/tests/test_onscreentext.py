@@ -1,13 +1,16 @@
 #!/usr/bin/python
 
-import __init__
+import sys
+sys.path.append('..')
+
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+
+import pygame
+from onscreentext import OnScreenText 
 
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
-
-    import sys
-    import pygame
-    from onscreentext import OnScreenText 
 
     pygame.init()
     clock = pygame.time.Clock()

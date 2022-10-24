@@ -1,15 +1,13 @@
 #!/usr/bin/python
 #------------------------------------------------------------------------------#
 
-import __init__
-import sys
 import pygame
 
-from world  import World
-from engine import Engine
+from world.world  import World
+from engine       import Engine
 
 #------------------------------------------------------------------------------#
-def run( world ):
+def main( world ):
 
     pygame.init()
     
@@ -29,13 +27,6 @@ def run( world ):
         if not engine.game_loop():
             break
 
-#------------------------------------------------------------------------------#
-if __name__ == '__main__':
-
-    world = World()
-
-    run( world )
-
-    sys.exit()
+    return 0
 
 #------------------------------------------------------------------------------#

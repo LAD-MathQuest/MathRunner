@@ -4,7 +4,7 @@ import pygame
 import random
 import time
 
-from   world  import World
+from   world.world  import World
 import objects
 from   onscreentext import OnScreenText
 
