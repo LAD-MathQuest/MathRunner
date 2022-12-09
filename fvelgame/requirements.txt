@@ -1,0 +1,5 @@
+pygame==2.1.2
+PySide6==6.4.1
+PySide6-Addons==6.4.1
+PySide6-Essentials==6.4.1
+shiboken6==6.4.1

@@ -4,9 +4,12 @@ import pygame
 import random
 import time
 
-from   world.world  import World
-import objects
-from   onscreentext import OnScreenText
+from   world.the_world   import World
+import game.objects      as objects
+from   game.onscreentext import OnScreenText
+
+# Frames per second
+FPS = 60
 
 #------------------------------------------------------------------------------#
 class Engine:
@@ -82,7 +85,7 @@ class Engine:
                         self.show_help()
         
             self.update()
-            clock.tick( self.world.fps )
+            clock.tick( FPS )
     
     #------------------------------------------------------------------------------#
 

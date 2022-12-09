@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------#
-# ./fvelgame/game/tests/Makefile
+# ./fvelgame/tests/Makefile
 
 # Qt designer ui files 
 TEST_FILES=$(shell find -maxdepth 1 -name 'test_*.py' -type f)

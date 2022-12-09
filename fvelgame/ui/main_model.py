@@ -1,7 +1,7 @@
 #------------------------------------------------------------------------------#
 
-from world.world import World
-import game.game as game
+from world.the_world import World
+import game.the_game as game
 
 #------------------------------------------------------------------------------#
 class MainModel:

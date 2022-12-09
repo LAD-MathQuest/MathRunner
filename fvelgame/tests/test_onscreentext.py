@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#------------------------------------------------------------------------------#
 
 import sys
 sys.path.append('..')
@@ -7,7 +7,7 @@ import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
 import pygame
-from onscreentext import OnScreenText 
+from game.onscreentext import OnScreenText 
 
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':

@@ -1,10 +1,13 @@
 #------------------------------------------------------------------------------#
 
-import sys
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
-from world.world import World
-import game.game as game
-import ui.ui     as ui
+import sys
+sys.path.append('.')
+
+import game.the_game as game
+import ui.gui        as gui
 
 #------------------------------------------------------------------------------#
 def main( argv ):
@@ -15,9 +18,14 @@ def main( argv ):
         sys.exit('Too many parameters!')
 
     elif N == 2:
-        sys.exit( game.main( World() ) )
+        sys.exit( game.main( argv[1] ) )
 
     else:
-        sys.exit( ui.main( sys.argv ) )
+        sys.exit( gui.main( sys.argv ) )
+
+#------------------------------------------------------------------------------#
+if __name__ == '__main__':
+
+    main( sys.argv )
 
 #------------------------------------------------------------------------------#

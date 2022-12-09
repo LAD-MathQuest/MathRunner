@@ -1,7 +1,6 @@
 #------------------------------------------------------------------------------#
 
 import pygame
-import random
 
 #------------------------------------------------------------------------------#
 class GameObjectParam:
@@ -24,7 +23,7 @@ class GameObjectParam:
 class World:
 
     #--------------------------------------------------------------------------#
-    def __init__( self ):
+    def __init__( self, filename='' ):
 
         # Score computing
         self.score_kill     =  10
@@ -35,9 +34,6 @@ class World:
         self.ost_bgcolor = ( 55, 55, 55)
         self.ost_fgcolor = (255,255,255)
         self.ost_large = 200
-
-        # Frames per second
-        self.fps = 60
 
         # Scrolling speed function
         self.speed          = 15

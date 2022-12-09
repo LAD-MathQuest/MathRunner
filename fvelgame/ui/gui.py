@@ -1,9 +1,9 @@
 #------------------------------------------------------------------------------#
 
 from PySide6.QtWidgets import QApplication
-from main_window       import MainWindow
-from main_controler    import MainControler
-from main_model        import MainModel
+from ui.main_window    import MainWindow
+from ui.main_controler import MainControler
+from ui.main_model     import MainModel
 
 #------------------------------------------------------------------------------#
 def main( argv ):

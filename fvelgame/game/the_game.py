@@ -1,13 +1,15 @@
-#!/usr/bin/python
 #------------------------------------------------------------------------------#
 
 import pygame
 
-from world.world  import World
-from engine       import Engine
+from world.the_world import World
+from game.engine     import Engine
 
 #------------------------------------------------------------------------------#
 def main( world ):
+
+    if type(world) is str:
+        world = World(world)
 
     pygame.init()
     

@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # ./fvelgame/game/__main__.py
 #------------------------------------------------------------------------------#
 
@@ -8,14 +7,11 @@ sys.path.append('..')
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
-import game
-from world.world import World
+import game.the_game as game
 
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
 
-    world = World()
-
-    sys.exit( game.main( world ) )
+    sys.exit( game.main( 'world' ) )
 
 #------------------------------------------------------------------------------#
