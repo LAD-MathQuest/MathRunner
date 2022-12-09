@@ -2,14 +2,22 @@
 
 import pygame
 
-from world.the_world import World
-from game.engine     import Engine
+from world.game_world import GameWorld
+from world.meta_world import MetaWorld, load_meta_world
+from game.engine      import Engine
 
 #------------------------------------------------------------------------------#
-def main( world ):
+def main( arg ):
+    '''
+    This function runs the game
 
-    if type(world) is str:
-        world = World(world)
+    arg can be a file name with a MetaWorld or a MetaWorld itself
+    '''
+
+    if type(arg) is MetaWorld:
+        world = GameWorld( arg )
+    else:
+        world = GameWorld( load_meta_world(arg) )
 
     pygame.init()
     
@@ -17,9 +25,9 @@ def main( world ):
     
     info = pygame.display.Info()
     
-    world.init( (info.current_w, info.current_h) )
+    world.set_dimensions( (info.current_w, info.current_h) )
 
-    engine = Engine( world )
+    engine = Engine(world)
     
     while True:
     

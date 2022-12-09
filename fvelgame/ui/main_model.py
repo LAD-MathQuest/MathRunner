@@ -1,16 +1,17 @@
 #------------------------------------------------------------------------------#
 
-from world.the_world import World
-import game.the_game as game
+from world.meta_world import MetaWorld
+
+import game.run_game as game
 
 #------------------------------------------------------------------------------#
 class MainModel:
     def __init__(self):
-        self._world = World()
+        self.meta_world = MetaWorld()
 
     #--------------------------------------------------------------------------#
     def new(self):
-        self._world = World()
+        self.meta_world = MetaWorld()
 
     #--------------------------------------------------------------------------#
     def open(self, file_name):
@@ -34,7 +35,7 @@ class MainModel:
 
     #--------------------------------------------------------------------------#
     def run(self):
-        game.main( self._world )
+        game.main( self.meta_world )
 
     #--------------------------------------------------------------------------#
     def build(self, file_name):

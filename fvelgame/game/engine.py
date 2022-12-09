@@ -1,10 +1,9 @@
 #------------------------------------------------------------------------------#
 
 import pygame
-import random
+# import random
 import time
 
-from   world.the_world   import World
 import game.objects      as objects
 from   game.onscreentext import OnScreenText
 

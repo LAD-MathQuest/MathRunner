@@ -2,6 +2,8 @@
 
 import pygame
 
+from world.meta_world import MetaWorld
+
 #------------------------------------------------------------------------------#
 class GameObjectParam:
 
@@ -20,10 +22,10 @@ class GameObjectParam:
         return surf
 
 #------------------------------------------------------------------------------#
-class World:
+class GameWorld:
 
     #--------------------------------------------------------------------------#
-    def __init__( self, filename='' ):
+    def __init__( self, meta=MetaWorld() ):
 
         # Score computing
         self.score_kill     =  10
@@ -49,7 +51,7 @@ class World:
         self.treasures_max_time = 4000
 
     #--------------------------------------------------------------------------#
-    def init( self, size ):
+    def set_dimensions( self, size ):
 
         self.size = size
 

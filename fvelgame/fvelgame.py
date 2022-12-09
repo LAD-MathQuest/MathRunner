@@ -6,7 +6,7 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import sys
 sys.path.append('.')
 
-import game.the_game as game
+import game.run_game as game
 import ui.gui        as gui
 
 #------------------------------------------------------------------------------#

@@ -7,7 +7,7 @@ sys.path.append('..')
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
-import game.the_game as game
+import game.run_game as game
 
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
