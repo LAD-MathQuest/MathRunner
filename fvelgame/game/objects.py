@@ -6,44 +6,128 @@ import random
 from pygame.locals import *
 
 #------------------------------------------------------------------------------#
-class GameObjects(pygame.sprite.Sprite):
+class GameObjects():
 
-    track_top    = 0
-    track_bottom = 0
-    track_left   = 0
-    track_right  = 0
+    track_top     = 0
+    track_top_min = 0
+    track_top_max = 0
 
+    track_bottom     = 0
+    track_bottom_min = 0
+    track_bottom_max = 0
+
+    player    = None
     sprites   = pygame.sprite.Group()
     obstacles = pygame.sprite.Group()
     treasures = pygame.sprite.Group()
 
+    obstacles_dodged   = 0
+    treasures_colected = 0
+
+    scrolling_speed = 0
+
     #--------------------------------------------------------------------------#
-    def __init__( self, world, gameObjectParam ):
+    def init( boundaries, speed ):
 
-        super().__init__() 
+        GameObjects.track_top     = boundaries['top'][0]
+        GameObjects.track_top_min = boundaries['top'][1]
+        GameObjects.track_top_max = boundaries['top'][2]
 
-        GameObjects.track_top    = world.get_track_top   ()
-        GameObjects.track_bottom = world.get_track_bottom()
-        GameObjects.track_left   = world.get_track_left  ()
-        GameObjects.track_right  = world.get_track_right ()
+        GameObjects.track_bottom     = boundaries['bottom'][0]
+        GameObjects.track_bottom_min = boundaries['bottom'][1]
+        GameObjects.track_bottom_max = boundaries['bottom'][2]
+
+        GameObjects.obstacles_dodged   = 0
+        GameObjects.treasures_colected = 0
+
+        GameObjects.scrolling_speed = speed
+
+    #--------------------------------------------------------------------------#
+    def draw_sprites( display ):
+        GameObjects.sprites.draw(display)
+
+    #--------------------------------------------------------------------------#
+    def update():
+        GameObjects.sprites.update()
+
+    #--------------------------------------------------------------------------#
+    def kill_all():
+        for sprite in GameObjects.sprites:
+            sprite.kill() 
+
+    #--------------------------------------------------------------------------#
+    def check_collision():
+        return pygame.sprite.spritecollideany( GameObjects.player, 
+                                               GameObjects.obstacles )
+
+    #--------------------------------------------------------------------------#
+    def check_treasure():
+
+        sprite = pygame.sprite.spritecollideany( GameObjects.player, 
+                                                 GameObjects.treasures )
+
+        if sprite:
+            sprite.kill()
+            GameObjects.treasures_colected += 1
+
+        return sprite
+
+    #--------------------------------------------------------------------------#
+    def create_player( object_param, speed ):
+
+        sprite = Player( object_param, speed )
         
-        self.image = gameObjectParam.image()
-        self.rect  = self.image.get_rect()
+        GameObjects.player = sprite
+        
+        sprite.add( GameObjects.sprites )
+        
+        return sprite
 
-        self.add( GameObjects.sprites )
+    #--------------------------------------------------------------------------#
+    def create_obstacle( object_param ):
+
+        sprite = Obstacle( object_param )
+        
+        sprite.add( GameObjects.sprites   )
+        sprite.add( GameObjects.obstacles )
+        
+        return sprite
+
+    #--------------------------------------------------------------------------#
+    def create_treasure( object_param ):
+
+        sprite = Treasure( object_param )
+        
+        sprite.add( GameObjects.sprites   )
+        sprite.add( GameObjects.treasures )
+        
+        return sprite
 
 #------------------------------------------------------------------------------#
-class Player(GameObjects):
+#------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
+class GameObject(pygame.sprite.Sprite):
 
     #--------------------------------------------------------------------------#
-    def __init__(self, world, gameObjectParam ):
+    def __init__(self, object_param):
 
-        super().__init__( world, gameObjectParam )
+        super().__init__() 
+        
+        self.image = object_param.image()
+        self.rect  = self.image.get_rect()
 
-        self.rect.centerx = int( (GameObjects.track_right+GameObjects.track_left)/2 )
-        self.rect.bottom  = int(0.99*GameObjects.track_bottom)
+#------------------------------------------------------------------------------#
+class Player(GameObject):
 
-        self.speed = world.player_speed
+    #--------------------------------------------------------------------------#
+    def __init__(self, object_param, speed):
+
+        super().__init__(object_param)
+
+        self.rect.centerx = int( (GameObjects.track_bottom_min+GameObjects.track_bottom_max)/2 )
+        self.rect.bottom  = int( 0.99*GameObjects.track_bottom )
+
+        self.speed = speed
 
     #--------------------------------------------------------------------------#
     def update(self):
@@ -51,68 +135,54 @@ class Player(GameObjects):
         pressed_keys = pygame.key.get_pressed()
 
         if pressed_keys[K_LEFT] or pressed_keys[K_a]:
-            if self.rect.left-self.speed > GameObjects.track_left:
-              self.rect.move_ip( -self.speed, 0 )
+
+            if self.rect.left-self.speed > GameObjects.track_bottom_min:
+                self.rect.move_ip( -self.speed, 0 )
 
         elif pressed_keys[K_RIGHT] or pressed_keys[K_d]:
-            if self.rect.right+self.speed < GameObjects.track_right:
+            
+            if self.rect.right+self.speed < GameObjects.track_bottom_max:
                 self.rect.move_ip( self.speed, 0 )
 
 #------------------------------------------------------------------------------#
-class ScrollingObject(GameObjects):
-
-    speed = 0
+class ScrollingObject(GameObject):
 
     #--------------------------------------------------------------------------#
-    def __init__(self, world, gameObjectParam ):
+    def __init__(self, object_param):
 
-        super().__init__( world, gameObjectParam )
+        super().__init__(object_param)
 
-        self.rect.centerx = self.random_x()
+        hw = int( self.rect.width / 2 )
+        xx = random.randint( GameObjects.track_bottom_min + hw,
+                             GameObjects.track_bottom_max - hw )
+        
+        self.rect.centerx = xx
 
     #--------------------------------------------------------------------------#
     def update(self):
 
-        self.rect.move_ip( 0, ScrollingObject.speed )
+        self.rect.move_ip( 0, GameObjects.scrolling_speed )
         
         if self.rect.top > GameObjects.track_bottom:
             self.kill()
 
-    #--------------------------------------------------------------------------#
-    def random_x( self ):
-
-        half_width = int( self.rect.width / 2 )
-
-        return random.randint( GameObjects.track_left  + half_width, \
-                               GameObjects.track_right - half_width )
-
 #------------------------------------------------------------------------------#
 class Obstacle(ScrollingObject):
 
-    dodged = 0
+    #--------------------------------------------------------------------------#
+    def __init__(self, object_param):
+        super().__init__(object_param)
 
     #--------------------------------------------------------------------------#
-    def __init__(self, world, gameObjectParam ):
-
-        super().__init__( world, gameObjectParam )
-
-        self.add( GameObjects.obstacles )
-
-    #--------------------------------------------------------------------------#
-    def dodge( self ):
-
-        Obstacle.dodged += 1
-
+    def kill(self):
+        GameObjects.obstacles_dodged += 1
         super().kill()
 
 #------------------------------------------------------------------------------#
 class Treasure(ScrollingObject):
 
     #--------------------------------------------------------------------------#
-    def __init__(self, world, gameObjectParam ):
-
-        super().__init__( world, gameObjectParam )
-
-        self.add( GameObjects.treasures )
+    def __init__(self, object_param):
+        super().__init__(object_param)
 
 #------------------------------------------------------------------------------#

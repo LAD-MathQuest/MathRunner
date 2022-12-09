@@ -79,20 +79,12 @@ class GameWorld:
         return self.meta.speed.eval(time) * self.mh
 
     #--------------------------------------------------------------------------#
-    def get_track_top( self ):
-        return self.track.top
+    def get_track_boundaries(self):
 
-    #--------------------------------------------------------------------------#
-    def get_track_bottom( self ):
-        return self.track.bottom
-
-    #--------------------------------------------------------------------------#
-    def get_track_left( self ):
-        return self.track.left
-
-    #--------------------------------------------------------------------------#
-    def get_track_right( self ):
-        return self.track.right
+        return { 
+            'top':    [self.track.top,    self.track.left, self.track.right],
+            'bottom': [self.track.bottom, self.track.left, self.track.right],
+        }
 
 #------------------------------------------------------------------------------#
 
