@@ -1,14 +1,19 @@
 #------------------------------------------------------------------------------#
 
 import pygame
-# import random
+import random
 import time
 
 import game.objects      as objects
-from   game.onscreentext import OnScreenText
+
+from game.objects      import GameObjects
+from game.onscreentext import OnScreenText
 
 # Frames per second
 FPS = 60
+
+# Increase speed time interval milliseconds
+INCREASE_SPEED_INTERVAL = 100
 
 #------------------------------------------------------------------------------#
 class Engine:
@@ -27,15 +32,15 @@ class Engine:
 
         self.event_restart        = pygame.USEREVENT + 1
         self.event_increase_speed = pygame.USEREVENT + 2
-        self.event_new_enemy      = pygame.USEREVENT + 3
+        self.event_new_obstacle   = pygame.USEREVENT + 3
         self.event_new_treasure   = pygame.USEREVENT + 4
     
-        pygame.time.set_timer( self.event_increase_speed, 1000 )
-        pygame.time.set_timer( self.event_new_enemy,    self.world.enemies_min_time )
+        pygame.time.set_timer( self.event_increase_speed, INCREASE_SPEED_INTERVAL )
+        pygame.time.set_timer( self.event_new_obstacle, self.world.obstacles_min_time )
         pygame.time.set_timer( self.event_new_treasure, self.world.treasures_min_time )
 
     #--------------------------------------------------------------------------#
-    def wait( self ):
+    def wait(self):
         while True:
             for event in pygame.event.get():
         
@@ -50,7 +55,7 @@ class Engine:
                         return True
 
     #--------------------------------------------------------------------------#
-    def game_loop( self ):
+    def game_loop(self):
 
         clock = pygame.time.Clock()
 
@@ -67,8 +72,8 @@ class Engine:
                 elif event.type == self.event_increase_speed:
                     self.increase_speed()
         
-                elif event.type == self.event_new_enemy:
-                    self.new_enemy()
+                elif event.type == self.event_new_obstacle:
+                    self.new_obstacle()
         
                 elif event.type == self.event_new_treasure:
                     self.new_treasure()
@@ -88,24 +93,26 @@ class Engine:
     
     #------------------------------------------------------------------------------#
 
-    def start( self ):
+    def start(self):
+
+        self.elapsed_time = 0
 
         self.treasures = 0;
-        objects.ScrollingObject.speed = self.world.speed
-        objects.Enemy.killed = 0
+        objects.ScrollingObject.speed = self.world.eval_speed(self.elapsed_time)
+        objects.Obstacle.dodged = 0
 
         # Create initial sprites
-        self.player = objects.Player( self.world, self.world.paramPlayer )
+        self.player = objects.Player( self.world, self.world.param_player )
         self.draw()
 
         if self.wait():
-            self.new_enemy()
+            self.new_obstacle()
             return True
         else:
             return False
 
     #--------------------------------------------------------------------------#
-    def draw( self ):
+    def draw(self):
 
         self.display.blit( self.world.background, (0,0) )
 
@@ -115,18 +122,25 @@ class Engine:
         self.ost.draw( self.display, 1, 0, 'Velocidade:' )
         self.ost.draw( self.display, 2, 0, 'Tempo:'      )
 
-        score = self.world.score_treasure * self.treasures       \
-              + self.world.score_kill     * objects.Enemy.killed
+        score = self.world.score_treasure * self.treasures          \
+              + self.world.score_dodge    * objects.Obstacle.dodged \
+              + int( self.world.score_time_bonus * self.elapsed_time )
 
-        self.ost.draw( self.display, 0, 1, f'{score}', '>' )
-        self.ost.draw( self.display, 1, 1, f'{objects.ScrollingObject.speed:.2f}', '>' )
-        self.ost.draw( self.display, 2, 1, '?', '>' )
+        # Compute speed in m?/ms 
+        speed = self.world.meta.speed.eval( self.elapsed_time )
 
-        objects.GameObject.sprites.draw( self.display )
+        # Time in seconds
+        elapsed_time = self.elapsed_time / 1000
+
+        self.ost.draw( self.display, 0, 1, f'{score} ',            '>' )
+        self.ost.draw( self.display, 1, 1, f'{speed:.2f} ',        '>' )
+        self.ost.draw( self.display, 2, 1, f'{elapsed_time:.2f} ', '>' )
+
+        GameObjects.sprites.draw( self.display )
         pygame.display.update()
         
     #--------------------------------------------------------------------------#
-    def game_over( self ):
+    def game_over(self):
 
         self.display.fill( (60,60,60), None, pygame.BLEND_MULT )
         
@@ -139,7 +153,7 @@ class Engine:
 
         pygame.display.update()
 
-        for entity in objects.GameObject.sprites:
+        for entity in GameObjects.sprites:
             entity.kill() 
 
         if self.wait():
@@ -150,7 +164,7 @@ class Engine:
             pygame.event.post( pygame.event.Event(pygame.QUIT) )
 
     #--------------------------------------------------------------------------#
-    def show_help( self ):
+    def show_help(self):
 
         info = [ [ '<-  ou  a',          'Mover para a esquerda'  ], \
                  [ '->  ou  d',          'Mover para a direita'   ], \
@@ -183,44 +197,53 @@ class Engine:
             pygame.event.post( pygame.event.Event(pygame.QUIT) )
 
     #--------------------------------------------------------------------------#
-    def update( self ):
+    def update(self):
 
-        objects.GameObject.sprites.update()
+        GameObjects.sprites.update()
 
         self.draw()
         self.check_collision()
         self.check_treasure()
 
     #--------------------------------------------------------------------------#
-    def check_collision( self ):
-        if pygame.sprite.spritecollideany( self.player, objects.GameObject.enemies ):
+    def check_collision(self):
+        if pygame.sprite.spritecollideany( self.player, GameObjects.obstacles ):
             self.game_over()            
 
     #--------------------------------------------------------------------------#
-    def check_treasure( self ):
-        if pygame.sprite.spritecollideany( self.player, objects.GameObject.treasures ):
+    def check_treasure(self):
+        sprite = pygame.sprite.spritecollideany( self.player, GameObjects.treasures )
+        if sprite:
+            sprite.kill()
             self.score_add_treasure()
 
     #--------------------------------------------------------------------------#
-    def increase_speed( self ):
-        objects.ScrollingObject.speed += self.world.increase_speed
+    def increase_speed(self):
+        self.elapsed_time += INCREASE_SPEED_INTERVAL
+        objects.ScrollingObject.speed = self.world.eval_speed(self.elapsed_time)
 
     #--------------------------------------------------------------------------#
-    def score_add_treasure( self ):
+    def score_add_treasure(self):
         self.treasures += 1
 
     #--------------------------------------------------------------------------#
-    def new_enemy( self ):
-        objects.Enemy( self.world, self.world.paramEnemy )
-        # pygame.time.set_timer( self.event_new_treasure,    \
-        #       random.randint( self.world.enemies_min_time, \
-        #                       self.world.enemies_max_time) )
+    def new_obstacle(self):
+
+        objects.Obstacle( self.world, self.world.param_obstacle )
+
+        interval = random.randint( self.world.obstacles_min_time,
+                                   self.world.obstacles_max_time )
+
+        pygame.time.set_timer( self.event_new_obstacle, interval )
 
     #--------------------------------------------------------------------------#
-    def new_treasure( self ):
-        objects.Treasure( self.world, self.world.paramTreasure )
-        # pygame.time.set_timer( self.event_new_treasure,       \
-        #        random.randint( self.world.treasures_min_time, \
-        #                        self.world.treasures_max_time) )
+    def new_treasure(self):
+
+        objects.Treasure( self.world, self.world.param_treasure )
+
+        interval = random.randint( self.world.treasures_min_time,
+                                   self.world.treasures_max_time )
+
+        pygame.time.set_timer( self.event_new_treasure, interval )
 
 #------------------------------------------------------------------------------#

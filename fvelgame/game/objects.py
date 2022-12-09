@@ -6,7 +6,7 @@ import random
 from pygame.locals import *
 
 #------------------------------------------------------------------------------#
-class GameObject(pygame.sprite.Sprite):
+class GameObjects(pygame.sprite.Sprite):
 
     track_top    = 0
     track_bottom = 0
@@ -14,7 +14,7 @@ class GameObject(pygame.sprite.Sprite):
     track_right  = 0
 
     sprites   = pygame.sprite.Group()
-    enemies   = pygame.sprite.Group()
+    obstacles = pygame.sprite.Group()
     treasures = pygame.sprite.Group()
 
     #--------------------------------------------------------------------------#
@@ -22,26 +22,26 @@ class GameObject(pygame.sprite.Sprite):
 
         super().__init__() 
 
-        GameObject.track_top    = world.get_track_top   ()
-        GameObject.track_bottom = world.get_track_bottom()
-        GameObject.track_left   = world.get_track_left  ()
-        GameObject.track_right  = world.get_track_right ()
+        GameObjects.track_top    = world.get_track_top   ()
+        GameObjects.track_bottom = world.get_track_bottom()
+        GameObjects.track_left   = world.get_track_left  ()
+        GameObjects.track_right  = world.get_track_right ()
         
         self.image = gameObjectParam.image()
         self.rect  = self.image.get_rect()
 
-        self.add( GameObject.sprites )
+        self.add( GameObjects.sprites )
 
 #------------------------------------------------------------------------------#
-class Player(GameObject):
+class Player(GameObjects):
 
     #--------------------------------------------------------------------------#
     def __init__(self, world, gameObjectParam ):
 
         super().__init__( world, gameObjectParam )
 
-        self.rect.centerx = int( (GameObject.track_right+GameObject.track_left)/2 )
-        self.rect.bottom  = int(0.99*GameObject.track_bottom)
+        self.rect.centerx = int( (GameObjects.track_right+GameObjects.track_left)/2 )
+        self.rect.bottom  = int(0.99*GameObjects.track_bottom)
 
         self.speed = world.player_speed
 
@@ -51,15 +51,15 @@ class Player(GameObject):
         pressed_keys = pygame.key.get_pressed()
 
         if pressed_keys[K_LEFT] or pressed_keys[K_a]:
-            if self.rect.left-self.speed > GameObject.track_left:
+            if self.rect.left-self.speed > GameObjects.track_left:
               self.rect.move_ip( -self.speed, 0 )
 
         elif pressed_keys[K_RIGHT] or pressed_keys[K_d]:
-            if self.rect.right+self.speed < GameObject.track_right:
+            if self.rect.right+self.speed < GameObjects.track_right:
                 self.rect.move_ip( self.speed, 0 )
 
 #------------------------------------------------------------------------------#
-class ScrollingObject(GameObject):
+class ScrollingObject(GameObjects):
 
     speed = 0
 
@@ -75,7 +75,7 @@ class ScrollingObject(GameObject):
 
         self.rect.move_ip( 0, ScrollingObject.speed )
         
-        if self.rect.top > GameObject.track_bottom:
+        if self.rect.top > GameObjects.track_bottom:
             self.kill()
 
     #--------------------------------------------------------------------------#
@@ -83,25 +83,25 @@ class ScrollingObject(GameObject):
 
         half_width = int( self.rect.width / 2 )
 
-        return random.randint( GameObject.track_left  + half_width, \
-                               GameObject.track_right - half_width )
+        return random.randint( GameObjects.track_left  + half_width, \
+                               GameObjects.track_right - half_width )
 
 #------------------------------------------------------------------------------#
-class Enemy(ScrollingObject):
+class Obstacle(ScrollingObject):
 
-    killed = 0
+    dodged = 0
 
     #--------------------------------------------------------------------------#
     def __init__(self, world, gameObjectParam ):
 
         super().__init__( world, gameObjectParam )
 
-        self.add( GameObject.enemies )
+        self.add( GameObjects.obstacles )
 
     #--------------------------------------------------------------------------#
-    def kill( self ):
+    def dodge( self ):
 
-        Enemy.killed += 1
+        Obstacle.dodged += 1
 
         super().kill()
 
@@ -113,6 +113,6 @@ class Treasure(ScrollingObject):
 
         super().__init__( world, gameObjectParam )
 
-        self.add( GameObject.treasures )
+        self.add( GameObjects.treasures )
 
 #------------------------------------------------------------------------------#

@@ -25,48 +25,58 @@ class GameObjectParam:
 class GameWorld:
 
     #--------------------------------------------------------------------------#
-    def __init__( self, meta=MetaWorld() ):
+    def __init__( self, meta ):
+
+        self.meta = meta
 
         # Score computing
-        self.score_kill     =  10
-        self.score_treasure = 100
+        self.score_time_bonus = meta.score_time_bonus # Points per milliseconds
+        self.score_dodge      = meta.score_dodge     
+        self.score_treasure   = meta.score_treasure  
 
         # On screen text
-        self.ost_area  = pygame.Rect( 100, 100, 400, 120 )
-        self.ost_bgcolor = ( 55, 55, 55)
-        self.ost_fgcolor = (255,255,255)
-        self.ost_large = 200
-
-        # Scrolling speed function
-        self.speed          = 15
-        self.increase_speed = 2
-
-        # Player speed
-        self.player_speed = 10
+        self.ost_area    = pygame.Rect(meta.ost.area)
+        self.ost_bgcolor = meta.ost.bgcolor
+        self.ost_fgcolor = meta.ost.fgcolor
 
         # Time interval between spawns (milliseconds)
-        self.enemies_min_time   = 700
-        self.enemies_max_time   = 2000
-        self.treasures_min_time = 3777
+        self.obstacles_min_time = 300
+        self.obstacles_max_time = 1000
+        self.treasures_min_time = 500
         self.treasures_max_time = 4000
 
     #--------------------------------------------------------------------------#
-    def set_dimensions( self, size ):
+    def set_dimensions( self, width, height ):
 
-        self.size = size
+        self.size = (width, height)
+
+        self.width  = width
+        self.height = height
+
+        self.mw = width  / 1000
+        self.mh = height / 1000
+
+        # Player speed
+        # TODO take direction in account
+        self.player_speed = self.meta.player_speed * self.mw
 
         # Sprite parameters
-        self.paramPlayer   = GameObjectParam( (int(0.015*size[0]),int(0.05*size[1])), ( 20, 20,250) )
-        self.paramEnemy    = GameObjectParam( (int(0.040*size[0]),int(0.02*size[1])), (250, 20, 20) )
-        self.paramTreasure = GameObjectParam( (int(0.020*size[0]),int(0.06*size[1])), ( 20,250,250) )
+        self.param_player   = GameObjectParam( (int(0.015*width),int(0.05*height)), ( 20, 20,250) )
+        self.param_obstacle = GameObjectParam( (int(0.040*width),int(0.02*height)), (250, 20, 20) )
+        self.param_treasure = GameObjectParam( (int(0.020*width),int(0.06*height)), ( 20,250,250) )
 
         # Background image
-        self.background = pygame.Surface( size )
-        self.background.fill( (0,0,0) )
+        self.background = pygame.Surface((width,height))
+        self.background.fill((0,0,0))
 
         # Track boundaries and background image
-        self.track = pygame.Rect( int(0.35*size[0]), 0, int(0.3*size[0]), size[1] )
+        self.track = pygame.Rect( int(0.35*width), 0, int(0.3*width), height )
         pygame.draw.rect( self.background, (0,100,20), self.track )
+
+    #--------------------------------------------------------------------------#
+    def eval_speed( self, time ):
+        # TODO take direction in account
+        return self.meta.speed.eval(time) * self.mh
 
     #--------------------------------------------------------------------------#
     def get_track_top( self ):

@@ -34,7 +34,7 @@ class MetaSprite:
 class MetaOnScreenText:
 
     #--------------------------------------------------------------------------#
-    def __init__( self ):
+    def __init__(self):
 
         self.area    = (100.0, 100.0, 370.0, 70.0 ) # (left, top, width, height) 
         self.bgcolor = ( 55, 55, 55)
@@ -44,18 +44,35 @@ class MetaOnScreenText:
 class MetaSpeedFunction:
 
     #--------------------------------------------------------------------------#
-    def __init__( self ):
-        self.const = 10.0
+    def __init__(self):
+        self.a = 5.0
+        self.b = 0.0003
 
     #--------------------------------------------------------------------------#
-    def eval( self, t ):
-        return self.const
+    def eval( self, time ):
+        return self.a + time * self.b
+
+#------------------------------------------------------------------------------#
+class MetaTrackMarginFunctions:
+
+    #--------------------------------------------------------------------------#
+    def __init__(self):
+        self.left_const  = 300
+        self.right_const = 700
+
+    #--------------------------------------------------------------------------#
+    def eval_left( self, t ):
+        return self.left_const
+
+    #--------------------------------------------------------------------------#
+    def eval_rigth( self, t ):
+        return self.rigth_const
 
 #------------------------------------------------------------------------------#
 class MetaBackground:
 
     #--------------------------------------------------------------------------#
-    def __init__( self ):
+    def __init__(self):
 
         # Background information
         self.background_color = (0,0,0)
@@ -70,10 +87,24 @@ class MetaBackground:
 class MetaWorld:
 
     #--------------------------------------------------------------------------#
-    def __init__( self ):
+    def __init__(self):
+
+        # Author and App information
+        self.author_name      = ''
+        self.game_name        = ''
+        self.game_icon        = None
+        self.game_description = ''
+
+        # Game dynamics information
+        self.vertical = True # False means horizontal scrolling
+
+        # Sound information
+        self.sound_background = None
+        self.sound_colision   = None
+        self.sound_treasure   = None
 
         # Score computing
-        self.score_time_bonus =   1 # points per millisecond
+        self.score_time_bonus = 0.001 # Points per millisecond
         self.score_dodge      =  10
         self.score_treasure   = 100
 
@@ -84,7 +115,7 @@ class MetaWorld:
         self.speed = MetaSpeedFunction()
 
         # Player moving speed
-        self.player_speed = 6.0
+        self.player_speed = 4.0
 
         # Average interval in milliseconds
         self.obstacles_average =  700
