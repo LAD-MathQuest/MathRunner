@@ -4,10 +4,6 @@
 # Qt designer ui files 
 TEST_FILES=$(shell find -maxdepth 1 -name 'test_*.py' -type f)
 
-
-
-
-
 # Files to be removed from this directory at cleaning
 CLEAN_FILES= *~
 
@@ -16,31 +12,21 @@ DISTCLEAN_FILES= __pycache__
 
 #------------------------------------------------------------------------------#
 
-run: 
+default: 
+
+tests:
 	@ for T in $(TEST_FILES) ; do   \
-	  python $$T ;                \
+	  python $$T ;                  \
 	done
-
-
-all:
-
-
-
 
 #------------------------------------------------------------------------------#
 
 clean:
 	-@ rm -vf ${CLEAN_FILES}
 
-
-
-
 distclean: 
 	-@ rm -vf ${DISTCLEAN_FILES}
 
-
-
-
-.PHONY: run all clean distclean
+.PHONY: clean distclean
 
 #------------------------------------------------------------------------------#
