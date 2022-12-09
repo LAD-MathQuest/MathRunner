@@ -1,5 +1,11 @@
 #------------------------------------------------------------------------------#
 
+import sys
+sys.path.append('..')
+
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+
 import pygame
 
 from world.game_world import GameWorld
@@ -25,7 +31,7 @@ def main( arg ):
     
     info = pygame.display.Info()
     
-    world.set_dimensions( (info.current_w, info.current_h) )
+    world.set_dimensions( info.current_w, info.current_h )
 
     engine = Engine(world)
     
@@ -38,5 +44,10 @@ def main( arg ):
             break
 
     return 0
+
+#------------------------------------------------------------------------------#
+if __name__ == '__main__':
+
+    sys.exit( main( 'world' ) )
 
 #------------------------------------------------------------------------------#
