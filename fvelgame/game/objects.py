@@ -113,7 +113,7 @@ class GameObject(pygame.sprite.Sprite):
 
         super().__init__() 
         
-        self.image = object_param.image()
+        self.image = object_param.image
         self.rect  = self.image.get_rect()
 
 #------------------------------------------------------------------------------#

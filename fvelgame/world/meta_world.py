@@ -1,87 +1,62 @@
 #------------------------------------------------------------------------------#
 
+'''This module defines the MetaWorld class.
+
+It stores all information about the GameWorld in an intermediate state
+between Pyside and PyGame being independent of both libraries. This class 
+must be saved in a binary file and used to create a GameWorld.
+
+All position and length measurements are proportional to screen size.
+
+Width  is measured in thousandths of the screen width  [mw]
+Height is measured in thousandths of the screen height [mh]
+
+In a FullHD (1920 x 1080 pixels) screen
+   1 mw = 1.920 pixels
+   1 mh = 1.080 pixels
+
+Velocity is measured in mw (or mh) per millisecond. A moving object with 
+velocity of 1 mh/ms go across the screen top bottom in a second.
 '''
-This module defines the MetaWorld class
-
-It stores all information about the GameWorld in a intermediate state between Pyside and PyGame
-It is independent of both these libraries
-This class will be saved in a binary file and used to create a GameWorld
-'''
-
-# All position and length measurements are proportional to screen size
-#
-# Width  is measured in thousandth's of the screen width  [mw]
-# Height is measured in thousandth's of the screen height [mh]
-# 
-# In a FullHD (1920 x 1080 pixels) screen
-#    1 mw = 1.920 pixels
-#    1 mh = 1.080 pixels
-
-# Velocity is measured in mw (or mh) per millisecond
-# A movel with velocity of 1 mh/ms go across the screen top bottom in a second
 
 #------------------------------------------------------------------------------#
-class MetaSprite:
+class MetaImage:
+    '''Describes an image to be used on game.
+
+    The image has a size proportional to the screen.
+    It can be an actual image file or color filled rectangle.
+    '''
 
     #--------------------------------------------------------------------------#
-    def __init__( self, size, color ):
+    def __init__(self, size = (1000,1000), color=(0,0,0) ):
 
-        self.size  = (100.0, 100.0)   # (width, height)
-        self.color = (255, 255, 255)  # (R,G,B)
+        self.size  = size  # (width, height)
+        self.color = color
         self.image = None
 
 #------------------------------------------------------------------------------#
-class MetaOnScreenText:
+class SpeedFunction:
 
     #--------------------------------------------------------------------------#
-    def __init__(self):
-
-        self.area    = (100.0, 100.0, 370.0, 70.0 ) # (left, top, width, height) 
-        self.bgcolor = ( 55, 55, 55)
-        self.fgcolor = (255,255,255)
-
-#------------------------------------------------------------------------------#
-class MetaSpeedFunction:
+    def __init__(self, a, b):
+        self.a = a
+        self.b = b
 
     #--------------------------------------------------------------------------#
-    def __init__(self):
-        self.a = 5.0
-        self.b = 0.0003
-
-    #--------------------------------------------------------------------------#
-    def eval( self, time ):
+    def eval(self, time):
         return self.a + time * self.b
 
 #------------------------------------------------------------------------------#
-class MetaTrackMarginFunctions:
+class MarginFunctions:
 
     #--------------------------------------------------------------------------#
-    def __init__(self):
-        self.left_const  = 300
-        self.right_const = 700
+    def __init__(self, min_, max_):
+        self.const_min = min_
+        self.const_max = max_
 
     #--------------------------------------------------------------------------#
-    def eval_left( self, t ):
-        return self.left_const
-
-    #--------------------------------------------------------------------------#
-    def eval_rigth( self, t ):
-        return self.rigth_const
-
-#------------------------------------------------------------------------------#
-class MetaBackground:
-
-    #--------------------------------------------------------------------------#
-    def __init__(self):
-
-        # Background information
-        self.background_color = (0,0,0)
-        self.background_image = None
-
-        self.track_min = 450             # "left"
-        self.track_max = 550             # "right"
-        self.track_pos_player    = 0.2   # "bottom"
-        self.track_pos_scrollers = 0.1   # "top"
+    def eval(self, time):
+        return ( self.const_min, self.const_max )
 
 #------------------------------------------------------------------------------#
 class MetaWorld:
@@ -89,53 +64,45 @@ class MetaWorld:
     #--------------------------------------------------------------------------#
     def __init__(self):
 
-        # Author and App information
-        self.author_name      = ''
-        self.game_name        = ''
-        self.game_icon        = None
-        self.game_description = ''
+        self.game = {}
+        self.game['author'     ] = ''
+        self.game['name'       ] = ''
+        self.game['icon'       ] = None
+        self.game['description'] = ''
 
-        # Game dynamics information
-        self.vertical = True # False means horizontal scrolling
+        self.dynamics = {}
+        self.dynamics['vertical'           ] = True  
+        self.dynamics['player_speed'       ] = 4.0
+        self.dynamics['obstacles_frequency'] = 3  # Average occurrences per second
+        self.dynamics['treasures_frequency'] = 1
+        self.dynamics['score_time_bonus'   ] = 0.001 # Points per millisecond
+        self.dynamics['score_dodge'        ] = 10
+        self.dynamics['score_treasure'     ] = 100
 
-        # Sound information
-        self.sound_background = None
-        self.sound_colision   = None
-        self.sound_treasure   = None
+        self.appearance = {}
+        self.appearance['player'      ] = MetaImage( (18,50), (49,116,200) )
+        self.appearance['obstacle'    ] = MetaImage( (45,30), (200,32,57)  )
+        self.appearance['treasure'    ] = MetaImage( (15,50), (240,212,117))
+        self.appearance['background'  ] = MetaImage( color=(39,38,67) )
+        self.appearance['track'       ] = MetaImage( color=(38,90,90) )
+        self.appearance['ost_position'] = (100,100)
+        self.appearance['ost_bgcolor' ] = (55,55,55)
+        self.appearance['ost_fgcolor' ] = (255,255,255)
 
-        # Score computing
-        self.score_time_bonus = 0.001 # Points per millisecond
-        self.score_dodge      =  10
-        self.score_treasure   = 100
+        self.sound = {}
+        self.sound['music'    ] = None
+        self.sound['collision'] = None
+        self.sound['treasure' ] = None
 
-        # On screen text
-        self.ost = MetaOnScreenText()
-
-        # Scrolling speed function
-        self.speed = MetaSpeedFunction()
-
-        # Player moving speed
-        self.player_speed = 4.0
-
-        # Average interval in milliseconds
-        self.obstacles_average =  700
-        self.treasures_average = 3777
-
-        # Sprite parameters
-        self.sprite_player   = MetaSprite( (15, 5), ( 17,  57,  69) )
-        self.sprite_obstacle = MetaSprite( (40, 2), (141,  29, 117) )
-        self.sprite_treasure = MetaSprite( (20, 6), (255, 222,  89) )
-
-        # Background and track
-        self.background = MetaBackground()
+        self.speed   = SpeedFunction  ( 5, 0.0005 )
+        self.margins = MarginFunctions( 350, 650  )
 
 #------------------------------------------------------------------------------#
-def save_meta_world( meta_world, file_name ):
-    print(f'Saving {meta_world} to {file_name} ')
+def save_meta_world(meta_world, file_name):
+    pass
 
 #------------------------------------------------------------------------------#
-def load_meta_world( file_name ):
-    print(f'Loading MetaWorld from {file_name} ')
+def load_meta_world(file_name):
     return MetaWorld()
 
 #------------------------------------------------------------------------------#

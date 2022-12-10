@@ -221,6 +221,7 @@ class Engine:
 
         GameObjects.create_obstacle( self.world.param_obstacle )
 
+        # TODO Take cake when the track is smaller than the object
         interval = random.randint( self.world.obstacles_min_time,
                                    self.world.obstacles_max_time )
 
@@ -231,6 +232,7 @@ class Engine:
 
         GameObjects.create_treasure( self.world.param_treasure )
 
+        # TODO Take cake when the track is smaller than the object
         interval = random.randint( self.world.treasures_min_time,
                                    self.world.treasures_max_time )
 
