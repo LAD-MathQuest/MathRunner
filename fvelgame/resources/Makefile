@@ -2,6 +2,7 @@
 # ./fvelgame/resources/Makefile
 
 default:
+	  make -C games
 
 clean:
 

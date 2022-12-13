@@ -9,6 +9,30 @@ import game.game_params as gp
 from game.objects      import GameObjects
 from game.onscreentext import OnScreenText
 
+
+#------------------------------------------------------------------------------#
+class Music:
+    '''pygame.mixer.music wrapper to encapsulate existence tests'''
+
+    #--------------------------------------------------------------------------#
+    def __init__( self, sound ):
+
+        self.has_sound = bool(sound)
+
+        if self.has_sound:
+            pygame.mixer.music.load(sound)
+            pygame.mixer.music.set_volume(1.0)
+
+    #--------------------------------------------------------------------------#
+    def play(self):
+        if self.has_sound:
+            pygame.mixer.music.play(-1)
+
+    #--------------------------------------------------------------------------#
+    def stop(self):
+        if self.has_sound:
+            pygame.mixer.music.stop()
+
 #------------------------------------------------------------------------------#
 class Engine:
 
@@ -32,8 +56,7 @@ class Engine:
         pygame.time.set_timer( self.event_new_obstacle, self.world.obstacles_min_time )
         pygame.time.set_timer( self.event_new_treasure, self.world.treasures_min_time )
 
-        pygame.mixer.music.load( world.ambience_sound )
-        pygame.mixer.music.set_volume(1.0)
+        self.music = Music(world.ambience_sound)
 
     #--------------------------------------------------------------------------#
     def wait(self):
@@ -55,18 +78,18 @@ class Engine:
     #--------------------------------------------------------------------------#
     def game_loop(self):
 
-        pygame.mixer.music.play( -1 )
+        self.music.play()
 
         while True:
             for event in pygame.event.get():
         
                 if event.type == pygame.QUIT:
-                    pygame.mixer.music.stop()
+                    self.music.stop()
                     pygame.quit()
                     return False
         
                 elif event.type == self.event_restart:
-                    pygame.mixer.music.stop()
+                    self.music.stop()
                     return True
         
                 elif event.type == self.event_new_obstacle:
@@ -131,7 +154,7 @@ class Engine:
     #--------------------------------------------------------------------------#
     def game_over(self):
 
-        pygame.mixer.music.stop()
+        self.music.stop()
 
         self.display.fill( (60,60,60), None, pygame.BLEND_MULT )
         
