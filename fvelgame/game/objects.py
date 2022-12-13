@@ -29,6 +29,7 @@ class GameObjects():
     #--------------------------------------------------------------------------#
     def init( boundaries, velocity ):
 
+        # TODO remove track top and bottom
         GameObjects.track_top     = boundaries['top'][0]
         GameObjects.track_top_min = boundaries['top'][1]
         GameObjects.track_top_max = boundaries['top'][2]
@@ -37,13 +38,14 @@ class GameObjects():
         GameObjects.track_bottom_min = boundaries['bottom'][1]
         GameObjects.track_bottom_max = boundaries['bottom'][2]
 
+        GameObjects.score = 0
         GameObjects.obstacles_dodged   = 0
         GameObjects.treasures_colected = 0
 
         GameObjects.scrolling_velocity = velocity
 
     #--------------------------------------------------------------------------#
-    def draw_sprites( display ):
+    def draw(display):
         GameObjects.sprites.draw(display)
 
     #--------------------------------------------------------------------------#
@@ -57,8 +59,13 @@ class GameObjects():
 
     #--------------------------------------------------------------------------#
     def check_collision():
-        return pygame.sprite.spritecollideany( GameObjects.player, 
-                                               GameObjects.obstacles )
+        sprite = pygame.sprite.spritecollideany( GameObjects.player, 
+                                                   GameObjects.obstacles )
+
+        if sprite:
+            sprite.play_sound()
+
+        return sprite
 
     #--------------------------------------------------------------------------#
     def check_treasure():
@@ -67,8 +74,9 @@ class GameObjects():
                                                  GameObjects.treasures )
 
         if sprite:
+            GameObjects.score += sprite.score
+            sprite.play_sound()
             sprite.kill()
-            GameObjects.treasures_colected += 1
 
         return sprite
 
@@ -110,11 +118,22 @@ class GameObject(pygame.sprite.Sprite):
 
     #--------------------------------------------------------------------------#
     def __init__(self, object_param):
+        '''Create a GameObject'''
 
         super().__init__() 
         
         self.image = object_param.image
         self.rect  = self.image.get_rect()
+        
+        self.score = object_param.collision_score
+        self.sound = object_param.collision_sound
+
+    #--------------------------------------------------------------------------#
+    def play_sound(self):
+        '''Play collision sound if it exists.'''
+
+        if self.sound:
+            pygame.mixer.Sound(self.sound).play()
 
 #------------------------------------------------------------------------------#
 class Player(GameObject):
@@ -149,9 +168,11 @@ class ScrollingObject(GameObject):
 
     #--------------------------------------------------------------------------#
     def __init__(self, object_param):
+        '''Create a ScrollingObject'''
 
         super().__init__(object_param)
 
+        # Initial position
         hw = int( self.rect.width / 2 )
         xx = random.randint( GameObjects.track_bottom_min + hw,
                              GameObjects.track_bottom_max - hw )
@@ -168,6 +189,7 @@ class ScrollingObject(GameObject):
 
 #------------------------------------------------------------------------------#
 class Obstacle(ScrollingObject):
+    '''Crate an Obstacle object'''
 
     #--------------------------------------------------------------------------#
     def __init__(self, object_param):
@@ -175,11 +197,12 @@ class Obstacle(ScrollingObject):
 
     #--------------------------------------------------------------------------#
     def kill(self):
-        GameObjects.obstacles_dodged += 1
+        GameObjects.score += self.score
         super().kill()
 
 #------------------------------------------------------------------------------#
 class Treasure(ScrollingObject):
+    '''Crate an Treasure object'''
 
     #--------------------------------------------------------------------------#
     def __init__(self, object_param):

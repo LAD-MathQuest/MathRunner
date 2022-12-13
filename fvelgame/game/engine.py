@@ -18,7 +18,7 @@ class Engine:
         self.world = world
         
         # Create the display background
-        self.display = pygame.display.set_mode( (0,0), pygame.FULLSCREEN )
+        self.display = pygame.display.get_surface()
         self.clock   = pygame.time.Clock()
 
         # Create the on screen text to show the score
@@ -31,6 +31,9 @@ class Engine:
     
         pygame.time.set_timer( self.event_new_obstacle, self.world.obstacles_min_time )
         pygame.time.set_timer( self.event_new_treasure, self.world.treasures_min_time )
+
+        pygame.mixer.music.load( world.ambience_sound )
+        pygame.mixer.music.set_volume(1.0)
 
     #--------------------------------------------------------------------------#
     def wait(self):
@@ -52,14 +55,18 @@ class Engine:
     #--------------------------------------------------------------------------#
     def game_loop(self):
 
+        pygame.mixer.music.play( -1 )
+
         while True:
             for event in pygame.event.get():
         
                 if event.type == pygame.QUIT:
+                    pygame.mixer.music.stop()
                     pygame.quit()
                     return False
         
                 elif event.type == self.event_restart:
+                    pygame.mixer.music.stop()
                     return True
         
                 elif event.type == self.event_new_obstacle:
@@ -110,20 +117,21 @@ class Engine:
         self.ost.draw( self.display, 1, 0, 'Velocidade:' )
         self.ost.draw( self.display, 2, 0, 'Tempo:'      )
 
-        score = self.world.score_treasure * GameObjects.treasures_colected \
-              + self.world.score_dodge    * GameObjects.obstacles_dodged   \
-              + int( self.world.score_time_bonus * self.elapsed_time )
+        # TODO create a coerent score system
+        score = GameObjects.score + int(self.world.score_time_bonus * self.elapsed_time)
 
         self.ost.draw( self.display, 0, 1, f'{score} ',                 '>' )
         self.ost.draw( self.display, 1, 1, f'{self.velocity:.2f} ',     '>' )
         self.ost.draw( self.display, 2, 1, f'{self.elapsed_time:.2f} ', '>' )
 
-        GameObjects.draw_sprites(self.display)
+        GameObjects.draw(self.display)
 
-        pygame.display.update()
+        pygame.display.flip()
         
     #--------------------------------------------------------------------------#
     def game_over(self):
+
+        pygame.mixer.music.stop()
 
         self.display.fill( (60,60,60), None, pygame.BLEND_MULT )
         
@@ -134,7 +142,7 @@ class Engine:
         rect.center = self.display.get_rect().center
         font.render_to( self.display, rect, None, (200,20,20) )
 
-        pygame.display.update()
+        pygame.display.flip()
 
         GameObjects.kill_all() 
 
@@ -172,7 +180,7 @@ class Engine:
             ost.draw( self.display, 2*ii, 0, info[ii][0] )
             ost.draw( self.display, 2*ii, 1, info[ii][1] )
 
-        pygame.display.update()
+        pygame.display.flip()
 
         if not self.wait():
             pygame.event.clear()

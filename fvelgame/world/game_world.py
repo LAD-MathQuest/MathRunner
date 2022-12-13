@@ -21,8 +21,12 @@ from world.meta_world import MetaWorld
 def surface_from_meta_image(meta):
     '''Create a pygame surface from a MetaImage object'''
 
-    surf = pygame.Surface(meta.size)
-    surf.fill(meta.color)
+    if meta.image_path:
+        surf = pygame.image.load(meta.image_path).convert_alpha()
+        surf = pygame.transform.scale(surf, meta.size )
+    else:
+        surf = pygame.Surface(meta.size)
+        surf.fill(meta.color)
 
     return surf
 
@@ -34,7 +38,10 @@ class GameObjectParam:
     def __init__(self, meta):
         '''Create game object parameters from a meta object.'''
 
-        self.image = surface_from_meta_image(meta)
+        self.image = surface_from_meta_image(meta.image)
+
+        self.collision_score = meta.score
+        self.collision_sound = meta.sound
 
 #------------------------------------------------------------------------------#
 class GameWorld:
@@ -45,6 +52,7 @@ class GameWorld:
         '''Create a GameWorld from MetaWorld.'''
 
         self.vertical = meta.dynamics['vertical']
+        self.ambience_sound = meta.ambience_sound
 
         # TODO Replace uniform distribution for a arrivel distribution
         self.obstacles_frequency = meta.dynamics['obstacles_frequency']
@@ -56,21 +64,14 @@ class GameWorld:
         self.treasures_max_time = 4000
 
         self.score_time_bonus = meta.dynamics['score_time_bonus']
-        self.score_dodge      = meta.dynamics['score_dodge'     ]
-        self.score_treasure   = meta.dynamics['score_treasure'  ]
 
         self.ost_bgcolor = meta.appearance['ost_bgcolor']
         self.ost_fgcolor = meta.appearance['ost_fgcolor']
 
-        self.sound_music     = meta.sound['music'    ]
-        self.sound_collision = meta.sound['collision']
-        self.sound_treasure  = meta.sound['treasure' ]
-
-        self.player_speed = meta.dynamics['player_speed']
-        
-        self.param_player   = GameObjectParam( meta.appearance['player'  ] )
-        self.param_obstacle = GameObjectParam( meta.appearance['obstacle'] )
-        self.param_treasure = GameObjectParam( meta.appearance['treasure'] )
+        self.player_speed   = meta.dynamics['player_speed']
+        self.param_player   = GameObjectParam( meta.objects['player'   ] )
+        self.param_obstacle = GameObjectParam( meta.objects['obstacles'] )
+        self.param_treasure = GameObjectParam( meta.objects['treasures'] )
 
         # TODO Compute ost size properly
         self.ost_area = pygame.Rect( meta.appearance['ost_position'], (260,110) )
