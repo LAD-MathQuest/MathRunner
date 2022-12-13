@@ -62,7 +62,11 @@ class MarginFunctions:
 class MetaWorld:
 
     #--------------------------------------------------------------------------#
-    def __init__(self):
+    def __init__( self, path=None ):
+
+        #### if path:
+        ####     load( path )
+        ####     return
 
         self.game = {}
         self.game['author'     ] = ''
@@ -97,13 +101,13 @@ class MetaWorld:
         self.speed   = SpeedFunction  ( 5, 0.0005 )
         self.margins = MarginFunctions( 350, 650  )
 
-#------------------------------------------------------------------------------#
-def save_meta_world(meta_world, file_name):
-    pass
-
-#------------------------------------------------------------------------------#
-def load_meta_world(file_name):
-    return MetaWorld()
+    #------------------------------------------------------------------------------#
+    def save(self, filename):
+        pass
+    
+    #------------------------------------------------------------------------------#
+    def load(self, filename):
+        pass
 
 #------------------------------------------------------------------------------#
 

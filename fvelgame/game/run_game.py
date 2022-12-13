@@ -6,40 +6,37 @@ sys.path.append('..')
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
+import argparse
 import pygame
 
 from world.game_world import GameWorld
-from world.meta_world import MetaWorld, load_meta_world
+from world.meta_world import MetaWorld
 from game.engine      import Engine
 
 #------------------------------------------------------------------------------#
-def main( arg ):
+def main( meta ):
     '''
     This function runs the game
 
     arg can be a file name with a MetaWorld or a MetaWorld itself
     '''
 
-    if type(arg) is MetaWorld:
-        world = GameWorld( arg )
-    else:
-        world = GameWorld( load_meta_world(arg) )
-
     pygame.init()
-    
-    pygame.mouse.set_visible( False )
-    
-    info = pygame.display.Info()
-    
-    world.set_dimensions( info.current_w, info.current_h )
+    pygame.mouse.set_visible(False)
 
-    engine = Engine(world)
+    world  = GameWorld(meta)
+
+    info = pygame.display.Info()    
+    world.set_dimensions( info.current_w, info.current_h )
+    engine = Engine  (world)
     
     while True:
     
+        # Restart engine and waits for user press any key
         if not engine.start():
             break
     
+        # Main game loop
         if not engine.game_loop():
             break
 
@@ -48,6 +45,12 @@ def main( arg ):
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
 
-    sys.exit( main( 'world' ) )
+    parser = argparse.ArgumentParser(description='FVelGame')
+    parser.add_argument( 'world', help='Game World file name', nargs='?' )
+
+    args = parser.parse_args()
+    meta = MetaWorld(args.world)
+
+    sys.exit( main(meta) )
 
 #------------------------------------------------------------------------------#
