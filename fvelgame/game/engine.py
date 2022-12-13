@@ -4,14 +4,10 @@ import pygame
 import random
 import time
 
+import game.game_params as gp
+
 from game.objects      import GameObjects
 from game.onscreentext import OnScreenText
-
-# Frames per second
-FPS = 60
-
-# Increase speed time interval milliseconds
-UPDATE_INTERVAL = 100
 
 #------------------------------------------------------------------------------#
 class Engine:
@@ -22,18 +18,17 @@ class Engine:
         self.world = world
         
         # Create the display background
-        self.display = pygame.display.set_mode( world.size, pygame.FULLSCREEN )
+        self.display = pygame.display.set_mode( (0,0), pygame.FULLSCREEN )
+        self.clock   = pygame.time.Clock()
 
         # Create the on screen text to show the score
         self.ost = OnScreenText( world.ost_area, 3, 2, world.ost_fgcolor, world.ost_bgcolor )
-        self.ost.column_width( ['Velocidade: ', '000 000'] )
+        self.ost.column_width( ['Velocidade: ', '000 000 000'] )
 
-        self.event_restart        = pygame.USEREVENT + 1
-        self.event_increase_speed = pygame.USEREVENT + 2
-        self.event_new_obstacle   = pygame.USEREVENT + 3
-        self.event_new_treasure   = pygame.USEREVENT + 4
+        self.event_restart      = pygame.USEREVENT + 1
+        self.event_new_obstacle = pygame.USEREVENT + 2
+        self.event_new_treasure = pygame.USEREVENT + 3
     
-        pygame.time.set_timer( self.event_increase_speed, UPDATE_INTERVAL )
         pygame.time.set_timer( self.event_new_obstacle, self.world.obstacles_min_time )
         pygame.time.set_timer( self.event_new_treasure, self.world.treasures_min_time )
 
@@ -52,10 +47,10 @@ class Engine:
                     else:
                         return True
 
+            self.clock.tick(gp.FPS)
+
     #--------------------------------------------------------------------------#
     def game_loop(self):
-
-        clock = pygame.time.Clock()
 
         while True:
             for event in pygame.event.get():
@@ -66,9 +61,6 @@ class Engine:
         
                 elif event.type == self.event_restart:
                     return True
-        
-                elif event.type == self.event_increase_speed:
-                    self.increase_speed()
         
                 elif event.type == self.event_new_obstacle:
                     self.new_obstacle()
@@ -87,16 +79,15 @@ class Engine:
                         self.show_help()
         
             self.update()
-            clock.tick( FPS )
+            self.clock.tick(gp.FPS)
     
     #------------------------------------------------------------------------------#
-
     def start(self):
 
         self.elapsed_time = 0
+        self.velocity     = self.world.eval_velocity(self.elapsed_time)
 
-        GameObjects.init( self.world.get_track_boundaries(), 
-                          self.world.eval_speed(self.elapsed_time) )
+        GameObjects.init( self.world.get_track_boundaries(), self.velocity )
 
         GameObjects.create_player( self.world.param_player, self.world.player_speed )
 
@@ -123,15 +114,9 @@ class Engine:
               + self.world.score_dodge    * GameObjects.obstacles_dodged   \
               + int( self.world.score_time_bonus * self.elapsed_time )
 
-        # Compute speed in m?/ms 
-        speed = self.world.meta.speed.eval( self.elapsed_time )
-
-        # Time in seconds
-        elapsed_time = self.elapsed_time / 1000
-
-        self.ost.draw( self.display, 0, 1, f'{score} ',            '>' )
-        self.ost.draw( self.display, 1, 1, f'{speed:.2f} ',        '>' )
-        self.ost.draw( self.display, 2, 1, f'{elapsed_time:.2f} ', '>' )
+        self.ost.draw( self.display, 0, 1, f'{score} ',                 '>' )
+        self.ost.draw( self.display, 1, 1, f'{self.velocity:.2f} ',     '>' )
+        self.ost.draw( self.display, 2, 1, f'{self.elapsed_time:.2f} ', '>' )
 
         GameObjects.draw_sprites(self.display)
 
@@ -202,6 +187,10 @@ class Engine:
         self.check_collision()
         self.check_treasure()
 
+        self.elapsed_time += 1 / gp.FPS
+        self.velocity      = self.world.eval_velocity(self.elapsed_time)
+        GameObjects.scrolling_velocity = self.velocity
+
     #--------------------------------------------------------------------------#
     def check_collision(self):
         if GameObjects.check_collision():
@@ -210,11 +199,6 @@ class Engine:
     #--------------------------------------------------------------------------#
     def check_treasure(self):
         GameObjects.check_treasure()
-
-    #--------------------------------------------------------------------------#
-    def increase_speed(self):
-        self.elapsed_time += UPDATE_INTERVAL
-        GameObjects.scrolling_speed = self.world.eval_speed(self.elapsed_time)
 
     #--------------------------------------------------------------------------#
     def new_obstacle(self):

@@ -14,7 +14,7 @@ from world.meta_world import MetaWorld
 from game.engine      import Engine
 
 #------------------------------------------------------------------------------#
-def main( meta ):
+def main(meta):
     '''
     This function runs the game
 
@@ -25,9 +25,6 @@ def main( meta ):
     pygame.mouse.set_visible(False)
 
     world  = GameWorld(meta)
-
-    info = pygame.display.Info()    
-    world.set_dimensions( info.current_w, info.current_h )
     engine = Engine  (world)
     
     while True:

@@ -24,10 +24,10 @@ class GameObjects():
     obstacles_dodged   = 0
     treasures_colected = 0
 
-    scrolling_speed = 0
+    scrolling_velocity = 0
 
     #--------------------------------------------------------------------------#
-    def init( boundaries, speed ):
+    def init( boundaries, velocity ):
 
         GameObjects.track_top     = boundaries['top'][0]
         GameObjects.track_top_min = boundaries['top'][1]
@@ -40,7 +40,7 @@ class GameObjects():
         GameObjects.obstacles_dodged   = 0
         GameObjects.treasures_colected = 0
 
-        GameObjects.scrolling_speed = speed
+        GameObjects.scrolling_velocity = velocity
 
     #--------------------------------------------------------------------------#
     def draw_sprites( display ):
@@ -161,7 +161,7 @@ class ScrollingObject(GameObject):
     #--------------------------------------------------------------------------#
     def update(self):
 
-        self.rect.move_ip( 0, GameObjects.scrolling_speed )
+        self.rect.move_ip( 0, GameObjects.scrolling_velocity )
         
         if self.rect.top > GameObjects.track_bottom:
             self.kill()
