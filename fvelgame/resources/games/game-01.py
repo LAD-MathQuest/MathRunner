@@ -1,7 +1,6 @@
 #------------------------------------------------------------------------------#
 
-'''This script build and save an example of MetaWorld.
-'''
+'''This script build and save an example of MetaWorld.'''
 
 import sys
 sys.path.append('../..')
@@ -17,7 +16,7 @@ if __name__ == '__main__':
 
     meta = MetaWorld()
 
-    meta.game['author'     ] = 'Luis D`Afonseca'
+    meta.game['author'     ] = "Luis D'Afonseca"
     meta.game['name'       ] = 'Corrida'
     meta.game['description'] = ''
     meta.game['icon'       ] = None
@@ -38,12 +37,13 @@ if __name__ == '__main__':
 
     path_player   = path_resources / 'objects' / 'sport_car-1.png'
     path_obstacle = path_resources / 'objects' / 'sport_car-7.png'
+    path_treasure = path_resources / 'objects' / 'precious_stone-3.png'
     path_crash    = path_resources / 'sounds'  / 'car_crash.mp3'   
     path_ambience = path_resources / 'sounds'  / 'music-1.mp3'     
 
-    imag_player   = MetaImage( (48,108), path=path_player    )
-    imag_obstacle = MetaImage( (40, 90), path=path_obstacle  )
-    imag_treasure = MetaImage( (30, 30), color=(240,212,117) )
+    imag_player   = MetaImage( (48,108), path=path_player   )
+    imag_obstacle = MetaImage( (40, 90), path=path_obstacle )
+    imag_treasure = MetaImage( (46, 38), path=path_treasure )
 
     meta.objects['player'   ] = MetaObject( imag_player )
     meta.objects['obstacles'] = MetaObject( imag_obstacle, 10, path_crash )
