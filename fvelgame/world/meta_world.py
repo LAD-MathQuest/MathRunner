@@ -96,24 +96,25 @@ class MetaWorld:
 
         # Obstacles
         self.objects['obstacles'] = []
- 
-        imag_obstacle = MetaImage( (90,17), color=(200, 32, 57) )
+
+        imag_obstacle = MetaImage( (70,70), color=(200, 32, 57) )
         self.objects['obstacles'].append( MetaObject( imag_obstacle, 10 ) )
  
-        imag_obstacle = MetaImage( (15,80), color=(200, 32, 57) )
+        imag_obstacle = MetaImage( (100,40), color=(200, 32, 57) )
         self.objects['obstacles'].append( MetaObject( imag_obstacle, 10 ) )
  
-        imag_obstacle = MetaImage( (50,50), color=(200, 32, 57) )
+        imag_obstacle = MetaImage( (40,100), color=(200, 32, 57) )
         self.objects['obstacles'].append( MetaObject( imag_obstacle, 10 ) )
 
         # Collectibles
         self.objects['collectibles'] = []
 
-        imag_collectible = MetaImage( (30,30), color=(240,212,117) )
+        imag_collectible = MetaImage( (50,50), color=(240,212,117) )
         self.objects['collectibles'].append( MetaObject( imag_collectible, 100 ) )
 
-        imag_collectible = MetaImage( (15,60), color=(240,212,117) )
+        imag_collectible = MetaImage( (30,80), color=(240,212,117) )
         self.objects['collectibles'].append( MetaObject( imag_collectible, 100 ) )
+
 
         # Ambience sound and functions
         #----------------------------------------------------------------------#

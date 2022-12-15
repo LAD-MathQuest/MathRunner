@@ -41,9 +41,6 @@ class MainControler:
         self.ui.action_About   .triggered.connect( self.about )
         self.ui.action_Contents.triggered.connect( self.help  )
 
-        # Test 
-        self.ui.pushButton.clicked.connect( self.change_world )
-
     # Action calls
     #--------------------------------------------------------------------------#
 

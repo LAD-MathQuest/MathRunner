@@ -114,6 +114,8 @@ class Engine:
     #------------------------------------------------------------------------------#
     def start(self):
 
+        self.last_rect = pygame.Rect(0,0,0,0)
+
         self.elapsed_time = 0
         self.velocity     = self.world.eval_velocity(self.elapsed_time)
 
@@ -122,6 +124,7 @@ class Engine:
 
         GameObjects.create_player( self.world.param_player, 
                                    self.world.player_speed )
+
 
         self.draw()
 
@@ -230,9 +233,16 @@ class Engine:
     #--------------------------------------------------------------------------#
     def new_obstacle(self):
 
-        ii = random.randint(0,len(self.world.param_obstacles)-1)
+        sprite = GameObjects.create_obstacle( random.choice(self.world.param_obstacles) )
 
-        GameObjects.create_obstacle( self.world.param_obstacles[ii] )
+        rect = sprite.rect
+
+        if pygame.Rect.colliderect( self.last_rect, rect ):
+            sprite.kill()
+            pygame.time.set_timer( self.event_new_obstacle, 100 )
+            return
+
+        self.last_rect = rect
 
         interval = random.randint( self.world.obstacles_min_time,
                                    self.world.obstacles_max_time )
@@ -242,9 +252,16 @@ class Engine:
     #--------------------------------------------------------------------------#
     def new_collectible(self):
 
-        ii = random.randint(0,len(self.world.param_collectibles)-1)
+        sprite = GameObjects.create_collectible( random.choice(self.world.param_collectibles) )
 
-        GameObjects.create_collectible( self.world.param_collectibles[ii] )
+        rect = sprite.rect
+
+        if pygame.Rect.colliderect( self.last_rect, rect ):
+            sprite.kill()
+            pygame.time.set_timer( self.event_new_collectible, 100 )
+            return
+
+        self.last_rect = rect
 
         interval = random.randint( self.world.collectibles_min_time,
                                    self.world.collectibles_max_time )

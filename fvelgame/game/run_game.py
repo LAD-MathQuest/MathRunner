@@ -16,7 +16,7 @@ from world.meta_world import MetaWorld
 from game.engine      import Engine
 
 #------------------------------------------------------------------------------#
-def main(path):
+def main(meta):
     '''
     This function runs the game
 
@@ -26,11 +26,6 @@ def main(path):
     pygame.init()
     pygame.mouse.set_visible(False)
     pygame.display.set_mode( (0,0), pygame.FULLSCREEN )
-
-    if path:
-        meta = MetaWorld.load(path)
-    else:
-        meta = MetaWorld()
 
     world  = GameWorld(meta)
     engine = Engine  (world)
@@ -54,6 +49,8 @@ if __name__ == '__main__':
     parser.add_argument( 'world', help='Game World file name', nargs='?' )
     args = parser.parse_args()
 
-    sys.exit( main(args.world) )
+    meta = MetaWorld.load(args.world) if args.world else MetaWorld()
+
+    sys.exit( main(meta) )
 
 #------------------------------------------------------------------------------#

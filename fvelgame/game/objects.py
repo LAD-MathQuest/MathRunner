@@ -5,7 +5,7 @@ import random
 
 from pygame.locals import *
 
-import game_params as gp
+import game.game_params as gp
 
 #------------------------------------------------------------------------------#
 class GameObjects():
@@ -88,7 +88,7 @@ class GameObjects():
     #--------------------------------------------------------------------------#
     def create_obstacle(object_param):
 
-        sprite = Obstacle( object_param )
+        sprite = ScrollingObject(object_param, True)
         
         sprite.add( GameObjects.sprites   )
         sprite.add( GameObjects.obstacles )
@@ -98,7 +98,7 @@ class GameObjects():
     #--------------------------------------------------------------------------#
     def create_collectible( object_param ):
 
-        sprite = ScrollingObject( object_param )
+        sprite = ScrollingObject(object_param)
         
         sprite.add( GameObjects.sprites      )
         sprite.add( GameObjects.collectibles )
@@ -161,10 +161,12 @@ class Player(GameObject):
 class ScrollingObject(GameObject):
 
     #--------------------------------------------------------------------------#
-    def __init__(self, object_param):
+    def __init__(self, object_param, obstacle=False):
         '''Create a ScrollingObject'''
 
         super().__init__(object_param)
+
+        self.obstacle = obstacle
 
         # Initial position
         hw = int( self.rect.width / 2 )
@@ -172,6 +174,7 @@ class ScrollingObject(GameObject):
                              GameObjects.track_bottom_max - hw )
         
         self.rect.centerx = xx
+        self.rect.bottom  = -20
 
     #--------------------------------------------------------------------------#
     def update(self):
@@ -179,19 +182,10 @@ class ScrollingObject(GameObject):
         self.rect.move_ip( 0, GameObjects.scrolling_velocity )
         
         if self.rect.top > gp.FULLHD_SIZE[1]:
+
+            if self.obstacle:
+                GameObjects.score += self.score
+
             self.kill()
-
-#------------------------------------------------------------------------------#
-class Obstacle(ScrollingObject):
-    '''Crate an Obstacle object'''
-
-    #--------------------------------------------------------------------------#
-    def __init__(self, object_param):
-        super().__init__(object_param)
-
-    #--------------------------------------------------------------------------#
-    def kill(self):
-        GameObjects.score += self.score
-        super().kill()
 
 #------------------------------------------------------------------------------#
