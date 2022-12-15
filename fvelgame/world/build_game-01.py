@@ -1,25 +1,34 @@
 #------------------------------------------------------------------------------#
 
-'''This script build and save an example of MetaWorld.'''
+'''This script builds a Game example.
+
+Author: Luis D'Afonseca
+Name:   Racing
+
+Description
+'''
+
+#------------------------------------------------------------------------------#
 
 import sys
-sys.path.append('../..')
+from pathlib import Path
 
-from pathlib          import Path
+sys.path.append(str(Path(__file__).parents[1]))
+
 from world.functions  import VelocityFunction, MarginFunctions
 from world.meta_world import MetaWorld, MetaImage, MetaObject
 
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
 
-    print('Building game-01...')
+    print('Building game-01: Racing...')
 
     meta = MetaWorld()
 
     # Game general information
     #--------------------------------------------------------------------------#
     meta.game['author'     ] = "Luis D'Afonseca"
-    meta.game['name'       ] = 'Corrida'
+    meta.game['name'       ] = 'Racing'
     meta.game['description'] = ''
     meta.game['icon'       ] = None
 
@@ -43,7 +52,7 @@ if __name__ == '__main__':
     # Objects
     #--------------------------------------------------------------------------#
 
-    path_resources = Path(__file__).resolve().parents[1]
+    path_resources = Path(__file__).parents[1] / 'resources'
     path_objects   = path_resources / 'objects' 
     path_crash     = path_resources / 'sounds' / 'car_crash.mp3'   
 
@@ -77,9 +86,11 @@ if __name__ == '__main__':
     meta.velocity = VelocityFunction( 5, 0.5 )
     meta.margins  = MarginFunctions( 0.35, 0.65 )
 
-    meta.save('game-01.pkl')
+    path = path_resources / 'games' / 'racing.pkl'
 
-    print('Done')
+    print(F'Writing: {path}')
+
+    meta.save(path)
 
 #------------------------------------------------------------------------------#
 

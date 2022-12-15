@@ -7,8 +7,12 @@ between Pyside and PyGame being independent of both libraries. This class
 must be saved in a binary file and used to create a GameWorld.
 '''
 
+#------------------------------------------------------------------------------#
+
 import sys
-sys.path.append('..')
+from pathlib import Path
+
+sys.path.append(str(Path(__file__).parents[1]))
 
 import pickle
 

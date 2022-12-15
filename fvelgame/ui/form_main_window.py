@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'form_main_window.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.4.0
+## Created by: Qt User Interface Compiler version 6.4.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -36,7 +36,7 @@ class Ui_MainWindow(object):
             icon = QIcon.fromTheme(iconThemeName)
         else:
             icon.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
-        
+
         self.action_Run.setIcon(icon)
         self.action_Exit = QAction(MainWindow)
         self.action_Exit.setObjectName(u"action_Exit")
@@ -46,7 +46,7 @@ class Ui_MainWindow(object):
             icon1 = QIcon.fromTheme(iconThemeName)
         else:
             icon1.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
-        
+
         self.action_Exit.setIcon(icon1)
         self.action_About = QAction(MainWindow)
         self.action_About.setObjectName(u"action_About")
@@ -56,7 +56,7 @@ class Ui_MainWindow(object):
             icon2 = QIcon.fromTheme(iconThemeName)
         else:
             icon2.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
-        
+
         self.action_About.setIcon(icon2)
         self.action_Contents = QAction(MainWindow)
         self.action_Contents.setObjectName(u"action_Contents")
@@ -66,7 +66,7 @@ class Ui_MainWindow(object):
             icon3 = QIcon.fromTheme(iconThemeName)
         else:
             icon3.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
-        
+
         self.action_Contents.setIcon(icon3)
         self.action_Undo = QAction(MainWindow)
         self.action_Undo.setObjectName(u"action_Undo")
@@ -76,7 +76,7 @@ class Ui_MainWindow(object):
             icon4 = QIcon.fromTheme(iconThemeName)
         else:
             icon4.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
-        
+
         self.action_Undo.setIcon(icon4)
         self.action_Redo = QAction(MainWindow)
         self.action_Redo.setObjectName(u"action_Redo")
@@ -86,7 +86,7 @@ class Ui_MainWindow(object):
             icon5 = QIcon.fromTheme(iconThemeName)
         else:
             icon5.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
-        
+
         self.action_Redo.setIcon(icon5)
         self.action_Reset = QAction(MainWindow)
         self.action_Reset.setObjectName(u"action_Reset")
@@ -96,7 +96,7 @@ class Ui_MainWindow(object):
             icon6 = QIcon.fromTheme(iconThemeName)
         else:
             icon6.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
-        
+
         self.action_Reset.setIcon(icon6)
         self.action_New = QAction(MainWindow)
         self.action_New.setObjectName(u"action_New")
@@ -106,7 +106,7 @@ class Ui_MainWindow(object):
             icon7 = QIcon.fromTheme(iconThemeName)
         else:
             icon7.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
-        
+
         self.action_New.setIcon(icon7)
         self.action_Open = QAction(MainWindow)
         self.action_Open.setObjectName(u"action_Open")
@@ -116,7 +116,7 @@ class Ui_MainWindow(object):
             icon8 = QIcon.fromTheme(iconThemeName)
         else:
             icon8.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
-        
+
         self.action_Open.setIcon(icon8)
         self.action_Save = QAction(MainWindow)
         self.action_Save.setObjectName(u"action_Save")
@@ -126,7 +126,7 @@ class Ui_MainWindow(object):
             icon9 = QIcon.fromTheme(iconThemeName)
         else:
             icon9.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
-        
+
         self.action_Save.setIcon(icon9)
         self.action_Build = QAction(MainWindow)
         self.action_Build.setObjectName(u"action_Build")
@@ -136,7 +136,7 @@ class Ui_MainWindow(object):
             icon10 = QIcon.fromTheme(iconThemeName)
         else:
             icon10.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
-        
+
         self.action_Build.setIcon(icon10)
         self.action_Save_as = QAction(MainWindow)
         self.action_Save_as.setObjectName(u"action_Save_as")
@@ -146,7 +146,7 @@ class Ui_MainWindow(object):
             icon11 = QIcon.fromTheme(iconThemeName)
         else:
             icon11.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
-        
+
         self.action_Save_as.setIcon(icon11)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
