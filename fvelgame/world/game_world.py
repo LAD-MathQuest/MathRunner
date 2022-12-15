@@ -79,18 +79,23 @@ class GameWorld:
         
         # Background and track images
         self.background = surface_from_meta_image( meta.appearance['background'] )
-        # self.track    = surface_from_meta_image( meta.appearance['track'     ] )
+        self.track      = surface_from_meta_image( meta.appearance['track'     ] )
 
         # Geting constant track rectangle
-        # TODO take horizontal scrolling in account
-        margins    = meta.margins.eval(0)
-        left       = int( gp.FULLHD_SIZE[0] * margins[0] )
-        width      = int( gp.FULLHD_SIZE[0] * (margins[1]-margins[0]) )
-        self.track = pygame.Rect( left, 0, width, gp.FULLHD_SIZE[1] )
+        min_, lenght = meta.margins.eval(0)
 
-        # Old method of drawing track on background
+        if self.vertical:
+            left  = int( gp.FULLHD_SIZE[0] * min_   )
+            width = int( gp.FULLHD_SIZE[0] * lenght )
+            self.track_rect = pygame.Rect( left, 0, width, gp.FULLHD_SIZE[1] )
+        else:
+            top    = int( gp.FULLHD_SIZE[1] * min_   )
+            height = int( gp.FULLHD_SIZE[1] * lenght )
+            self.track_rect = pygame.Rect( 0, top, gp.FULLHD_SIZE[0], height )
+
+        # TODO implement image blits of track and background
         color = meta.appearance['track'].color 
-        pygame.draw.rect( self.background, color, self.track )
+        pygame.draw.rect( self.background, color, self.track_rect )
 
         self.velocity = meta.velocity
 
@@ -98,7 +103,6 @@ class GameWorld:
     def eval_velocity(self, time):
         ''' Eval scrolling velocity in pixels'''
 
-        # TODO take horizontal scrolling in account
         return int( self.velocity.eval(time) )
 
     #--------------------------------------------------------------------------#
@@ -108,12 +112,20 @@ class GameWorld:
         pass
 
     #--------------------------------------------------------------------------#
-    def get_track_boundaries(self):
+    def get_player_boundaries(self):
 
-        return { 
-            'top':    [self.track.left, self.track.right],
-            'bottom': [self.track.left, self.track.right],
-        }
+        if self.vertical:
+            return [self.track_rect.left, self.track_rect.right]
+        else:
+            return [self.track_rect.top, self.track_rect.bottom]
+
+    #--------------------------------------------------------------------------#
+    def get_spawn_boundaries(self):
+
+        if self.vertical:
+            return [self.track_rect.left, self.track_rect.right]
+        else:
+            return [self.track_rect.top, self.track_rect.bottom]
 
 #------------------------------------------------------------------------------#
 

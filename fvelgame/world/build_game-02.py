@@ -3,10 +3,10 @@
 '''This script builds a Game example.
 
 Author: Luis D'Afonseca
-Name:   Racing
+Name:   Student
 
 Description
-Simple racing game with treasures and obstacles.
+A student runs from studying and seeks only playing video games.
 '''
 
 #------------------------------------------------------------------------------#
@@ -22,21 +22,21 @@ from world.meta_world import MetaWorld, MetaImage, MetaObject
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
 
-    print('Building game 01: Racing...')
+    print('Building game 02: Student...')
 
     meta = MetaWorld()
 
     # Game general information
     #--------------------------------------------------------------------------#
     meta.game['author'     ] = "Luis D'Afonseca"
-    meta.game['name'       ] = 'Racing'
-    meta.game['description'] = ''
+    meta.game['name'       ] = 'Student'
+    meta.game['description'] = 'A student runs from studying and seeks only playing video games.'
     meta.game['icon'       ] = None
 
     # Game dynamics
     #--------------------------------------------------------------------------#
 
-    meta.dynamics['vertical'              ] = True  
+    meta.dynamics['vertical'              ] = False
     meta.dynamics['player_speed'          ] = 4.0
     meta.dynamics['obstacles_frequency'   ] = 3  # Average occurrences per second
     meta.dynamics['collectibles_frequency'] = 1
@@ -44,9 +44,9 @@ if __name__ == '__main__':
 
     # Game appearance
     #--------------------------------------------------------------------------#
-    meta.appearance['background'  ] = MetaImage( color=(39,89,38) )
-    meta.appearance['track'       ] = MetaImage( color=(42,41,34) )
-    meta.appearance['ost_position'] = (100,100)
+    meta.appearance['background'  ] = MetaImage( color=( 51,  51,  51) )
+    meta.appearance['track'       ] = MetaImage( color=(255, 249, 243) )
+    meta.appearance['ost_position'] = (1600,10)
     meta.appearance['ost_bgcolor' ] = ( 55, 55, 55)
     meta.appearance['ost_fgcolor' ] = (255,255,255)
 
@@ -65,17 +65,28 @@ if __name__ == '__main__':
     # Obstacles
     meta.objects['obstacles'] = []
 
-    for ii in range(2,10):
-        path_obstacle = path_objects / f'sport_car-{ii}.png'
-        imag_obstacle = MetaImage((40,90), path=path_obstacle)
-        meta.objects['obstacles'].append(MetaObject( imag_obstacle, 10, path_crash ))
+    imag_obstacle = MetaImage( (100,100), color=(200, 32, 57) )
+    meta.objects['obstacles'].append(MetaObject( imag_obstacle, 10, path_crash ))
 
     # Collectibles
     meta.objects['collectibles'] = []
 
-    for ii in range(1,5):
-        path_collectible = path_objects / f'precious_stone-{ii}.png'
-        imag_collectible = MetaImage((46,38), path=path_collectible)
+    # File resolution
+    # sizes = [ (197, 133),
+    #           (224, 221),
+    #           (227, 219),
+    #           (168, 223),
+    #           (202, 133) ]
+
+    sizes = [ (100,  68),
+              (100,  99),
+              (100,  96),
+              (100, 133),
+              (100,  66) ]
+
+    for ii in range(5):
+        path_collectible = path_objects / f'video_game_controller-{ii+1}.png'
+        imag_collectible = MetaImage(sizes[ii], path=path_collectible)
         meta.objects['collectibles'].append(MetaObject(imag_collectible, 100))
 
     # Ambience sound and functions
@@ -85,9 +96,9 @@ if __name__ == '__main__':
     meta.ambience_sound = path_ambience
 
     meta.velocity = VelocityFunction( 5, 0.5 )
-    meta.margins  = MarginFunctions( 0.35, 0.65 )
+    meta.margins  = MarginFunctions(0.1, 0.9 )
 
-    path = path_resources / 'games' / 'racing.pkl'
+    path = path_resources / 'games' / 'student.pkl'
 
     print(F'Writing: {path}')
 

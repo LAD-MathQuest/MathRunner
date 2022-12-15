@@ -122,7 +122,7 @@ def make_dist():
 
     path_app       = here           / 'fvelgame.py'
     path_resources = here           / 'resources'
-    path_icon      = path_resources / 'icon.ico'
+    path_icon      = path_resources / 'icons' / 'fvelgame.ico'
     
     installer.run([ str(path_app),
                     '--name=FVelGame',

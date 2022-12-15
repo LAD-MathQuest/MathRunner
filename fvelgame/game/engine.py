@@ -47,13 +47,13 @@ class Engine:
 
         # Create the on screen text to show the score
         self.ost = OnScreenText( world.ost_area, 3, 2, world.ost_fgcolor, world.ost_bgcolor )
-        self.ost.column_width( ['Velocidade: ', '000 000 000'] )
+        self.ost.column_width( ['Velocidade: ', '000000'] )
 
-        self.event_restart      = pygame.USEREVENT + 1
-        self.event_new_obstacle = pygame.USEREVENT + 2
+        self.event_restart         = pygame.USEREVENT + 1
+        self.event_new_obstacle    = pygame.USEREVENT + 2
         self.event_new_collectible = pygame.USEREVENT + 3
     
-        pygame.time.set_timer( self.event_new_obstacle, self.world.obstacles_min_time )
+        pygame.time.set_timer( self.event_new_obstacle,    self.world.obstacles_min_time    )
         pygame.time.set_timer( self.event_new_collectible, self.world.collectibles_min_time )
 
         self.music = Music(world.ambience_sound)
@@ -119,12 +119,11 @@ class Engine:
         self.elapsed_time = 0
         self.velocity     = self.world.eval_velocity(self.elapsed_time)
 
-        GameObjects.init( self.world.get_track_boundaries(), 
-                          self.velocity )
+        GameObjects.init( self.world.vertical )
 
         GameObjects.create_player( self.world.param_player, 
-                                   self.world.player_speed )
-
+                                   self.world.player_speed,
+                                   self.world.get_player_boundaries() )
 
         self.draw()
 
@@ -145,7 +144,6 @@ class Engine:
         self.ost.draw( self.display, 1, 0, 'Velocidade:' )
         self.ost.draw( self.display, 2, 0, 'Tempo:'      )
 
-        # TODO create a coerent score system
         score = GameObjects.score + int(self.world.score_time_bonus * self.elapsed_time)
 
         self.ost.draw( self.display, 0, 1, f'{score} ',                 '>' )
@@ -217,7 +215,7 @@ class Engine:
     #--------------------------------------------------------------------------#
     def update(self):
 
-        GameObjects.update()
+        GameObjects.update(self.velocity, self.world.get_player_boundaries())
 
         self.draw()
 
@@ -227,16 +225,18 @@ class Engine:
             self.game_over()            
 
         self.elapsed_time += 1 / gp.FPS
-        self.velocity      = self.world.eval_velocity(self.elapsed_time)
+        self.velocity = self.world.eval_velocity(self.elapsed_time)
         GameObjects.scrolling_velocity = self.velocity
 
     #--------------------------------------------------------------------------#
     def new_obstacle(self):
 
-        sprite = GameObjects.create_obstacle( random.choice(self.world.param_obstacles) )
+        sprite = GameObjects.create_obstacle( random.choice(self.world.param_obstacles),
+                                              self.world.get_spawn_boundaries() )
 
         rect = sprite.rect
 
+        # This sprite overlaps with the last one
         if pygame.Rect.colliderect( self.last_rect, rect ):
             sprite.kill()
             pygame.time.set_timer( self.event_new_obstacle, 100 )
@@ -252,10 +252,12 @@ class Engine:
     #--------------------------------------------------------------------------#
     def new_collectible(self):
 
-        sprite = GameObjects.create_collectible( random.choice(self.world.param_collectibles) )
+        sprite = GameObjects.create_collectible( random.choice(self.world.param_collectibles),
+                                                 self.world.get_spawn_boundaries() )
 
         rect = sprite.rect
 
+        # This sprite overlaps with the last one
         if pygame.Rect.colliderect( self.last_rect, rect ):
             sprite.kill()
             pygame.time.set_timer( self.event_new_collectible, 100 )
