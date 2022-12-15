@@ -52,18 +52,27 @@ class MetaWorld:
     def __init__( self ):
         '''Create a default MetaWorld.'''
 
+        # Game general information
+        #----------------------------------------------------------------------#
+
         self.game = {}
         self.game['author'     ] = ''
         self.game['name'       ] = ''
         self.game['description'] = ''
         self.game['icon'       ] = None
 
+        # Game dynamics
+        #----------------------------------------------------------------------#
+
         self.dynamics = {}
-        self.dynamics['vertical'           ] = True  
-        self.dynamics['player_speed'       ] = 4.0
-        self.dynamics['obstacles_frequency'] = 3  # Average occurrences per second
-        self.dynamics['treasures_frequency'] = 1
-        self.dynamics['score_time_bonus'   ] = 0.001 # Points per millisecond
+        self.dynamics['vertical'              ] = True  
+        self.dynamics['player_speed'          ] = 4.0
+        self.dynamics['obstacles_frequency'   ] = 3  # Average occurrences per second
+        self.dynamics['collectibles_frequency'] = 1
+        self.dynamics['score_time_bonus'      ] = 0.001 # Points per millisecond
+
+        # Game appearance
+        #----------------------------------------------------------------------#
 
         self.appearance = {}
         self.appearance['background'  ] = MetaImage( color=(39,38,67) )
@@ -72,19 +81,43 @@ class MetaWorld:
         self.appearance['ost_bgcolor' ] = ( 55, 55, 55)
         self.appearance['ost_fgcolor' ] = (255,255,255)
 
-        imag_player   = MetaImage( (35,60), color=( 49,116,200) )
-        imag_obstacle = MetaImage( (90,17), color=(200, 32, 57) )
-        imag_treasure = MetaImage( (30,30), color=(240,212,117) )
-    
+        # Objects
+        #----------------------------------------------------------------------#
+
         self.objects = {}
-        self.objects['player'   ] = MetaObject( imag_player )
-        self.objects['obstacles'] = MetaObject( imag_obstacle, 10 )
-        self.objects['treasures'] = MetaObject( imag_treasure, 100 )
+
+        # Player
+        imag_player = MetaImage( (35,60), color=( 49,116,200) )
+        self.objects['player'] = MetaObject(imag_player)
+
+        # Obstacles
+        self.objects['obstacles'] = []
+ 
+        imag_obstacle = MetaImage( (90,17), color=(200, 32, 57) )
+        self.objects['obstacles'].append( MetaObject( imag_obstacle, 10 ) )
+ 
+        imag_obstacle = MetaImage( (15,80), color=(200, 32, 57) )
+        self.objects['obstacles'].append( MetaObject( imag_obstacle, 10 ) )
+ 
+        imag_obstacle = MetaImage( (50,50), color=(200, 32, 57) )
+        self.objects['obstacles'].append( MetaObject( imag_obstacle, 10 ) )
+
+        # Collectibles
+        self.objects['collectibles'] = []
+
+        imag_collectible = MetaImage( (30,30), color=(240,212,117) )
+        self.objects['collectibles'].append( MetaObject( imag_collectible, 100 ) )
+
+        imag_collectible = MetaImage( (15,60), color=(240,212,117) )
+        self.objects['collectibles'].append( MetaObject( imag_collectible, 100 ) )
+
+        # Ambience sound and functions
+        #----------------------------------------------------------------------#
 
         self.ambience_sound = None
 
-        self.velocity = VelocityFunction( 5, 0.5 )
-        self.margins  = MarginFunctions( 0.3, 0.7 )
+        self.velocity = VelocityFunction(5, 0.5)
+        self.margins  = MarginFunctions(0.35, 0.65)
 
     #--------------------------------------------------------------------------#
     def save(self, path):

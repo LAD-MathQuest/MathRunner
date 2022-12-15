@@ -55,23 +55,24 @@ class GameWorld:
         self.ambience_sound = meta.ambience_sound
 
         # TODO Replace uniform distribution for a arrivel distribution
-        self.obstacles_frequency = meta.dynamics['obstacles_frequency']
-        self.treasures_frequency = meta.dynamics['treasures_frequency']
+        self.obstacles_frequency    = meta.dynamics['obstacles_frequency'   ]
+        self.collectibles_frequency = meta.dynamics['collectibles_frequency']
 
-        self.obstacles_min_time =  100
-        self.obstacles_max_time = 1000
-        self.treasures_min_time =  500
-        self.treasures_max_time = 4000
+        self.obstacles_min_time    =  100
+        self.obstacles_max_time    = 1000
+        self.collectibles_min_time =  500
+        self.collectibles_max_time = 4000
 
         self.score_time_bonus = meta.dynamics['score_time_bonus']
 
         self.ost_bgcolor = meta.appearance['ost_bgcolor']
         self.ost_fgcolor = meta.appearance['ost_fgcolor']
 
-        self.player_speed   = meta.dynamics['player_speed']
-        self.param_player   = GameObjectParam( meta.objects['player'   ] )
-        self.param_obstacle = GameObjectParam( meta.objects['obstacles'] )
-        self.param_treasure = GameObjectParam( meta.objects['treasures'] )
+        self.player_speed = meta.dynamics['player_speed']
+        self.param_player = GameObjectParam( meta.objects['player'] )
+
+        self.param_obstacles    = [ GameObjectParam(ob) for ob in meta.objects['obstacles'   ] ]
+        self.param_collectibles = [ GameObjectParam(ob) for ob in meta.objects['collectibles'] ]
 
         # TODO Compute ost size properly
         self.ost_area = pygame.Rect( meta.appearance['ost_position'], (260,110) )
@@ -110,8 +111,8 @@ class GameWorld:
     def get_track_boundaries(self):
 
         return { 
-            'top':    [self.track.top,    self.track.left, self.track.right],
-            'bottom': [self.track.bottom, self.track.left, self.track.right],
+            'top':    [self.track.left, self.track.right],
+            'bottom': [self.track.left, self.track.right],
         }
 
 #------------------------------------------------------------------------------#

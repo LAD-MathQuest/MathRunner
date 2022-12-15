@@ -5,42 +5,36 @@ import random
 
 from pygame.locals import *
 
+import game_params as gp
+
 #------------------------------------------------------------------------------#
 class GameObjects():
 
-    track_top     = 0
     track_top_min = 0
     track_top_max = 0
 
-    track_bottom     = 0
     track_bottom_min = 0
     track_bottom_max = 0
 
-    player    = None
-    sprites   = pygame.sprite.Group()
-    obstacles = pygame.sprite.Group()
-    treasures = pygame.sprite.Group()
-
-    obstacles_dodged   = 0
-    treasures_colected = 0
+    player       = None
+    sprites      = pygame.sprite.Group()
+    obstacles    = pygame.sprite.Group()
+    collectibles = pygame.sprite.Group()
 
     scrolling_velocity = 0
 
     #--------------------------------------------------------------------------#
-    def init( boundaries, velocity ):
+    def init(boundaries, velocity):
 
-        # TODO remove track top and bottom
-        GameObjects.track_top     = boundaries['top'][0]
-        GameObjects.track_top_min = boundaries['top'][1]
-        GameObjects.track_top_max = boundaries['top'][2]
+        GameObjects.track_top_min = boundaries['top'][0]
+        GameObjects.track_top_max = boundaries['top'][1]
 
-        GameObjects.track_bottom     = boundaries['bottom'][0]
-        GameObjects.track_bottom_min = boundaries['bottom'][1]
-        GameObjects.track_bottom_max = boundaries['bottom'][2]
+        GameObjects.track_bottom_min = boundaries['bottom'][0]
+        GameObjects.track_bottom_max = boundaries['bottom'][1]
+
+        GameObjects.track_bottom = int( 0.99*gp.FULLHD_SIZE[1] )
 
         GameObjects.score = 0
-        GameObjects.obstacles_dodged   = 0
-        GameObjects.treasures_colected = 0
 
         GameObjects.scrolling_velocity = velocity
 
@@ -60,7 +54,7 @@ class GameObjects():
     #--------------------------------------------------------------------------#
     def check_collision():
         sprite = pygame.sprite.spritecollideany( GameObjects.player, 
-                                                   GameObjects.obstacles )
+                                                 GameObjects.obstacles )
 
         if sprite:
             sprite.play_sound()
@@ -68,10 +62,10 @@ class GameObjects():
         return sprite
 
     #--------------------------------------------------------------------------#
-    def check_treasure():
+    def check_collectible():
 
         sprite = pygame.sprite.spritecollideany( GameObjects.player, 
-                                                 GameObjects.treasures )
+                                                 GameObjects.collectibles )
 
         if sprite:
             GameObjects.score += sprite.score
@@ -81,7 +75,7 @@ class GameObjects():
         return sprite
 
     #--------------------------------------------------------------------------#
-    def create_player( object_param, speed ):
+    def create_player(object_param, speed):
 
         sprite = Player( object_param, speed )
         
@@ -92,7 +86,7 @@ class GameObjects():
         return sprite
 
     #--------------------------------------------------------------------------#
-    def create_obstacle( object_param ):
+    def create_obstacle(object_param):
 
         sprite = Obstacle( object_param )
         
@@ -102,12 +96,12 @@ class GameObjects():
         return sprite
 
     #--------------------------------------------------------------------------#
-    def create_treasure( object_param ):
+    def create_collectible( object_param ):
 
-        sprite = Treasure( object_param )
+        sprite = ScrollingObject( object_param )
         
-        sprite.add( GameObjects.sprites   )
-        sprite.add( GameObjects.treasures )
+        sprite.add( GameObjects.sprites      )
+        sprite.add( GameObjects.collectibles )
         
         return sprite
 
@@ -144,7 +138,7 @@ class Player(GameObject):
         super().__init__(object_param)
 
         self.rect.centerx = int( (GameObjects.track_bottom_min+GameObjects.track_bottom_max)/2 )
-        self.rect.bottom  = int( 0.99*GameObjects.track_bottom )
+        self.rect.bottom  = GameObjects.track_bottom
 
         self.speed = speed
 
@@ -184,7 +178,7 @@ class ScrollingObject(GameObject):
 
         self.rect.move_ip( 0, GameObjects.scrolling_velocity )
         
-        if self.rect.top > GameObjects.track_bottom:
+        if self.rect.top > gp.FULLHD_SIZE[1]:
             self.kill()
 
 #------------------------------------------------------------------------------#
@@ -199,13 +193,5 @@ class Obstacle(ScrollingObject):
     def kill(self):
         GameObjects.score += self.score
         super().kill()
-
-#------------------------------------------------------------------------------#
-class Treasure(ScrollingObject):
-    '''Crate an Treasure object'''
-
-    #--------------------------------------------------------------------------#
-    def __init__(self, object_param):
-        super().__init__(object_param)
 
 #------------------------------------------------------------------------------#

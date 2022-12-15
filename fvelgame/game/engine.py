@@ -51,10 +51,10 @@ class Engine:
 
         self.event_restart      = pygame.USEREVENT + 1
         self.event_new_obstacle = pygame.USEREVENT + 2
-        self.event_new_treasure = pygame.USEREVENT + 3
+        self.event_new_collectible = pygame.USEREVENT + 3
     
         pygame.time.set_timer( self.event_new_obstacle, self.world.obstacles_min_time )
-        pygame.time.set_timer( self.event_new_treasure, self.world.treasures_min_time )
+        pygame.time.set_timer( self.event_new_collectible, self.world.collectibles_min_time )
 
         self.music = Music(world.ambience_sound)
 
@@ -95,8 +95,8 @@ class Engine:
                 elif event.type == self.event_new_obstacle:
                     self.new_obstacle()
         
-                elif event.type == self.event_new_treasure:
-                    self.new_treasure()
+                elif event.type == self.event_new_collectible:
+                    self.new_collectible()
 
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_q        or \
@@ -117,9 +117,11 @@ class Engine:
         self.elapsed_time = 0
         self.velocity     = self.world.eval_velocity(self.elapsed_time)
 
-        GameObjects.init( self.world.get_track_boundaries(), self.velocity )
+        GameObjects.init( self.world.get_track_boundaries(), 
+                          self.velocity )
 
-        GameObjects.create_player( self.world.param_player, self.world.player_speed )
+        GameObjects.create_player( self.world.param_player, 
+                                   self.world.player_speed )
 
         self.draw()
 
@@ -215,42 +217,38 @@ class Engine:
         GameObjects.update()
 
         self.draw()
-        self.check_collision()
-        self.check_treasure()
+
+        GameObjects.check_collectible()
+        
+        if GameObjects.check_collision():
+            self.game_over()            
 
         self.elapsed_time += 1 / gp.FPS
         self.velocity      = self.world.eval_velocity(self.elapsed_time)
         GameObjects.scrolling_velocity = self.velocity
 
     #--------------------------------------------------------------------------#
-    def check_collision(self):
-        if GameObjects.check_collision():
-            self.game_over()            
-
-    #--------------------------------------------------------------------------#
-    def check_treasure(self):
-        GameObjects.check_treasure()
-
-    #--------------------------------------------------------------------------#
     def new_obstacle(self):
 
-        GameObjects.create_obstacle( self.world.param_obstacle )
+        ii = random.randint(0,len(self.world.param_obstacles)-1)
 
-        # TODO Take cake when the track is smaller than the object
+        GameObjects.create_obstacle( self.world.param_obstacles[ii] )
+
         interval = random.randint( self.world.obstacles_min_time,
                                    self.world.obstacles_max_time )
 
         pygame.time.set_timer( self.event_new_obstacle, interval )
 
     #--------------------------------------------------------------------------#
-    def new_treasure(self):
+    def new_collectible(self):
 
-        GameObjects.create_treasure( self.world.param_treasure )
+        ii = random.randint(0,len(self.world.param_collectibles)-1)
 
-        # TODO Take cake when the track is smaller than the object
-        interval = random.randint( self.world.treasures_min_time,
-                                   self.world.treasures_max_time )
+        GameObjects.create_collectible( self.world.param_collectibles[ii] )
 
-        pygame.time.set_timer( self.event_new_treasure, interval )
+        interval = random.randint( self.world.collectibles_min_time,
+                                   self.world.collectibles_max_time )
+
+        pygame.time.set_timer( self.event_new_collectible, interval )
 
 #------------------------------------------------------------------------------#
