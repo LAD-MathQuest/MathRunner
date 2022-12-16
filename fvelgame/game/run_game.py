@@ -11,6 +11,8 @@ sys.path.append(str(Path(__file__).parents[1]))
 import argparse
 import pygame
 
+import game.game_params as gp
+
 from world.game_world import GameWorld
 from world.meta_world import MetaWorld
 from game.engine      import Engine
@@ -20,12 +22,12 @@ def main(meta):
     '''
     This function runs the game
 
-    arg can be a file name with a MetaWorld or a MetaWorld itself
+        meta: MetaWorld object
     '''
 
     pygame.init()
     pygame.mouse.set_visible(False)
-    pygame.display.set_mode( (0,0), pygame.FULLSCREEN )
+    pygame.display.set_mode( gp.FULLHD_SIZE, pygame.FULLSCREEN )
 
     world  = GameWorld(meta)
     engine = Engine  (world)

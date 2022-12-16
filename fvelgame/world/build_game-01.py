@@ -37,10 +37,10 @@ if __name__ == '__main__':
     #--------------------------------------------------------------------------#
 
     meta.dynamics['vertical'              ] = True  
-    meta.dynamics['player_speed'          ] = 4.0
-    meta.dynamics['obstacles_frequency'   ] = 3  # Average occurrences per second
+    meta.dynamics['player_speed'          ] = 4 # Pixels per frame
+    meta.dynamics['obstacles_frequency'   ] = 3 # Average occurrences per second
     meta.dynamics['collectibles_frequency'] = 1
-    meta.dynamics['score_time_bonus'      ] = 0.001 # Points per millisecond
+    meta.dynamics['score_time_bonus'      ] = 1 # Points per second
 
     # Game appearance
     #--------------------------------------------------------------------------#
@@ -87,7 +87,7 @@ if __name__ == '__main__':
     meta.velocity = VelocityFunction( 5, 0.5 )
     meta.margins  = MarginFunctions( 0.35, 0.65 )
 
-    path = path_resources / 'games' / 'racing.pkl'
+    path = path_resources / 'games' / 'racing.game'
 
     print(F'Writing: {path}')
 

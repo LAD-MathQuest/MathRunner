@@ -37,16 +37,16 @@ if __name__ == '__main__':
     #--------------------------------------------------------------------------#
 
     meta.dynamics['vertical'              ] = False
-    meta.dynamics['player_speed'          ] = 4.0
-    meta.dynamics['obstacles_frequency'   ] = 3  # Average occurrences per second
-    meta.dynamics['collectibles_frequency'] = 1
-    meta.dynamics['score_time_bonus'      ] = 0.001 # Points per millisecond
+    meta.dynamics['player_speed'          ] =  8 # Pixels per frame
+    meta.dynamics['obstacles_frequency'   ] =  3 # Average occurrences per second
+    meta.dynamics['collectibles_frequency'] =  1
+    meta.dynamics['score_time_bonus'      ] = -2 # Points per second
 
     # Game appearance
     #--------------------------------------------------------------------------#
-    meta.appearance['background'  ] = MetaImage( color=( 51,  51,  51) )
-    meta.appearance['track'       ] = MetaImage( color=(255, 249, 243) )
-    meta.appearance['ost_position'] = (1600,10)
+    meta.appearance['background'  ] = MetaImage( color=( 55, 55, 55) )
+    meta.appearance['track'       ] = MetaImage( color=(102,153,153) )
+    meta.appearance['ost_position'] = (200,10)
     meta.appearance['ost_bgcolor' ] = ( 55, 55, 55)
     meta.appearance['ost_fgcolor' ] = (255,255,255)
 
@@ -56,49 +56,51 @@ if __name__ == '__main__':
     path_resources = Path(__file__).parents[1] / 'resources'
     path_objects   = path_resources / 'objects' 
     path_crash     = path_resources / 'sounds' / 'car_crash.mp3'   
+    path_crash = None
 
     # Player
-    path_player = path_objects / 'sport_car-1.png'
-    imag_player = MetaImage((48,108), path=path_player)
+    path_player = path_objects / 'confident_student.png'
+    imag_player = MetaImage((90,140), path=path_player)
     meta.objects['player'] = MetaObject(imag_player)
 
     # Obstacles
     meta.objects['obstacles'] = []
 
-    imag_obstacle = MetaImage( (100,100), color=(200, 32, 57) )
-    meta.objects['obstacles'].append(MetaObject( imag_obstacle, 10, path_crash ))
+    # Image sizes
+    # file = [ (110,143), (168,130), (92,124),  (207,155), (203,103), 
+    #          (166,111), (135,147), (204,114), (227,148) ]
+    sizes = [ (80,104), (100,77),  (80,108), (100,75), (100,51),
+              (100,67),  (100,109), (100,56),  (160,104) ]
+
+    for ii in range(9):
+        path_obstacle = path_objects / f'book-{ii+1}.png'
+        imag_obstacle = MetaImage(sizes[ii], path=path_obstacle)
+        meta.objects['obstacles'].append(MetaObject(imag_obstacle, -10))
 
     # Collectibles
     meta.objects['collectibles'] = []
 
-    # File resolution
-    # sizes = [ (197, 133),
-    #           (224, 221),
-    #           (227, 219),
-    #           (168, 223),
-    #           (202, 133) ]
-
-    sizes = [ (100,  68),
-              (100,  99),
-              (100,  96),
-              (100, 133),
-              (100,  66) ]
+    # Image sizes
+    # file = [ (197, 133), (224, 221), (227, 219), (168, 223), (202, 133) ]
+    sizes = [ (100,68), (100,99), (100,96), (100,133), (100,66) ]
 
     for ii in range(5):
         path_collectible = path_objects / f'video_game_controller-{ii+1}.png'
         imag_collectible = MetaImage(sizes[ii], path=path_collectible)
-        meta.objects['collectibles'].append(MetaObject(imag_collectible, 100))
+        meta.objects['collectibles'].append(MetaObject(imag_collectible, -100))
 
     # Ambience sound and functions
     #--------------------------------------------------------------------------#
 
     path_ambience = path_resources / 'sounds' / 'music-1.mp3'     
+    path_ambience = None
+
     meta.ambience_sound = path_ambience
 
-    meta.velocity = VelocityFunction( 5, 0.5 )
-    meta.margins  = MarginFunctions(0.1, 0.9 )
+    meta.velocity = VelocityFunction( 8, 0.3 )
+    meta.margins  = MarginFunctions(0.12, 0.9 )
 
-    path = path_resources / 'games' / 'student.pkl'
+    path = path_resources / 'games' / 'student.game'
 
     print(F'Writing: {path}')
 

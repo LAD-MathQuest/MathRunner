@@ -28,6 +28,9 @@
   - 5 stars, the creator choses the score of each star
 - Help message must be aware of vertical or horizontal scrolling
 - Play crash sound before show game over
+- Add elapsed time to scoreboard
+- Add transparent option to MetaImage
+- Allow creator to make margins kill the player
 
 #### Games
 
@@ -62,9 +65,8 @@
 
 ## In progress...
 
-- Implement Horizontal scrolling
-
 ## DONE
 
+- Implement Horizontal scrolling
 
 ## GAVE UP

@@ -70,10 +70,10 @@ class MetaWorld:
 
         self.dynamics = {}
         self.dynamics['vertical'              ] = True  
-        self.dynamics['player_speed'          ] = 4.0
-        self.dynamics['obstacles_frequency'   ] = 3  # Average occurrences per second
+        self.dynamics['player_speed'          ] = 4 # Pixels per frame
+        self.dynamics['obstacles_frequency'   ] = 3 # Average occurrences per second
         self.dynamics['collectibles_frequency'] = 1
-        self.dynamics['score_time_bonus'      ] = 0.001 # Points per millisecond
+        self.dynamics['score_time_bonus'      ] = 1 # Points per second
 
         # Game appearance
         #----------------------------------------------------------------------#

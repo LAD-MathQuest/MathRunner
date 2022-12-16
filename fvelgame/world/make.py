@@ -74,7 +74,7 @@ def make_distclean():
 
     make_clean()
     print(f'{here.name}: Hard cleaning...')
-    remove_files( here.parent / 'resources' / 'games', '*.pkl' )
+    remove_files( here.parent / 'resources' / 'games', '*.game' )
 
 #------------------------------------------------------------------------------#
 def make_default():
