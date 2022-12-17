@@ -8,13 +8,10 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).parents[1]))
 
-import argparse
 import pygame
 
-import game.game_params as gp
-
-from world.game_world import GameWorld
 from world.meta_world import MetaWorld
+from world.game_world import GameWorld
 from game.engine      import Engine
 
 #------------------------------------------------------------------------------#
@@ -27,7 +24,7 @@ def main(meta):
 
     pygame.init()
     pygame.mouse.set_visible(False)
-    pygame.display.set_mode( gp.FULLHD_SIZE, pygame.FULLSCREEN )
+    pygame.display.set_mode( (0,0), pygame.FULLSCREEN )
 
     world  = GameWorld(meta)
     engine = Engine  (world)
@@ -46,6 +43,8 @@ def main(meta):
 
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
+    
+    import argparse
 
     parser = argparse.ArgumentParser(description='FVelGame')
     parser.add_argument( 'world', help='Game World file name', nargs='?' )

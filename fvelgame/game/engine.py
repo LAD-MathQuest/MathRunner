@@ -40,10 +40,9 @@ class Engine:
     def __init__( self, world ):
 
         self.world = world
-        
-        # Create the display background
-        self.display = pygame.display.get_surface()
-        self.clock   = pygame.time.Clock()
+        self.clock = pygame.time.Clock()
+
+        self.set_display()
 
         # Create the on screen text to show the score
         self.ost = OnScreenText( world.ost_area, 3, 2, world.ost_fgcolor, world.ost_bgcolor )
@@ -57,6 +56,32 @@ class Engine:
         pygame.time.set_timer( self.event_new_collectible, self.world.collectibles_min_time )
 
         self.music = Music(world.ambience_sound)
+
+    #--------------------------------------------------------------------------#
+    def set_display(self):
+
+        display = pygame.display.get_surface()
+        size    = tuple(display.get_size())
+
+        self.needs_resize = True # ( size != gp.SCREEN_SIZE )
+
+        if self.needs_resize:
+            self.display = pygame.Surface(gp.SCREEN_SIZE)
+        else:
+            self.display = display
+
+    #--------------------------------------------------------------------------#
+    def flip(self):
+
+        if self.needs_resize:
+
+            display = pygame.display.get_surface()
+            size    = display.get_size()
+            resized = pygame.transform.scale(self.display, size) 
+
+            display.blit(resized, (0,0))
+
+        pygame.display.flip()
 
     #--------------------------------------------------------------------------#
     def wait(self):
@@ -152,7 +177,7 @@ class Engine:
 
         GameObjects.draw(self.display)
 
-        pygame.display.flip()
+        self.flip()
         
     #--------------------------------------------------------------------------#
     def game_over(self):
@@ -168,7 +193,7 @@ class Engine:
         rect.center = self.display.get_rect().center
         font.render_to( self.display, rect, None, (200,20,20) )
 
-        pygame.display.flip()
+        self.flip()
 
         GameObjects.kill_all() 
 
@@ -206,7 +231,7 @@ class Engine:
             ost.draw( self.display, 2*ii, 0, info[ii][0] )
             ost.draw( self.display, 2*ii, 1, info[ii][1] )
 
-        pygame.display.flip()
+        self.flip()
 
         if not self.wait():
             pygame.event.clear()

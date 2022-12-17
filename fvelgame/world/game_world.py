@@ -85,13 +85,13 @@ class GameWorld:
         min_, lenght = meta.margins.eval(0)
 
         if self.vertical:
-            left  = int( gp.FULLHD_SIZE[0] * min_   )
-            width = int( gp.FULLHD_SIZE[0] * lenght )
-            self.track_rect = pygame.Rect( left, 0, width, gp.FULLHD_SIZE[1] )
+            left  = int( gp.SCREEN_SIZE[0] * min_   )
+            width = int( gp.SCREEN_SIZE[0] * lenght )
+            self.track_rect = pygame.Rect( left, 0, width, gp.SCREEN_SIZE[1] )
         else:
-            top    = int( gp.FULLHD_SIZE[1] * min_   )
-            height = int( gp.FULLHD_SIZE[1] * lenght )
-            self.track_rect = pygame.Rect( 0, top, gp.FULLHD_SIZE[0], height )
+            top    = int( gp.SCREEN_SIZE[1] * min_   )
+            height = int( gp.SCREEN_SIZE[1] * lenght )
+            self.track_rect = pygame.Rect( 0, top, gp.SCREEN_SIZE[0], height )
 
         # TODO implement image blits of track and background
         color = meta.appearance['track'].color 

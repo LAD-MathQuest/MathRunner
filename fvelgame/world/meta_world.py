@@ -17,7 +17,7 @@ sys.path.append(str(Path(__file__).parents[1]))
 import pickle
 
 # Default screen resolution
-FULLHD_SIZE = (1920, 1080)
+SCREEN_SIZE = (1920, 1080)
 
 #------------------------------------------------------------------------------#
 
@@ -28,7 +28,7 @@ class MetaImage:
     '''Describes an image to be used on game.'''
 
     #--------------------------------------------------------------------------#
-    def __init__(self, size=FULLHD_SIZE, color=(0,0,0), path=None ):
+    def __init__(self, size=SCREEN_SIZE, color=(0,0,0), path=None ):
         '''Create a MetaImage.
 
         Height (size[1]) equal to None means to keep the image aspect ratio

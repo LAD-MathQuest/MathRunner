@@ -123,10 +123,10 @@ class Player(GameObject):
 
         if GameObjects.vertical:
             self.rect.centerx = int( (boundaries[0]+boundaries[1]) / 2 )
-            self.rect.bottom  = int( 0.99*gp.FULLHD_SIZE[1] )
+            self.rect.bottom  = int( 0.99*gp.SCREEN_SIZE[1] )
         else:
             self.rect.centery = int( (boundaries[0]+boundaries[1]) / 2 )
-            self.rect.left    = int( 0.03*gp.FULLHD_SIZE[0] )
+            self.rect.left    = int( 0.03*gp.SCREEN_SIZE[0] )
 
         self.speed = speed
 
@@ -191,14 +191,14 @@ class ScrollingObject(GameObject):
                 yy = random.randint( boundaries[0]+aa, boundaries[1]-aa )
 
             self.rect.centery = yy
-            self.rect.left    = gp.FULLHD_SIZE[0]
+            self.rect.left    = gp.SCREEN_SIZE[0]
 
     #--------------------------------------------------------------------------#
     def update(self):
 
         if GameObjects.vertical:
             self.rect.move_ip( 0, GameObjects.velocity )
-            out = self.rect.top > gp.FULLHD_SIZE[1]
+            out = self.rect.top > gp.SCREEN_SIZE[1]
         else:
             self.rect.move_ip( -GameObjects.velocity, 0 )
             out = self.rect.right < 1
