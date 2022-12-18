@@ -6,6 +6,7 @@ import random
 from pygame.locals import *
 
 import game.game_params as gp
+from   game.sound_mixer import SoundMixer
 
 #------------------------------------------------------------------------------#
 class GameObjects():
@@ -111,7 +112,7 @@ class GameObject(pygame.sprite.Sprite):
         '''Play collision sound if it exists.'''
 
         if self.sound:
-            pygame.mixer.Sound(self.sound).play()
+            SoundMixer.play_sound(self.sound)
 
 #------------------------------------------------------------------------------#
 class Player(GameObject):

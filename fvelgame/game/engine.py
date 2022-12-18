@@ -8,30 +8,7 @@ import game.game_params as gp
 
 from game.objects      import GameObjects
 from game.onscreentext import OnScreenText
-
-
-#------------------------------------------------------------------------------#
-class Music:
-    '''pygame.mixer.music wrapper to encapsulate existence tests'''
-
-    #--------------------------------------------------------------------------#
-    def __init__( self, sound ):
-
-        self.has_sound = bool(sound)
-
-        if self.has_sound:
-            pygame.mixer.music.load(sound)
-            pygame.mixer.music.set_volume(1.0)
-
-    #--------------------------------------------------------------------------#
-    def play(self):
-        if self.has_sound:
-            pygame.mixer.music.play(-1)
-
-    #--------------------------------------------------------------------------#
-    def stop(self):
-        if self.has_sound:
-            pygame.mixer.music.stop()
+from game.sound_mixer  import SoundMixer
 
 #------------------------------------------------------------------------------#
 class Engine:
@@ -55,7 +32,7 @@ class Engine:
         pygame.time.set_timer( self.event_new_obstacle,    self.world.obstacles_min_time    )
         pygame.time.set_timer( self.event_new_collectible, self.world.collectibles_min_time )
 
-        self.music = Music(world.ambience_sound)
+        self.mixer = SoundMixer(world.ambience_sound)
 
     #--------------------------------------------------------------------------#
     def set_display(self):
@@ -103,18 +80,18 @@ class Engine:
     #--------------------------------------------------------------------------#
     def game_loop(self):
 
-        self.music.play()
+        self.mixer.play()
 
         while True:
             for event in pygame.event.get():
         
                 if event.type == pygame.QUIT:
-                    self.music.stop()
+                    self.mixer.stop()
                     pygame.quit()
                     return False
         
                 elif event.type == self.event_restart:
-                    self.music.stop()
+                    self.mixer.stop()
                     return True
         
                 elif event.type == self.event_new_obstacle:
@@ -124,14 +101,16 @@ class Engine:
                     self.new_collectible()
 
                 elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_q        or \
-                       event.key == pygame.K_ESCAPE:
+
+                    if event.key in [ pygame.K_q, pygame.K_ESCAPE ]:
                         pygame.quit()
                         return False
-                    elif event.key == pygame.K_h      or \
-                         event.key == pygame.K_F1     or \
-                         event.key == pygame.K_SPACE:
+
+                    elif event.key in [ pygame.K_h, pygame.K_F1, pygame.K_SPACE ]:
                         self.show_help()
+
+                    elif event.key == pygame.K_m:
+                        self.mixer.toggle_mute()
         
             self.update()
             self.clock.tick(gp.FPS)
@@ -182,14 +161,14 @@ class Engine:
     #--------------------------------------------------------------------------#
     def game_over(self):
 
-        self.music.stop()
+        self.mixer.stop()
 
         self.display.fill( (60,60,60), None, pygame.BLEND_MULT )
         
         size = self.display.get_rect().height // 6
         font = pygame.freetype.Font( None, size )
 
-        rect = font.get_rect( 'Game Over' )
+        rect = font.get_rect('Game Over')
         rect.center = self.display.get_rect().center
         font.render_to( self.display, rect, None, (200,20,20) )
 
@@ -210,6 +189,7 @@ class Engine:
         info = [ [ '<-  ou  a',          'Mover para a esquerda'  ], \
                  [ '->  ou  d',          'Mover para a direita'   ], \
                  [ 'F1,  h  ou  espaço', 'Pausar e mostrar ajuda' ], \
+                 [ 'M',                  'Alternar mudo'          ], \
                  [ 'q  ou  esc',         'Sair'                   ]  ]
 
         n_lin = len(info)
