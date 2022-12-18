@@ -138,10 +138,12 @@ class MetaWorld:
         with open(path, 'rb') as file:
             meta = pickle.load(file)
 
-        # Simple data validation
+        # TODO Simple data validation
+        # try:
         meta.game['author']
         meta.dynamics['player_speed']
         meta.appearance['background']
+        # except:
 
         return meta
 

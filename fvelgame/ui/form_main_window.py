@@ -50,6 +50,7 @@ class Ui_MainWindow(object):
         self.action_Exit.setIcon(icon1)
         self.action_About = QAction(MainWindow)
         self.action_About.setObjectName(u"action_About")
+        self.action_About.setEnabled(False)
         icon2 = QIcon()
         iconThemeName = u"help-about"
         if QIcon.hasThemeIcon(iconThemeName):
@@ -60,6 +61,7 @@ class Ui_MainWindow(object):
         self.action_About.setIcon(icon2)
         self.action_Contents = QAction(MainWindow)
         self.action_Contents.setObjectName(u"action_Contents")
+        self.action_Contents.setEnabled(False)
         icon3 = QIcon()
         iconThemeName = u"help-contents"
         if QIcon.hasThemeIcon(iconThemeName):
@@ -70,6 +72,7 @@ class Ui_MainWindow(object):
         self.action_Contents.setIcon(icon3)
         self.action_Undo = QAction(MainWindow)
         self.action_Undo.setObjectName(u"action_Undo")
+        self.action_Undo.setEnabled(False)
         icon4 = QIcon()
         iconThemeName = u"edit-undo"
         if QIcon.hasThemeIcon(iconThemeName):
@@ -80,6 +83,7 @@ class Ui_MainWindow(object):
         self.action_Undo.setIcon(icon4)
         self.action_Redo = QAction(MainWindow)
         self.action_Redo.setObjectName(u"action_Redo")
+        self.action_Redo.setEnabled(False)
         icon5 = QIcon()
         iconThemeName = u"edit-redo"
         if QIcon.hasThemeIcon(iconThemeName):
@@ -90,6 +94,7 @@ class Ui_MainWindow(object):
         self.action_Redo.setIcon(icon5)
         self.action_Reset = QAction(MainWindow)
         self.action_Reset.setObjectName(u"action_Reset")
+        self.action_Reset.setEnabled(False)
         icon6 = QIcon()
         iconThemeName = u"document-revert"
         if QIcon.hasThemeIcon(iconThemeName):
@@ -120,6 +125,7 @@ class Ui_MainWindow(object):
         self.action_Open.setIcon(icon8)
         self.action_Save = QAction(MainWindow)
         self.action_Save.setObjectName(u"action_Save")
+        self.action_Save.setEnabled(False)
         icon9 = QIcon()
         iconThemeName = u"document-save"
         if QIcon.hasThemeIcon(iconThemeName):
@@ -130,6 +136,7 @@ class Ui_MainWindow(object):
         self.action_Save.setIcon(icon9)
         self.action_Build = QAction(MainWindow)
         self.action_Build.setObjectName(u"action_Build")
+        self.action_Build.setEnabled(False)
         icon10 = QIcon()
         iconThemeName = u"application-x-executable"
         if QIcon.hasThemeIcon(iconThemeName):
@@ -140,6 +147,7 @@ class Ui_MainWindow(object):
         self.action_Build.setIcon(icon10)
         self.action_Save_as = QAction(MainWindow)
         self.action_Save_as.setObjectName(u"action_Save_as")
+        self.action_Save_as.setEnabled(False)
         icon11 = QIcon()
         iconThemeName = u"document-save-as"
         if QIcon.hasThemeIcon(iconThemeName):
@@ -150,6 +158,7 @@ class Ui_MainWindow(object):
         self.action_Save_as.setIcon(icon11)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
+        self.centralwidget.setEnabled(True)
         self.gridLayout = QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName(u"gridLayout")
         self.tabWidget = QTabWidget(self.centralwidget)
@@ -158,6 +167,7 @@ class Ui_MainWindow(object):
         self.tabWidget.setAutoFillBackground(True)
         self.tabGame = QWidget()
         self.tabGame.setObjectName(u"tabGame")
+        self.tabGame.setEnabled(False)
         self.gridLayout_2 = QGridLayout(self.tabGame)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
@@ -221,6 +231,7 @@ class Ui_MainWindow(object):
         self.tabWidget.addTab(self.tabGame, "")
         self.tabDynamics = QWidget()
         self.tabDynamics.setObjectName(u"tabDynamics")
+        self.tabDynamics.setEnabled(False)
         self.gridLayout_3 = QGridLayout(self.tabDynamics)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
         self.verticalSpacer_2 = QSpacerItem(20, 268, QSizePolicy.Minimum, QSizePolicy.Expanding)
@@ -360,6 +371,7 @@ class Ui_MainWindow(object):
         self.tabWidget.addTab(self.tabDynamics, "")
         self.tabAppearence = QWidget()
         self.tabAppearence.setObjectName(u"tabAppearence")
+        self.tabAppearence.setEnabled(False)
         self.gridLayout_4 = QGridLayout(self.tabAppearence)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.scrollArea = QScrollArea(self.tabAppearence)
@@ -367,7 +379,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, -267, 580, 1013))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 422, 1013))
         self.gridLayout_19 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_19.setObjectName(u"gridLayout_19")
         self.groupBox_Scoreboard = QGroupBox(self.scrollAreaWidgetContents)
@@ -955,6 +967,7 @@ class Ui_MainWindow(object):
         self.tabWidget.addTab(self.tabAppearence, "")
         self.tabSounds = QWidget()
         self.tabSounds.setObjectName(u"tabSounds")
+        self.tabSounds.setEnabled(False)
         self.gridLayout_5 = QGridLayout(self.tabSounds)
         self.gridLayout_5.setObjectName(u"gridLayout_5")
         self.label_SoundCatch = QLabel(self.tabSounds)
@@ -1013,6 +1026,7 @@ class Ui_MainWindow(object):
         self.tabWidget.addTab(self.tabSounds, "")
         self.tabVelocity = QWidget()
         self.tabVelocity.setObjectName(u"tabVelocity")
+        self.tabVelocity.setEnabled(False)
         self.gridLayout_6 = QGridLayout(self.tabVelocity)
         self.gridLayout_6.setObjectName(u"gridLayout_6")
         self.label_VelocityPlot = QLabel(self.tabVelocity)

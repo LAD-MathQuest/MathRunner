@@ -1,7 +1,12 @@
 #------------------------------------------------------------------------------#
 
-from PySide6.QtWidgets import QApplication
-from ui.main_model     import MainModel
+from PySide6.QtWidgets import ( QApplication, 
+                                QFileDialog, 
+                                QMessageBox )
+
+import parameters as par
+
+from ui.main_model import MainModel
 
 #------------------------------------------------------------------------------#
 class MainControler:
@@ -13,10 +18,11 @@ class MainControler:
         self.win   = window
         self.ui    = window.ui
 
-        self.connect_signals_and_slots()
-
+        self.last_dir  = str(par.HOME)
         self.file_name = ''
         self.start_new()
+
+        self.connect_signals_and_slots()
 
     #--------------------------------------------------------------------------#
     def connect_signals_and_slots(self):
@@ -45,24 +51,26 @@ class MainControler:
     #--------------------------------------------------------------------------#
 
     #--------------------------------------------------------------------------#
-    def change_world(self):
-        print('Contr: Changing world')
-        self.changed = True
-
-    #--------------------------------------------------------------------------#
     def new(self):
+
         if self.confirm_deletion():
             self.file_name = ''
             self.start_new()
 
     #--------------------------------------------------------------------------#
     def open(self):
+
         if self.confirm_deletion():
-            print('Contr: Get file not yet implemented!')
-            self.file_name = 'get_file_name'
-            self.model.open( self.file_name )
-            self.changed = False
-            self.update()
+
+            path  = par.RESOURCES / 'games' 
+            fname = self.get_open_fname('Chose a game description', path, 'game' )
+
+            if fname:
+                # TODO try:
+                self.file_name = fname
+                self.model.open(self.file_name)
+                self.changed = False
+                self.update()
 
     #--------------------------------------------------------------------------#
     def save(self):
@@ -76,7 +84,6 @@ class MainControler:
 
     #--------------------------------------------------------------------------#
     def save_as(self):
-        print('Contr: Get file not yet implemented!')
         self.file_name = 'get_file_name'
         self.model.save( self.file_name )
         self.changed = False
@@ -91,7 +98,6 @@ class MainControler:
         self.model.undo()
         self.update()
 
-        print('Contr: Unchanging world')
         self.changed = False
 
     #--------------------------------------------------------------------------#
@@ -111,18 +117,17 @@ class MainControler:
 
     #--------------------------------------------------------------------------#
     def build(self):
-        print('Contr: Get file not yet implemented!')
         self.exe_file_name = 'get_file_name'
         self.block_ui()
         self.model.build( self.exe_file_name )
 
     #--------------------------------------------------------------------------#
     def about(self):
-        print('Contr: About not yet implemented!')
+        QMessageBox.about(self.win, par.TITLE+' - About', par.ABOUT )
 
     #--------------------------------------------------------------------------#
     def help(self):
-        print('Contr: Help contents not yet implemented!')
+        QMessageBox.about(self.win, par.TITLE+' - Help', par.ABOUT )
 
     # Internal tools
     #--------------------------------------------------------------------------#
@@ -137,17 +142,53 @@ class MainControler:
     def confirm_deletion(self):
 
         if self.changed:
-            print('Contr: Confirm deletion not yet implemented!')
             return False
 
         return True
 
     #--------------------------------------------------------------------------#
     def block_ui(self):
-        print('Contr: Block not yet implemented!')
+        pass
 
     #--------------------------------------------------------------------------#
     def update(self):
-        print('Contr: Update not yet implemented!')
+
+        meta = self.model.meta
+        
+        self.ui.lineEdit_GameName.setText(meta.game['name'  ])
+        self.ui.lineEdit_Author  .setText(meta.game['author'])
+
+        self.ui.plainTextEdit_GameDescription.setPlainText(meta.game['description'])
+
+    #-------------------------------------------------------------------------#
+    def error_box( self, title, message ):
+        QMessageBox.critical( self.win, title, message,
+                              buttons=QMessageBox.StandardButton.Ok )
+
+    #--------------------------------------------------------------------------#
+    def get_open_fname( self, title, path, ext ):
+        fname, _ = QFileDialog.getOpenFileName( parent  = self.win, 
+                                                caption = title, 
+                                                dir     = str(path),
+                                                filter  = '*.' + ext )
+        return fname
+    
+    #--------------------------------------------------------------------------#
+    def get_save_fname( self, title, ext, suggestion = '' ):
+
+        if not suggestion:
+            suggestion = self.last_dir
+
+        fname, _ = QFileDialog.getSaveFileName( parent  = self.win, 
+                                                caption = title, 
+                                                dir     = suggestion, 
+                                                filter  = '*.' + ext )
+        if fname:
+            ee = '.' + ext
+            nn = len(ee)
+            if len(fname) < nn or fname[-nn:] != ee:
+                fname += ee
+    
+        return fname
 
 #------------------------------------------------------------------------------#

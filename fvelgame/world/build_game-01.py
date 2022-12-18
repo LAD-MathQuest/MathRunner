@@ -30,7 +30,7 @@ if __name__ == '__main__':
     #--------------------------------------------------------------------------#
     meta.game['author'     ] = "Luis D'Afonseca"
     meta.game['name'       ] = 'Racing'
-    meta.game['description'] = ''
+    meta.game['description'] = 'Simple racing game with treasures and obstacles'
     meta.game['icon'       ] = None
 
     # Game dynamics
