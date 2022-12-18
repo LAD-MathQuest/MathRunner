@@ -8,10 +8,6 @@
 #### Game engine
 
 - Deal with pygame.ACTIVEEVENT events as the display gains and loses input focus
-- Volume Control
-  - [-] decrease volume
-  - [+] increase volume
-  - [M] toggle mute
 - Use a system font that offers unicode support
   - Create a table os equivalent fonts in all systems
   - Select the fonts presente on all systems
@@ -31,13 +27,21 @@
 - Add elapsed time to scoreboard
 - Add transparent option to MetaImage
 - Allow creator to make margins kill the player
+- Compute elapsed time using pygame function
 
 #### Games
 
 - Ship on ocean colecting precious stones and chests
   - Vertical scrolling
-- Student running from study
-  - Horizontal scrolling
+- racing
+  - add sound to treasure catch
+  - add oil spill
+  - add background
+  - add track image
+- student
+  - add sounds
+  - add background
+  - add track image
 
 #### Graphycal Interface
 
@@ -67,6 +71,14 @@
 
 ## DONE
 
+2022-12-17
+- Improve collision boundaries on transparent pngs
+- Game: Student running from study
+  - Horizontal scrolling
+- Volume Control
+  - [-] decrease volume - decided to not implement
+  - [+] increase volume - decided to not implement
+  - [M] toggle mute
 - Implement Horizontal scrolling
 
 ## GAVE UP

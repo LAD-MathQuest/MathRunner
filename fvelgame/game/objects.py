@@ -1,9 +1,10 @@
 #------------------------------------------------------------------------------#
 
-import pygame
 import random
 
+import pygame
 from pygame.locals import *
+from pygame        import sprite
 
 import game.game_params as gp
 from   game.sound_mixer import SoundMixer
@@ -15,52 +16,59 @@ class GameObjects():
     score        = 0
 
     player       = None
-    sprites      = pygame.sprite.Group()
-    obstacles    = pygame.sprite.Group()
-    collectibles = pygame.sprite.Group()
+    sprites      = sprite.Group()
+    obstacles    = sprite.Group()
+    collectibles = sprite.Group()
 
     #--------------------------------------------------------------------------#
     def init(vertical):
+
         GameObjects.vertical = vertical
         GameObjects.score    = 0
 
     #--------------------------------------------------------------------------#
     def draw(display):
+
         GameObjects.sprites.draw(display)
 
     #--------------------------------------------------------------------------#
     def update(velocity, boundaries):
+
         GameObjects.velocity          = velocity
         GameObjects.player_boundaries = boundaries
         GameObjects.sprites.update()
 
     #--------------------------------------------------------------------------#
     def kill_all():
-        for sprite in GameObjects.sprites:
-            sprite.kill() 
+
+        for sprt in GameObjects.sprites:
+            sprt.kill() 
 
     #--------------------------------------------------------------------------#
     def check_collision():
-        sprite = pygame.sprite.spritecollideany( GameObjects.player, 
-                                                 GameObjects.obstacles )
 
-        if sprite:
-            sprite.play_sound()
+        sprt = sprite.spritecollideany( GameObjects.player, 
+                                      GameObjects.obstacles,
+                                      sprite.collide_mask )
 
-        return sprite
+        if sprt:
+            sprt.play_sound()
+
+        return sprt
 
     #--------------------------------------------------------------------------#
     def check_collectible():
 
-        sprite = pygame.sprite.spritecollideany( GameObjects.player, 
-                                                 GameObjects.collectibles )
+        sprt = sprite.spritecollideany( GameObjects.player, 
+                                      GameObjects.collectibles,
+                                      sprite.collide_mask )
 
-        if sprite:
-            GameObjects.score += sprite.score
-            sprite.play_sound()
-            sprite.kill()
+        if sprt:
+            GameObjects.score += sprt.score
+            sprt.play_sound()
+            sprt.kill()
 
-        return sprite
+        return sprt
 
     #--------------------------------------------------------------------------#
     def create_player(object_param, speed, boundaries):
@@ -73,27 +81,27 @@ class GameObjects():
     #--------------------------------------------------------------------------#
     def create_obstacle(object_param, boundaries):
 
-        sprite = ScrollingObject(object_param, boundaries, True)
+        sprt = ScrollingObject(object_param, boundaries, True)
         
-        sprite.add( GameObjects.sprites   )
-        sprite.add( GameObjects.obstacles )
+        sprt.add( GameObjects.sprites   )
+        sprt.add( GameObjects.obstacles )
         
-        return sprite
+        return sprt
 
     #--------------------------------------------------------------------------#
     def create_collectible( object_param, boundaries ):
 
-        sprite = ScrollingObject(object_param, boundaries)
+        sprt = ScrollingObject(object_param, boundaries)
         
-        sprite.add( GameObjects.sprites      )
-        sprite.add( GameObjects.collectibles )
+        sprt.add( GameObjects.sprites      )
+        sprt.add( GameObjects.collectibles )
         
-        return sprite
+        return sprt
 
 #------------------------------------------------------------------------------#
 #------------------------------------------------------------------------------#
 #------------------------------------------------------------------------------#
-class GameObject(pygame.sprite.Sprite):
+class GameObject(sprite.Sprite):
 
     #--------------------------------------------------------------------------#
     def __init__(self, object_param):
@@ -103,6 +111,7 @@ class GameObject(pygame.sprite.Sprite):
         
         self.image = object_param.image
         self.rect  = self.image.get_rect()
+        self.mask  = pygame.mask.from_surface(self.image)
         
         self.score = object_param.collision_score
         self.sound = object_param.collision_sound
@@ -123,10 +132,10 @@ class Player(GameObject):
         super().__init__(object_param)
 
         if GameObjects.vertical:
-            self.rect.centerx = int( (boundaries[0]+boundaries[1]) / 2 )
+            self.rect.centerx = (boundaries[0]+boundaries[1]) // 2
             self.rect.bottom  = int( 0.99*gp.SCREEN_SIZE[1] )
         else:
-            self.rect.centery = int( (boundaries[0]+boundaries[1]) / 2 )
+            self.rect.centery = (boundaries[0]+boundaries[1]) // 2
             self.rect.left    = int( 0.03*gp.SCREEN_SIZE[0] )
 
         self.speed = speed
