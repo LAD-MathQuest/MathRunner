@@ -17,7 +17,6 @@ import sys
 import os
 import argparse
 import shutil
-import PyInstaller.__main__ as installer
 
 from pathlib import Path
 

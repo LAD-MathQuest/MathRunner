@@ -19,7 +19,6 @@ import sys
 import os
 import argparse
 import shutil
-import PyInstaller.__main__ as installer
 
 from pathlib import Path
 
@@ -105,6 +104,8 @@ def make_default():
 #------------------------------------------------------------------------------#
 def make_dist():
     '''Execute PyInstaller to build a distribution'''
+
+    import PyInstaller.__main__ as installer
 
     if sys.platform.startswith('linux'):
         os_name = 'Linux'
