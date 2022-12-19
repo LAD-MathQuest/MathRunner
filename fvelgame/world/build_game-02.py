@@ -6,7 +6,7 @@ Author: Luis D'Afonseca
 Name:   Student
 
 Description
-A student runs from studying and seeks only playing video games.
+A confident student runs from studying and seeks only playing video games.
 '''
 
 #------------------------------------------------------------------------------#
@@ -24,61 +24,83 @@ if __name__ == '__main__':
 
     print('Building game 02: Student...')
 
+    path_resources   = Path(__file__).parents[1]/'resources'
+    path_backgrounds = path_resources/'backgrounds'
+    path_objects     = path_resources/'objects' 
+    path_sounds      = path_resources/'sounds'
+    path_games       = path_resources/'games'
+
+    #--------------------------------------------------------------------------#
+
     meta = MetaWorld()
 
-    # Game general information
-    #--------------------------------------------------------------------------#
-    meta.game['author'     ] = "Luis D'Afonseca"
-    meta.game['name'       ] = 'Student'
-    meta.game['description'] = 'A student runs from studying and seeks only playing video games.'
-    meta.game['icon'       ] = None
-
-    # Game dynamics
+    # Software
     #--------------------------------------------------------------------------#
 
-    meta.dynamics['vertical'              ] = False
-    meta.dynamics['player_speed'          ] =  8 # Pixels per frame
-    meta.dynamics['obstacles_frequency'   ] =  3 # Average occurrences per second
-    meta.dynamics['collectibles_frequency'] =  1
-    meta.dynamics['score_time_bonus'      ] = -2 # Points per second
+    meta.soft_name        = 'Student'
+    meta.soft_author      = "Luis D'Afonseca"
+    meta.soft_description = 'A confident student runs from studying and seeks only playing video games.'
+    meta.soft_icon        = None
 
-    # Game appearance
-    #--------------------------------------------------------------------------#
-    meta.appearance['background'  ] = MetaImage( color=( 55, 55, 55) )
-    meta.appearance['track'       ] = MetaImage( color=(102,153,153) )
-    meta.appearance['ost_position'] = (200,10)
-    meta.appearance['ost_bgcolor' ] = ( 55, 55, 55)
-    meta.appearance['ost_fgcolor' ] = (255,255,255)
-
-    # Objects
+    # Game 
     #--------------------------------------------------------------------------#
 
-    path_resources = Path(__file__).parents[1] / 'resources'
-    path_objects   = path_resources / 'objects' 
-    path_crash     = path_resources / 'sounds' / 'car_crash.mp3'   
-    path_crash = None
+    meta.game_vertical   = False
+    meta.game_time_bonus = -2
+    meta.game_ambience   = None
+
+    # Appearance
+    #--------------------------------------------------------------------------#
+
+    meta.background_image   = MetaImage( color=( 55, 55, 55) )
+    meta.background_scrolls = False
+    
+    meta.track_image      = MetaImage( color=(102,153,153) )
+    meta.scoreboard_image = None
+
+    meta.scoreboard_text_position = (200,10)
+    meta.scoreboard_text_bgcolor  = ( 55, 55, 55)
+    meta.scoreboard_text_fgcolor  = (255,255,255)
 
     # Player
-    path_player = path_objects / 'confident_student.png'
+    #--------------------------------------------------------------------------#
+
+    path_player = path_objects/'confident_student.png'
     imag_player = MetaImage((90,140), path=path_player)
-    meta.objects['player'] = MetaObject(imag_player)
+
+    meta.player       = MetaObject(imag_player)
+    meta.player_speed = 8
 
     # Obstacles
-    meta.objects['obstacles'] = []
+    #--------------------------------------------------------------------------#
+
+    points = -10
+
+    meta.obstacles_frequency = 3
+    meta.obstacles = []
 
     # Image sizes
-    # file = [ (110,143), (168,130), (92,124),  (207,155), (203,103), 
-    #          (166,111), (135,147), (204,114), (227,148) ]
-    sizes = [ (80,104), (100,77),  (80,108), (100,75), (100,51),
-              (100,67),  (100,109), (100,56),  (160,104) ]
+    # file = [ (110,143), (168,130), (92,124),
+    #          (207,155), (203,103), (166,111), 
+    #          (135,147), (204,114), (227,148) ]
+    sizes = [ (80,104),  (100,77), (80,108), 
+              (100,75),  (100,51), (100,67),
+              (100,109), (100,56), (160,104) ]
 
     for ii in range(9):
+        
         path_obstacle = path_objects / f'book-{ii+1}.png'
         imag_obstacle = MetaImage(sizes[ii], path=path_obstacle)
-        meta.objects['obstacles'].append(MetaObject(imag_obstacle, -10))
+
+        meta.obstacles.append(MetaObject(imag_obstacle, points))
 
     # Collectibles
-    meta.objects['collectibles'] = []
+    #--------------------------------------------------------------------------#
+
+    points = -100
+
+    meta.collectibles_frequency = 1
+    meta.collectibles = []
 
     # Image sizes
     # file = [ (197, 133), (224, 221), (227, 219), (168, 223), (202, 133) ]
@@ -87,20 +109,18 @@ if __name__ == '__main__':
     for ii in range(5):
         path_collectible = path_objects / f'video_game_controller-{ii+1}.png'
         imag_collectible = MetaImage(sizes[ii], path=path_collectible)
-        meta.objects['collectibles'].append(MetaObject(imag_collectible, -100))
+        meta.collectibles.append(MetaObject(imag_collectible, points))
 
-    # Ambience sound and functions
+    # Functions
     #--------------------------------------------------------------------------#
 
-    path_ambience = path_resources / 'sounds' / 'music-1.mp3'     
-    path_ambience = None
+    meta.velocity = VelocityFunction( 8.00, 0.3 )
+    meta.margins  = MarginFunctions ( 0.12, 0.9 )
 
-    meta.ambience_sound = path_ambience
+    # Saving
+    #--------------------------------------------------------------------------#
 
-    meta.velocity = VelocityFunction( 8, 0.3 )
-    meta.margins  = MarginFunctions(0.12, 0.9 )
-
-    path = path_resources / 'games' / 'student.game'
+    path = path_games/'student.game'
 
     print(F'Writing: {path}')
 

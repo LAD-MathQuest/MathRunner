@@ -18,7 +18,7 @@ class OnScreenText:
         self.fgcolor = fgcolor
         self.bgcolor = bgcolor
 
-        self.area   = area.copy()
+        self.area = area.copy()
 
         mx = -OnScreenText.margin( area.width  )
         my = -OnScreenText.margin( area.height )

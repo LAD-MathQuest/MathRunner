@@ -56,73 +56,83 @@ class MetaWorld:
     def __init__( self ):
         '''Create a default MetaWorld.'''
 
-        # Game general information
+        # Software
         #----------------------------------------------------------------------#
 
-        self.game = {}
-        self.game['author'     ] = ''
-        self.game['name'       ] = ''
-        self.game['description'] = ''
-        self.game['icon'       ] = None
+        self.soft_name        = ''
+        self.soft_author      = ''
+        self.soft_description = ''
+        self.soft_icon        = None
 
-        # Game dynamics
+        # Game 
         #----------------------------------------------------------------------#
 
-        self.dynamics = {}
-        self.dynamics['vertical'              ] = True  
-        self.dynamics['player_speed'          ] = 4 # Pixels per frame
-        self.dynamics['obstacles_frequency'   ] = 3 # Average occurrences per second
-        self.dynamics['collectibles_frequency'] = 1
-        self.dynamics['score_time_bonus'      ] = 1 # Points per second
+        self.game_vertical   = True   
+        self.game_time_bonus = 1     # Score points bonnus per second
+        self.game_ambience   = None  # Ambience sound
 
-        # Game appearance
+        # Appearance
         #----------------------------------------------------------------------#
 
-        self.appearance = {}
-        self.appearance['background'  ] = MetaImage( color=(39,38,67) )
-        self.appearance['track'       ] = MetaImage( color=(38,90,90) )
-        self.appearance['ost_position'] = (100,100)
-        self.appearance['ost_bgcolor' ] = ( 55, 55, 55)
-        self.appearance['ost_fgcolor' ] = (255,255,255)
+        self.background_image   = MetaImage( color=(39,38,67) )
+        self.background_scrolls = False
+        
+        # If track_image if null the game will not draw the track
+        self.track_image           = MetaImage( color=(38,90,90) )
+        self.track_boundaries_kill = False
 
-        # Objects
-        #----------------------------------------------------------------------#
+        self.scoreboard_image          = None
+        self.scoreboard_image_position = (0,0)
+        self.scoreboard_image_size     = (0,0)
 
-        self.objects = {}
+        self.scoreboard_text_position = (100,100)
+        self.scoreboard_text_bgcolor  = ( 55, 55, 55)
+        self.scoreboard_text_fgcolor  = (255,255,255)
 
         # Player
-        imag_player = MetaImage( (35,60), color=( 49,116,200) )
-        self.objects['player'] = MetaObject(imag_player)
-
-        # Obstacles
-        self.objects['obstacles'] = []
-
-        imag_obstacle = MetaImage( (70,70), color=(200, 32, 57) )
-        self.objects['obstacles'].append( MetaObject( imag_obstacle, 10 ) )
- 
-        imag_obstacle = MetaImage( (100,40), color=(200, 32, 57) )
-        self.objects['obstacles'].append( MetaObject( imag_obstacle, 10 ) )
- 
-        imag_obstacle = MetaImage( (40,100), color=(200, 32, 57) )
-        self.objects['obstacles'].append( MetaObject( imag_obstacle, 10 ) )
-
-        # Collectibles
-        self.objects['collectibles'] = []
-
-        imag_collectible = MetaImage( (50,50), color=(240,212,117) )
-        self.objects['collectibles'].append( MetaObject( imag_collectible, 100 ) )
-
-        imag_collectible = MetaImage( (30,80), color=(240,212,117) )
-        self.objects['collectibles'].append( MetaObject( imag_collectible, 100 ) )
-
-
-        # Ambience sound and functions
         #----------------------------------------------------------------------#
 
-        self.ambience_sound = None
+        self.player       = MetaObject(MetaImage( (35,60), color=(80,50,200)))
+        self.player_speed = 4 # Pixels per frame
 
-        self.velocity = VelocityFunction(5, 0.5)
-        self.margins  = MarginFunctions(0.35, 0.65)
+        # Obstacles
+        #----------------------------------------------------------------------#
+
+        color  = (200,32,57)
+        points = 10
+
+        self.obstacles_frequency = 4 # Average occurrences per second
+        self.obstacles = []
+
+        imag_obstacle = MetaImage( (70,70), color=color )
+        self.obstacles.append( MetaObject( imag_obstacle, points ) )
+ 
+        imag_obstacle = MetaImage( (100,40), color=color )
+        self.obstacles.append( MetaObject( imag_obstacle, points ) )
+ 
+        imag_obstacle = MetaImage( (40,100), color=color )
+        self.obstacles.append( MetaObject( imag_obstacle, points ) )
+
+        # Collectibles
+        #----------------------------------------------------------------------#
+
+        color  = (240,212,117)
+        points = 100
+
+        self.collectibles_frequency = 1
+        self.collectibles = []
+
+        imag_collectible = MetaImage( (50,50), color=color )
+        self.collectibles.append( MetaObject( imag_collectible, points ) )
+
+        imag_collectible = MetaImage( (30,80), color=color )
+        self.collectibles.append( MetaObject( imag_collectible, points ) )
+
+        # Functions
+        #----------------------------------------------------------------------#
+
+        self.velocity = VelocityFunction(5.00, 0.50)
+        self.margins  = MarginFunctions (0.35, 0.65)
 
     #--------------------------------------------------------------------------#
     def save(self, path):
@@ -139,11 +149,6 @@ class MetaWorld:
             meta = pickle.load(file)
 
         # TODO Simple data validation
-        # try:
-        meta.game['author']
-        meta.dynamics['player_speed']
-        meta.appearance['background']
-        # except:
 
         return meta
 

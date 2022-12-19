@@ -51,40 +51,84 @@ class GameWorld:
     def __init__(self, meta):
         '''Create a GameWorld from MetaWorld.'''
 
-        self.vertical = meta.dynamics['vertical']
-        self.ambience_sound = meta.ambience_sound
+        # Software
+        #----------------------------------------------------------------------#
 
-        # TODO Replace uniform distribution for a arrivel distribution
-        self.obstacles_frequency    = meta.dynamics['obstacles_frequency'   ]
-        self.collectibles_frequency = meta.dynamics['collectibles_frequency']
+        self.soft_name        = meta.soft_name       
+        self.soft_author      = meta.soft_author     
+        self.soft_description = meta.soft_description
+        self.soft_icon        = meta.soft_icon       
 
-        self.obstacles_min_time    =  100
-        self.obstacles_max_time    = 1000
-        self.collectibles_min_time =  500
-        self.collectibles_max_time = 4000
+        # Game 
+        #----------------------------------------------------------------------#
 
-        self.score_time_bonus = meta.dynamics['score_time_bonus']
+        self.game_vertical   = meta.game_vertical  
+        self.game_time_bonus = meta.game_time_bonus
+        self.game_ambience   = meta.game_ambience  
 
-        self.ost_bgcolor = meta.appearance['ost_bgcolor']
-        self.ost_fgcolor = meta.appearance['ost_fgcolor']
+        # Appearance
+        #----------------------------------------------------------------------#
 
-        self.player_speed = meta.dynamics['player_speed']
-        self.param_player = GameObjectParam( meta.objects['player'] )
-
-        self.param_obstacles    = [ GameObjectParam(ob) for ob in meta.objects['obstacles'   ] ]
-        self.param_collectibles = [ GameObjectParam(ob) for ob in meta.objects['collectibles'] ]
-
-        # TODO Compute ost size properly
-        self.ost_area = pygame.Rect( meta.appearance['ost_position'], (260,110) )
+        # Background
+        self.background_image   = surface_from_meta_image(meta.background_image)
+        self.background_scrolls = meta.background_scrolls
         
-        # Background and track images
-        self.background = surface_from_meta_image( meta.appearance['background'] )
-        self.track      = surface_from_meta_image( meta.appearance['track'     ] )
+        # Track
+        self.draw_track = bool(meta.track_image)
+        
+        if self.draw_track:
+            self.track_image = surface_from_meta_image(meta.track_image)
 
-        # Geting constant track rectangle
-        min_, lenght = meta.margins.eval(0)
+        # Scoreboard
+        self.scoreboard_has_image = bool(meta.scoreboard_image)
 
-        if self.vertical:
+        if self.scoreboard_has_image:
+            self.scoreboard_image      = surface_from_meta_image(meta.scoreboard_image)
+            self.scoreboard_image_rect = pygame.Rect( meta.scoreboard_image_position,
+                                                      meta.scoreboard_image_size )
+
+        self.scoreboard_text_position = meta.scoreboard_text_position
+        self.scoreboard_text_bgcolor  = meta.scoreboard_text_bgcolor 
+        self.scoreboard_text_fgcolor  = meta.scoreboard_text_fgcolor 
+
+        # Player
+        #----------------------------------------------------------------------#
+
+        self.player_speed = meta.player_speed
+        self.param_player = GameObjectParam( meta.player )
+
+        # Obstacles
+        #----------------------------------------------------------------------#
+
+        mean = 1 / meta.obstacles_frequency
+
+        self.obstacles_min_delay = mean / 4
+        self.obstacles_max_delay = mean * 4
+
+        self.param_obstacles = [ GameObjectParam(ob) for ob in meta.obstacles ]
+
+        # Collectibles
+        #----------------------------------------------------------------------#
+
+        mean = 1 / meta.collectibles_frequency
+
+        self.collectibles_min_delay = mean / 4
+        self.collectibles_max_delay = mean * 4
+
+        self.param_collectibles = [ GameObjectParam(ob) for ob in meta.collectibles ]
+
+        # Functions
+        #----------------------------------------------------------------------#
+
+        self.velocity = meta.velocity
+        self.margins  = meta.margins 
+
+        # Initializing background and track
+        #----------------------------------------------------------------------#
+
+        min_, lenght = self.margins.eval(0)
+
+        if self.game_vertical:
             left  = int( gp.SCREEN_SIZE[0] * min_   )
             width = int( gp.SCREEN_SIZE[0] * lenght )
             self.track_rect = pygame.Rect( left, 0, width, gp.SCREEN_SIZE[1] )
@@ -93,11 +137,10 @@ class GameWorld:
             height = int( gp.SCREEN_SIZE[1] * lenght )
             self.track_rect = pygame.Rect( 0, top, gp.SCREEN_SIZE[0], height )
 
-        # TODO implement image blits of track and background
-        color = meta.appearance['track'].color 
-        pygame.draw.rect( self.background, color, self.track_rect )
-
-        self.velocity = meta.velocity
+        if self.draw_track:
+            self.background_image.blit( self.track_image, 
+                                        self.track_rect, 
+                                        self.track_rect )
 
     #--------------------------------------------------------------------------#
     def eval_velocity(self, time):
@@ -114,7 +157,7 @@ class GameWorld:
     #--------------------------------------------------------------------------#
     def get_player_boundaries(self):
 
-        if self.vertical:
+        if self.game_vertical:
             return [self.track_rect.left, self.track_rect.right]
         else:
             return [self.track_rect.top, self.track_rect.bottom]
@@ -122,7 +165,7 @@ class GameWorld:
     #--------------------------------------------------------------------------#
     def get_spawn_boundaries(self):
 
-        if self.vertical:
+        if self.game_vertical:
             return [self.track_rect.left, self.track_rect.right]
         else:
             return [self.track_rect.top, self.track_rect.bottom]

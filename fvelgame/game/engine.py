@@ -22,17 +22,17 @@ class Engine:
         self.set_display()
 
         # Create the on screen text to show the score
-        self.ost = OnScreenText( world.ost_area, 3, 2, world.ost_fgcolor, world.ost_bgcolor )
-        self.ost.column_width( ['Velocidade: ', '000000'] )
+        area = pygame.Rect( world.scoreboard_text_position, (100,100)) 
+        self.ost = OnScreenText(area, 3, 2, 
+                                world.scoreboard_text_fgcolor, 
+                                world.scoreboard_text_bgcolor )
+        self.ost.column_width(['Velocidade: ', '000000'])
 
         self.event_restart         = pygame.USEREVENT + 1
         self.event_new_obstacle    = pygame.USEREVENT + 2
         self.event_new_collectible = pygame.USEREVENT + 3
-    
-        pygame.time.set_timer( self.event_new_obstacle,    self.world.obstacles_min_time    )
-        pygame.time.set_timer( self.event_new_collectible, self.world.collectibles_min_time )
 
-        self.mixer = SoundMixer(world.ambience_sound)
+        self.mixer = SoundMixer(world.game_ambience)
 
     #--------------------------------------------------------------------------#
     def set_display(self):
@@ -40,7 +40,7 @@ class Engine:
         display = pygame.display.get_surface()
         size    = tuple(display.get_size())
 
-        self.needs_resize = True # ( size != gp.SCREEN_SIZE )
+        self.needs_resize = ( size != gp.SCREEN_SIZE )
 
         if self.needs_resize:
             self.display = pygame.Surface(gp.SCREEN_SIZE)
@@ -69,8 +69,7 @@ class Engine:
                     return False
 
                 elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_q or \
-                       event.key == pygame.K_ESCAPE:
+                    if event.key in [ pygame.K_q, pygame.K_ESCAPE ]:
                         return False
                     else:
                         return True
@@ -118,29 +117,32 @@ class Engine:
     #------------------------------------------------------------------------------#
     def start(self):
 
-        self.last_rect = pygame.Rect(0,0,0,0)
+        self.last_object_rect = pygame.Rect(0,0,0,0)
 
         self.elapsed_time = 0
         self.velocity     = self.world.eval_velocity(self.elapsed_time)
 
-        GameObjects.init( self.world.vertical )
+        GameObjects.init(self.world.game_vertical)
 
-        GameObjects.create_player( self.world.param_player, 
-                                   self.world.player_speed,
-                                   self.world.get_player_boundaries() )
+        GameObjects.create_player(self.world.param_player, 
+                                  self.world.player_speed,
+                                  self.world.get_player_boundaries())
 
         self.draw()
 
         if self.wait():
+
             self.new_obstacle()
+            self.set_timer_collectibles()
             return True
+
         else:
             return False
 
     #--------------------------------------------------------------------------#
     def draw(self):
 
-        self.display.blit( self.world.background, (0,0) )
+        self.display.blit(self.world.background_image, (0,0))
 
         # Writing the score
         self.display.fill( self.ost.bgcolor, self.ost.area )
@@ -148,7 +150,7 @@ class Engine:
         self.ost.draw( self.display, 1, 0, 'Velocidade:' )
         self.ost.draw( self.display, 2, 0, 'Tempo:'      )
 
-        score = GameObjects.score + int(self.world.score_time_bonus * self.elapsed_time)
+        score = GameObjects.score + int(self.world.game_time_bonus * self.elapsed_time)
 
         self.ost.draw( self.display, 0, 1, f'{score} ',                 '>' )
         self.ost.draw( self.display, 1, 1, f'{self.velocity:.2f} ',     '>' )
@@ -186,11 +188,11 @@ class Engine:
     #--------------------------------------------------------------------------#
     def show_help(self):
 
-        info = [ [ '<-  ou  a',          'Mover para a esquerda'  ], \
-                 [ '->  ou  d',          'Mover para a direita'   ], \
-                 [ 'F1,  h  ou  espaço', 'Pausar e mostrar ajuda' ], \
-                 [ 'M',                  'Alternar mudo'          ], \
-                 [ 'q  ou  esc',         'Sair'                   ]  ]
+        info = [ [ '[<] ou [A]',            'Mover para a esquerda'  ], \
+                 [ '[>] ou [D]',            'Mover para a direita'   ], \
+                 [ '[F1], [H] ou [espaço]', 'Pausar e mostrar ajuda' ], \
+                 [ '[M]',                   'Alternar mudo'          ], \
+                 [ '[Q] ou [esc]',          'Sair'                   ]  ]
 
         n_lin = len(info)
 
@@ -220,6 +222,9 @@ class Engine:
     #--------------------------------------------------------------------------#
     def update(self):
 
+        self.elapsed_time += 1 / gp.FPS
+        self.velocity      = self.world.eval_velocity(self.elapsed_time)
+
         GameObjects.update(self.velocity, self.world.get_player_boundaries())
 
         self.draw()
@@ -229,50 +234,60 @@ class Engine:
         if GameObjects.check_collision():
             self.game_over()            
 
-        self.elapsed_time += 1 / gp.FPS
-        self.velocity = self.world.eval_velocity(self.elapsed_time)
-        GameObjects.scrolling_velocity = self.velocity
-
     #--------------------------------------------------------------------------#
     def new_obstacle(self):
 
-        sprite = GameObjects.create_obstacle( random.choice(self.world.param_obstacles),
-                                              self.world.get_spawn_boundaries() )
+        ob = random.choice(self.world.param_obstacles)
+        sb = self.world.get_spawn_boundaries()
 
-        rect = sprite.rect
+        sprite = GameObjects.create_obstacle(ob, sb)
+        rect   = sprite.rect
 
-        # This sprite overlaps with the last one
-        if pygame.Rect.colliderect( self.last_rect, rect ):
+        # Discart this sprite if it overlaps with the last one
+        if pygame.Rect.colliderect(self.last_object_rect, rect):
             sprite.kill()
-            pygame.time.set_timer( self.event_new_obstacle, 100 )
+            self.set_timer_obstacles(100)
             return
 
-        self.last_rect = rect
-
-        interval = random.randint( self.world.obstacles_min_time,
-                                   self.world.obstacles_max_time )
-
-        pygame.time.set_timer( self.event_new_obstacle, interval )
+        self.last_object_rect = rect
+    
+        self.set_timer_obstacles()
 
     #--------------------------------------------------------------------------#
     def new_collectible(self):
 
-        sprite = GameObjects.create_collectible( random.choice(self.world.param_collectibles),
-                                                 self.world.get_spawn_boundaries() )
+        ob = random.choice(self.world.param_collectibles)
+        sb = self.world.get_spawn_boundaries()
 
-        rect = sprite.rect
+        sprite = GameObjects.create_collectible(ob, sb)
+        rect   = sprite.rect
 
-        # This sprite overlaps with the last one
-        if pygame.Rect.colliderect( self.last_rect, rect ):
+        # Discart this sprite if it overlaps with the last one
+        if pygame.Rect.colliderect(self.last_object_rect, rect):
             sprite.kill()
-            pygame.time.set_timer( self.event_new_collectible, 100 )
+            self.set_timer_collectibles(100)
             return
 
-        self.last_rect = rect
+        self.last_object_rect = rect
 
-        interval = random.randint( self.world.collectibles_min_time,
-                                   self.world.collectibles_max_time )
+        self.set_timer_collectibles()
 
-        pygame.time.set_timer( self.event_new_collectible, interval )
+    #--------------------------------------------------------------------------#
+    def set_timer_obstacles(self, delay=None):
+
+        if not delay:
+            delay = int( 1000 * random.uniform(self.world.obstacles_min_delay,
+                                               self.world.obstacles_max_delay) )
+    
+        pygame.time.set_timer(self.event_new_obstacle, delay )
+
+    #--------------------------------------------------------------------------#
+    def set_timer_collectibles(self, delay=None):
+
+        if not delay:
+            delay = int( 1000 * random.uniform(self.world.collectibles_min_delay,
+                                               self.world.collectibles_max_delay) )
+    
+        pygame.time.set_timer(self.event_new_collectible, delay )
 
 #------------------------------------------------------------------------------#
