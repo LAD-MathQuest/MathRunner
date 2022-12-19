@@ -9,11 +9,6 @@ must be saved in a binary file and used to create a GameWorld.
 
 #------------------------------------------------------------------------------#
 
-import sys
-from pathlib import Path
-
-sys.path.append(str(Path(__file__).parents[1]))
-
 import pickle
 
 # Default screen resolution
@@ -40,7 +35,7 @@ class MetaImage:
 
 #------------------------------------------------------------------------------#
 class MetaObject:
-    '''Describes game object.'''
+    '''Describes game objects.'''
 
     #--------------------------------------------------------------------------#
     def __init__(self, image, score=0, sound=None ):
@@ -48,6 +43,25 @@ class MetaObject:
         self.image = image
         self.score = score
         self.sound = sound
+
+#------------------------------------------------------------------------------#
+class MetaScoreboard:
+    '''Describes the game scoreboard.'''
+
+    #--------------------------------------------------------------------------#
+    def __init__(self, 
+                 image          = MetaImage((140,140), (200,70,80)), 
+                 image_position = (80,80), 
+                 text_rect      = (100,100,100,100),
+                 text_bgcolor   = ( 55, 55, 55),
+                 text_fgcolor   = (255,255,255)):
+
+        self.image          = image
+        self.image_position = image_position
+
+        self.text_rect    = text_rect
+        self.text_bgcolor = text_bgcolor
+        self.text_fgcolor = text_fgcolor
 
 #------------------------------------------------------------------------------#
 class MetaWorld:
@@ -81,18 +95,12 @@ class MetaWorld:
         self.track_image           = MetaImage( color=(38,90,90) )
         self.track_boundaries_kill = False
 
-        self.scoreboard_image          = None
-        self.scoreboard_image_position = (0,0)
-        self.scoreboard_image_size     = (0,0)
-
-        self.scoreboard_text_position = (100,100)
-        self.scoreboard_text_bgcolor  = ( 55, 55, 55)
-        self.scoreboard_text_fgcolor  = (255,255,255)
+        self.scoreboard = MetaScoreboard()
 
         # Player
         #----------------------------------------------------------------------#
 
-        self.player       = MetaObject(MetaImage( (35,60), color=(80,50,200)))
+        self.player       = MetaObject(MetaImage((35,60), color=(25,25,25)))
         self.player_speed = 4 # Pixels per frame
 
         # Obstacles

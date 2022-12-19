@@ -17,7 +17,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parents[1]))
 
 from world.functions  import VelocityFunction, MarginFunctions
-from world.meta_world import MetaWorld, MetaImage, MetaObject
+from world.meta_world import MetaImage, MetaObject, MetaScoreboard, MetaWorld 
 
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
@@ -58,12 +58,8 @@ if __name__ == '__main__':
     meta.background_image   = imag_background
     meta.background_scrolls = True
     
-    meta.track_image      = None
-    meta.scoreboard_image = None
-
-    meta.scoreboard_text_position = (100,100)
-    meta.scoreboard_text_bgcolor  = ( 55, 55, 55)
-    meta.scoreboard_text_fgcolor  = (255,255,255)
+    meta.track_image = None
+    meta.scoreboard  = MetaScoreboard()
 
     # Player
     #--------------------------------------------------------------------------#

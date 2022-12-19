@@ -1,9 +1,5 @@
 #------------------------------------------------------------------------------#
 
-import os
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
-
-import sys
 import pygame
 import pygame.freetype
 
@@ -20,21 +16,22 @@ class OnScreenText:
 
         self.area = area.copy()
 
-        mx = -OnScreenText.margin( area.width  )
-        my = -OnScreenText.margin( area.height )
-        area.inflate_ip( mx, my )
+        mx = -OnScreenText.margin( self.area.width  )
+        my = -OnScreenText.margin( self.area.height )
+        self.area.inflate_ip( mx, my )
 
-        w = area.width  // n_col
-        h = area.height // n_lin
+        w = self.area.width  // n_col
+        h = self.area.height // n_lin
 
-        self.font = pygame.freetype.Font( None, int(0.9*h) )
+        # TODO check if font exists
+        self.font = pygame.freetype.SysFont( 'arial', int(0.9*h) )
         self.font.origin = True
 
         self.cell_w = [ w ] * n_col
         self.cell_h = h
 
-        Xo = area.left
-        Yo = area.top + self.font.get_sized_ascender() + int(0.05*h)
+        Xo = self.area.left
+        Yo = self.area.top + self.font.get_sized_ascender() + int(0.05*h)
 
         self.cell_x = [ Xo + w * ii for ii in range(n_col) ]
         self.cell_y = [ Yo + h * ii for ii in range(n_lin) ]
@@ -54,7 +51,8 @@ class OnScreenText:
             self.cell_x[ii] = self.cell_x[ii-1] + self.cell_w[ii-1]
         
         w = sum(self.cell_w)
-        self.area.width = w + OnScreenText.margin(w)
+        self.area.width = w
+        self.area.inflate_ip(OnScreenText.margin(w), 0)
 
         return self.area
 

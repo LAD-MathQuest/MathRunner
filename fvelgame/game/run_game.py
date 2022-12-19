@@ -9,6 +9,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parents[1]))
 
 import pygame
+import pygame.freetype
 
 from world.meta_world import MetaWorld
 from world.game_world import GameWorld

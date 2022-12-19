@@ -44,6 +44,21 @@ class GameObjectParam:
         self.collision_sound = meta.sound
 
 #------------------------------------------------------------------------------#
+class ScoreboardParam:
+    '''Describes the game scoreboard.'''
+
+    #--------------------------------------------------------------------------#
+    def __init__(self, meta):
+
+        self.image      = surface_from_meta_image(meta.image)
+        self.image_rect = pygame.Rect(meta.image_position, 
+                                      self.image.get_size())
+
+        self.text_rect    = pygame.Rect(meta.text_rect)
+        self.text_bgcolor = meta.text_bgcolor
+        self.text_fgcolor = meta.text_fgcolor
+
+#------------------------------------------------------------------------------#
 class GameWorld:
     '''Manages all parameters needed by the game Engine.'''
 
@@ -80,16 +95,7 @@ class GameWorld:
             self.track_image = surface_from_meta_image(meta.track_image)
 
         # Scoreboard
-        self.scoreboard_has_image = bool(meta.scoreboard_image)
-
-        if self.scoreboard_has_image:
-            self.scoreboard_image      = surface_from_meta_image(meta.scoreboard_image)
-            self.scoreboard_image_rect = pygame.Rect( meta.scoreboard_image_position,
-                                                      meta.scoreboard_image_size )
-
-        self.scoreboard_text_position = meta.scoreboard_text_position
-        self.scoreboard_text_bgcolor  = meta.scoreboard_text_bgcolor 
-        self.scoreboard_text_fgcolor  = meta.scoreboard_text_fgcolor 
+        self.param_scoreboard = ScoreboardParam(meta.scoreboard)
 
         # Player
         #----------------------------------------------------------------------#

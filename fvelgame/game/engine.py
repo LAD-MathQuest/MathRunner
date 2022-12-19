@@ -9,30 +9,25 @@ import game.game_params as gp
 from game.objects      import GameObjects
 from game.onscreentext import OnScreenText
 from game.sound_mixer  import SoundMixer
+from game.scoreboard   import Scoreboard
 
 #------------------------------------------------------------------------------#
 class Engine:
 
     #--------------------------------------------------------------------------#
-    def __init__( self, world ):
+    def __init__(self, world):
 
         self.world = world
         self.clock = pygame.time.Clock()
 
         self.set_display()
 
-        # Create the on screen text to show the score
-        area = pygame.Rect( world.scoreboard_text_position, (100,100)) 
-        self.ost = OnScreenText(area, 3, 2, 
-                                world.scoreboard_text_fgcolor, 
-                                world.scoreboard_text_bgcolor )
-        self.ost.column_width(['Velocidade: ', '000000'])
+        self.mixer      = SoundMixer(world.game_ambience)
+        self.scoreboard = Scoreboard(world.param_scoreboard)
 
         self.event_restart         = pygame.USEREVENT + 1
         self.event_new_obstacle    = pygame.USEREVENT + 2
         self.event_new_collectible = pygame.USEREVENT + 3
-
-        self.mixer = SoundMixer(world.game_ambience)
 
     #--------------------------------------------------------------------------#
     def set_display(self):
@@ -144,17 +139,9 @@ class Engine:
 
         self.display.blit(self.world.background_image, (0,0))
 
-        # Writing the score
-        self.display.fill( self.ost.bgcolor, self.ost.area )
-        self.ost.draw( self.display, 0, 0, 'Pontos:'     )
-        self.ost.draw( self.display, 1, 0, 'Velocidade:' )
-        self.ost.draw( self.display, 2, 0, 'Tempo:'      )
-
         score = GameObjects.score + int(self.world.game_time_bonus * self.elapsed_time)
 
-        self.ost.draw( self.display, 0, 1, f'{score} ',                 '>' )
-        self.ost.draw( self.display, 1, 1, f'{self.velocity:.2f} ',     '>' )
-        self.ost.draw( self.display, 2, 1, f'{self.elapsed_time:.2f} ', '>' )
+        self.scoreboard.draw(self.display, score, self.velocity, self.elapsed_time)
 
         GameObjects.draw(self.display)
 
@@ -188,8 +175,8 @@ class Engine:
     #--------------------------------------------------------------------------#
     def show_help(self):
 
-        info = [ [ '[<] ou [A]',            'Mover para a esquerda'  ], \
-                 [ '[>] ou [D]',            'Mover para a direita'   ], \
+        info = [ [ '[←] ou [A]',            'Mover para a esquerda'  ], \
+                 [ '[→] ou [D]',            'Mover para a direita'   ], \
                  [ '[F1], [H] ou [espaço]', 'Pausar e mostrar ajuda' ], \
                  [ '[M]',                   'Alternar mudo'          ], \
                  [ '[Q] ou [esc]',          'Sair'                   ]  ]
