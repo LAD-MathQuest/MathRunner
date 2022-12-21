@@ -1,8 +1,8 @@
 #------------------------------------------------------------------------------#
 
 import random
-
 import pygame
+
 from pygame.locals import *
 from pygame        import sprite
 

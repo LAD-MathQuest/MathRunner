@@ -3,6 +3,8 @@
 import pygame
 import pygame.freetype
 
+import game.game_params as gp
+
 #------------------------------------------------------------------------------#
 class OnScreenText:
 
@@ -24,7 +26,7 @@ class OnScreenText:
         h = self.area.height // n_lin
 
         # TODO check if font exists
-        self.font = pygame.freetype.SysFont( 'arial', int(0.9*h) )
+        self.font = pygame.freetype.SysFont( gp.FONT, int(0.9*h) )
         self.font.origin = True
 
         self.cell_w = [ w ] * n_col

@@ -8,26 +8,27 @@
 #### Game engine
 
 - Deal with pygame.ACTIVEEVENT events as the display gains and loses input focus
-- Use a system font that offers unicode support
+- OST
   - Create a table os equivalent fonts in all systems
   - Select the fonts presente on all systems
-- Implement the scoreboard display
-  - Load a scoreboard background image
+- Load a scoreboard background image
 - Implement a initial screen
-- Show game information on help
-- Implement scrolling background
 - Implement variable tracks
   - Take care of spawning objects outside screen
 - Implement blits of track and background images using mask
 - Implement function evaluation
 - Implement achievements
   - 5 stars, the creator choses the score of each star
-- Help message must be aware of vertical or horizontal scrolling
 - Play crash sound before show game over
 - Add elapsed time to scoreboard
 - Add transparent option to MetaImage
 - Allow creator to make margins kill the player
 - Compute elapsed time using pygame function
+- Implement horizontal scrolling background
+- Take care of background images smaller than screen
+
+- Sound
+  - Allow creator to define sound volume for each sprite, 1 is the music volume
 
 #### Games
 
@@ -45,7 +46,8 @@
 
 #### Graphycal Interface
 
-- Implement open game file, to allow selection playing by the interface
+- Implement everything
+
 - Implement a simple image editor 
   - Set size
   - Fill with color
@@ -55,13 +57,7 @@
   - Crop
   - Zoom
 
-- Implement everything
-
 ### Bugs
-
-- game_world.py: Take scrolling direction in account
-- game_world.py: Compute OST size properly
-- engine.py:     Take care when the track is smaller than the object
 
 ### Improvements
 
@@ -70,6 +66,22 @@
 ## In progress...
 
 ## DONE
+
+2022-12-20
+- GUI - Implement open game file, to allow selection playing by the interface
+- Show game information on help
+- Implement scrolling background
+- game_world.py: Take scrolling direction in account
+- game_world.py: Compute OST size properly
+- engine.py:     Take care when the track is smaller than the object
+- Sound
+  - Reimplement mute do stop music
+  - Implement volume control
+- Help message must be aware of vertical or horizontal scrolling
+- Implement the scoreboard display
+- Use a system font that offers unicode support
+
+
 
 2022-12-17
 - Improve collision boundaries on transparent pngs

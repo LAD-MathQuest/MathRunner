@@ -73,9 +73,9 @@ class MetaWorld:
         # Software
         #----------------------------------------------------------------------#
 
-        self.soft_name        = ''
-        self.soft_author      = ''
-        self.soft_description = ''
+        self.soft_name        = 'FVelGame'
+        self.soft_author      = "Luis D'Afonseca"
+        self.soft_description = 'Um jogo para explorar funções'
         self.soft_icon        = None
 
         # Game 
@@ -101,7 +101,7 @@ class MetaWorld:
         #----------------------------------------------------------------------#
 
         self.player       = MetaObject(MetaImage((35,60), color=(25,25,25)))
-        self.player_speed = 4 # Pixels per frame
+        self.player_speed = 400 # Pixels per frame
 
         # Obstacles
         #----------------------------------------------------------------------#
@@ -139,7 +139,7 @@ class MetaWorld:
         # Functions
         #----------------------------------------------------------------------#
 
-        self.velocity = VelocityFunction(5.00, 0.50)
+        self.velocity = VelocityFunction(0.50, 0.01)
         self.margins  = MarginFunctions (0.35, 0.65)
 
     #--------------------------------------------------------------------------#

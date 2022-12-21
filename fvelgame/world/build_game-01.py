@@ -68,7 +68,7 @@ if __name__ == '__main__':
     imag_player = MetaImage((48,108), path=path_player)
 
     meta.player       = MetaObject(imag_player)
-    meta.player_speed = 5
+    meta.player_speed = 400
 
     # Obstacles
     #--------------------------------------------------------------------------#
@@ -105,7 +105,7 @@ if __name__ == '__main__':
     # Functions
     #--------------------------------------------------------------------------#
 
-    meta.velocity = VelocityFunction( 5.00, 0.50 )
+    meta.velocity = VelocityFunction( 0.40, 0.01 )
     meta.margins  = MarginFunctions ( 0.35, 0.65 )
 
     # Saving

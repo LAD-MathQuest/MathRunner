@@ -100,7 +100,7 @@ class GameWorld:
         # Player
         #----------------------------------------------------------------------#
 
-        self.player_speed = meta.player_speed
+        self.player_speed = round(meta.player_speed / gp.FPS)
         self.param_player = GameObjectParam( meta.player )
 
         # Obstacles
@@ -128,6 +128,11 @@ class GameWorld:
 
         self.velocity = meta.velocity
         self.margins  = meta.margins 
+        
+        if self.game_vertical:
+            self.vel_scale = gp.SCREEN_SIZE[1] / gp.FPS
+        else:
+            self.vel_scale = gp.SCREEN_SIZE[0] / gp.FPS
 
         # Initializing background and track
         #----------------------------------------------------------------------#
@@ -152,7 +157,7 @@ class GameWorld:
     def eval_velocity(self, time):
         ''' Eval scrolling velocity in pixels'''
 
-        return int( self.velocity.eval(time) )
+        return int(self.velocity.eval(time) * self.vel_scale)
 
     #--------------------------------------------------------------------------#
     def eval_margins(self, time):

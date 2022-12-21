@@ -6,39 +6,60 @@ from pygame import mixer
 class SoundMixer:
     '''pygame.mixer.music wrapper'''
 
-    volume = 1
+    muted  = False
+    volume = 1.0
+    volume_step = 1/20
+
+    has_music = None
 
     #--------------------------------------------------------------------------#
-    def __init__( self, sound ):
+    def load_music(sound, vol=volume):
 
-        self.has_sound = bool(sound)
+        SoundMixer.has_music = bool(sound)
 
-        if self.has_sound:
+        if SoundMixer.has_music:
             mixer.music.load(sound)
-            mixer.music.set_volume(SoundMixer.volume)
+            mixer.music.set_volume(vol)
 
     #--------------------------------------------------------------------------#
-    def play(self):
-
-        if self.has_sound:
+    def play_music():
+        
+        if SoundMixer.has_music:
             mixer.music.play(-1)
 
     #--------------------------------------------------------------------------#
-    def stop(self):
+    def stop_music():
 
-        if self.has_sound:
+        if SoundMixer.has_music:
             mixer.music.stop()
 
     #--------------------------------------------------------------------------#
-    def toggle_mute(self):
+    def play_sound(sound, vol=volume):
 
-        SoundMixer.volume = 1 - SoundMixer.volume
+        if not SoundMixer.muted:
+            sound = mixer.Sound(sound)
+            sound.set_volume(vol)
+            sound.play()
+
+    #--------------------------------------------------------------------------#
+    def toggle_mute():
+
+        SoundMixer.muted = not SoundMixer.muted
+
+        if SoundMixer.has_music:
+            if SoundMixer.muted:
+                mixer.music.stop()
+            else:
+                mixer.music.play(-1)
+
+    #--------------------------------------------------------------------------#
+    def volume_up():
+        SoundMixer.volume = min( 1.0, SoundMixer.volume + SoundMixer.volume_step )
         mixer.music.set_volume(SoundMixer.volume)
 
     #--------------------------------------------------------------------------#
-    def play_sound(sound):
-
-        if SoundMixer.volume:
-            mixer.Sound(sound).play()
+    def volume_down():
+        SoundMixer.volume = max( 0.0, SoundMixer.volume - SoundMixer.volume_step )
+        mixer.music.set_volume(SoundMixer.volume)
 
 #------------------------------------------------------------------------------#

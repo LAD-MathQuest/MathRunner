@@ -56,7 +56,7 @@ if __name__ == '__main__':
     meta.background_scrolls = False
     
     meta.track_image = MetaImage( color=(102,153,153) )
-    meta.scoreboard  = MetaScoreboard(text_rect=(200,10,100,100))
+    meta.scoreboard  = MetaScoreboard(text_rect=(200,15,100,100))
 
     # Player
     #--------------------------------------------------------------------------#
@@ -65,7 +65,7 @@ if __name__ == '__main__':
     imag_player = MetaImage((90,140), path=path_player)
 
     meta.player       = MetaObject(imag_player)
-    meta.player_speed = 8
+    meta.player_speed = 800
 
     # Obstacles
     #--------------------------------------------------------------------------#
@@ -110,8 +110,8 @@ if __name__ == '__main__':
     # Functions
     #--------------------------------------------------------------------------#
 
-    meta.velocity = VelocityFunction( 8.00, 0.3 )
-    meta.margins  = MarginFunctions ( 0.12, 0.9 )
+    meta.velocity = VelocityFunction( 0.25, 0.005 )
+    meta.margins  = MarginFunctions ( 0.12, 0.900 )
 
     # Saving
     #--------------------------------------------------------------------------#
