@@ -38,10 +38,10 @@ class GameObjectParam:
     def __init__(self, meta):
         '''Create game object parameters from a meta object.'''
 
-        self.image = surface_from_meta_image(meta.image)
-
-        self.collision_score = meta.score
-        self.collision_sound = meta.sound
+        self.image  = surface_from_meta_image(meta.image)
+        self.score  = meta.score
+        self.sound  = meta.sound
+        self.volume = meta.volume
 
 #------------------------------------------------------------------------------#
 class ScoreboardParam:
@@ -77,9 +77,10 @@ class GameWorld:
         # Game 
         #----------------------------------------------------------------------#
 
-        self.game_vertical   = meta.game_vertical  
-        self.game_time_bonus = meta.game_time_bonus
-        self.game_ambience   = meta.game_ambience  
+        self.game_vertical        = meta.game_vertical  
+        self.game_time_bonus      = meta.game_time_bonus
+        self.game_ambience        = meta.game_ambience  
+        self.game_ambience_volume = meta.game_ambience_volume  
 
         # Appearance
         #----------------------------------------------------------------------#

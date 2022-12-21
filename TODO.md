@@ -27,9 +27,6 @@
 - Implement horizontal scrolling background
 - Take care of background images smaller than screen
 
-- Sound
-  - Allow creator to define sound volume for each sprite, 1 is the music volume
-
 #### Games
 
 - Ship on ocean colecting precious stones and chests
@@ -47,6 +44,7 @@
 #### Graphycal Interface
 
 - Implement everything
+- Allow creator to define sound volume for each sprite, 1 is the music volume
 
 - Implement a simple image editor 
   - Set size

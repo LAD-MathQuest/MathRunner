@@ -7,19 +7,22 @@ class SoundMixer:
     '''pygame.mixer.music wrapper'''
 
     muted  = False
-    volume = 1.0
+
+    volume      = 1.0
     volume_step = 1/20
 
-    has_music = None
+    has_music    = None
+    music_volume = 1.0
 
     #--------------------------------------------------------------------------#
     def load_music(sound, vol=volume):
 
-        SoundMixer.has_music = bool(sound)
+        SoundMixer.has_music    = bool(sound)
+        SoundMixer.music_volume = vol
 
         if SoundMixer.has_music:
             mixer.music.load(sound)
-            mixer.music.set_volume(vol)
+            mixer.music.set_volume(SoundMixer.volume * SoundMixer.music_volume)
 
     #--------------------------------------------------------------------------#
     def play_music():
@@ -38,7 +41,7 @@ class SoundMixer:
 
         if not SoundMixer.muted:
             sound = mixer.Sound(sound)
-            sound.set_volume(vol)
+            sound.set_volume(SoundMixer.volume * vol)
             sound.play()
 
     #--------------------------------------------------------------------------#
@@ -55,11 +58,11 @@ class SoundMixer:
     #--------------------------------------------------------------------------#
     def volume_up():
         SoundMixer.volume = min( 1.0, SoundMixer.volume + SoundMixer.volume_step )
-        mixer.music.set_volume(SoundMixer.volume)
+        mixer.music.set_volume(SoundMixer.volume * SoundMixer.music_volume)
 
     #--------------------------------------------------------------------------#
     def volume_down():
         SoundMixer.volume = max( 0.0, SoundMixer.volume - SoundMixer.volume_step )
-        mixer.music.set_volume(SoundMixer.volume)
+        mixer.music.set_volume(SoundMixer.volume * SoundMixer.music_volume)
 
 #------------------------------------------------------------------------------#

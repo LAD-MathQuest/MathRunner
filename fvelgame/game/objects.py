@@ -47,9 +47,9 @@ class GameObjects():
     #--------------------------------------------------------------------------#
     def check_collision():
 
-        sprt = sprite.spritecollideany( GameObjects.player, 
-                                      GameObjects.obstacles,
-                                      sprite.collide_mask )
+        sprt = sprite.spritecollideany(GameObjects.player, 
+                                       GameObjects.obstacles,
+                                       sprite.collide_mask)
 
         if sprt:
             sprt.play_sound()
@@ -59,9 +59,9 @@ class GameObjects():
     #--------------------------------------------------------------------------#
     def check_collectible():
 
-        sprt = sprite.spritecollideany( GameObjects.player, 
-                                      GameObjects.collectibles,
-                                      sprite.collide_mask )
+        sprt = sprite.spritecollideany(GameObjects.player, 
+                                       GameObjects.collectibles,
+                                       sprite.collide_mask)
 
         if sprt:
             GameObjects.score += sprt.score
@@ -73,8 +73,8 @@ class GameObjects():
     #--------------------------------------------------------------------------#
     def create_player(object_param, speed, boundaries):
 
-        GameObjects.player = Player( object_param, speed, boundaries )
-        GameObjects.player.add( GameObjects.sprites )
+        GameObjects.player = Player(object_param, speed, boundaries)
+        GameObjects.player.add(GameObjects.sprites)
         
         return GameObjects.player
 
@@ -83,8 +83,8 @@ class GameObjects():
 
         sprt = ScrollingObject(object_param, boundaries, True)
         
-        sprt.add( GameObjects.sprites   )
-        sprt.add( GameObjects.obstacles )
+        sprt.add(GameObjects.sprites  )
+        sprt.add(GameObjects.obstacles)
         
         return sprt
 
@@ -93,8 +93,8 @@ class GameObjects():
 
         sprt = ScrollingObject(object_param, boundaries)
         
-        sprt.add( GameObjects.sprites      )
-        sprt.add( GameObjects.collectibles )
+        sprt.add(GameObjects.sprites     )
+        sprt.add(GameObjects.collectibles)
         
         return sprt
 
@@ -109,19 +109,19 @@ class GameObject(sprite.Sprite):
 
         super().__init__() 
         
-        self.image = object_param.image
-        self.rect  = self.image.get_rect()
-        self.mask  = pygame.mask.from_surface(self.image)
-        
-        self.score = object_param.collision_score
-        self.sound = object_param.collision_sound
+        self.image  = object_param.image
+        self.rect   = self.image.get_rect()
+        self.mask   = pygame.mask.from_surface(self.image)
+        self.score  = object_param.score
+        self.sound  = object_param.sound
+        self.volume = object_param.volume
 
     #--------------------------------------------------------------------------#
     def play_sound(self):
         '''Play collision sound if it exists.'''
 
         if self.sound:
-            SoundMixer.play_sound(self.sound)
+            SoundMixer.play_sound(self.sound, self.volume)
 
 #------------------------------------------------------------------------------#
 class Player(GameObject):

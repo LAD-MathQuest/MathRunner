@@ -38,11 +38,12 @@ class MetaObject:
     '''Describes game objects.'''
 
     #--------------------------------------------------------------------------#
-    def __init__(self, image, score=0, sound=None ):
+    def __init__(self, image, score=0, sound=None, volume=1.0 ):
 
-        self.image = image
-        self.score = score
-        self.sound = sound
+        self.image  = image
+        self.score  = score
+        self.sound  = sound
+        self.volume = volume  # Sound volume 
 
 #------------------------------------------------------------------------------#
 class MetaScoreboard:
@@ -81,18 +82,19 @@ class MetaWorld:
         # Game 
         #----------------------------------------------------------------------#
 
-        self.game_vertical   = True   
-        self.game_time_bonus = 1     # Score points bonnus per second
-        self.game_ambience   = None  # Ambience sound
+        self.game_vertical        = True   
+        self.game_time_bonus      = 1     # Score points bonnus per second
+        self.game_ambience        = None  # Ambience sound
+        self.game_ambience_volume = 1.0   # Sound volume
 
         # Appearance
         #----------------------------------------------------------------------#
 
-        self.background_image   = MetaImage( color=(39,38,67) )
+        self.background_image   = MetaImage(color=(39,38,67))
         self.background_scrolls = False
         
         # If track_image if null the game will not draw the track
-        self.track_image           = MetaImage( color=(38,90,90) )
+        self.track_image           = MetaImage(color=(38,90,90))
         self.track_boundaries_kill = False
 
         self.scoreboard = MetaScoreboard()

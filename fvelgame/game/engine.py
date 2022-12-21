@@ -25,7 +25,7 @@ class Engine:
         self.set_display()
         self.set_background()
 
-        SoundMixer.load_music(world.game_ambience)
+        SoundMixer.load_music(world.game_ambience, world.game_ambience_volume)
 
         self.scoreboard = Scoreboard(world.param_scoreboard)
 

@@ -74,7 +74,8 @@ if __name__ == '__main__':
     #--------------------------------------------------------------------------#
 
     path_crash = path_sounds/'car_crash.mp3'   
-    points     = 10
+    points = 10
+    volume = 0.9
 
     meta.obstacles_frequency = 3
     meta.obstacles = []
@@ -84,13 +85,15 @@ if __name__ == '__main__':
         path_obstacle = path_objects/f'sport_car-{ii}.png'
         imag_obstacle = MetaImage((40,90), path=path_obstacle)
 
-        meta.obstacles.append(MetaObject(imag_obstacle, points, path_crash))
+        obstacle = MetaObject(imag_obstacle, points, path_crash, volume)
+        meta.obstacles.append(obstacle)
 
     # Collectibles
     #--------------------------------------------------------------------------#
 
     path_collect = path_sounds/'collect-ring.mp3'   
     points = 100
+    volume = 0.2
 
     meta.collectibles_frequency = 1
     meta.collectibles = []
@@ -100,7 +103,8 @@ if __name__ == '__main__':
         path_collectible = path_objects/f'precious_stone-{ii}.png'
         imag_collectible = MetaImage((46,38), path=path_collectible)
         
-        meta.collectibles.append(MetaObject(imag_collectible, points, path_collect))
+        collectible = MetaObject(imag_collectible, points, path_collect,volume)
+        meta.collectibles.append(collectible)
 
     # Functions
     #--------------------------------------------------------------------------#
