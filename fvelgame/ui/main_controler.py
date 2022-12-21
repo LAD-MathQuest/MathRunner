@@ -155,10 +155,10 @@ class MainControler:
 
         meta = self.model.meta
         
-        self.ui.lineEdit_GameName.setText(meta.game['name'  ])
-        self.ui.lineEdit_Author  .setText(meta.game['author'])
+        self.ui.lineEdit_GameName.setText(meta.soft_name)
+        self.ui.lineEdit_Author  .setText(meta.soft_author)
 
-        self.ui.plainTextEdit_GameDescription.setPlainText(meta.game['description'])
+        self.ui.plainTextEdit_GameDescription.setPlainText(meta.soft_description)
 
     #-------------------------------------------------------------------------#
     def error_box( self, title, message ):
