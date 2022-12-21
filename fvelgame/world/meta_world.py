@@ -29,9 +29,9 @@ class MetaImage:
         Height (size[1]) equal to None means to keep the image aspect ratio
         '''
 
-        self.size       = size  # (width, height)
-        self.color      = color
-        self.image_path = path
+        self.size  = size  # (width, height)
+        self.color = color
+        self.path  = path
 
 #------------------------------------------------------------------------------#
 class MetaObject:
@@ -51,18 +51,36 @@ class MetaScoreboard:
 
     #--------------------------------------------------------------------------#
     def __init__(self, 
-                 image          = MetaImage((140,140), (200,70,80)), 
-                 image_position = (80,80), 
-                 text_rect      = (100,100,100,100),
+                 image          = None,
+                 image_position = None,
+                 text_rect      = (100,100,280,110),
                  text_bgcolor   = ( 55, 55, 55),
                  text_fgcolor   = (255,255,255)):
-
-        self.image          = image
-        self.image_position = image_position
 
         self.text_rect    = text_rect
         self.text_bgcolor = text_bgcolor
         self.text_fgcolor = text_fgcolor
+
+        if image:
+
+            self.image = image
+
+            if image_position:
+                self.image_position = image_position
+            else:
+                self.image_position = text_rect[0:2]
+
+        else:
+
+            dx = 20
+            dy = 10
+            rect = ( text_rect[0]-dx//2,  # left
+                     text_rect[1]-dy//2,  # right
+                     text_rect[2]+dx,     # width
+                     text_rect[3]+dy )    # height
+
+            self.image          = MetaImage(rect[2:], color=text_bgcolor) 
+            self.image_position = rect[0:2] 
 
 #------------------------------------------------------------------------------#
 class MetaWorld:

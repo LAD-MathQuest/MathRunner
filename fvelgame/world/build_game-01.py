@@ -26,6 +26,7 @@ if __name__ == '__main__':
 
     path_resources   = Path(__file__).parents[1]/'resources'
     path_backgrounds = path_resources/'backgrounds'
+    path_scoreboards = path_resources/'scoreboards'
     path_objects     = path_resources/'objects' 
     path_sounds      = path_resources/'sounds'
     path_games       = path_resources/'games'
@@ -53,13 +54,20 @@ if __name__ == '__main__':
     #--------------------------------------------------------------------------#
 
     path_background = path_backgrounds/'racing_background.png'
-    imag_background = MetaImage( (1920,6000), path=path_background)
+    imag_background = MetaImage((1920,6000), path=path_background)
 
     meta.background_image   = imag_background
     meta.background_scrolls = True
     
     meta.track_image = None
-    meta.scoreboard  = MetaScoreboard()
+
+    path_score = path_scoreboards/'frame_neon.png'
+    imag_score = MetaImage((330,160), path=path_score)
+    meta.scoreboard = MetaScoreboard(image          = imag_score, 
+                                     image_position = (55,70), 
+                                     text_rect      = (103,100,100,100),
+                                     text_bgcolor   = ( 90, 93,102),
+                                     text_fgcolor   = (255,255,255))
 
     # Player
     #--------------------------------------------------------------------------#
@@ -109,7 +117,7 @@ if __name__ == '__main__':
     # Functions
     #--------------------------------------------------------------------------#
 
-    meta.velocity = VelocityFunction( 0.40, 0.01 )
+    meta.velocity = VelocityFunction( 0.40, 0.02 )
     meta.margins  = MarginFunctions ( 0.35, 0.65 )
 
     # Saving

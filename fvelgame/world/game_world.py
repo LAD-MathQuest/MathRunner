@@ -21,8 +21,8 @@ from world.meta_world import MetaWorld
 def surface_from_meta_image(meta):
     '''Create a pygame surface from a MetaImage object'''
 
-    if meta.image_path:
-        surf = pygame.image.load(meta.image_path).convert_alpha()
+    if meta.path:
+        surf = pygame.image.load(meta.path).convert_alpha()
         surf = pygame.transform.scale(surf, meta.size )
     else:
         surf = pygame.Surface(meta.size)

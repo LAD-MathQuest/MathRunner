@@ -26,6 +26,7 @@ if __name__ == '__main__':
 
     path_resources   = Path(__file__).parents[1]/'resources'
     path_backgrounds = path_resources/'backgrounds'
+    path_scoreboards = path_resources/'scoreboards'
     path_objects     = path_resources/'objects' 
     path_sounds      = path_resources/'sounds'
     path_games       = path_resources/'games'
@@ -52,7 +53,7 @@ if __name__ == '__main__':
     # Appearance
     #--------------------------------------------------------------------------#
 
-    meta.background_image   = MetaImage( color=( 55, 55, 55) )
+    meta.background_image   = MetaImage(color=(55, 55, 55))
     meta.background_scrolls = False
     
     meta.track_image = MetaImage( color=(102,153,153) )

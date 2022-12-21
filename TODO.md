@@ -4,23 +4,23 @@
 ## TODO
 
 ### New features
+- Implement achievements
+  - 5 stars, the creator choses the score of each star
+- Implement a initial screen
 
 #### Game engine
 
-- Deal with pygame.ACTIVEEVENT events as the display gains and loses input focus
+- Events
+  - Deal with pygame.ACTIVEEVENT events as the display gains and loses input focus
+  - Control the event queue pygame.event.set_allowed()
 - OST
   - Create a table os equivalent fonts in all systems
   - Select the fonts presente on all systems
-- Load a scoreboard background image
-- Implement a initial screen
 - Implement variable tracks
   - Take care of spawning objects outside screen
 - Implement blits of track and background images using mask
 - Implement function evaluation
-- Implement achievements
-  - 5 stars, the creator choses the score of each star
 - Play crash sound before show game over
-- Add elapsed time to scoreboard
 - Add transparent option to MetaImage
 - Allow creator to make margins kill the player
 - Compute elapsed time using pygame function
@@ -65,6 +65,9 @@
 
 ## DONE
 
+2022-12-21
+- Load a scoreboard background image
+
 2022-12-20
 - GUI - Implement open game file, to allow selection playing by the interface
 - Show game information on help
@@ -79,8 +82,6 @@
 - Implement the scoreboard display
 - Use a system font that offers unicode support
 
-
-
 2022-12-17
 - Improve collision boundaries on transparent pngs
 - Game: Student running from study
@@ -90,5 +91,6 @@
   - [+] increase volume - decided to not implement
   - [M] toggle mute
 - Implement Horizontal scrolling
+- Add elapsed time to scoreboard
 
 ## GAVE UP
