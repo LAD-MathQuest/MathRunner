@@ -40,7 +40,7 @@ def main(meta):
         if not engine.game_loop():
             break
 
-    return 0
+    pygame.quit()
 
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
@@ -53,6 +53,8 @@ if __name__ == '__main__':
 
     meta = MetaWorld.load(args.world) if args.world else MetaWorld()
 
-    sys.exit( main(meta) )
+    main(meta)
+
+    sys.exit()
 
 #------------------------------------------------------------------------------#

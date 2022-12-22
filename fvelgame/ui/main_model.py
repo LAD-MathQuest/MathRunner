@@ -1,8 +1,9 @@
 #------------------------------------------------------------------------------#
 
-from world.meta_world import MetaWorld
+import sys, os, tempfile
 
-from game.run_game import main as run_game
+from pathlib import Path
+from world.meta_world import MetaWorld
 
 #------------------------------------------------------------------------------#
 class MainModel:
@@ -35,7 +36,14 @@ class MainModel:
 
     #--------------------------------------------------------------------------#
     def run(self):
-        run_game(self.meta)
+        temp_file = tempfile.NamedTemporaryFile( prefix='meta_', suffix='.game' )
+        name = str(temp_file.name)
+
+        self.meta.save(name)
+
+        run_game = str(Path(__file__).parents[1]/'game'/'run_game.py')
+
+        os.system( f'{sys.executable} {run_game} {name}')
 
     #--------------------------------------------------------------------------#
     def build(self, file_name):
