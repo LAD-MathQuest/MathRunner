@@ -6,7 +6,8 @@ from pygame import mixer
 class SoundMixer:
     '''pygame.mixer.music wrapper'''
 
-    muted  = False
+    muted = False  # Mute all sounds
+    music = True   # Play music if it was provided
 
     volume      = 1.0
     volume_step = 1/20
@@ -26,15 +27,23 @@ class SoundMixer:
 
     #--------------------------------------------------------------------------#
     def play_music():
-        
-        if SoundMixer.has_music:
+        if SoundMixer.has_music and SoundMixer.music and not SoundMixer.muted:
             mixer.music.play(-1)
 
     #--------------------------------------------------------------------------#
     def stop_music():
-
         if SoundMixer.has_music:
             mixer.music.stop()
+
+    #--------------------------------------------------------------------------#
+    def toggle_play_music():
+
+        SoundMixer.music = not SoundMixer.music
+
+        if SoundMixer.music:
+            SoundMixer.play_music()
+        else:
+            SoundMixer.stop_music()
 
     #--------------------------------------------------------------------------#
     def play_sound(sound, vol=volume):
@@ -49,11 +58,10 @@ class SoundMixer:
 
         SoundMixer.muted = not SoundMixer.muted
 
-        if SoundMixer.has_music:
-            if SoundMixer.muted:
-                mixer.music.stop()
-            else:
-                mixer.music.play(-1)
+        if SoundMixer.muted:
+            SoundMixer.stop_music()
+        else:
+            SoundMixer.play_music()
 
     #--------------------------------------------------------------------------#
     def volume_up():

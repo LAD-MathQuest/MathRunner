@@ -125,6 +125,9 @@ class Engine:
                     elif event.key == pygame.K_m:
                         SoundMixer.toggle_mute()
 
+                    elif event.key == pygame.K_n:
+                        SoundMixer.toggle_play_music()
+
                     elif event.key in [ pygame.K_PLUS, pygame.K_EQUALS ]:
                         SoundMixer.volume_up()
 
@@ -178,6 +181,9 @@ class Engine:
 
                     elif event.key == pygame.K_m:
                         SoundMixer.toggle_mute()
+
+                    elif event.key == pygame.K_n:
+                        SoundMixer.toggle_play_music()
 
                     elif event.key in [ pygame.K_PLUS, pygame.K_EQUALS ]:
                         SoundMixer.volume_up()

@@ -115,10 +115,9 @@ if __name__ == '__main__':
         meta.collectibles.append(collectible)
 
     # Oil spill
-
-    path_collect = None # path_sounds/'collect-ring.mp3'   
+    path_collect = path_sounds/'car_drift.mp3'   
     points = -200
-    volume = 0.2
+    volume = 1.0
 
     # File image size [312, 344]
     path_collectible = path_objects/'oil_spill.png'

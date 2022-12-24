@@ -18,6 +18,7 @@ def draw_help(surf, name, description, vertical):
              [f'Mover para {rr[2]}',     f'{rr[0]}   ou   {rr[1]}' ],
              [ 'Pausar e mostrar ajuda',  'F1,   H   ou   Espaço'  ],
              [ 'Alternar mudo',           'M'                      ],
+             [ 'Alternar música',         'N'                      ],
              [ 'Ajustar volume',          '+  −'                   ],
              [ 'Sair',                    'Q   ou   Esc'           ] ]
 
