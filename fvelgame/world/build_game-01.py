@@ -111,8 +111,21 @@ if __name__ == '__main__':
         path_collectible = path_objects/f'precious_stone-{ii}.png'
         imag_collectible = MetaImage((46,38), path=path_collectible)
         
-        collectible = MetaObject(imag_collectible, points, path_collect,volume)
+        collectible = MetaObject(imag_collectible, points, path_collect, volume)
         meta.collectibles.append(collectible)
+
+    # Oil spill
+
+    path_collect = None # path_sounds/'collect-ring.mp3'   
+    points = -200
+    volume = 0.2
+
+    # File image size [312, 344]
+    path_collectible = path_objects/'oil_spill.png'
+    imag_collectible = MetaImage((100,110), path=path_collectible)
+    
+    collectible = MetaObject(imag_collectible, points, path_collect, volume)
+    meta.collectibles.append(collectible)
 
     # Functions
     #--------------------------------------------------------------------------#

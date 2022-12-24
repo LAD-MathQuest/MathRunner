@@ -31,6 +31,27 @@ class Engine:
 
         self.at_game_over = False
 
+        # Blocks unused events
+        pygame.event.set_blocked([pygame.MOUSEMOTION,
+                                  pygame.MOUSEBUTTONUP,
+                                  pygame.MOUSEBUTTONDOWN,
+                                  pygame.JOYAXISMOTION,
+                                  pygame.JOYBALLMOTION,
+                                  pygame.JOYHATMOTION,
+                                  pygame.JOYBUTTONUP,
+                                  pygame.JOYBUTTONDOWN,
+                                  pygame.VIDEORESIZE,
+                                  pygame.VIDEOEXPOSE,
+                                  pygame.AUDIODEVICEADDED,
+                                  pygame.AUDIODEVICEREMOVED,
+                                  pygame.FINGERMOTION,
+                                  pygame.FINGERDOWN,
+                                  pygame.FINGERUP,
+                                  pygame.MOUSEWHEEL,
+                                  pygame.MULTIGESTURE,
+                                  pygame.TEXTEDITING,
+                                  pygame.TEXTINPUT  ])
+
         self.event_restart         = pygame.USEREVENT + 1
         self.event_new_obstacle    = pygame.USEREVENT + 2
         self.event_new_collectible = pygame.USEREVENT + 3
@@ -62,13 +83,33 @@ class Engine:
         pygame.display.flip()
 
     #--------------------------------------------------------------------------#
+    def wait_for_focus(self):
+
+        wait = True
+
+        while wait:
+            for event in pygame.event.get():
+                if event.type == pygame.WINDOWFOCUSGAINED:
+                    wait = False
+
+            self.clock.tick(gp.FPS//10)
+
+        self.show_help() 
+        self.show_help() 
+
+    #--------------------------------------------------------------------------#
     def wait(self, showing_help=False):
+
+        pygame.event.clear()
 
         while True:
             for event in pygame.event.get():
         
                 if event.type == pygame.QUIT:
                     return False
+
+                elif event.type == pygame.WINDOWFOCUSLOST:
+                    self.wait_for_focus()
 
                 elif event.type == pygame.KEYDOWN:
                     if event.key in [ pygame.K_q, pygame.K_ESCAPE ]:
@@ -93,12 +134,14 @@ class Engine:
                     else:
                         return True
 
-            self.clock.tick(gp.FPS)
+            self.clock.tick(gp.FPS//10)
 
     #--------------------------------------------------------------------------#
     def game_loop(self):
 
         SoundMixer.play_music()
+
+        pygame.event.clear()
 
         while True:
             for event in pygame.event.get():
@@ -107,6 +150,9 @@ class Engine:
                     SoundMixer.stop_music()
                     pygame.quit()
                     return False
+
+                elif event.type == pygame.WINDOWFOCUSLOST:
+                    self.wait_for_focus()
         
                 elif event.type == self.event_restart:
                     SoundMixer.stop_music()
@@ -147,6 +193,7 @@ class Engine:
 
         self.last_object_rect = pygame.Rect(0,0,0,0)
 
+        self.start_time   = pygame.time.get_ticks()
         self.elapsed_time = 0
         self.velocity     = self.world.eval_velocity(self.elapsed_time)
 
@@ -279,8 +326,8 @@ class Engine:
     #--------------------------------------------------------------------------#
     def update(self):
 
-        self.elapsed_time += 1 / gp.FPS
-        self.velocity      = self.world.eval_velocity(self.elapsed_time)
+        self.elapsed_time = (pygame.time.get_ticks() - self.start_time) / 1000
+        self.velocity     = self.world.eval_velocity(self.elapsed_time)
 
         self.update_background()
 

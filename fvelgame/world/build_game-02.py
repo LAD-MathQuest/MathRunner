@@ -101,7 +101,7 @@ if __name__ == '__main__':
 
     # Image sizes
     # file = [ (197, 133), (224, 221), (227, 219), (168, 223), (202, 133) ]
-    sizes = [ (100,68), (100,99), (100,96), (100,133), (100,66) ]
+    sizes = [ (100,68), (100,99), (100,96), (80,106), (100,66) ]
 
     for ii in range(5):
         path_collectible = path_objects / f'video_game_controller-{ii+1}.png'

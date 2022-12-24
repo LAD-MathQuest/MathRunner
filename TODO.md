@@ -10,9 +10,6 @@
 
 #### Game engine
 
-- Events
-  - Deal with pygame.ACTIVEEVENT events as the display gains and loses input focus
-  - Control the event queue pygame.event.set_allowed()
 - OST
   - Create a table os equivalent fonts in all systems
   - Select the fonts presente on all systems
@@ -23,7 +20,6 @@
 - Play crash sound before show game over
 - Add transparent option to MetaImage
 - Allow creator to make margins kill the player
-- Compute elapsed time using pygame function
 - Implement horizontal scrolling background
 - Take care of background images smaller than screen
 
@@ -31,11 +27,7 @@
 
 - Ship on ocean colecting precious stones and chests
   - Vertical scrolling
-- racing
-  - add sound to treasure catch
-  - add oil spill
-  - add background
-  - add track image
+
 - student
   - add sounds
   - add background
@@ -64,6 +56,17 @@
 ## In progress...
 
 ## DONE
+
+2022-12-22
+- Events
+  - Deal with pygame.ACTIVEEVENT events as the display gains and loses input focus
+  - Control the event queue pygame.event.set_allowed()
+- Compute elapsed time using pygame function
+- racing
+  - add sound to treasure catch
+  - add oil spill
+  - add background
+  - add track image
 
 2022-12-21
 - Load a scoreboard background image
