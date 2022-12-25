@@ -37,6 +37,14 @@ class MarginFunctions:
         self.const_max = max_
 
     #--------------------------------------------------------------------------#
+    def eval_min(self, time):
+        return self.const_min
+
+    #--------------------------------------------------------------------------#
+    def eval_max(self, time):
+        return self.const_max
+
+    #--------------------------------------------------------------------------#
     def eval(self, time):
         '''Eval margins and return minimum and length'''
         return ( self.const_min, self.const_max-self.const_min )

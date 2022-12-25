@@ -33,10 +33,18 @@
   - add background
   - add track image
 
-#### Graphycal Interface
+#### Graphical Interface
 
-- Implement everything
+- Keep ratio of images 
+- Implement callbacks
+- Implement undo
 - Allow creator to define sound volume for each sprite, 1 is the music volume
+- Set proper maximum values to positions and sizes based on vertical em horizontal scrolling
+
+- Implement simple media player
+  - play, stop, pause, quit
+
+- Implement appearence preview
 
 - Implement a simple image editor 
   - Set size

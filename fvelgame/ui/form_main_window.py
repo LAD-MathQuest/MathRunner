@@ -23,11 +23,13 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QDoubleSpinBox, QFrame,
     QSizePolicy, QSpacerItem, QSpinBox, QStatusBar,
     QTabWidget, QToolBar, QVBoxLayout, QWidget)
 
+from pyqtgraph import PlotWidget
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(935, 901)
+        MainWindow.resize(643, 902)
         self.action_Run = QAction(MainWindow)
         self.action_Run.setObjectName(u"action_Run")
         icon = QIcon()
@@ -168,55 +170,52 @@ class Ui_MainWindow(object):
         self.tabGame = QWidget()
         self.tabGame.setObjectName(u"tabGame")
         self.tabGame.setEnabled(True)
-        self.gridLayout_2 = QGridLayout(self.tabGame)
-        self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.gridLayout_2.addItem(self.verticalSpacer, 8, 0, 1, 1)
-
-        self.groupBox_3 = QGroupBox(self.tabGame)
-        self.groupBox_3.setObjectName(u"groupBox_3")
-        self.gridLayout_17 = QGridLayout(self.groupBox_3)
+        self.verticalLayout_10 = QVBoxLayout(self.tabGame)
+        self.verticalLayout_10.setObjectName(u"verticalLayout_10")
+        self.groupBox_Software = QGroupBox(self.tabGame)
+        self.groupBox_Software.setObjectName(u"groupBox_Software")
+        self.gridLayout_17 = QGridLayout(self.groupBox_Software)
         self.gridLayout_17.setObjectName(u"gridLayout_17")
-        self.label_Author = QLabel(self.groupBox_3)
+        self.label_Author = QLabel(self.groupBox_Software)
         self.label_Author.setObjectName(u"label_Author")
 
         self.gridLayout_17.addWidget(self.label_Author, 1, 0, 1, 1)
 
-        self.pushButton_IconSelect = QPushButton(self.groupBox_3)
+        self.pushButton_IconSelect = QPushButton(self.groupBox_Software)
         self.pushButton_IconSelect.setObjectName(u"pushButton_IconSelect")
 
         self.gridLayout_17.addWidget(self.pushButton_IconSelect, 2, 0, 1, 1)
 
-        self.lineEdit_GameName = QLineEdit(self.groupBox_3)
+        self.lineEdit_GameName = QLineEdit(self.groupBox_Software)
         self.lineEdit_GameName.setObjectName(u"lineEdit_GameName")
 
         self.gridLayout_17.addWidget(self.lineEdit_GameName, 0, 1, 1, 1)
 
-        self.label_GameName = QLabel(self.groupBox_3)
+        self.label_GameName = QLabel(self.groupBox_Software)
         self.label_GameName.setObjectName(u"label_GameName")
 
         self.gridLayout_17.addWidget(self.label_GameName, 0, 0, 1, 1)
 
-        self.label_GameDescription = QLabel(self.groupBox_3)
+        self.label_GameDescription = QLabel(self.groupBox_Software)
         self.label_GameDescription.setObjectName(u"label_GameDescription")
 
         self.gridLayout_17.addWidget(self.label_GameDescription, 3, 0, 1, 1)
 
-        self.lineEdit_Author = QLineEdit(self.groupBox_3)
+        self.lineEdit_Author = QLineEdit(self.groupBox_Software)
         self.lineEdit_Author.setObjectName(u"lineEdit_Author")
 
         self.gridLayout_17.addWidget(self.lineEdit_Author, 1, 1, 1, 1)
 
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.label_GameIcon = QLabel(self.groupBox_3)
+        self.label_GameIcon = QLabel(self.groupBox_Software)
         self.label_GameIcon.setObjectName(u"label_GameIcon")
         self.label_GameIcon.setMinimumSize(QSize(64, 64))
         self.label_GameIcon.setBaseSize(QSize(64, 64))
         self.label_GameIcon.setAutoFillBackground(True)
         self.label_GameIcon.setFrameShape(QFrame.Panel)
         self.label_GameIcon.setFrameShadow(QFrame.Sunken)
+        self.label_GameIcon.setScaledContents(True)
 
         self.horizontalLayout.addWidget(self.label_GameIcon)
 
@@ -227,34 +226,34 @@ class Ui_MainWindow(object):
 
         self.gridLayout_17.addLayout(self.horizontalLayout, 2, 1, 1, 1)
 
-        self.plainTextEdit_GameDescription = QPlainTextEdit(self.groupBox_3)
+        self.plainTextEdit_GameDescription = QPlainTextEdit(self.groupBox_Software)
         self.plainTextEdit_GameDescription.setObjectName(u"plainTextEdit_GameDescription")
 
         self.gridLayout_17.addWidget(self.plainTextEdit_GameDescription, 3, 1, 1, 1)
 
 
-        self.gridLayout_2.addWidget(self.groupBox_3, 0, 0, 1, 1)
+        self.verticalLayout_10.addWidget(self.groupBox_Software)
 
-        self.groupBox_4 = QGroupBox(self.tabGame)
-        self.groupBox_4.setObjectName(u"groupBox_4")
-        self.verticalLayout_2 = QVBoxLayout(self.groupBox_4)
+        self.groupBox_Game = QGroupBox(self.tabGame)
+        self.groupBox_Game.setObjectName(u"groupBox_Game")
+        self.verticalLayout_2 = QVBoxLayout(self.groupBox_Game)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.horizontalLayout_7 = QHBoxLayout()
         self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
-        self.radioButton = QRadioButton(self.groupBox_4)
-        self.radioButton.setObjectName(u"radioButton")
-
-        self.horizontalLayout_7.addWidget(self.radioButton)
-
-        self.radioButton_2 = QRadioButton(self.groupBox_4)
-        self.radioButton_2.setObjectName(u"radioButton_2")
-
-        self.horizontalLayout_7.addWidget(self.radioButton_2)
-
-        self.label_ScrollDirection = QLabel(self.groupBox_4)
+        self.label_ScrollDirection = QLabel(self.groupBox_Game)
         self.label_ScrollDirection.setObjectName(u"label_ScrollDirection")
 
         self.horizontalLayout_7.addWidget(self.label_ScrollDirection)
+
+        self.radioButton_VertialScrolling = QRadioButton(self.groupBox_Game)
+        self.radioButton_VertialScrolling.setObjectName(u"radioButton_VertialScrolling")
+
+        self.horizontalLayout_7.addWidget(self.radioButton_VertialScrolling)
+
+        self.radioButton_HorizontalScrolling = QRadioButton(self.groupBox_Game)
+        self.radioButton_HorizontalScrolling.setObjectName(u"radioButton_HorizontalScrolling")
+
+        self.horizontalLayout_7.addWidget(self.radioButton_HorizontalScrolling)
 
         self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
@@ -265,22 +264,22 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_8 = QHBoxLayout()
         self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
-        self.checkBox_4 = QCheckBox(self.groupBox_4)
-        self.checkBox_4.setObjectName(u"checkBox_4")
+        self.checkBox_TrackKills = QCheckBox(self.groupBox_Game)
+        self.checkBox_TrackKills.setObjectName(u"checkBox_TrackKills")
 
-        self.horizontalLayout_8.addWidget(self.checkBox_4)
+        self.horizontalLayout_8.addWidget(self.checkBox_TrackKills)
 
 
         self.verticalLayout_2.addLayout(self.horizontalLayout_8)
 
         self.horizontalLayout_15 = QHBoxLayout()
         self.horizontalLayout_15.setObjectName(u"horizontalLayout_15")
-        self.label_ScoreTimeBonus = QLabel(self.groupBox_4)
+        self.label_ScoreTimeBonus = QLabel(self.groupBox_Game)
         self.label_ScoreTimeBonus.setObjectName(u"label_ScoreTimeBonus")
 
         self.horizontalLayout_15.addWidget(self.label_ScoreTimeBonus)
 
-        self.doubleSpinBox_ScoreTimeBonus = QDoubleSpinBox(self.groupBox_4)
+        self.doubleSpinBox_ScoreTimeBonus = QDoubleSpinBox(self.groupBox_Game)
         self.doubleSpinBox_ScoreTimeBonus.setObjectName(u"doubleSpinBox_ScoreTimeBonus")
         sizePolicy = QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -288,6 +287,10 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.doubleSpinBox_ScoreTimeBonus.sizePolicy().hasHeightForWidth())
         self.doubleSpinBox_ScoreTimeBonus.setSizePolicy(sizePolicy)
         self.doubleSpinBox_ScoreTimeBonus.setMinimumSize(QSize(60, 0))
+        self.doubleSpinBox_ScoreTimeBonus.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.doubleSpinBox_ScoreTimeBonus.setDecimals(6)
+        self.doubleSpinBox_ScoreTimeBonus.setMinimum(-999999.999998999992386)
+        self.doubleSpinBox_ScoreTimeBonus.setMaximum(999999.999998999992386)
 
         self.horizontalLayout_15.addWidget(self.doubleSpinBox_ScoreTimeBonus)
 
@@ -300,25 +303,41 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_17 = QHBoxLayout()
         self.horizontalLayout_17.setObjectName(u"horizontalLayout_17")
-        self.label_8 = QLabel(self.groupBox_4)
-        self.label_8.setObjectName(u"label_8")
+        self.label_AmbienceSound = QLabel(self.groupBox_Game)
+        self.label_AmbienceSound.setObjectName(u"label_AmbienceSound")
 
-        self.horizontalLayout_17.addWidget(self.label_8)
+        self.horizontalLayout_17.addWidget(self.label_AmbienceSound)
 
-        self.pushButton_11 = QPushButton(self.groupBox_4)
-        self.pushButton_11.setObjectName(u"pushButton_11")
+        self.pushButton_AmbienceSoundSelect = QPushButton(self.groupBox_Game)
+        self.pushButton_AmbienceSoundSelect.setObjectName(u"pushButton_AmbienceSoundSelect")
 
-        self.horizontalLayout_17.addWidget(self.pushButton_11)
+        self.horizontalLayout_17.addWidget(self.pushButton_AmbienceSoundSelect)
 
-        self.pushButton_13 = QPushButton(self.groupBox_4)
-        self.pushButton_13.setObjectName(u"pushButton_13")
+        self.pushButton_AmbienceSoundRemove = QPushButton(self.groupBox_Game)
+        self.pushButton_AmbienceSoundRemove.setObjectName(u"pushButton_AmbienceSoundRemove")
+        self.pushButton_AmbienceSoundRemove.setEnabled(False)
 
-        self.horizontalLayout_17.addWidget(self.pushButton_13)
+        self.horizontalLayout_17.addWidget(self.pushButton_AmbienceSoundRemove)
 
-        self.pushButton_12 = QPushButton(self.groupBox_4)
-        self.pushButton_12.setObjectName(u"pushButton_12")
+        self.pushButton_AmbienceSoundPlay = QPushButton(self.groupBox_Game)
+        self.pushButton_AmbienceSoundPlay.setObjectName(u"pushButton_AmbienceSoundPlay")
+        self.pushButton_AmbienceSoundPlay.setEnabled(False)
 
-        self.horizontalLayout_17.addWidget(self.pushButton_12)
+        self.horizontalLayout_17.addWidget(self.pushButton_AmbienceSoundPlay)
+
+        self.label_AmbienceSoundVolume = QLabel(self.groupBox_Game)
+        self.label_AmbienceSoundVolume.setObjectName(u"label_AmbienceSoundVolume")
+        self.label_AmbienceSoundVolume.setIndent(2)
+
+        self.horizontalLayout_17.addWidget(self.label_AmbienceSoundVolume)
+
+        self.doubleSpinBox_AmbienceSoundVolume = QDoubleSpinBox(self.groupBox_Game)
+        self.doubleSpinBox_AmbienceSoundVolume.setObjectName(u"doubleSpinBox_AmbienceSoundVolume")
+        self.doubleSpinBox_AmbienceSoundVolume.setEnabled(False)
+        self.doubleSpinBox_AmbienceSoundVolume.setMaximum(1.000000000000000)
+        self.doubleSpinBox_AmbienceSoundVolume.setValue(1.000000000000000)
+
+        self.horizontalLayout_17.addWidget(self.doubleSpinBox_AmbienceSoundVolume)
 
         self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
@@ -328,7 +347,11 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.addLayout(self.horizontalLayout_17)
 
 
-        self.gridLayout_2.addWidget(self.groupBox_4, 5, 0, 1, 1)
+        self.verticalLayout_10.addWidget(self.groupBox_Game)
+
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.verticalLayout_10.addItem(self.verticalSpacer)
 
         self.tabWidget.addTab(self.tabGame, "")
         self.tabAppearance = QWidget()
@@ -366,10 +389,10 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_18.addLayout(self.horizontalLayout_20)
 
-        self.checkBox_2 = QCheckBox(self.groupBox_Background)
-        self.checkBox_2.setObjectName(u"checkBox_2")
+        self.checkBox_BackgroundScrolls = QCheckBox(self.groupBox_Background)
+        self.checkBox_BackgroundScrolls.setObjectName(u"checkBox_BackgroundScrolls")
 
-        self.verticalLayout_18.addWidget(self.checkBox_2)
+        self.verticalLayout_18.addWidget(self.checkBox_BackgroundScrolls)
 
         self.verticalSpacer_17 = QSpacerItem(20, 0, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
@@ -383,9 +406,11 @@ class Ui_MainWindow(object):
         sizePolicy1.setHeightForWidth(self.label_BackgroundImage.sizePolicy().hasHeightForWidth())
         self.label_BackgroundImage.setSizePolicy(sizePolicy1)
         self.label_BackgroundImage.setMinimumSize(QSize(228, 128))
+        self.label_BackgroundImage.setMaximumSize(QSize(228, 128))
         self.label_BackgroundImage.setAutoFillBackground(True)
         self.label_BackgroundImage.setFrameShape(QFrame.Panel)
         self.label_BackgroundImage.setFrameShadow(QFrame.Sunken)
+        self.label_BackgroundImage.setScaledContents(True)
 
         self.gridLayout_15.addWidget(self.label_BackgroundImage, 0, 0, 1, 1)
 
@@ -398,18 +423,18 @@ class Ui_MainWindow(object):
         self.gridLayout_16.setObjectName(u"gridLayout_16")
         self.verticalLayout_19 = QVBoxLayout()
         self.verticalLayout_19.setObjectName(u"verticalLayout_19")
-        self.checkBox_3 = QCheckBox(self.groupBox_Track)
-        self.checkBox_3.setObjectName(u"checkBox_3")
+        self.checkBox_DrawTrack = QCheckBox(self.groupBox_Track)
+        self.checkBox_DrawTrack.setObjectName(u"checkBox_DrawTrack")
 
-        self.verticalLayout_19.addWidget(self.checkBox_3)
+        self.verticalLayout_19.addWidget(self.checkBox_DrawTrack)
 
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.label_11 = QLabel(self.groupBox_Track)
-        self.label_11.setObjectName(u"label_11")
-        self.label_11.setIndent(5)
+        self.label_Track = QLabel(self.groupBox_Track)
+        self.label_Track.setObjectName(u"label_Track")
+        self.label_Track.setIndent(5)
 
-        self.horizontalLayout_2.addWidget(self.label_11)
+        self.horizontalLayout_2.addWidget(self.label_Track)
 
         self.pushButton_SelectTrack = QPushButton(self.groupBox_Track)
         self.pushButton_SelectTrack.setObjectName(u"pushButton_SelectTrack")
@@ -437,9 +462,11 @@ class Ui_MainWindow(object):
         sizePolicy1.setHeightForWidth(self.label_TrackImage.sizePolicy().hasHeightForWidth())
         self.label_TrackImage.setSizePolicy(sizePolicy1)
         self.label_TrackImage.setMinimumSize(QSize(228, 128))
+        self.label_TrackImage.setMaximumSize(QSize(228, 128))
         self.label_TrackImage.setAutoFillBackground(True)
         self.label_TrackImage.setFrameShape(QFrame.Panel)
         self.label_TrackImage.setFrameShadow(QFrame.Sunken)
+        self.label_TrackImage.setScaledContents(True)
 
         self.gridLayout_16.addWidget(self.label_TrackImage, 1, 0, 1, 1)
 
@@ -457,11 +484,28 @@ class Ui_MainWindow(object):
         sizePolicy1.setHeightForWidth(self.label_ScoreboardImage.sizePolicy().hasHeightForWidth())
         self.label_ScoreboardImage.setSizePolicy(sizePolicy1)
         self.label_ScoreboardImage.setMinimumSize(QSize(228, 128))
+        self.label_ScoreboardImage.setMaximumSize(QSize(228, 128))
         self.label_ScoreboardImage.setAutoFillBackground(True)
         self.label_ScoreboardImage.setFrameShape(QFrame.Panel)
         self.label_ScoreboardImage.setFrameShadow(QFrame.Sunken)
+        self.label_ScoreboardImage.setScaledContents(True)
 
         self.verticalLayout_12.addWidget(self.label_ScoreboardImage)
+
+        self.label_ScoreboardExample = QLabel(self.groupBox_Scoreboard)
+        self.label_ScoreboardExample.setObjectName(u"label_ScoreboardExample")
+        sizePolicy1.setHeightForWidth(self.label_ScoreboardExample.sizePolicy().hasHeightForWidth())
+        self.label_ScoreboardExample.setSizePolicy(sizePolicy1)
+        self.label_ScoreboardExample.setMinimumSize(QSize(228, 26))
+        self.label_ScoreboardExample.setBaseSize(QSize(26, 26))
+        self.label_ScoreboardExample.setAutoFillBackground(True)
+        self.label_ScoreboardExample.setFrameShape(QFrame.Panel)
+        self.label_ScoreboardExample.setFrameShadow(QFrame.Sunken)
+        self.label_ScoreboardExample.setAlignment(Qt.AlignCenter)
+        self.label_ScoreboardExample.setMargin(0)
+        self.label_ScoreboardExample.setIndent(0)
+
+        self.verticalLayout_12.addWidget(self.label_ScoreboardExample)
 
         self.verticalSpacer_18 = QSpacerItem(20, 0, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
@@ -472,24 +516,24 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_20 = QVBoxLayout()
         self.verticalLayout_20.setObjectName(u"verticalLayout_20")
-        self.groupBox_5 = QGroupBox(self.groupBox_Scoreboard)
-        self.groupBox_5.setObjectName(u"groupBox_5")
-        self.verticalLayout = QVBoxLayout(self.groupBox_5)
+        self.groupBox_ScoreboardImage = QGroupBox(self.groupBox_Scoreboard)
+        self.groupBox_ScoreboardImage.setObjectName(u"groupBox_ScoreboardImage")
+        self.verticalLayout = QVBoxLayout(self.groupBox_ScoreboardImage)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.horizontalLayout_9 = QHBoxLayout()
         self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
-        self.label_12 = QLabel(self.groupBox_5)
-        self.label_12.setObjectName(u"label_12")
-        self.label_12.setIndent(5)
+        self.label_ScoreboardImage_2 = QLabel(self.groupBox_ScoreboardImage)
+        self.label_ScoreboardImage_2.setObjectName(u"label_ScoreboardImage_2")
+        self.label_ScoreboardImage_2.setIndent(5)
 
-        self.horizontalLayout_9.addWidget(self.label_12)
+        self.horizontalLayout_9.addWidget(self.label_ScoreboardImage_2)
 
-        self.pushButton_SelectScoreboard = QPushButton(self.groupBox_5)
-        self.pushButton_SelectScoreboard.setObjectName(u"pushButton_SelectScoreboard")
-        sizePolicy1.setHeightForWidth(self.pushButton_SelectScoreboard.sizePolicy().hasHeightForWidth())
-        self.pushButton_SelectScoreboard.setSizePolicy(sizePolicy1)
+        self.pushButton_SelectScoreboardImage = QPushButton(self.groupBox_ScoreboardImage)
+        self.pushButton_SelectScoreboardImage.setObjectName(u"pushButton_SelectScoreboardImage")
+        sizePolicy1.setHeightForWidth(self.pushButton_SelectScoreboardImage.sizePolicy().hasHeightForWidth())
+        self.pushButton_SelectScoreboardImage.setSizePolicy(sizePolicy1)
 
-        self.horizontalLayout_9.addWidget(self.pushButton_SelectScoreboard)
+        self.horizontalLayout_9.addWidget(self.pushButton_SelectScoreboardImage)
 
         self.horizontalSpacer_25 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
@@ -500,126 +544,160 @@ class Ui_MainWindow(object):
 
         self.gridLayout_13 = QGridLayout()
         self.gridLayout_13.setObjectName(u"gridLayout_13")
-        self.spinBox_ScoreboardWidth = QSpinBox(self.groupBox_5)
-        self.spinBox_ScoreboardWidth.setObjectName(u"spinBox_ScoreboardWidth")
-        self.spinBox_ScoreboardWidth.setMinimumSize(QSize(60, 0))
+        self.spinBox_ScoreboardImageWidth = QSpinBox(self.groupBox_ScoreboardImage)
+        self.spinBox_ScoreboardImageWidth.setObjectName(u"spinBox_ScoreboardImageWidth")
+        self.spinBox_ScoreboardImageWidth.setMinimumSize(QSize(60, 0))
+        self.spinBox_ScoreboardImageWidth.setMinimum(1)
+        self.spinBox_ScoreboardImageWidth.setMaximum(1920)
 
-        self.gridLayout_13.addWidget(self.spinBox_ScoreboardWidth, 1, 1, 1, 1)
+        self.gridLayout_13.addWidget(self.spinBox_ScoreboardImageWidth, 1, 1, 1, 1)
 
-        self.checkBox_ScoreboardKeepAspectRatio = QCheckBox(self.groupBox_5)
-        self.checkBox_ScoreboardKeepAspectRatio.setObjectName(u"checkBox_ScoreboardKeepAspectRatio")
+        self.checkBox_ScoreboardImageKeepAspectRatio = QCheckBox(self.groupBox_ScoreboardImage)
+        self.checkBox_ScoreboardImageKeepAspectRatio.setObjectName(u"checkBox_ScoreboardImageKeepAspectRatio")
         sizePolicy2 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         sizePolicy2.setHorizontalStretch(0)
         sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.checkBox_ScoreboardKeepAspectRatio.sizePolicy().hasHeightForWidth())
-        self.checkBox_ScoreboardKeepAspectRatio.setSizePolicy(sizePolicy2)
+        sizePolicy2.setHeightForWidth(self.checkBox_ScoreboardImageKeepAspectRatio.sizePolicy().hasHeightForWidth())
+        self.checkBox_ScoreboardImageKeepAspectRatio.setSizePolicy(sizePolicy2)
 
-        self.gridLayout_13.addWidget(self.checkBox_ScoreboardKeepAspectRatio, 1, 4, 1, 1)
+        self.gridLayout_13.addWidget(self.checkBox_ScoreboardImageKeepAspectRatio, 1, 4, 1, 1)
 
-        self.label_ScoreboardWidth = QLabel(self.groupBox_5)
-        self.label_ScoreboardWidth.setObjectName(u"label_ScoreboardWidth")
-        self.label_ScoreboardWidth.setIndent(5)
+        self.label_ScoreboardImageWidth = QLabel(self.groupBox_ScoreboardImage)
+        self.label_ScoreboardImageWidth.setObjectName(u"label_ScoreboardImageWidth")
+        self.label_ScoreboardImageWidth.setIndent(5)
 
-        self.gridLayout_13.addWidget(self.label_ScoreboardWidth, 1, 0, 1, 1)
+        self.gridLayout_13.addWidget(self.label_ScoreboardImageWidth, 1, 0, 1, 1)
 
-        self.spinBox_ScoreboardHeight = QSpinBox(self.groupBox_5)
-        self.spinBox_ScoreboardHeight.setObjectName(u"spinBox_ScoreboardHeight")
-        self.spinBox_ScoreboardHeight.setMinimumSize(QSize(60, 0))
+        self.label_ScoreboardImagePosition = QLabel(self.groupBox_ScoreboardImage)
+        self.label_ScoreboardImagePosition.setObjectName(u"label_ScoreboardImagePosition")
+        self.label_ScoreboardImagePosition.setIndent(5)
 
-        self.gridLayout_13.addWidget(self.spinBox_ScoreboardHeight, 1, 3, 1, 1)
+        self.gridLayout_13.addWidget(self.label_ScoreboardImagePosition, 0, 0, 1, 1)
 
-        self.label_ScoreboardHeight = QLabel(self.groupBox_5)
-        self.label_ScoreboardHeight.setObjectName(u"label_ScoreboardHeight")
-        self.label_ScoreboardHeight.setIndent(5)
+        self.spinBox_ScoreboardImagePositionX = QSpinBox(self.groupBox_ScoreboardImage)
+        self.spinBox_ScoreboardImagePositionX.setObjectName(u"spinBox_ScoreboardImagePositionX")
+        self.spinBox_ScoreboardImagePositionX.setMinimumSize(QSize(60, 0))
+        self.spinBox_ScoreboardImagePositionX.setMinimum(1)
+        self.spinBox_ScoreboardImagePositionX.setMaximum(1920)
 
-        self.gridLayout_13.addWidget(self.label_ScoreboardHeight, 1, 2, 1, 1)
+        self.gridLayout_13.addWidget(self.spinBox_ScoreboardImagePositionX, 0, 1, 1, 1)
 
-        self.label_ScoreboardPosition = QLabel(self.groupBox_5)
-        self.label_ScoreboardPosition.setObjectName(u"label_ScoreboardPosition")
-        self.label_ScoreboardPosition.setIndent(5)
+        self.spinBox_ScoreboardImagePositionY = QSpinBox(self.groupBox_ScoreboardImage)
+        self.spinBox_ScoreboardImagePositionY.setObjectName(u"spinBox_ScoreboardImagePositionY")
+        self.spinBox_ScoreboardImagePositionY.setMinimumSize(QSize(60, 0))
+        self.spinBox_ScoreboardImagePositionY.setMinimum(1)
+        self.spinBox_ScoreboardImagePositionY.setMaximum(1080)
 
-        self.gridLayout_13.addWidget(self.label_ScoreboardPosition, 0, 0, 1, 1)
+        self.gridLayout_13.addWidget(self.spinBox_ScoreboardImagePositionY, 0, 2, 1, 1)
 
-        self.spinBox_ScoreboardPositionX = QSpinBox(self.groupBox_5)
-        self.spinBox_ScoreboardPositionX.setObjectName(u"spinBox_ScoreboardPositionX")
-        self.spinBox_ScoreboardPositionX.setMinimumSize(QSize(60, 0))
+        self.spinBox_ScoreboardImageHeight = QSpinBox(self.groupBox_ScoreboardImage)
+        self.spinBox_ScoreboardImageHeight.setObjectName(u"spinBox_ScoreboardImageHeight")
+        self.spinBox_ScoreboardImageHeight.setMinimumSize(QSize(60, 0))
+        self.spinBox_ScoreboardImageHeight.setMinimum(1)
+        self.spinBox_ScoreboardImageHeight.setMaximum(1080)
 
-        self.gridLayout_13.addWidget(self.spinBox_ScoreboardPositionX, 0, 1, 1, 1)
-
-        self.spinBox_ScoreboardPositionY = QSpinBox(self.groupBox_5)
-        self.spinBox_ScoreboardPositionY.setObjectName(u"spinBox_ScoreboardPositionY")
-        self.spinBox_ScoreboardPositionY.setMinimumSize(QSize(60, 0))
-
-        self.gridLayout_13.addWidget(self.spinBox_ScoreboardPositionY, 0, 2, 1, 1)
+        self.gridLayout_13.addWidget(self.spinBox_ScoreboardImageHeight, 1, 2, 1, 1)
 
 
         self.verticalLayout.addLayout(self.gridLayout_13)
 
 
-        self.verticalLayout_20.addWidget(self.groupBox_5)
+        self.verticalLayout_20.addWidget(self.groupBox_ScoreboardImage)
 
-        self.groupBox_7 = QGroupBox(self.groupBox_Scoreboard)
-        self.groupBox_7.setObjectName(u"groupBox_7")
-        self.gridLayout_3 = QGridLayout(self.groupBox_7)
+        self.groupBox_ScoreboardText = QGroupBox(self.groupBox_Scoreboard)
+        self.groupBox_ScoreboardText.setObjectName(u"groupBox_ScoreboardText")
+        self.verticalLayout_4 = QVBoxLayout(self.groupBox_ScoreboardText)
+        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
+        self.gridLayout_14 = QGridLayout()
+        self.gridLayout_14.setObjectName(u"gridLayout_14")
+        self.label_ScoreboardTextWidth = QLabel(self.groupBox_ScoreboardText)
+        self.label_ScoreboardTextWidth.setObjectName(u"label_ScoreboardTextWidth")
+        self.label_ScoreboardTextWidth.setIndent(5)
+
+        self.gridLayout_14.addWidget(self.label_ScoreboardTextWidth, 1, 0, 1, 1)
+
+        self.horizontalSpacer_13 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.gridLayout_14.addItem(self.horizontalSpacer_13, 0, 3, 1, 1)
+
+        self.spinBox_ScoreboardTextWidth = QSpinBox(self.groupBox_ScoreboardText)
+        self.spinBox_ScoreboardTextWidth.setObjectName(u"spinBox_ScoreboardTextWidth")
+        self.spinBox_ScoreboardTextWidth.setMinimumSize(QSize(60, 0))
+        self.spinBox_ScoreboardTextWidth.setMinimum(1)
+        self.spinBox_ScoreboardTextWidth.setMaximum(1920)
+
+        self.gridLayout_14.addWidget(self.spinBox_ScoreboardTextWidth, 1, 1, 1, 1)
+
+        self.label_ScoreboardTextPosition = QLabel(self.groupBox_ScoreboardText)
+        self.label_ScoreboardTextPosition.setObjectName(u"label_ScoreboardTextPosition")
+        self.label_ScoreboardTextPosition.setIndent(5)
+
+        self.gridLayout_14.addWidget(self.label_ScoreboardTextPosition, 0, 0, 1, 1)
+
+        self.spinBox_ScoreboardTextPositionY = QSpinBox(self.groupBox_ScoreboardText)
+        self.spinBox_ScoreboardTextPositionY.setObjectName(u"spinBox_ScoreboardTextPositionY")
+        self.spinBox_ScoreboardTextPositionY.setMinimumSize(QSize(60, 0))
+        self.spinBox_ScoreboardTextPositionY.setMinimum(1)
+        self.spinBox_ScoreboardTextPositionY.setMaximum(1080)
+
+        self.gridLayout_14.addWidget(self.spinBox_ScoreboardTextPositionY, 0, 2, 1, 1)
+
+        self.spinBox_ScoreboardTextHeight = QSpinBox(self.groupBox_ScoreboardText)
+        self.spinBox_ScoreboardTextHeight.setObjectName(u"spinBox_ScoreboardTextHeight")
+        self.spinBox_ScoreboardTextHeight.setMinimumSize(QSize(60, 0))
+        self.spinBox_ScoreboardTextHeight.setMinimum(1)
+        self.spinBox_ScoreboardTextHeight.setMaximum(1080)
+
+        self.gridLayout_14.addWidget(self.spinBox_ScoreboardTextHeight, 1, 2, 1, 1)
+
+        self.spinBox_ScoreboardTextPositionX = QSpinBox(self.groupBox_ScoreboardText)
+        self.spinBox_ScoreboardTextPositionX.setObjectName(u"spinBox_ScoreboardTextPositionX")
+        self.spinBox_ScoreboardTextPositionX.setMinimumSize(QSize(60, 0))
+        self.spinBox_ScoreboardTextPositionX.setMinimum(1)
+        self.spinBox_ScoreboardTextPositionX.setMaximum(1920)
+
+        self.gridLayout_14.addWidget(self.spinBox_ScoreboardTextPositionX, 0, 1, 1, 1)
+
+
+        self.verticalLayout_4.addLayout(self.gridLayout_14)
+
+        self.gridLayout_3 = QGridLayout()
         self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.label_ScoreboardBgColor_2 = QLabel(self.groupBox_7)
+        self.horizontalSpacer_11 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.gridLayout_3.addItem(self.horizontalSpacer_11, 0, 3, 1, 1)
+
+        self.label_ScoreboardBgColor_2 = QLabel(self.groupBox_ScoreboardText)
         self.label_ScoreboardBgColor_2.setObjectName(u"label_ScoreboardBgColor_2")
         self.label_ScoreboardBgColor_2.setIndent(5)
 
         self.gridLayout_3.addWidget(self.label_ScoreboardBgColor_2, 0, 0, 1, 1)
 
-        self.label_ScoreboardBgColor = QLabel(self.groupBox_7)
-        self.label_ScoreboardBgColor.setObjectName(u"label_ScoreboardBgColor")
-        sizePolicy1.setHeightForWidth(self.label_ScoreboardBgColor.sizePolicy().hasHeightForWidth())
-        self.label_ScoreboardBgColor.setSizePolicy(sizePolicy1)
-        self.label_ScoreboardBgColor.setMinimumSize(QSize(26, 26))
-        self.label_ScoreboardBgColor.setBaseSize(QSize(26, 26))
-        self.label_ScoreboardBgColor.setAutoFillBackground(True)
-        self.label_ScoreboardBgColor.setFrameShape(QFrame.Panel)
-        self.label_ScoreboardBgColor.setFrameShadow(QFrame.Sunken)
-        self.label_ScoreboardBgColor.setMargin(0)
-
-        self.gridLayout_3.addWidget(self.label_ScoreboardBgColor, 0, 1, 1, 1)
-
-        self.pushButton_ChoseScoreboardBgColor = QPushButton(self.groupBox_7)
+        self.pushButton_ChoseScoreboardBgColor = QPushButton(self.groupBox_ScoreboardText)
         self.pushButton_ChoseScoreboardBgColor.setObjectName(u"pushButton_ChoseScoreboardBgColor")
         sizePolicy1.setHeightForWidth(self.pushButton_ChoseScoreboardBgColor.sizePolicy().hasHeightForWidth())
         self.pushButton_ChoseScoreboardBgColor.setSizePolicy(sizePolicy1)
 
-        self.gridLayout_3.addWidget(self.pushButton_ChoseScoreboardBgColor, 0, 2, 1, 1)
+        self.gridLayout_3.addWidget(self.pushButton_ChoseScoreboardBgColor, 0, 1, 1, 1)
 
-        self.label_ChoseScoreboardFgColor = QLabel(self.groupBox_7)
-        self.label_ChoseScoreboardFgColor.setObjectName(u"label_ChoseScoreboardFgColor")
-        self.label_ChoseScoreboardFgColor.setIndent(5)
-
-        self.gridLayout_3.addWidget(self.label_ChoseScoreboardFgColor, 1, 0, 1, 1)
-
-        self.horizontalSpacer_15 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.gridLayout_3.addItem(self.horizontalSpacer_15, 0, 3, 1, 1)
-
-        self.label_ScoreboardFgColor = QLabel(self.groupBox_7)
-        self.label_ScoreboardFgColor.setObjectName(u"label_ScoreboardFgColor")
-        sizePolicy1.setHeightForWidth(self.label_ScoreboardFgColor.sizePolicy().hasHeightForWidth())
-        self.label_ScoreboardFgColor.setSizePolicy(sizePolicy1)
-        self.label_ScoreboardFgColor.setMinimumSize(QSize(26, 26))
-        self.label_ScoreboardFgColor.setBaseSize(QSize(26, 26))
-        self.label_ScoreboardFgColor.setAutoFillBackground(True)
-        self.label_ScoreboardFgColor.setFrameShape(QFrame.Panel)
-        self.label_ScoreboardFgColor.setFrameShadow(QFrame.Sunken)
-        self.label_ScoreboardFgColor.setMargin(0)
-
-        self.gridLayout_3.addWidget(self.label_ScoreboardFgColor, 1, 1, 1, 1)
-
-        self.pushButton_ChoseScoreboardFgColor = QPushButton(self.groupBox_7)
+        self.pushButton_ChoseScoreboardFgColor = QPushButton(self.groupBox_ScoreboardText)
         self.pushButton_ChoseScoreboardFgColor.setObjectName(u"pushButton_ChoseScoreboardFgColor")
         sizePolicy1.setHeightForWidth(self.pushButton_ChoseScoreboardFgColor.sizePolicy().hasHeightForWidth())
         self.pushButton_ChoseScoreboardFgColor.setSizePolicy(sizePolicy1)
 
-        self.gridLayout_3.addWidget(self.pushButton_ChoseScoreboardFgColor, 1, 2, 1, 1)
+        self.gridLayout_3.addWidget(self.pushButton_ChoseScoreboardFgColor, 1, 1, 1, 1)
+
+        self.label_ScoreboardFgColor_2 = QLabel(self.groupBox_ScoreboardText)
+        self.label_ScoreboardFgColor_2.setObjectName(u"label_ScoreboardFgColor_2")
+        self.label_ScoreboardFgColor_2.setIndent(5)
+
+        self.gridLayout_3.addWidget(self.label_ScoreboardFgColor_2, 1, 0, 1, 1)
 
 
-        self.verticalLayout_20.addWidget(self.groupBox_7)
+        self.verticalLayout_4.addLayout(self.gridLayout_3)
+
+
+        self.verticalLayout_20.addWidget(self.groupBox_ScoreboardText)
 
 
         self.gridLayout_18.addLayout(self.verticalLayout_20, 0, 3, 1, 1)
@@ -647,10 +725,10 @@ class Ui_MainWindow(object):
         self.tabObjects = QWidget()
         self.tabObjects.setObjectName(u"tabObjects")
         self.tabObjects.setEnabled(True)
-        self.gridLayout_4 = QGridLayout(self.tabObjects)
-        self.gridLayout_4.setObjectName(u"gridLayout_4")
-        self.tabWidget_2 = QTabWidget(self.tabObjects)
-        self.tabWidget_2.setObjectName(u"tabWidget_2")
+        self.verticalLayout_11 = QVBoxLayout(self.tabObjects)
+        self.verticalLayout_11.setObjectName(u"verticalLayout_11")
+        self.tabWidget_Objects = QTabWidget(self.tabObjects)
+        self.tabWidget_Objects.setObjectName(u"tabWidget_Objects")
         self.tab_Player = QWidget()
         self.tab_Player.setObjectName(u"tab_Player")
         self.verticalLayout_21 = QVBoxLayout(self.tab_Player)
@@ -663,16 +741,18 @@ class Ui_MainWindow(object):
         self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
         self.verticalLayout_13 = QVBoxLayout()
         self.verticalLayout_13.setObjectName(u"verticalLayout_13")
-        self.label_PlayerImage_2 = QLabel(self.frame)
-        self.label_PlayerImage_2.setObjectName(u"label_PlayerImage_2")
-        sizePolicy1.setHeightForWidth(self.label_PlayerImage_2.sizePolicy().hasHeightForWidth())
-        self.label_PlayerImage_2.setSizePolicy(sizePolicy1)
-        self.label_PlayerImage_2.setMinimumSize(QSize(128, 128))
-        self.label_PlayerImage_2.setAutoFillBackground(True)
-        self.label_PlayerImage_2.setFrameShape(QFrame.Panel)
-        self.label_PlayerImage_2.setFrameShadow(QFrame.Sunken)
+        self.label_PlayerImage = QLabel(self.frame)
+        self.label_PlayerImage.setObjectName(u"label_PlayerImage")
+        sizePolicy1.setHeightForWidth(self.label_PlayerImage.sizePolicy().hasHeightForWidth())
+        self.label_PlayerImage.setSizePolicy(sizePolicy1)
+        self.label_PlayerImage.setMinimumSize(QSize(128, 128))
+        self.label_PlayerImage.setMaximumSize(QSize(128, 128))
+        self.label_PlayerImage.setAutoFillBackground(True)
+        self.label_PlayerImage.setFrameShape(QFrame.Panel)
+        self.label_PlayerImage.setFrameShadow(QFrame.Sunken)
+        self.label_PlayerImage.setScaledContents(True)
 
-        self.verticalLayout_13.addWidget(self.label_PlayerImage_2)
+        self.verticalLayout_13.addWidget(self.label_PlayerImage)
 
 
         self.horizontalLayout_12.addLayout(self.verticalLayout_13)
@@ -681,17 +761,17 @@ class Ui_MainWindow(object):
         self.verticalLayout_14.setObjectName(u"verticalLayout_14")
         self.horizontalLayout_16 = QHBoxLayout()
         self.horizontalLayout_16.setObjectName(u"horizontalLayout_16")
-        self.label_9 = QLabel(self.frame)
-        self.label_9.setObjectName(u"label_9")
-        self.label_9.setMargin(1)
-        self.label_9.setIndent(5)
+        self.label_SelectPlayerImage = QLabel(self.frame)
+        self.label_SelectPlayerImage.setObjectName(u"label_SelectPlayerImage")
+        self.label_SelectPlayerImage.setMargin(1)
+        self.label_SelectPlayerImage.setIndent(5)
 
-        self.horizontalLayout_16.addWidget(self.label_9)
+        self.horizontalLayout_16.addWidget(self.label_SelectPlayerImage)
 
-        self.pushButton_SelectPlayer_2 = QPushButton(self.frame)
-        self.pushButton_SelectPlayer_2.setObjectName(u"pushButton_SelectPlayer_2")
+        self.pushButton_SelectPlayer = QPushButton(self.frame)
+        self.pushButton_SelectPlayer.setObjectName(u"pushButton_SelectPlayer")
 
-        self.horizontalLayout_16.addWidget(self.pushButton_SelectPlayer_2)
+        self.horizontalLayout_16.addWidget(self.pushButton_SelectPlayer)
 
         self.horizontalSpacer_14 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
@@ -702,51 +782,50 @@ class Ui_MainWindow(object):
 
         self.gridLayout_19 = QGridLayout()
         self.gridLayout_19.setObjectName(u"gridLayout_19")
-        self.spinBox_PlayerWidth_2 = QSpinBox(self.frame)
-        self.spinBox_PlayerWidth_2.setObjectName(u"spinBox_PlayerWidth_2")
-        self.spinBox_PlayerWidth_2.setMinimumSize(QSize(60, 0))
+        self.label_PlayerSpeed = QLabel(self.frame)
+        self.label_PlayerSpeed.setObjectName(u"label_PlayerSpeed")
+        self.label_PlayerSpeed.setMargin(1)
+        self.label_PlayerSpeed.setIndent(5)
 
-        self.gridLayout_19.addWidget(self.spinBox_PlayerWidth_2, 0, 1, 1, 1)
+        self.gridLayout_19.addWidget(self.label_PlayerSpeed, 1, 0, 1, 1)
 
-        self.label_PlayerHeight_2 = QLabel(self.frame)
-        self.label_PlayerHeight_2.setObjectName(u"label_PlayerHeight_2")
-        self.label_PlayerHeight_2.setMargin(1)
-        self.label_PlayerHeight_2.setIndent(2)
+        self.spinBox_PlayerSpeed = QSpinBox(self.frame)
+        self.spinBox_PlayerSpeed.setObjectName(u"spinBox_PlayerSpeed")
+        self.spinBox_PlayerSpeed.setMinimum(1)
+        self.spinBox_PlayerSpeed.setMaximum(1920)
 
-        self.gridLayout_19.addWidget(self.label_PlayerHeight_2, 0, 2, 1, 1)
+        self.gridLayout_19.addWidget(self.spinBox_PlayerSpeed, 1, 1, 1, 1)
 
-        self.label_PlayerWidth_2 = QLabel(self.frame)
-        self.label_PlayerWidth_2.setObjectName(u"label_PlayerWidth_2")
-        self.label_PlayerWidth_2.setMinimumSize(QSize(50, 0))
-        self.label_PlayerWidth_2.setMargin(1)
-        self.label_PlayerWidth_2.setIndent(5)
+        self.spinBox_PlayerHeight = QSpinBox(self.frame)
+        self.spinBox_PlayerHeight.setObjectName(u"spinBox_PlayerHeight")
+        self.spinBox_PlayerHeight.setMinimumSize(QSize(60, 0))
+        self.spinBox_PlayerHeight.setMinimum(1)
+        self.spinBox_PlayerHeight.setMaximum(1080)
 
-        self.gridLayout_19.addWidget(self.label_PlayerWidth_2, 0, 0, 1, 1)
+        self.gridLayout_19.addWidget(self.spinBox_PlayerHeight, 0, 2, 1, 1)
 
-        self.spinBox_PlayerHeight_2 = QSpinBox(self.frame)
-        self.spinBox_PlayerHeight_2.setObjectName(u"spinBox_PlayerHeight_2")
-        self.spinBox_PlayerHeight_2.setMinimumSize(QSize(60, 0))
+        self.label_PlayerSize = QLabel(self.frame)
+        self.label_PlayerSize.setObjectName(u"label_PlayerSize")
+        self.label_PlayerSize.setMinimumSize(QSize(50, 0))
+        self.label_PlayerSize.setMargin(1)
+        self.label_PlayerSize.setIndent(5)
 
-        self.gridLayout_19.addWidget(self.spinBox_PlayerHeight_2, 0, 3, 1, 1)
+        self.gridLayout_19.addWidget(self.label_PlayerSize, 0, 0, 1, 1)
 
-        self.checkBox_PlayerKeepAspectRatio_2 = QCheckBox(self.frame)
-        self.checkBox_PlayerKeepAspectRatio_2.setObjectName(u"checkBox_PlayerKeepAspectRatio_2")
-        sizePolicy2.setHeightForWidth(self.checkBox_PlayerKeepAspectRatio_2.sizePolicy().hasHeightForWidth())
-        self.checkBox_PlayerKeepAspectRatio_2.setSizePolicy(sizePolicy2)
+        self.checkBox_PlayerKeepAspectRatio = QCheckBox(self.frame)
+        self.checkBox_PlayerKeepAspectRatio.setObjectName(u"checkBox_PlayerKeepAspectRatio")
+        sizePolicy2.setHeightForWidth(self.checkBox_PlayerKeepAspectRatio.sizePolicy().hasHeightForWidth())
+        self.checkBox_PlayerKeepAspectRatio.setSizePolicy(sizePolicy2)
 
-        self.gridLayout_19.addWidget(self.checkBox_PlayerKeepAspectRatio_2, 0, 4, 1, 1)
+        self.gridLayout_19.addWidget(self.checkBox_PlayerKeepAspectRatio, 0, 3, 1, 1)
 
-        self.label_5 = QLabel(self.frame)
-        self.label_5.setObjectName(u"label_5")
-        self.label_5.setMargin(1)
-        self.label_5.setIndent(5)
+        self.spinBox_PlayerWidth = QSpinBox(self.frame)
+        self.spinBox_PlayerWidth.setObjectName(u"spinBox_PlayerWidth")
+        self.spinBox_PlayerWidth.setMinimumSize(QSize(60, 0))
+        self.spinBox_PlayerWidth.setMinimum(1)
+        self.spinBox_PlayerWidth.setMaximum(1920)
 
-        self.gridLayout_19.addWidget(self.label_5, 1, 0, 1, 1)
-
-        self.spinBox_3 = QSpinBox(self.frame)
-        self.spinBox_3.setObjectName(u"spinBox_3")
-
-        self.gridLayout_19.addWidget(self.spinBox_3, 1, 1, 1, 1)
+        self.gridLayout_19.addWidget(self.spinBox_PlayerWidth, 0, 1, 1, 1)
 
 
         self.verticalLayout_14.addLayout(self.gridLayout_19)
@@ -777,14 +856,14 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_21.addItem(self.verticalSpacer_15)
 
-        self.tabWidget_2.addTab(self.tab_Player, "")
-        self.tab_3 = QWidget()
-        self.tab_3.setObjectName(u"tab_3")
-        self.verticalLayout_22 = QVBoxLayout(self.tab_3)
+        self.tabWidget_Objects.addTab(self.tab_Player, "")
+        self.tab_Obstacles = QWidget()
+        self.tab_Obstacles.setObjectName(u"tab_Obstacles")
+        self.verticalLayout_22 = QVBoxLayout(self.tab_Obstacles)
         self.verticalLayout_22.setObjectName(u"verticalLayout_22")
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.label_6 = QLabel(self.tab_3)
+        self.label_6 = QLabel(self.tab_Obstacles)
         self.label_6.setObjectName(u"label_6")
         self.label_6.setMinimumSize(QSize(130, 0))
         self.label_6.setMargin(1)
@@ -792,7 +871,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_3.addWidget(self.label_6)
 
-        self.doubleSpinBox = QDoubleSpinBox(self.tab_3)
+        self.doubleSpinBox = QDoubleSpinBox(self.tab_Obstacles)
         self.doubleSpinBox.setObjectName(u"doubleSpinBox")
         self.doubleSpinBox.setMinimumSize(QSize(60, 0))
 
@@ -805,12 +884,12 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_22.addLayout(self.horizontalLayout_3)
 
-        self.scrollArea_2 = QScrollArea(self.tab_3)
+        self.scrollArea_2 = QScrollArea(self.tab_Obstacles)
         self.scrollArea_2.setObjectName(u"scrollArea_2")
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 542, 226))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 579, 630))
         self.verticalLayout_17 = QVBoxLayout(self.scrollAreaWidgetContents_2)
         self.verticalLayout_17.setObjectName(u"verticalLayout_17")
         self.frameCollectable_2 = QFrame(self.scrollAreaWidgetContents_2)
@@ -829,6 +908,7 @@ class Ui_MainWindow(object):
         self.label_TreasureImage_2.setAutoFillBackground(True)
         self.label_TreasureImage_2.setFrameShape(QFrame.Panel)
         self.label_TreasureImage_2.setFrameShadow(QFrame.Sunken)
+        self.label_TreasureImage_2.setScaledContents(True)
 
         self.verticalLayout_6.addWidget(self.label_TreasureImage_2)
 
@@ -993,7 +1073,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_25.addItem(self.horizontalSpacer_26)
 
-        self.pushButton_10 = QPushButton(self.tab_3)
+        self.pushButton_10 = QPushButton(self.tab_Obstacles)
         self.pushButton_10.setObjectName(u"pushButton_10")
 
         self.horizontalLayout_25.addWidget(self.pushButton_10)
@@ -1001,14 +1081,14 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_22.addLayout(self.horizontalLayout_25)
 
-        self.tabWidget_2.addTab(self.tab_3, "")
-        self.tab_4 = QWidget()
-        self.tab_4.setObjectName(u"tab_4")
-        self.verticalLayout_23 = QVBoxLayout(self.tab_4)
+        self.tabWidget_Objects.addTab(self.tab_Obstacles, "")
+        self.tab_Collectibles = QWidget()
+        self.tab_Collectibles.setObjectName(u"tab_Collectibles")
+        self.verticalLayout_23 = QVBoxLayout(self.tab_Collectibles)
         self.verticalLayout_23.setObjectName(u"verticalLayout_23")
         self.horizontalLayout_4 = QHBoxLayout()
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.label_7 = QLabel(self.tab_4)
+        self.label_7 = QLabel(self.tab_Collectibles)
         self.label_7.setObjectName(u"label_7")
         self.label_7.setMinimumSize(QSize(130, 0))
         self.label_7.setMargin(1)
@@ -1016,7 +1096,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_4.addWidget(self.label_7)
 
-        self.doubleSpinBox_2 = QDoubleSpinBox(self.tab_4)
+        self.doubleSpinBox_2 = QDoubleSpinBox(self.tab_Collectibles)
         self.doubleSpinBox_2.setObjectName(u"doubleSpinBox_2")
         self.doubleSpinBox_2.setMinimumSize(QSize(60, 0))
 
@@ -1029,12 +1109,12 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_23.addLayout(self.horizontalLayout_4)
 
-        self.scrollArea = QScrollArea(self.tab_4)
+        self.scrollArea = QScrollArea(self.tab_Collectibles)
         self.scrollArea.setObjectName(u"scrollArea")
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 871, 629))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 579, 630))
         self.verticalLayout_15 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_15.setObjectName(u"verticalLayout_15")
         self.frameCollectable = QFrame(self.scrollAreaWidgetContents)
@@ -1053,6 +1133,7 @@ class Ui_MainWindow(object):
         self.label_TreasureImage.setAutoFillBackground(True)
         self.label_TreasureImage.setFrameShape(QFrame.Panel)
         self.label_TreasureImage.setFrameShadow(QFrame.Sunken)
+        self.label_TreasureImage.setScaledContents(True)
 
         self.verticalLayout_5.addWidget(self.label_TreasureImage)
 
@@ -1214,7 +1295,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_5.addItem(self.horizontalSpacer_2)
 
-        self.pushButton = QPushButton(self.tab_4)
+        self.pushButton = QPushButton(self.tab_Collectibles)
         self.pushButton.setObjectName(u"pushButton")
 
         self.horizontalLayout_5.addWidget(self.pushButton)
@@ -1222,89 +1303,117 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_23.addLayout(self.horizontalLayout_5)
 
-        self.tabWidget_2.addTab(self.tab_4, "")
+        self.tabWidget_Objects.addTab(self.tab_Collectibles, "")
 
-        self.gridLayout_4.addWidget(self.tabWidget_2, 0, 0, 1, 1)
+        self.verticalLayout_11.addWidget(self.tabWidget_Objects)
 
         self.tabWidget.addTab(self.tabObjects, "")
         self.tabVelocity = QWidget()
         self.tabVelocity.setObjectName(u"tabVelocity")
-        self.tabVelocity.setEnabled(False)
-        self.gridLayout_6 = QGridLayout(self.tabVelocity)
-        self.gridLayout_6.setObjectName(u"gridLayout_6")
-        self.label_VelocityPlot = QLabel(self.tabVelocity)
-        self.label_VelocityPlot.setObjectName(u"label_VelocityPlot")
-        sizePolicy4 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
-        sizePolicy4.setHorizontalStretch(0)
-        sizePolicy4.setVerticalStretch(0)
-        sizePolicy4.setHeightForWidth(self.label_VelocityPlot.sizePolicy().hasHeightForWidth())
-        self.label_VelocityPlot.setSizePolicy(sizePolicy4)
-        self.label_VelocityPlot.setMinimumSize(QSize(0, 264))
-        self.label_VelocityPlot.setAutoFillBackground(True)
-        self.label_VelocityPlot.setFrameShape(QFrame.Panel)
-        self.label_VelocityPlot.setFrameShadow(QFrame.Sunken)
-
-        self.gridLayout_6.addWidget(self.label_VelocityPlot, 0, 1, 1, 1)
-
+        self.tabVelocity.setEnabled(True)
+        self.layout_TabVelocity = QHBoxLayout(self.tabVelocity)
+        self.layout_TabVelocity.setObjectName(u"layout_TabVelocity")
         self.gridLayout_7 = QGridLayout()
         self.gridLayout_7.setObjectName(u"gridLayout_7")
+        self.doubleSpinBox_VelocityA = QDoubleSpinBox(self.tabVelocity)
+        self.doubleSpinBox_VelocityA.setObjectName(u"doubleSpinBox_VelocityA")
+        self.doubleSpinBox_VelocityA.setMinimumSize(QSize(90, 0))
+        self.doubleSpinBox_VelocityA.setDecimals(3)
+
+        self.gridLayout_7.addWidget(self.doubleSpinBox_VelocityA, 0, 1, 1, 1)
+
         self.label_VelocityA = QLabel(self.tabVelocity)
         self.label_VelocityA.setObjectName(u"label_VelocityA")
-        self.label_VelocityA.setMinimumSize(QSize(30, 0))
+        self.label_VelocityA.setMinimumSize(QSize(40, 0))
         self.label_VelocityA.setAlignment(Qt.AlignCenter)
+        self.label_VelocityA.setIndent(2)
 
         self.gridLayout_7.addWidget(self.label_VelocityA, 0, 0, 1, 1)
 
         self.label_VelocityB = QLabel(self.tabVelocity)
         self.label_VelocityB.setObjectName(u"label_VelocityB")
-        self.label_VelocityB.setMinimumSize(QSize(30, 0))
+        self.label_VelocityB.setMinimumSize(QSize(40, 0))
         self.label_VelocityB.setAlignment(Qt.AlignCenter)
+        self.label_VelocityB.setIndent(2)
 
         self.gridLayout_7.addWidget(self.label_VelocityB, 1, 0, 1, 1)
+
+        self.doubleSpinBox_VelocityB = QDoubleSpinBox(self.tabVelocity)
+        self.doubleSpinBox_VelocityB.setObjectName(u"doubleSpinBox_VelocityB")
+        self.doubleSpinBox_VelocityB.setDecimals(6)
+
+        self.gridLayout_7.addWidget(self.doubleSpinBox_VelocityB, 1, 1, 1, 1)
 
         self.verticalSpacer_9 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.gridLayout_7.addItem(self.verticalSpacer_9, 2, 0, 1, 1)
 
-        self.doubleSpinBox_VelocityA = QDoubleSpinBox(self.tabVelocity)
-        self.doubleSpinBox_VelocityA.setObjectName(u"doubleSpinBox_VelocityA")
 
-        self.gridLayout_7.addWidget(self.doubleSpinBox_VelocityA, 0, 1, 1, 1)
+        self.layout_TabVelocity.addLayout(self.gridLayout_7)
 
-        self.doubleSpinBox_VelocityB = QDoubleSpinBox(self.tabVelocity)
-        self.doubleSpinBox_VelocityB.setObjectName(u"doubleSpinBox_VelocityB")
+        self.plotVelocity = PlotWidget(self.tabVelocity)
+        self.plotVelocity.setObjectName(u"plotVelocity")
+        sizePolicy4 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        sizePolicy4.setHorizontalStretch(0)
+        sizePolicy4.setVerticalStretch(0)
+        sizePolicy4.setHeightForWidth(self.plotVelocity.sizePolicy().hasHeightForWidth())
+        self.plotVelocity.setSizePolicy(sizePolicy4)
 
-        self.gridLayout_7.addWidget(self.doubleSpinBox_VelocityB, 1, 1, 1, 1)
-
-
-        self.gridLayout_6.addLayout(self.gridLayout_7, 0, 0, 1, 1)
+        self.layout_TabVelocity.addWidget(self.plotVelocity)
 
         self.tabWidget.addTab(self.tabVelocity, "")
         self.tabMargins = QWidget()
         self.tabMargins.setObjectName(u"tabMargins")
-        self.tabMargins.setEnabled(False)
-        self.gridLayout_9 = QGridLayout(self.tabMargins)
-        self.gridLayout_9.setObjectName(u"gridLayout_9")
-        self.label_MarginsPlot = QLabel(self.tabMargins)
-        self.label_MarginsPlot.setObjectName(u"label_MarginsPlot")
-        sizePolicy4.setHeightForWidth(self.label_MarginsPlot.sizePolicy().hasHeightForWidth())
-        self.label_MarginsPlot.setSizePolicy(sizePolicy4)
-        self.label_MarginsPlot.setMinimumSize(QSize(0, 264))
-        self.label_MarginsPlot.setAutoFillBackground(True)
-        self.label_MarginsPlot.setFrameShape(QFrame.Panel)
-        self.label_MarginsPlot.setFrameShadow(QFrame.Sunken)
-
-        self.gridLayout_9.addWidget(self.label_MarginsPlot, 0, 3, 1, 1)
-
+        self.tabMargins.setEnabled(True)
+        self.layout_TabMargins = QHBoxLayout(self.tabMargins)
+        self.layout_TabMargins.setObjectName(u"layout_TabMargins")
         self.verticalLayout_3 = QVBoxLayout()
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.gridLayout_5 = QGridLayout()
+        self.gridLayout_5.setObjectName(u"gridLayout_5")
+        self.label_8 = QLabel(self.tabMargins)
+        self.label_8.setObjectName(u"label_8")
+        self.label_8.setMinimumSize(QSize(40, 0))
+        self.label_8.setIndent(2)
+
+        self.gridLayout_5.addWidget(self.label_8, 1, 0, 1, 1)
+
+        self.doubleSpinBox_MarginRight = QDoubleSpinBox(self.tabMargins)
+        self.doubleSpinBox_MarginRight.setObjectName(u"doubleSpinBox_MarginRight")
+        self.doubleSpinBox_MarginRight.setDecimals(6)
+        self.doubleSpinBox_MarginRight.setMaximum(1.000000000000000)
+        self.doubleSpinBox_MarginRight.setSingleStep(0.100000000000000)
+
+        self.gridLayout_5.addWidget(self.doubleSpinBox_MarginRight, 1, 1, 1, 1)
+
+        self.label_5 = QLabel(self.tabMargins)
+        self.label_5.setObjectName(u"label_5")
+        self.label_5.setMinimumSize(QSize(40, 0))
+        self.label_5.setIndent(2)
+
+        self.gridLayout_5.addWidget(self.label_5, 0, 0, 1, 1)
+
+        self.doubleSpinBox_MarginLeft = QDoubleSpinBox(self.tabMargins)
+        self.doubleSpinBox_MarginLeft.setObjectName(u"doubleSpinBox_MarginLeft")
+        self.doubleSpinBox_MarginLeft.setMinimumSize(QSize(90, 0))
+        self.doubleSpinBox_MarginLeft.setDecimals(6)
+        self.doubleSpinBox_MarginLeft.setMaximum(1.000000000000000)
+        self.doubleSpinBox_MarginLeft.setSingleStep(0.100000000000000)
+
+        self.gridLayout_5.addWidget(self.doubleSpinBox_MarginLeft, 0, 1, 1, 1)
+
+
+        self.verticalLayout_3.addLayout(self.gridLayout_5)
+
         self.checkBox = QCheckBox(self.tabMargins)
         self.checkBox.setObjectName(u"checkBox")
+        self.checkBox.setEnabled(False)
 
         self.verticalLayout_3.addWidget(self.checkBox)
 
         self.groupBox = QGroupBox(self.tabMargins)
         self.groupBox.setObjectName(u"groupBox")
+        self.groupBox.setEnabled(False)
         self.gridLayout_10 = QGridLayout(self.groupBox)
         self.gridLayout_10.setObjectName(u"gridLayout_10")
         self.label_32 = QLabel(self.groupBox)
@@ -1336,6 +1445,7 @@ class Ui_MainWindow(object):
 
         self.groupBox_2 = QGroupBox(self.tabMargins)
         self.groupBox_2.setObjectName(u"groupBox_2")
+        self.groupBox_2.setEnabled(False)
         self.gridLayout_11 = QGridLayout(self.groupBox_2)
         self.gridLayout_11.setObjectName(u"gridLayout_11")
         self.label_35 = QLabel(self.groupBox_2)
@@ -1367,6 +1477,7 @@ class Ui_MainWindow(object):
 
         self.groupBox_6 = QGroupBox(self.tabMargins)
         self.groupBox_6.setObjectName(u"groupBox_6")
+        self.groupBox_6.setEnabled(False)
         self.gridLayout_26 = QGridLayout(self.groupBox_6)
         self.gridLayout_26.setObjectName(u"gridLayout_26")
         self.label_24 = QLabel(self.groupBox_6)
@@ -1397,7 +1508,14 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.addItem(self.verticalSpacer_10)
 
 
-        self.gridLayout_9.addLayout(self.verticalLayout_3, 0, 0, 1, 1)
+        self.layout_TabMargins.addLayout(self.verticalLayout_3)
+
+        self.plotMargins = PlotWidget(self.tabMargins)
+        self.plotMargins.setObjectName(u"plotMargins")
+        sizePolicy4.setHeightForWidth(self.plotMargins.sizePolicy().hasHeightForWidth())
+        self.plotMargins.setSizePolicy(sizePolicy4)
+
+        self.layout_TabMargins.addWidget(self.plotMargins)
 
         self.tabWidget.addTab(self.tabMargins, "")
 
@@ -1406,7 +1524,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 935, 23))
+        self.menubar.setGeometry(QRect(0, 0, 643, 23))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuHelp = QMenu(self.menubar)
@@ -1456,8 +1574,8 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.tabWidget.setCurrentIndex(0)
-        self.tabWidget_2.setCurrentIndex(2)
+        self.tabWidget.setCurrentIndex(3)
+        self.tabWidget_Objects.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -1537,61 +1655,61 @@ class Ui_MainWindow(object):
 #if QT_CONFIG(statustip)
         self.tabGame.setStatusTip(QCoreApplication.translate("MainWindow", u"Define game properties", None))
 #endif // QT_CONFIG(statustip)
-        self.groupBox_3.setTitle(QCoreApplication.translate("MainWindow", u"Software", None))
+        self.groupBox_Software.setTitle(QCoreApplication.translate("MainWindow", u"Software", None))
         self.label_Author.setText(QCoreApplication.translate("MainWindow", u"Author", None))
         self.pushButton_IconSelect.setText(QCoreApplication.translate("MainWindow", u"Icon", None))
         self.label_GameName.setText(QCoreApplication.translate("MainWindow", u"Game name", None))
         self.label_GameDescription.setText(QCoreApplication.translate("MainWindow", u"Game description", None))
         self.label_GameIcon.setText("")
-        self.groupBox_4.setTitle(QCoreApplication.translate("MainWindow", u"Game", None))
-        self.radioButton.setText(QCoreApplication.translate("MainWindow", u"Vertical", None))
-        self.radioButton_2.setText(QCoreApplication.translate("MainWindow", u"Horizontal", None))
-        self.label_ScrollDirection.setText(QCoreApplication.translate("MainWindow", u"Scroll direction", None))
-        self.checkBox_4.setText(QCoreApplication.translate("MainWindow", u"Touching track boundaries kills the player", None))
+        self.groupBox_Game.setTitle(QCoreApplication.translate("MainWindow", u"Game", None))
+        self.label_ScrollDirection.setText(QCoreApplication.translate("MainWindow", u"Scroll direction: ", None))
+        self.radioButton_VertialScrolling.setText(QCoreApplication.translate("MainWindow", u"Vertical", None))
+        self.radioButton_HorizontalScrolling.setText(QCoreApplication.translate("MainWindow", u"Horizontal", None))
+        self.checkBox_TrackKills.setText(QCoreApplication.translate("MainWindow", u"Touching track boundaries kills the player", None))
         self.label_ScoreTimeBonus.setText(QCoreApplication.translate("MainWindow", u"Score time bonus", None))
-        self.label_8.setText(QCoreApplication.translate("MainWindow", u"Ambience sound", None))
-        self.pushButton_11.setText(QCoreApplication.translate("MainWindow", u"Select", None))
-        self.pushButton_13.setText(QCoreApplication.translate("MainWindow", u"Remove", None))
-        self.pushButton_12.setText(QCoreApplication.translate("MainWindow", u"Play", None))
+        self.label_AmbienceSound.setText(QCoreApplication.translate("MainWindow", u"Ambience sound", None))
+        self.pushButton_AmbienceSoundSelect.setText(QCoreApplication.translate("MainWindow", u"Select", None))
+        self.pushButton_AmbienceSoundRemove.setText(QCoreApplication.translate("MainWindow", u"Remove", None))
+        self.pushButton_AmbienceSoundPlay.setText(QCoreApplication.translate("MainWindow", u"Play", None))
+        self.label_AmbienceSoundVolume.setText(QCoreApplication.translate("MainWindow", u"Volume", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabGame), QCoreApplication.translate("MainWindow", u"Game", None))
         self.groupBox_Background.setTitle(QCoreApplication.translate("MainWindow", u"Screen background", None))
         self.label_10.setText(QCoreApplication.translate("MainWindow", u"Image", None))
         self.pushButton_SelectBackground.setText(QCoreApplication.translate("MainWindow", u"Select", None))
-        self.checkBox_2.setText(QCoreApplication.translate("MainWindow", u"Background scrolls", None))
+        self.checkBox_BackgroundScrolls.setText(QCoreApplication.translate("MainWindow", u"Background scrolls", None))
         self.label_BackgroundImage.setText("")
         self.groupBox_Track.setTitle(QCoreApplication.translate("MainWindow", u"Track background", None))
-        self.checkBox_3.setText(QCoreApplication.translate("MainWindow", u"Draw track", None))
-        self.label_11.setText(QCoreApplication.translate("MainWindow", u"Image", None))
+        self.checkBox_DrawTrack.setText(QCoreApplication.translate("MainWindow", u"Draw track", None))
+        self.label_Track.setText(QCoreApplication.translate("MainWindow", u"Image", None))
         self.pushButton_SelectTrack.setText(QCoreApplication.translate("MainWindow", u"Select", None))
         self.label_TrackImage.setText("")
         self.groupBox_Scoreboard.setTitle(QCoreApplication.translate("MainWindow", u"Scoreboard", None))
         self.label_ScoreboardImage.setText("")
-        self.groupBox_5.setTitle(QCoreApplication.translate("MainWindow", u"Image", None))
-        self.label_12.setText(QCoreApplication.translate("MainWindow", u"Image", None))
-        self.pushButton_SelectScoreboard.setText(QCoreApplication.translate("MainWindow", u"Select", None))
-        self.checkBox_ScoreboardKeepAspectRatio.setText(QCoreApplication.translate("MainWindow", u"Keep aspect ratio", None))
-        self.label_ScoreboardWidth.setText(QCoreApplication.translate("MainWindow", u"Width", None))
-        self.label_ScoreboardHeight.setText(QCoreApplication.translate("MainWindow", u"Height", None))
-        self.label_ScoreboardPosition.setText(QCoreApplication.translate("MainWindow", u"Position", None))
-        self.groupBox_7.setTitle(QCoreApplication.translate("MainWindow", u"Text", None))
+        self.label_ScoreboardExample.setText(QCoreApplication.translate("MainWindow", u"Text Example", None))
+        self.groupBox_ScoreboardImage.setTitle(QCoreApplication.translate("MainWindow", u"Image", None))
+        self.label_ScoreboardImage_2.setText(QCoreApplication.translate("MainWindow", u"Image", None))
+        self.pushButton_SelectScoreboardImage.setText(QCoreApplication.translate("MainWindow", u"Select", None))
+        self.checkBox_ScoreboardImageKeepAspectRatio.setText(QCoreApplication.translate("MainWindow", u"Keep aspect ratio", None))
+        self.label_ScoreboardImageWidth.setText(QCoreApplication.translate("MainWindow", u"Size", None))
+        self.label_ScoreboardImagePosition.setText(QCoreApplication.translate("MainWindow", u"Position", None))
+        self.groupBox_ScoreboardText.setTitle(QCoreApplication.translate("MainWindow", u"Text", None))
+        self.label_ScoreboardTextWidth.setText(QCoreApplication.translate("MainWindow", u"Size", None))
+        self.label_ScoreboardTextPosition.setText(QCoreApplication.translate("MainWindow", u"Position", None))
         self.label_ScoreboardBgColor_2.setText(QCoreApplication.translate("MainWindow", u"Background color", None))
-        self.label_ScoreboardBgColor.setText("")
         self.pushButton_ChoseScoreboardBgColor.setText(QCoreApplication.translate("MainWindow", u"Choose", None))
-        self.label_ChoseScoreboardFgColor.setText(QCoreApplication.translate("MainWindow", u"Foreground color", None))
-        self.label_ScoreboardFgColor.setText("")
         self.pushButton_ChoseScoreboardFgColor.setText(QCoreApplication.translate("MainWindow", u"Choose", None))
+        self.label_ScoreboardFgColor_2.setText(QCoreApplication.translate("MainWindow", u"Foreground color", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabAppearance), QCoreApplication.translate("MainWindow", u"Appearance", None))
 #if QT_CONFIG(statustip)
         self.tabObjects.setStatusTip(QCoreApplication.translate("MainWindow", u"Define visual elements", None))
 #endif // QT_CONFIG(statustip)
-        self.label_PlayerImage_2.setText("")
-        self.label_9.setText(QCoreApplication.translate("MainWindow", u"Image", None))
-        self.pushButton_SelectPlayer_2.setText(QCoreApplication.translate("MainWindow", u"Select", None))
-        self.label_PlayerHeight_2.setText(QCoreApplication.translate("MainWindow", u"Height", None))
-        self.label_PlayerWidth_2.setText(QCoreApplication.translate("MainWindow", u"Width", None))
-        self.checkBox_PlayerKeepAspectRatio_2.setText(QCoreApplication.translate("MainWindow", u"Keep aspect ratio", None))
-        self.label_5.setText(QCoreApplication.translate("MainWindow", u"Speed", None))
-        self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_Player), QCoreApplication.translate("MainWindow", u"Player", None))
+        self.label_PlayerImage.setText("")
+        self.label_SelectPlayerImage.setText(QCoreApplication.translate("MainWindow", u"Image", None))
+        self.pushButton_SelectPlayer.setText(QCoreApplication.translate("MainWindow", u"Select", None))
+        self.label_PlayerSpeed.setText(QCoreApplication.translate("MainWindow", u"Speed", None))
+        self.label_PlayerSize.setText(QCoreApplication.translate("MainWindow", u"Size", None))
+        self.checkBox_PlayerKeepAspectRatio.setText(QCoreApplication.translate("MainWindow", u"Keep aspect ratio", None))
+        self.tabWidget_Objects.setTabText(self.tabWidget_Objects.indexOf(self.tab_Player), QCoreApplication.translate("MainWindow", u"Player", None))
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"Obstacle frequency", None))
         self.label_TreasureImage_2.setText("")
         self.pushButton_6.setText(QCoreApplication.translate("MainWindow", u"Delete", None))
@@ -1606,7 +1724,7 @@ class Ui_MainWindow(object):
         self.pushButton_8.setText(QCoreApplication.translate("MainWindow", u"Remove", None))
         self.pushButton_9.setText(QCoreApplication.translate("MainWindow", u"Play", None))
         self.pushButton_10.setText(QCoreApplication.translate("MainWindow", u"Add", None))
-        self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_3), QCoreApplication.translate("MainWindow", u"Obstacles", None))
+        self.tabWidget_Objects.setTabText(self.tabWidget_Objects.indexOf(self.tab_Obstacles), QCoreApplication.translate("MainWindow", u"Obstacles", None))
         self.label_7.setText(QCoreApplication.translate("MainWindow", u"Treasure frequency", None))
         self.label_TreasureImage.setText("")
         self.pushButton_4.setText(QCoreApplication.translate("MainWindow", u"Delete", None))
@@ -1621,19 +1739,19 @@ class Ui_MainWindow(object):
         self.pushButton_5.setText(QCoreApplication.translate("MainWindow", u"Remove", None))
         self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"Play", None))
         self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Add", None))
-        self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_4), QCoreApplication.translate("MainWindow", u"Collectibles", None))
+        self.tabWidget_Objects.setTabText(self.tabWidget_Objects.indexOf(self.tab_Collectibles), QCoreApplication.translate("MainWindow", u"Collectibles", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabObjects), QCoreApplication.translate("MainWindow", u"Objects", None))
 #if QT_CONFIG(statustip)
         self.tabVelocity.setStatusTip(QCoreApplication.translate("MainWindow", u"Define scrolling velocity", None))
 #endif // QT_CONFIG(statustip)
-        self.label_VelocityPlot.setText("")
         self.label_VelocityA.setText(QCoreApplication.translate("MainWindow", u"a", None))
         self.label_VelocityB.setText(QCoreApplication.translate("MainWindow", u"b", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabVelocity), QCoreApplication.translate("MainWindow", u"Velocity", None))
 #if QT_CONFIG(statustip)
         self.tabMargins.setStatusTip(QCoreApplication.translate("MainWindow", u"Define track margins", None))
 #endif // QT_CONFIG(statustip)
-        self.label_MarginsPlot.setText("")
+        self.label_8.setText(QCoreApplication.translate("MainWindow", u"Right", None))
+        self.label_5.setText(QCoreApplication.translate("MainWindow", u"Left", None))
         self.checkBox.setText(QCoreApplication.translate("MainWindow", u"Symmetrical", None))
         self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"Left", None))
         self.label_32.setText(QCoreApplication.translate("MainWindow", u"a", None))

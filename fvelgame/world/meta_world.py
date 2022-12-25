@@ -54,7 +54,7 @@ class MetaScoreboard:
                  image          = None,
                  image_position = None,
                  text_rect      = (100,100,280,110),
-                 text_bgcolor   = ( 55, 55, 55),
+                 text_bgcolor   = ( 9, 30, 66),
                  text_fgcolor   = (255,255,255)):
 
         self.text_rect    = text_rect
