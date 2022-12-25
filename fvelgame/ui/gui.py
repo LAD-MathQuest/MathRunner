@@ -13,7 +13,7 @@ def main( argv ):
 
     main_controler = MainControler( window )
 
-    window.resize(1, 1)
+    window.resize(900, 1)
     window.show()
 
     return app.exec()

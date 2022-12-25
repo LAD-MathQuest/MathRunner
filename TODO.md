@@ -40,6 +40,7 @@
 - Implement undo
 - Allow creator to define sound volume for each sprite, 1 is the music volume
 - Set proper maximum values to positions and sizes based on vertical em horizontal scrolling
+- Replace os.system by QProcess
 
 - Implement simple media player
   - play, stop, pause, quit
