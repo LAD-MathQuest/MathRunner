@@ -9,37 +9,14 @@ from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
 from pathlib import Path
 
 import parameters as par
+import ui.tools   as tools
+
 from world.meta_world import MetaWorld
 
 #------------------------------------------------------------------------------#
-def draw_meta_image(label, meta):
-
-    label.setStyleSheet('')
-    label.clear()
-
-    if meta:
-       if meta.path:
-           pixmap = QPixmap(meta.path)
-           label.setPixmap(pixmap)
-       else:
-           bg = 'rgb({},{},{})'.format(*(meta.color))
-           label.setStyleSheet(f'QLabel{{background-color:{bg};}}')
-
-#------------------------------------------------------------------------------#
-def play_sound(parent, path, vol):
-
-    player      = QMediaPlayer(parent)
-    audioOutput = QAudioOutput(parent)
-
-    player.setAudioOutput(audioOutput)
-    player.setSource     (QUrl.fromLocalFile(str(path)))
-    
-    audioOutput.setVolume(vol)
-    
-    player.play()
-
-#------------------------------------------------------------------------------#
 class MainModel:
+
+    #--------------------------------------------------------------------------#
     def __init__(self, controler):
 
         self.meta = MetaWorld()
@@ -77,9 +54,9 @@ class MainModel:
     #--------------------------------------------------------------------------#
     def ambience_play(self):
 
-        play_sound(self.win,
-                   self.meta.game_ambience, 
-                   self.meta.game_ambience_volume)
+        tools.play_sound(self.win,
+                         self.meta.game_ambience, 
+                         self.meta.game_ambience_volume)
 
     #--------------------------------------------------------------------------#
     def eval_velocity(self, t_min, t_max ):
@@ -142,13 +119,13 @@ class MainModel:
 
         #--- Background -------------------------------------------------------#
         
-        draw_meta_image(ui.label_BackgroundImage, meta.background_image)
+        tools.draw_meta_image(ui.label_BackgroundImage, meta.background_image)
 
         ui.checkBox_BackgroundImageScrolls.setChecked(meta.background_scrolls)
 
         #--- Track ------------------------------------------------------------#
 
-        draw_meta_image(ui.label_TrackImage, meta.track_image)
+        tools.draw_meta_image(ui.label_TrackImage, meta.track_image)
 
         if meta.track_image:
             ui.checkBox_DrawTrack         .setChecked(True)
@@ -162,7 +139,7 @@ class MainModel:
 
         score = meta.scoreboard
 
-        draw_meta_image(ui.label_ScoreboardImage, score.image)
+        tools.draw_meta_image(ui.label_ScoreboardImage, score.image)
 
         rect = score.text_rect
         ui.spinBox_ScoreboardTextPositionX.setValue(rect[0])
@@ -194,7 +171,7 @@ class MainModel:
 
         player = meta.player
 
-        draw_meta_image(ui.label_PlayerImage, player.image)
+        tools.draw_meta_image(ui.label_PlayerImage, player.image)
 
         ui.spinBox_PlayerWidth. setValue(player.image.size[0])
         ui.spinBox_PlayerHeight.setValue(player.image.size[1])
@@ -204,13 +181,12 @@ class MainModel:
 
         #--- Obstacles---------------------------------------------------------#
 
-        ui.doubleSpinBox_ObsctaclesFrequency.setValue(meta.obstacles_frequency)
+        ui.doubleSpinBox_ObstaclesFrequency.setValue(meta.obstacles_frequency)
 
         con.clear_obstacle_widgets()
 
-        for ob in meta.obstacles:
-            label = con.new_obstacle_widget()
-            draw_meta_image(label, ob.image)
+        for meta_op in meta.obstacles:
+            con.new_obstacle_widget().meta_to_object(meta_op)
 
         #--- Collectibles -----------------------------------------------------#
         
@@ -218,9 +194,8 @@ class MainModel:
 
         con.clear_collectible_widgets()
 
-        for ob in meta.collectibles:
-            label = con.new_collectible_widget()
-            draw_meta_image(label, ob.image)
+        for meta_op in meta.collectibles:
+            con.new_collectible_widget().meta_to_object(meta_op)
 
     #--------------------------------------------------------------------------#
     def meta_to_view_velocity_tab(self):

@@ -53,11 +53,12 @@ if __name__ == '__main__':
     # Appearance
     #--------------------------------------------------------------------------#
 
-    meta.background_image   = MetaImage(color=(55, 55, 55))
+    meta.background_image   = MetaImage(color=(55,55,55))
     meta.background_scrolls = False
     
-    meta.track_image = MetaImage( color=(102,153,153) )
-    meta.scoreboard  = MetaScoreboard(text_rect=(200,15,100,100))
+    meta.track_image = MetaImage(color=(102,153,153))
+    meta.scoreboard  = MetaScoreboard(text_rect    = (200,15,100,100),
+                                      text_bgcolor = (55,55,55))
 
     # Player
     #--------------------------------------------------------------------------#

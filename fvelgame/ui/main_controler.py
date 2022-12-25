@@ -9,7 +9,8 @@ from PySide6.QtWidgets import (QApplication,
 import pyqtgraph  as pg
 import parameters as par
 
-from ui.main_model import MainModel
+from ui.main_model    import MainModel
+from ui.object_widget import ObjectWidget
 
 #------------------------------------------------------------------------------#
 class MainControler:
@@ -70,7 +71,7 @@ class MainControler:
 
         #--- Obstacles --------------------------------------------------------#
 
-        self.obstacles_area = self.ui.scrollAreaWidgetContents_Obsctacle
+        self.obstacles_area = self.ui.scrollArea_Obstacles
         self.obstacles_box  = self.obstacles_area.findChild(QVBoxLayout)
         self.num_obstacles  = 0
         self.obstacles      = []
@@ -79,7 +80,7 @@ class MainControler:
 
         #--- Collectibles -----------------------------------------------------#
 
-        self.collectibles_area = self.ui.scrollAreaWidgetContents_Collectibles
+        self.collectibles_area = self.ui.scrollArea_Collectibles
         self.collectibles_box  = self.collectibles_area.findChild(QVBoxLayout)
         self.num_collectibles  = 0
         self.collectibles      = []
@@ -147,7 +148,7 @@ class MainControler:
         ui.pushButton_NewObstacle   .clicked.connect( self.new_obstacle_widget    )
         ui.pushButton_NewCollectible.clicked.connect( self.new_collectible_widget )
 
-        ui.doubleSpinBox_ObsctaclesFrequency  .valueChanged.connect( self.obstacles_frequency_changed    )
+        ui.doubleSpinBox_ObstaclesFrequency   .valueChanged.connect( self.obstacles_frequency_changed    )
         ui.doubleSpinBox_CollectiblesFrequency.valueChanged.connect( self.collectibles_frequency_changed )
 
     #--------------------------------------------------------------------------#
@@ -236,9 +237,12 @@ class MainControler:
     #--------------------------------------------------------------------------#
     def new_obstacle_widget(self):
 
-        widget = QLabel(f'Obstacle {self.num_obstacles}', self.obstacles_area)
+        widget = ObjectWidget(self.obstacles_area)
 
         self.obstacles_box.insertWidget(self.num_obstacles, widget)
+
+        bar = self.obstacles_area.verticalScrollBar()
+        bar.setValue(bar.maximum())
 
         self.obstacles.append(widget)
         self.num_obstacles += 1
@@ -248,9 +252,12 @@ class MainControler:
     #--------------------------------------------------------------------------#
     def new_collectible_widget(self):
 
-        widget = QLabel(f'Collectible {self.num_collectibles}', self.collectibles_area)
+        widget = ObjectWidget(self.collectibles_area)
 
         self.collectibles_box.insertWidget(self.num_collectibles, widget)
+
+        bar = self.collectibles_area.verticalScrollBar()
+        bar.setValue(bar.maximum())
 
         self.collectibles.append(widget)
         self.num_collectibles += 1
