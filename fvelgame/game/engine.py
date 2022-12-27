@@ -225,46 +225,59 @@ class Engine:
         self.bg_scrolls = self.world.background_scrolls
 
         if not self.bg_scrolls:
-            self.bg_image = self.world.background_image
+            self.bg_image     = self.world.background_image
+            self.bg_show_rect = None
+            return
+
+        w_bg_image  = self.world.background_image
+        w_bg_width  = w_bg_image.get_width ()
+        w_bg_height = w_bg_image.get_height()
+
+        sc_width  = gp.SCREEN_SIZE[0]
+        sc_height = gp.SCREEN_SIZE[1]
+
+        if self.vertical:
+
+            self.bg_top_start = w_bg_height
+            self.bg_image     = pygame.Surface((sc_width, w_bg_height+sc_height))
+            
+            self.bg_image.blit(w_bg_image, (0,sc_height))
+            self.bg_image.blit(w_bg_image, (0,0), (0,w_bg_height-sc_height,sc_width,sc_height) )
 
         else:
-            w_bg = self.world.background_image
+            self.bg_max_width = w_bg_width + sc_width
+            self.bg_image     = pygame.Surface((self.bg_max_width, sc_height))
 
-            w_bg_width  = w_bg.get_width ()
-            w_bg_height = w_bg.get_height()
+            self.bg_image.blit(w_bg_image, (0,0))
+            self.bg_image.blit(w_bg_image, (sc_width+1,0), (0,0,sc_width,sc_height) )
 
-            sc_width  = gp.SCREEN_SIZE[0]
-            sc_height = gp.SCREEN_SIZE[1]
-
-            bg_width  = sc_width
-            bg_height = w_bg_height + sc_height
-
-            bg = pygame.Surface((bg_width,bg_height))
-            bg.fill((0,0,80))
-            bg.blit(w_bg, (0,0), (0,w_bg_height-sc_height,sc_width,sc_height) )
-            bg.blit(w_bg, (0,sc_height))
-
-            self.bg_start = bg_height - sc_height
-
-            self.bg_image = bg
-            self.bg_rect  = pygame.Rect((0,self.bg_start), gp.SCREEN_SIZE)
+        self.bg_show_rect = pygame.Rect((0,0), gp.SCREEN_SIZE)
 
     #--------------------------------------------------------------------------#
     def update_background(self):
 
-        if self.bg_scrolls:
-            if self.bg_rect.top <= self.velocity:
-                self.bg_rect.top = self.bg_start + self.bg_rect.top
+        if not self.bg_scrolls:
+            return
+        
+        if self.vertical:
+            self.bg_show_rect.top -= self.velocity
 
-            self.bg_rect.move_ip((0,-self.velocity))
+            if self.bg_show_rect.top < 0:
+                self.bg_show_rect.top = self.bg_top_start + self.bg_show_rect.top
+
+        else:
+            self.bg_show_rect.right += self.velocity
+
+            if self.bg_show_rect.right > self.bg_max_width:
+                self.bg_show_rect.right += gp.SCREEN_SIZE[0] - self.bg_max_width
 
     #--------------------------------------------------------------------------#
     def draw_background(self):
 
-        if self.bg_scrolls:
-            self.display.blit(self.bg_image, (0,0), self.bg_rect)
-        else:
-            self.display.blit(self.bg_image, (0,0))
+        # if self.bg_scrolls:
+        self.display.blit(self.bg_image, (0,0), self.bg_show_rect)
+        # else:
+            # self.display.blit(self.bg_image, (0,0))
 
 
     #--------------------------------------------------------------------------#

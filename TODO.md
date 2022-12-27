@@ -20,7 +20,6 @@
 - Play crash sound before show game over
 - Add transparent option to MetaImage
 - Allow creator to make margins kill the player
-- Implement horizontal scrolling background
 - Take care of background images smaller than screen
 
 #### Games
@@ -65,6 +64,9 @@
 ## In progress...
 
 ## DONE
+
+2022-12-27
+- Implement horizontal scrolling background
 
 2022-12-22
 - Events
