@@ -53,10 +53,12 @@ class MetaScoreboard:
     def __init__(self, 
                  image          = None,
                  image_position = None,
+                 text_font      = None,
                  text_rect      = (100,100,280,110),
                  text_bgcolor   = ( 9, 30, 66),
                  text_fgcolor   = (255,255,255)):
 
+        self.text_font    = text_font
         self.text_rect    = text_rect
         self.text_bgcolor = text_bgcolor
         self.text_fgcolor = text_fgcolor

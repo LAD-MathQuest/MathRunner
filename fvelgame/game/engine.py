@@ -286,7 +286,7 @@ class Engine:
         self.display.fill( (60,60,60), None, pygame.BLEND_MULT )
         
         size = self.display.get_rect().height // 6
-        font = pygame.freetype.SysFont( gp.FONT, size )
+        font = pygame.freetype.Font( gp.DEFAULT_FONT, size )
 
         rect = font.get_rect('Game Over')
         rect.center = self.display.get_rect().center

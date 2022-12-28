@@ -10,9 +10,6 @@
 
 #### Game engine
 
-- OST
-  - Create a table os equivalent fonts in all systems
-  - Select the fonts presente on all systems
 - Implement variable tracks
   - Take care of spawning objects outside screen
 - Implement blits of track and background images using mask
@@ -40,6 +37,7 @@
 - Allow creator to define sound volume for each sprite, 1 is the music volume
 - Set proper maximum values to positions and sizes based on vertical em horizontal scrolling
 - Replace os.system by QProcess
+- Allow creator to select scoreboard font
 
 - Implement simple media player
   - play, stop, pause, quit
@@ -108,3 +106,9 @@
 - Add elapsed time to scoreboard
 
 ## GAVE UP
+
+2022-12-28 - Replaced by adding selected fonts to resources
+- OST
+  - Create a table os equivalent fonts in all systems
+  - Select the fonts presente on all systems
+

@@ -33,16 +33,16 @@ def draw_help(surf, name, description, vertical):
 
     color = (255,255,255)
 
-    nn = 5 + 2*n_lin
+    nn = 5 + n_lin
 
-    ost = OnScreenText( area, nn, 2, color, None )
+    ost = OnScreenText( None, area, nn, 2, color, None )
     ost.column_width( [ 'M'*15, 'M'*25 ] )
              
     ost.draw( surf, 0, 0, name        )
-    ost.draw( surf, 2, 0, description )
+    ost.draw( surf, 1, 0, description )
 
     for ii in range(n_lin):
-        ost.draw( surf, 2*ii+6, 0, info[ii][0] )
-        ost.draw( surf, 2*ii+6, 1, info[ii][1] )
+        ost.draw( surf, ii+3, 0, info[ii][0] )
+        ost.draw( surf, ii+3, 1, info[ii][1] )
 
 #------------------------------------------------------------------------------#

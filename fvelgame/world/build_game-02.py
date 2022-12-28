@@ -29,6 +29,7 @@ if __name__ == '__main__':
     path_scoreboards = path_resources/'scoreboards'
     path_objects     = path_resources/'objects' 
     path_sounds      = path_resources/'sounds'
+    path_fonts       = path_resources/'fonts'
     path_games       = path_resources/'games'
 
     #--------------------------------------------------------------------------#
@@ -57,8 +58,11 @@ if __name__ == '__main__':
     meta.background_scrolls = False
     
     meta.track_image = MetaImage(color=(102,153,153))
-    meta.scoreboard  = MetaScoreboard(text_rect    = (200,15,100,100),
-                                      text_bgcolor = (55,55,55))
+
+    path_font = path_fonts/'Party_Confetti.ttf'
+    meta.scoreboard = MetaScoreboard(text_font    = path_font,
+                                     text_rect    = (200,23,100,100),
+                                     text_bgcolor = (55,55,55))
 
     # Player
     #--------------------------------------------------------------------------#

@@ -13,11 +13,13 @@ class Scoreboard:
         self.image      = param.image
         self.image_rect = param.image_rect
 
+        self.text_font    = param.text_font
         self.text_rect    = param.text_rect
         self.text_bgcolor = param.text_bgcolor
         self.text_fgcolor = param.text_fgcolor
 
-        self.ost = OnScreenText(self.text_rect, 3, 2, 
+        self.ost = OnScreenText(self.text_font,
+                                self.text_rect, 3, 2, 
                                 self.text_fgcolor, 
                                 self.text_bgcolor)
 

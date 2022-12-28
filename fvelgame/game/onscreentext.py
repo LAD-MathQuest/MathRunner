@@ -7,26 +7,30 @@ import game.game_params as gp
 
 #------------------------------------------------------------------------------#
 class OnScreenText:
-
-    margin = lambda x: max( 1, int( 0.05 * x ) )
+    '''Encapsulates on screen text actions'''
 
     #--------------------------------------------------------------------------#
-    def __init__( self, area, n_lin, n_col, fgcolor, bgcolor ):
+    def __init__(self, 
+                 font    = None, 
+                 area    = pygame.Rect((0,0), gp.SCREEN_SIZE), 
+                 n_lin   = 1, 
+                 n_col   = 1, 
+                 fgcolor = (255,255,255), 
+                 bgcolor = (0,0,0)):
 
         self.fgcolor = fgcolor
         self.bgcolor = bgcolor
 
         self.area = area.copy()
 
-        mx = -OnScreenText.margin( self.area.width  )
-        my = -OnScreenText.margin( self.area.height )
-        self.area.inflate_ip( mx, my )
-
         w = self.area.width  // n_col
         h = self.area.height // n_lin
 
-        # TODO check if font exists
-        self.font = pygame.freetype.SysFont( gp.FONT, int(0.9*h) )
+        if not font:
+            font = gp.DEFAULT_FONT
+
+        self.font = pygame.freetype.Font(font, int(0.9*h))
+
         self.font.origin = True
 
         self.cell_w = [ w ] * n_col
@@ -40,21 +44,28 @@ class OnScreenText:
 
     #--------------------------------------------------------------------------#
     def column_width( self, A, B=None ):
+        '''Set column widths.
 
-        W = lambda x: x if type(x) is int else self.font.get_rect(x).width
+        Parameters can be:
+        - A list of widths
+        - A pair of column index and width
 
-        if type(A) in [ list, tuple ]:
-            for ii in range(len(self.cell_w)):
-                self.cell_w[ii] = W(A[ii])
+        Widths can be an integer os a string
+        '''
+
+        str_width = lambda x: x if type(x) is int else self.font.get_rect(x).width
+
+        if type(A) in (list, tuple):
+            for ii, aa in enumerate(A):
+                self.cell_w[ii] = str_width(aa)
         else:
-            self.cell_w[A] = W(B)
+            self.cell_w[A] = str_width(B)
 
         for ii in range(1,len(self.cell_x)):
             self.cell_x[ii] = self.cell_x[ii-1] + self.cell_w[ii-1]
         
-        w = sum(self.cell_w)
-        self.area.width = w
-        self.area.inflate_ip(OnScreenText.margin(w), 0)
+        ww = sum(self.cell_w)
+        self.area.width = ww
 
         return self.area
 

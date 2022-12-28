@@ -55,6 +55,7 @@ class ScoreboardParam:
                                       self.image.get_size())
 
         self.text_rect    = pygame.Rect(meta.text_rect)
+        self.text_font    = meta.text_font
         self.text_bgcolor = meta.text_bgcolor
         self.text_fgcolor = meta.text_fgcolor
 
