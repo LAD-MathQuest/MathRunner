@@ -49,10 +49,16 @@ class Ui_ObjectWidget(object):
         self.label_Image.setSizePolicy(sizePolicy1)
         self.label_Image.setMinimumSize(QSize(128, 128))
         self.label_Image.setMaximumSize(QSize(128, 128))
+#if QT_CONFIG(accessibility)
+        self.label_Image.setAccessibleName(u"")
+#endif // QT_CONFIG(accessibility)
         self.label_Image.setAutoFillBackground(True)
         self.label_Image.setFrameShape(QFrame.Panel)
         self.label_Image.setFrameShadow(QFrame.Sunken)
-        self.label_Image.setScaledContents(True)
+        self.label_Image.setScaledContents(False)
+        self.label_Image.setAlignment(Qt.AlignCenter)
+        self.label_Image.setMargin(2)
+        self.label_Image.setIndent(0)
 
         self.horizontalLayout_13.addWidget(self.label_Image)
 

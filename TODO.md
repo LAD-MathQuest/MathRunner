@@ -31,18 +31,28 @@
 
 #### Graphical Interface
 
-- Keep ratio of images 
 - Implement callbacks
 - Implement undo
 - Allow creator to define sound volume for each sprite, 1 is the music volume
 - Set proper maximum values to positions and sizes based on vertical em horizontal scrolling
 - Replace os.system by QProcess
-- Allow creator to select scoreboard font
 
 - Implement simple media player
   - play, stop, pause, quit
 
 - Implement appearence preview
+
+- Replace select by edit on image forms
+- On object forms
+  - Add a duplicate button
+  - Replace select by edit button
+
+- Scoreboard
+  - Add font selection
+  - Show preview using selecte font
+  - Merge label and buttons on color selection
+
+
 
 - Implement a simple image editor 
   - Set size
@@ -62,6 +72,9 @@
 ## In progress...
 
 ## DONE
+
+2022-12-28
+- Keep ratio of images 
 
 2022-12-27
 - Implement horizontal scrolling background

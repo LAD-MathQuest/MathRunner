@@ -29,7 +29,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(845, 589)
+        MainWindow.resize(845, 874)
         self.action_Run = QAction(MainWindow)
         self.action_Run.setObjectName(u"action_Run")
         icon = QIcon()
@@ -415,10 +415,16 @@ class Ui_MainWindow(object):
         self.label_BackgroundImage.setSizePolicy(sizePolicy1)
         self.label_BackgroundImage.setMinimumSize(QSize(228, 128))
         self.label_BackgroundImage.setMaximumSize(QSize(228, 128))
+#if QT_CONFIG(accessibility)
+        self.label_BackgroundImage.setAccessibleName(u"")
+#endif // QT_CONFIG(accessibility)
         self.label_BackgroundImage.setAutoFillBackground(True)
         self.label_BackgroundImage.setFrameShape(QFrame.Panel)
         self.label_BackgroundImage.setFrameShadow(QFrame.Sunken)
-        self.label_BackgroundImage.setScaledContents(True)
+        self.label_BackgroundImage.setScaledContents(False)
+        self.label_BackgroundImage.setAlignment(Qt.AlignCenter)
+        self.label_BackgroundImage.setMargin(2)
+        self.label_BackgroundImage.setIndent(0)
 
         self.gridLayout_15.addWidget(self.label_BackgroundImage, 0, 0, 1, 1)
 
@@ -466,10 +472,16 @@ class Ui_MainWindow(object):
         self.label_TrackImage.setSizePolicy(sizePolicy1)
         self.label_TrackImage.setMinimumSize(QSize(228, 128))
         self.label_TrackImage.setMaximumSize(QSize(228, 128))
+#if QT_CONFIG(accessibility)
+        self.label_TrackImage.setAccessibleName(u"")
+#endif // QT_CONFIG(accessibility)
         self.label_TrackImage.setAutoFillBackground(True)
         self.label_TrackImage.setFrameShape(QFrame.Panel)
         self.label_TrackImage.setFrameShadow(QFrame.Sunken)
-        self.label_TrackImage.setScaledContents(True)
+        self.label_TrackImage.setScaledContents(False)
+        self.label_TrackImage.setAlignment(Qt.AlignCenter)
+        self.label_TrackImage.setMargin(2)
+        self.label_TrackImage.setIndent(0)
 
         self.gridLayout_16.addWidget(self.label_TrackImage, 1, 0, 1, 1)
 
@@ -491,7 +503,10 @@ class Ui_MainWindow(object):
         self.label_ScoreboardImage.setAutoFillBackground(True)
         self.label_ScoreboardImage.setFrameShape(QFrame.Panel)
         self.label_ScoreboardImage.setFrameShadow(QFrame.Sunken)
-        self.label_ScoreboardImage.setScaledContents(True)
+        self.label_ScoreboardImage.setScaledContents(False)
+        self.label_ScoreboardImage.setAlignment(Qt.AlignCenter)
+        self.label_ScoreboardImage.setMargin(2)
+        self.label_ScoreboardImage.setIndent(0)
 
         self.verticalLayout_12.addWidget(self.label_ScoreboardImage)
 
@@ -738,7 +753,9 @@ class Ui_MainWindow(object):
         self.label_PlayerImage.setAutoFillBackground(True)
         self.label_PlayerImage.setFrameShape(QFrame.Panel)
         self.label_PlayerImage.setFrameShadow(QFrame.Sunken)
-        self.label_PlayerImage.setScaledContents(True)
+        self.label_PlayerImage.setScaledContents(False)
+        self.label_PlayerImage.setAlignment(Qt.AlignCenter)
+        self.label_PlayerImage.setIndent(0)
 
         self.horizontalLayout_12.addWidget(self.label_PlayerImage)
 
@@ -879,7 +896,7 @@ class Ui_MainWindow(object):
         self.scrollArea_Obstacles.setWidgetResizable(True)
         self.scrollAreaWidgetContents_Obstacle = QWidget()
         self.scrollAreaWidgetContents_Obstacle.setObjectName(u"scrollAreaWidgetContents_Obstacle")
-        self.scrollAreaWidgetContents_Obstacle.setGeometry(QRect(0, 0, 783, 319))
+        self.scrollAreaWidgetContents_Obstacle.setGeometry(QRect(0, 0, 98, 36))
         self.verticalLayout_17 = QVBoxLayout(self.scrollAreaWidgetContents_Obstacle)
         self.verticalLayout_17.setObjectName(u"verticalLayout_17")
         self.verticalSpacer_ObstacleFrequency_1 = QSpacerItem(20, 0, QSizePolicy.Minimum, QSizePolicy.Expanding)
@@ -953,7 +970,7 @@ class Ui_MainWindow(object):
         self.scrollArea_Collectibles.setWidgetResizable(True)
         self.scrollAreaWidgetContents_Collectibles = QWidget()
         self.scrollAreaWidgetContents_Collectibles.setObjectName(u"scrollAreaWidgetContents_Collectibles")
-        self.scrollAreaWidgetContents_Collectibles.setGeometry(QRect(0, 0, 783, 319))
+        self.scrollAreaWidgetContents_Collectibles.setGeometry(QRect(0, 0, 98, 36))
         self.verticalLayout_15 = QVBoxLayout(self.scrollAreaWidgetContents_Collectibles)
         self.verticalLayout_15.setObjectName(u"verticalLayout_15")
         self.verticalSpacer_13 = QSpacerItem(20, 0, QSizePolicy.Minimum, QSizePolicy.Expanding)
@@ -1262,7 +1279,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
 
         self.tabWidget.setCurrentIndex(0)
-        self.tabWidget_Objects.setCurrentIndex(1)
+        self.tabWidget_Objects.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(MainWindow)

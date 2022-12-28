@@ -1,22 +1,27 @@
 #------------------------------------------------------------------------------#
 
-from PySide6.QtCore       import QUrl
-from PySide6.QtGui        import QPixmap
+from PySide6.QtCore       import Qt, QSize, QUrl
+from PySide6.QtGui        import QPixmap, QColor
 from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
 
 #------------------------------------------------------------------------------#
 def draw_meta_image(label, meta):
 
-    label.setStyleSheet('')
     label.clear()
 
-    if meta:
-       if meta.path:
-           pixmap = QPixmap(meta.path)
-           label.setPixmap(pixmap)
-       else:
-           bg = 'rgb({},{},{})'.format(*(meta.color))
-           label.setStyleSheet(f'QLabel{{background-color:{bg};}}')
+    # If there is no meta image leave the label empty
+    if not meta:
+        return
+
+    if meta.path:
+        pixmap = QPixmap(meta.path)
+    else:
+        pixmap = QPixmap(meta.size[0], meta.size[1])
+        pixmap.fill(QColor(*(meta.color)))
+       
+    size = label.size().boundedTo(QSize(*(meta.size)))
+
+    label.setPixmap(pixmap.scaled(size, aspectMode=Qt.KeepAspectRatio))
 
 #------------------------------------------------------------------------------#
 def play_sound(parent, path, vol):
