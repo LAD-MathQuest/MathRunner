@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>845</width>
-    <height>874</height>
+    <width>944</width>
+    <height>946</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
    </property>
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <widget class="QTabWidget" name="tabWidget">
+     <widget class="QTabWidget" name="tabWidget_Game">
       <property name="enabled">
        <bool>true</bool>
       </property>
@@ -30,7 +30,7 @@
        <bool>true</bool>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tabGame">
        <property name="enabled">
@@ -366,8 +366,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>791</width>
-             <height>749</height>
+             <width>904</width>
+             <height>795</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_13">
@@ -399,7 +399,7 @@
                       </size>
                      </property>
                      <property name="text">
-                      <string>Select Image</string>
+                      <string>Edit Image</string>
                      </property>
                     </widget>
                    </item>
@@ -527,7 +527,7 @@
                       </size>
                      </property>
                      <property name="text">
-                      <string>Select Image</string>
+                      <string>Edit Image</string>
                      </property>
                     </widget>
                    </item>
@@ -756,7 +756,7 @@
                          </size>
                         </property>
                         <property name="text">
-                         <string>Select Image</string>
+                         <string>Edit Image</string>
                         </property>
                        </widget>
                       </item>
@@ -990,9 +990,60 @@
                      </layout>
                     </item>
                     <item>
-                     <layout class="QGridLayout" name="gridLayout_3">
-                      <item row="0" column="3">
-                       <spacer name="horizontalSpacer_11">
+                     <layout class="QHBoxLayout" name="horizontalLayout_3">
+                      <item>
+                       <widget class="QPushButton" name="pushButton">
+                        <property name="minimumSize">
+                         <size>
+                          <width>140</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="text">
+                         <string>Select font</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="pushButton_ChoseScoreboardBgColor">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                         <size>
+                          <width>140</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="text">
+                         <string>Background color</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="pushButton_ChoseScoreboardFgColor">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                         <size>
+                          <width>140</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="text">
+                         <string>Foreground color</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <spacer name="horizontalSpacer">
                         <property name="orientation">
                          <enum>Qt::Horizontal</enum>
                         </property>
@@ -1003,52 +1054,6 @@
                          </size>
                         </property>
                        </spacer>
-                      </item>
-                      <item row="0" column="0">
-                       <widget class="QLabel" name="label_ScoreboardBgColor">
-                        <property name="text">
-                         <string>Background color</string>
-                        </property>
-                        <property name="indent">
-                         <number>5</number>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="0" column="1">
-                       <widget class="QPushButton" name="pushButton_ChoseScoreboardBgColor">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="text">
-                         <string>Choose</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="1" column="1">
-                       <widget class="QPushButton" name="pushButton_ChoseScoreboardFgColor">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="text">
-                         <string>Choose</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="1" column="0">
-                       <widget class="QLabel" name="label_ScoreboardFgColor">
-                        <property name="text">
-                         <string>Foreground color</string>
-                        </property>
-                        <property name="indent">
-                         <number>5</number>
-                        </property>
-                       </widget>
                       </item>
                      </layout>
                     </item>
@@ -1157,22 +1162,21 @@
                  <item>
                   <layout class="QHBoxLayout" name="horizontalLayout_16">
                    <item>
-                    <widget class="QLabel" name="label_SelectPlayerImage">
-                     <property name="text">
-                      <string>Image</string>
-                     </property>
-                     <property name="margin">
-                      <number>1</number>
-                     </property>
-                     <property name="indent">
-                      <number>5</number>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
                     <widget class="QPushButton" name="pushButton_SelectPlayerImage">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>120</width>
+                       <height>0</height>
+                      </size>
+                     </property>
                      <property name="text">
-                      <string>Select</string>
+                      <string>Edit Image</string>
                      </property>
                     </widget>
                    </item>
@@ -1433,8 +1437,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>98</width>
-                 <height>36</height>
+                 <width>882</width>
+                 <height>676</height>
                 </rect>
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_17">
@@ -1593,8 +1597,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>98</width>
-                 <height>36</height>
+                 <width>882</width>
+                 <height>676</height>
                 </rect>
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_15">
@@ -2041,7 +2045,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>845</width>
+     <width>944</width>
      <height>23</height>
     </rect>
    </property>

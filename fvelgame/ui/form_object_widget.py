@@ -74,23 +74,6 @@ class Ui_ObjectWidget(object):
 
         self.horizontalLayout_SelectImage.addWidget(self.pushButton_SelectImage)
 
-        self.horizontalSpacer_SelectImage = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.horizontalLayout_SelectImage.addItem(self.horizontalSpacer_SelectImage)
-
-        self.pushButton_Delete = QPushButton(self.frameObject)
-        self.pushButton_Delete.setObjectName(u"pushButton_Delete")
-        sizePolicy1.setHeightForWidth(self.pushButton_Delete.sizePolicy().hasHeightForWidth())
-        self.pushButton_Delete.setSizePolicy(sizePolicy1)
-        self.pushButton_Delete.setMinimumSize(QSize(140, 0))
-
-        self.horizontalLayout_SelectImage.addWidget(self.pushButton_Delete)
-
-
-        self.verticalLayout_Buttons.addLayout(self.horizontalLayout_SelectImage)
-
-        self.horizontalLayout_Size = QHBoxLayout()
-        self.horizontalLayout_Size.setObjectName(u"horizontalLayout_Size")
         self.label_Size = QLabel(self.frameObject)
         self.label_Size.setObjectName(u"label_Size")
         sizePolicy.setHeightForWidth(self.label_Size.sizePolicy().hasHeightForWidth())
@@ -98,7 +81,7 @@ class Ui_ObjectWidget(object):
         self.label_Size.setMinimumSize(QSize(60, 0))
         self.label_Size.setIndent(5)
 
-        self.horizontalLayout_Size.addWidget(self.label_Size)
+        self.horizontalLayout_SelectImage.addWidget(self.label_Size)
 
         self.spinBox_Width = QSpinBox(self.frameObject)
         self.spinBox_Width.setObjectName(u"spinBox_Width")
@@ -108,7 +91,7 @@ class Ui_ObjectWidget(object):
         self.spinBox_Width.setMaximum(1920)
         self.spinBox_Width.setValue(100)
 
-        self.horizontalLayout_Size.addWidget(self.spinBox_Width)
+        self.horizontalLayout_SelectImage.addWidget(self.spinBox_Width)
 
         self.spinBox_Height = QSpinBox(self.frameObject)
         self.spinBox_Height.setObjectName(u"spinBox_Height")
@@ -118,7 +101,7 @@ class Ui_ObjectWidget(object):
         self.spinBox_Height.setMinimum(1)
         self.spinBox_Height.setMaximum(1920)
 
-        self.horizontalLayout_Size.addWidget(self.spinBox_Height)
+        self.horizontalLayout_SelectImage.addWidget(self.spinBox_Height)
 
         self.checkBox_KeepAspectRatio = QCheckBox(self.frameObject)
         self.checkBox_KeepAspectRatio.setObjectName(u"checkBox_KeepAspectRatio")
@@ -129,10 +112,14 @@ class Ui_ObjectWidget(object):
         self.checkBox_KeepAspectRatio.setSizePolicy(sizePolicy2)
         self.checkBox_KeepAspectRatio.setChecked(True)
 
-        self.horizontalLayout_Size.addWidget(self.checkBox_KeepAspectRatio)
+        self.horizontalLayout_SelectImage.addWidget(self.checkBox_KeepAspectRatio)
+
+        self.horizontalSpacer_SelectImage = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_SelectImage.addItem(self.horizontalSpacer_SelectImage)
 
 
-        self.verticalLayout_Buttons.addLayout(self.horizontalLayout_Size)
+        self.verticalLayout_Buttons.addLayout(self.horizontalLayout_SelectImage)
 
         self.horizontalLayout_Points = QHBoxLayout()
         self.horizontalLayout_Points.setObjectName(u"horizontalLayout_Points")
@@ -167,7 +154,7 @@ class Ui_ObjectWidget(object):
         self.label_Sound.setObjectName(u"label_Sound")
         sizePolicy.setHeightForWidth(self.label_Sound.sizePolicy().hasHeightForWidth())
         self.label_Sound.setSizePolicy(sizePolicy)
-        self.label_Sound.setMinimumSize(QSize(0, 0))
+        self.label_Sound.setMinimumSize(QSize(120, 0))
         self.label_Sound.setIndent(5)
 
         self.horizontalLayout_Sound.addWidget(self.label_Sound)
@@ -218,6 +205,29 @@ class Ui_ObjectWidget(object):
 
         self.verticalLayout_Buttons.addLayout(self.horizontalLayout_Sound)
 
+        self.horizontalLayout_Size = QHBoxLayout()
+        self.horizontalLayout_Size.setObjectName(u"horizontalLayout_Size")
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_Size.addItem(self.horizontalSpacer)
+
+        self.pushButton = QPushButton(self.frameObject)
+        self.pushButton.setObjectName(u"pushButton")
+        self.pushButton.setMinimumSize(QSize(140, 0))
+
+        self.horizontalLayout_Size.addWidget(self.pushButton)
+
+        self.pushButton_Delete = QPushButton(self.frameObject)
+        self.pushButton_Delete.setObjectName(u"pushButton_Delete")
+        sizePolicy1.setHeightForWidth(self.pushButton_Delete.sizePolicy().hasHeightForWidth())
+        self.pushButton_Delete.setSizePolicy(sizePolicy1)
+        self.pushButton_Delete.setMinimumSize(QSize(140, 0))
+
+        self.horizontalLayout_Size.addWidget(self.pushButton_Delete)
+
+
+        self.verticalLayout_Buttons.addLayout(self.horizontalLayout_Size)
+
 
         self.horizontalLayout_13.addLayout(self.verticalLayout_Buttons)
 
@@ -233,15 +243,16 @@ class Ui_ObjectWidget(object):
     def retranslateUi(self, ObjectWidget):
         ObjectWidget.setWindowTitle(QCoreApplication.translate("ObjectWidget", u"Form", None))
         self.label_Image.setText("")
-        self.pushButton_SelectImage.setText(QCoreApplication.translate("ObjectWidget", u"Select Image", None))
-        self.pushButton_Delete.setText(QCoreApplication.translate("ObjectWidget", u"Delete Object", None))
+        self.pushButton_SelectImage.setText(QCoreApplication.translate("ObjectWidget", u"Edit Image", None))
         self.label_Size.setText(QCoreApplication.translate("ObjectWidget", u"Size", None))
         self.checkBox_KeepAspectRatio.setText(QCoreApplication.translate("ObjectWidget", u"Keep aspect ratio", None))
         self.label_Points.setText(QCoreApplication.translate("ObjectWidget", u"Points", None))
-        self.label_Sound.setText(QCoreApplication.translate("ObjectWidget", u"Collision sound", None))
+        self.label_Sound.setText(QCoreApplication.translate("ObjectWidget", u"Contact sound", None))
         self.pushButton_SoundSelect.setText(QCoreApplication.translate("ObjectWidget", u"Select", None))
         self.pushButton_SoundRemove.setText(QCoreApplication.translate("ObjectWidget", u"Remove", None))
         self.pushButton_SoundPlay.setText(QCoreApplication.translate("ObjectWidget", u"Play", None))
         self.label_Volume.setText(QCoreApplication.translate("ObjectWidget", u"Volume", None))
+        self.pushButton.setText(QCoreApplication.translate("ObjectWidget", u"Duplicate Object", None))
+        self.pushButton_Delete.setText(QCoreApplication.translate("ObjectWidget", u"Delete Object", None))
     # retranslateUi
 

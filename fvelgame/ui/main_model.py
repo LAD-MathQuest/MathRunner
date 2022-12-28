@@ -1,8 +1,8 @@
 #------------------------------------------------------------------------------#
 
-import sys, os, tempfile
+import sys, tempfile
 
-from PySide6.QtCore       import QUrl
+from PySide6.QtCore       import QProcess, QUrl
 from PySide6.QtGui        import QPixmap
 from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
 
@@ -47,9 +47,8 @@ class MainModel:
 
         run_game = str(Path(__file__).parents[1]/'game'/'run_game.py')
 
-        # TODO replace by QProcess
-        # https://www.pythonguis.com/tutorials/qprocess-external-programs
-        os.system( f'{sys.executable} {run_game} {name}')
+        self.p = QProcess()
+        self.p.execute(sys.executable, [run_game, name])
 
     #--------------------------------------------------------------------------#
     def ambience_play(self):
@@ -76,16 +75,16 @@ class MainModel:
         return (tt, ll, rr)
 
     #--------------------------------------------------------------------------#
-    def meta_to_view(self):
+    def start_view(self):
 
-      self.meta_to_view_game_tab      ()
-      self.meta_to_view_appearence_tab()
-      self.meta_to_view_object_tab    ()
-      self.meta_to_view_velocity_tab  ()
-      self.meta_to_view_margins_tab   ()
+      self.start_view_tab_game      ()
+      self.start_view_tab_appearence()
+      self.start_view_tab_objects   ()
+      self.start_view_tab_velocity  ()
+      self.start_view_tab_margins   ()
 
     #--------------------------------------------------------------------------#
-    def meta_to_view_game_tab(self):
+    def start_view_tab_game(self):
 
         ui   = self.ui
         meta = self.meta
@@ -112,7 +111,7 @@ class MainModel:
             ui.pushButton_AmbienceSoundPlay  .setEnabled(False)
 
     #--------------------------------------------------------------------------#
-    def meta_to_view_appearence_tab(self):
+    def start_view_tab_appearence(self):
 
         ui   = self.ui
         meta = self.meta
@@ -161,7 +160,7 @@ class MainModel:
         ui.label_ScoreboardExample.setStyleSheet(f'QLabel{{ {bg} {fg} }}')
 
     #--------------------------------------------------------------------------#
-    def meta_to_view_object_tab(self):
+    def start_view_tab_objects(self):
 
         ui   = self.ui
         con  = self.con
@@ -198,7 +197,7 @@ class MainModel:
             con.new_collectible_widget().meta_to_object(meta_op)
 
     #--------------------------------------------------------------------------#
-    def meta_to_view_velocity_tab(self):
+    def start_view_tab_velocity(self):
 
         ui    = self.ui
         meta  = self.meta
@@ -211,7 +210,7 @@ class MainModel:
         self.con.plot_velocity_data.setData(tt, vv)
 
     #--------------------------------------------------------------------------#
-    def meta_to_view_margins_tab(self):
+    def start_view_tab_margins(self):
 
         ui    = self.ui
         meta  = self.meta

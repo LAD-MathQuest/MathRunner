@@ -29,7 +29,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(845, 874)
+        MainWindow.resize(944, 946)
         self.action_Run = QAction(MainWindow)
         self.action_Run.setObjectName(u"action_Run")
         icon = QIcon()
@@ -163,10 +163,10 @@ class Ui_MainWindow(object):
         self.centralwidget.setEnabled(True)
         self.gridLayout = QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName(u"gridLayout")
-        self.tabWidget = QTabWidget(self.centralwidget)
-        self.tabWidget.setObjectName(u"tabWidget")
-        self.tabWidget.setEnabled(True)
-        self.tabWidget.setAutoFillBackground(True)
+        self.tabWidget_Game = QTabWidget(self.centralwidget)
+        self.tabWidget_Game.setObjectName(u"tabWidget_Game")
+        self.tabWidget_Game.setEnabled(True)
+        self.tabWidget_Game.setAutoFillBackground(True)
         self.tabGame = QWidget()
         self.tabGame.setObjectName(u"tabGame")
         self.tabGame.setEnabled(True)
@@ -355,7 +355,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_10.addItem(self.verticalSpacer)
 
-        self.tabWidget.addTab(self.tabGame, "")
+        self.tabWidget_Game.addTab(self.tabGame, "")
         self.tabAppearance = QWidget()
         self.tabAppearance.setObjectName(u"tabAppearance")
         self.verticalLayout_9 = QVBoxLayout(self.tabAppearance)
@@ -367,7 +367,7 @@ class Ui_MainWindow(object):
         self.scrollArea_Appearance.setWidgetResizable(True)
         self.scrollAreaWidgetContents_Appearance = QWidget()
         self.scrollAreaWidgetContents_Appearance.setObjectName(u"scrollAreaWidgetContents_Appearance")
-        self.scrollAreaWidgetContents_Appearance.setGeometry(QRect(0, 0, 791, 749))
+        self.scrollAreaWidgetContents_Appearance.setGeometry(QRect(0, 0, 904, 795))
         self.verticalLayout_13 = QVBoxLayout(self.scrollAreaWidgetContents_Appearance)
         self.verticalLayout_13.setObjectName(u"verticalLayout_13")
         self.groupBox_Background = QGroupBox(self.scrollAreaWidgetContents_Appearance)
@@ -674,40 +674,36 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_4.addLayout(self.gridLayout_14)
 
-        self.gridLayout_3 = QGridLayout()
-        self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.horizontalSpacer_11 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalLayout_3 = QHBoxLayout()
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.pushButton = QPushButton(self.groupBox_ScoreboardText)
+        self.pushButton.setObjectName(u"pushButton")
+        self.pushButton.setMinimumSize(QSize(140, 0))
 
-        self.gridLayout_3.addItem(self.horizontalSpacer_11, 0, 3, 1, 1)
-
-        self.label_ScoreboardBgColor = QLabel(self.groupBox_ScoreboardText)
-        self.label_ScoreboardBgColor.setObjectName(u"label_ScoreboardBgColor")
-        self.label_ScoreboardBgColor.setIndent(5)
-
-        self.gridLayout_3.addWidget(self.label_ScoreboardBgColor, 0, 0, 1, 1)
+        self.horizontalLayout_3.addWidget(self.pushButton)
 
         self.pushButton_ChoseScoreboardBgColor = QPushButton(self.groupBox_ScoreboardText)
         self.pushButton_ChoseScoreboardBgColor.setObjectName(u"pushButton_ChoseScoreboardBgColor")
         sizePolicy1.setHeightForWidth(self.pushButton_ChoseScoreboardBgColor.sizePolicy().hasHeightForWidth())
         self.pushButton_ChoseScoreboardBgColor.setSizePolicy(sizePolicy1)
+        self.pushButton_ChoseScoreboardBgColor.setMinimumSize(QSize(140, 0))
 
-        self.gridLayout_3.addWidget(self.pushButton_ChoseScoreboardBgColor, 0, 1, 1, 1)
+        self.horizontalLayout_3.addWidget(self.pushButton_ChoseScoreboardBgColor)
 
         self.pushButton_ChoseScoreboardFgColor = QPushButton(self.groupBox_ScoreboardText)
         self.pushButton_ChoseScoreboardFgColor.setObjectName(u"pushButton_ChoseScoreboardFgColor")
         sizePolicy1.setHeightForWidth(self.pushButton_ChoseScoreboardFgColor.sizePolicy().hasHeightForWidth())
         self.pushButton_ChoseScoreboardFgColor.setSizePolicy(sizePolicy1)
+        self.pushButton_ChoseScoreboardFgColor.setMinimumSize(QSize(140, 0))
 
-        self.gridLayout_3.addWidget(self.pushButton_ChoseScoreboardFgColor, 1, 1, 1, 1)
+        self.horizontalLayout_3.addWidget(self.pushButton_ChoseScoreboardFgColor)
 
-        self.label_ScoreboardFgColor = QLabel(self.groupBox_ScoreboardText)
-        self.label_ScoreboardFgColor.setObjectName(u"label_ScoreboardFgColor")
-        self.label_ScoreboardFgColor.setIndent(5)
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
-        self.gridLayout_3.addWidget(self.label_ScoreboardFgColor, 1, 0, 1, 1)
+        self.horizontalLayout_3.addItem(self.horizontalSpacer)
 
 
-        self.verticalLayout_4.addLayout(self.gridLayout_3)
+        self.verticalLayout_4.addLayout(self.horizontalLayout_3)
 
 
         self.verticalLayout_20.addWidget(self.groupBox_ScoreboardText)
@@ -726,7 +722,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_9.addWidget(self.scrollArea_Appearance)
 
-        self.tabWidget.addTab(self.tabAppearance, "")
+        self.tabWidget_Game.addTab(self.tabAppearance, "")
         self.tabObjects = QWidget()
         self.tabObjects.setObjectName(u"tabObjects")
         self.tabObjects.setEnabled(True)
@@ -763,15 +759,11 @@ class Ui_MainWindow(object):
         self.verticalLayout_14.setObjectName(u"verticalLayout_14")
         self.horizontalLayout_16 = QHBoxLayout()
         self.horizontalLayout_16.setObjectName(u"horizontalLayout_16")
-        self.label_SelectPlayerImage = QLabel(self.frame)
-        self.label_SelectPlayerImage.setObjectName(u"label_SelectPlayerImage")
-        self.label_SelectPlayerImage.setMargin(1)
-        self.label_SelectPlayerImage.setIndent(5)
-
-        self.horizontalLayout_16.addWidget(self.label_SelectPlayerImage)
-
         self.pushButton_SelectPlayerImage = QPushButton(self.frame)
         self.pushButton_SelectPlayerImage.setObjectName(u"pushButton_SelectPlayerImage")
+        sizePolicy1.setHeightForWidth(self.pushButton_SelectPlayerImage.sizePolicy().hasHeightForWidth())
+        self.pushButton_SelectPlayerImage.setSizePolicy(sizePolicy1)
+        self.pushButton_SelectPlayerImage.setMinimumSize(QSize(120, 0))
 
         self.horizontalLayout_16.addWidget(self.pushButton_SelectPlayerImage)
 
@@ -896,7 +888,7 @@ class Ui_MainWindow(object):
         self.scrollArea_Obstacles.setWidgetResizable(True)
         self.scrollAreaWidgetContents_Obstacle = QWidget()
         self.scrollAreaWidgetContents_Obstacle.setObjectName(u"scrollAreaWidgetContents_Obstacle")
-        self.scrollAreaWidgetContents_Obstacle.setGeometry(QRect(0, 0, 98, 36))
+        self.scrollAreaWidgetContents_Obstacle.setGeometry(QRect(0, 0, 882, 676))
         self.verticalLayout_17 = QVBoxLayout(self.scrollAreaWidgetContents_Obstacle)
         self.verticalLayout_17.setObjectName(u"verticalLayout_17")
         self.verticalSpacer_ObstacleFrequency_1 = QSpacerItem(20, 0, QSizePolicy.Minimum, QSizePolicy.Expanding)
@@ -970,7 +962,7 @@ class Ui_MainWindow(object):
         self.scrollArea_Collectibles.setWidgetResizable(True)
         self.scrollAreaWidgetContents_Collectibles = QWidget()
         self.scrollAreaWidgetContents_Collectibles.setObjectName(u"scrollAreaWidgetContents_Collectibles")
-        self.scrollAreaWidgetContents_Collectibles.setGeometry(QRect(0, 0, 98, 36))
+        self.scrollAreaWidgetContents_Collectibles.setGeometry(QRect(0, 0, 882, 676))
         self.verticalLayout_15 = QVBoxLayout(self.scrollAreaWidgetContents_Collectibles)
         self.verticalLayout_15.setObjectName(u"verticalLayout_15")
         self.verticalSpacer_13 = QSpacerItem(20, 0, QSizePolicy.Minimum, QSizePolicy.Expanding)
@@ -1011,7 +1003,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_11.addWidget(self.tabWidget_Objects)
 
-        self.tabWidget.addTab(self.tabObjects, "")
+        self.tabWidget_Game.addTab(self.tabObjects, "")
         self.tabVelocity = QWidget()
         self.tabVelocity.setObjectName(u"tabVelocity")
         self.tabVelocity.setEnabled(True)
@@ -1065,7 +1057,7 @@ class Ui_MainWindow(object):
 
         self.layout_TabVelocity.addWidget(self.plotVelocity)
 
-        self.tabWidget.addTab(self.tabVelocity, "")
+        self.tabWidget_Game.addTab(self.tabVelocity, "")
         self.tabMargins = QWidget()
         self.tabMargins.setObjectName(u"tabMargins")
         self.tabMargins.setEnabled(True)
@@ -1221,14 +1213,14 @@ class Ui_MainWindow(object):
 
         self.layout_TabMargins.addWidget(self.plotMargins)
 
-        self.tabWidget.addTab(self.tabMargins, "")
+        self.tabWidget_Game.addTab(self.tabMargins, "")
 
-        self.gridLayout.addWidget(self.tabWidget, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.tabWidget_Game, 0, 0, 1, 1)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 845, 23))
+        self.menubar.setGeometry(QRect(0, 0, 944, 23))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuHelp = QMenu(self.menubar)
@@ -1278,7 +1270,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget_Game.setCurrentIndex(2)
         self.tabWidget_Objects.setCurrentIndex(0)
 
 
@@ -1351,7 +1343,7 @@ class Ui_MainWindow(object):
 #endif // QT_CONFIG(shortcut)
         self.action_Save_as.setText(QCoreApplication.translate("MainWindow", u"Save As...", None))
 #if QT_CONFIG(statustip)
-        self.tabWidget.setStatusTip("")
+        self.tabWidget_Game.setStatusTip("")
 #endif // QT_CONFIG(statustip)
 #if QT_CONFIG(tooltip)
         self.tabGame.setToolTip("")
@@ -1376,37 +1368,35 @@ class Ui_MainWindow(object):
         self.pushButton_AmbienceSoundRemove.setText(QCoreApplication.translate("MainWindow", u"Remove", None))
         self.pushButton_AmbienceSoundPlay.setText(QCoreApplication.translate("MainWindow", u"Play", None))
         self.label_AmbienceSoundVolume.setText(QCoreApplication.translate("MainWindow", u"Volume", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabGame), QCoreApplication.translate("MainWindow", u"Game", None))
+        self.tabWidget_Game.setTabText(self.tabWidget_Game.indexOf(self.tabGame), QCoreApplication.translate("MainWindow", u"Game", None))
         self.groupBox_Background.setTitle(QCoreApplication.translate("MainWindow", u"Screen background", None))
-        self.pushButton_SelectBackgroundImage.setText(QCoreApplication.translate("MainWindow", u"Select Image", None))
+        self.pushButton_SelectBackgroundImage.setText(QCoreApplication.translate("MainWindow", u"Edit Image", None))
         self.checkBox_BackgroundImageScrolls.setText(QCoreApplication.translate("MainWindow", u"Background image scrolls", None))
         self.label_BackgroundImage.setText("")
         self.groupBox_Track.setTitle(QCoreApplication.translate("MainWindow", u"Track background", None))
         self.checkBox_DrawTrack.setText(QCoreApplication.translate("MainWindow", u"Draw track image", None))
-        self.pushButton_SelectTrackImage.setText(QCoreApplication.translate("MainWindow", u"Select Image", None))
+        self.pushButton_SelectTrackImage.setText(QCoreApplication.translate("MainWindow", u"Edit Image", None))
         self.label_TrackImage.setText("")
         self.groupBox_Scoreboard.setTitle(QCoreApplication.translate("MainWindow", u"Scoreboard", None))
         self.label_ScoreboardImage.setText("")
         self.label_ScoreboardExample.setText(QCoreApplication.translate("MainWindow", u"Text Example", None))
         self.groupBox_ScoreboardImage.setTitle(QCoreApplication.translate("MainWindow", u"Image", None))
-        self.pushButton_SelectScoreboardImage.setText(QCoreApplication.translate("MainWindow", u"Select Image", None))
+        self.pushButton_SelectScoreboardImage.setText(QCoreApplication.translate("MainWindow", u"Edit Image", None))
         self.checkBox_ScoreboardImageKeepAspectRatio.setText(QCoreApplication.translate("MainWindow", u"Keep aspect ratio", None))
         self.label_ScoreboardImageWidth.setText(QCoreApplication.translate("MainWindow", u"Size", None))
         self.label_ScoreboardImagePosition.setText(QCoreApplication.translate("MainWindow", u"Position", None))
         self.groupBox_ScoreboardText.setTitle(QCoreApplication.translate("MainWindow", u"Text", None))
         self.label_ScoreboardTextWidth.setText(QCoreApplication.translate("MainWindow", u"Size", None))
         self.label_ScoreboardTextPosition.setText(QCoreApplication.translate("MainWindow", u"Position", None))
-        self.label_ScoreboardBgColor.setText(QCoreApplication.translate("MainWindow", u"Background color", None))
-        self.pushButton_ChoseScoreboardBgColor.setText(QCoreApplication.translate("MainWindow", u"Choose", None))
-        self.pushButton_ChoseScoreboardFgColor.setText(QCoreApplication.translate("MainWindow", u"Choose", None))
-        self.label_ScoreboardFgColor.setText(QCoreApplication.translate("MainWindow", u"Foreground color", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabAppearance), QCoreApplication.translate("MainWindow", u"Appearance", None))
+        self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Select font", None))
+        self.pushButton_ChoseScoreboardBgColor.setText(QCoreApplication.translate("MainWindow", u"Background color", None))
+        self.pushButton_ChoseScoreboardFgColor.setText(QCoreApplication.translate("MainWindow", u"Foreground color", None))
+        self.tabWidget_Game.setTabText(self.tabWidget_Game.indexOf(self.tabAppearance), QCoreApplication.translate("MainWindow", u"Appearance", None))
 #if QT_CONFIG(statustip)
         self.tabObjects.setStatusTip(QCoreApplication.translate("MainWindow", u"Define visual elements", None))
 #endif // QT_CONFIG(statustip)
         self.label_PlayerImage.setText("")
-        self.label_SelectPlayerImage.setText(QCoreApplication.translate("MainWindow", u"Image", None))
-        self.pushButton_SelectPlayerImage.setText(QCoreApplication.translate("MainWindow", u"Select", None))
+        self.pushButton_SelectPlayerImage.setText(QCoreApplication.translate("MainWindow", u"Edit Image", None))
         self.label_PlayerSpeed.setText(QCoreApplication.translate("MainWindow", u"Speed", None))
         self.label_PlayerSize.setText(QCoreApplication.translate("MainWindow", u"Size", None))
         self.checkBox_PlayerKeepAspectRatio.setText(QCoreApplication.translate("MainWindow", u"Keep aspect ratio", None))
@@ -1417,13 +1407,13 @@ class Ui_MainWindow(object):
         self.label_CollectiblesFrequency.setText(QCoreApplication.translate("MainWindow", u"Collectibles frequency", None))
         self.pushButton_NewCollectible.setText(QCoreApplication.translate("MainWindow", u"New", None))
         self.tabWidget_Objects.setTabText(self.tabWidget_Objects.indexOf(self.tab_Collectibles), QCoreApplication.translate("MainWindow", u"Collectibles", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabObjects), QCoreApplication.translate("MainWindow", u"Objects", None))
+        self.tabWidget_Game.setTabText(self.tabWidget_Game.indexOf(self.tabObjects), QCoreApplication.translate("MainWindow", u"Objects", None))
 #if QT_CONFIG(statustip)
         self.tabVelocity.setStatusTip(QCoreApplication.translate("MainWindow", u"Define scrolling velocity", None))
 #endif // QT_CONFIG(statustip)
         self.label_VelocityA.setText(QCoreApplication.translate("MainWindow", u"a", None))
         self.label_VelocityB.setText(QCoreApplication.translate("MainWindow", u"b", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabVelocity), QCoreApplication.translate("MainWindow", u"Velocity", None))
+        self.tabWidget_Game.setTabText(self.tabWidget_Game.indexOf(self.tabVelocity), QCoreApplication.translate("MainWindow", u"Velocity", None))
 #if QT_CONFIG(statustip)
         self.tabMargins.setStatusTip(QCoreApplication.translate("MainWindow", u"Define track margins", None))
 #endif // QT_CONFIG(statustip)
@@ -1439,7 +1429,7 @@ class Ui_MainWindow(object):
         self.groupBox_6.setTitle(QCoreApplication.translate("MainWindow", u"Symmetrical", None))
         self.label_24.setText(QCoreApplication.translate("MainWindow", u"Center", None))
         self.label_25.setText(QCoreApplication.translate("MainWindow", u"Radius", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabMargins), QCoreApplication.translate("MainWindow", u"Margins", None))
+        self.tabWidget_Game.setTabText(self.tabWidget_Game.indexOf(self.tabMargins), QCoreApplication.translate("MainWindow", u"Margins", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
         self.menuEdit.setTitle(QCoreApplication.translate("MainWindow", u"Edit", None))

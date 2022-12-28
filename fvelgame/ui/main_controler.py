@@ -158,24 +158,26 @@ class MainControler:
     #--------------------------------------------------------------------------#
     def new(self):
 
-        if self.confirm_deletion():
-            self.file_name = ''
-            self.start_new()
+        if not self.confirm_deletion():
+            return
+            
+        self.file_name = ''
+        self.start_new()
 
     #--------------------------------------------------------------------------#
     def open(self):
 
-        if self.confirm_deletion():
+        if not self.confirm_deletion():
+            return
 
-            path  = par.RESOURCES / 'games' 
-            fname = self.get_open_fname('Chose a game description', path, 'game' )
+        path  = par.RESOURCES / 'games' 
+        fname = self.get_open_fname('Chose a game description', path, 'game' )
 
-            if fname:
-                # TODO try:
-                self.file_name = fname
-                self.model.open(self.file_name)
-                self.changed = False
-                self.model_to_view()
+        if fname:
+            # TODO try:
+            self.file_name = fname
+            self.model.open(self.file_name)
+            self.start_view_from_model()
 
     #--------------------------------------------------------------------------#
     def save(self):
@@ -287,14 +289,19 @@ class MainControler:
     #--------------------------------------------------------------------------#
 
     #--------------------------------------------------------------------------#
-    def model_to_view(self):
-        self.model.meta_to_view()
+    def start_new(self):
+
+        self.model.new()
+        self.start_view_from_model()
 
     #--------------------------------------------------------------------------#
-    def start_new(self):
-        self.model.new()
+    def start_view_from_model(self):
+
+        self.ui.tabWidget_Game   .setCurrentIndex(0)
+        self.ui.tabWidget_Objects.setCurrentIndex(0)
+
+        self.model.start_view()
         self.changed = False
-        self.model_to_view()
 
     #--------------------------------------------------------------------------#
     def confirm_deletion(self):
