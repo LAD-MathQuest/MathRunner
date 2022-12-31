@@ -29,7 +29,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(944, 946)
+        MainWindow.resize(944, 832)
         self.action_Run = QAction(MainWindow)
         self.action_Run.setObjectName(u"action_Run")
         icon = QIcon()
@@ -367,7 +367,7 @@ class Ui_MainWindow(object):
         self.scrollArea_Appearance.setWidgetResizable(True)
         self.scrollAreaWidgetContents_Appearance = QWidget()
         self.scrollAreaWidgetContents_Appearance.setObjectName(u"scrollAreaWidgetContents_Appearance")
-        self.scrollAreaWidgetContents_Appearance.setGeometry(QRect(0, 0, 904, 795))
+        self.scrollAreaWidgetContents_Appearance.setGeometry(QRect(0, 0, 904, 681))
         self.verticalLayout_13 = QVBoxLayout(self.scrollAreaWidgetContents_Appearance)
         self.verticalLayout_13.setObjectName(u"verticalLayout_13")
         self.groupBox_Background = QGroupBox(self.scrollAreaWidgetContents_Appearance)
@@ -619,62 +619,7 @@ class Ui_MainWindow(object):
 
         self.groupBox_ScoreboardText = QGroupBox(self.groupBox_Scoreboard)
         self.groupBox_ScoreboardText.setObjectName(u"groupBox_ScoreboardText")
-        self.verticalLayout_4 = QVBoxLayout(self.groupBox_ScoreboardText)
-        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.gridLayout_14 = QGridLayout()
-        self.gridLayout_14.setObjectName(u"gridLayout_14")
-        self.label_ScoreboardTextWidth = QLabel(self.groupBox_ScoreboardText)
-        self.label_ScoreboardTextWidth.setObjectName(u"label_ScoreboardTextWidth")
-        self.label_ScoreboardTextWidth.setIndent(5)
-
-        self.gridLayout_14.addWidget(self.label_ScoreboardTextWidth, 1, 0, 1, 1)
-
-        self.horizontalSpacer_13 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.gridLayout_14.addItem(self.horizontalSpacer_13, 0, 3, 1, 1)
-
-        self.spinBox_ScoreboardTextWidth = QSpinBox(self.groupBox_ScoreboardText)
-        self.spinBox_ScoreboardTextWidth.setObjectName(u"spinBox_ScoreboardTextWidth")
-        self.spinBox_ScoreboardTextWidth.setMinimumSize(QSize(60, 0))
-        self.spinBox_ScoreboardTextWidth.setMinimum(1)
-        self.spinBox_ScoreboardTextWidth.setMaximum(1920)
-
-        self.gridLayout_14.addWidget(self.spinBox_ScoreboardTextWidth, 1, 1, 1, 1)
-
-        self.label_ScoreboardTextPosition = QLabel(self.groupBox_ScoreboardText)
-        self.label_ScoreboardTextPosition.setObjectName(u"label_ScoreboardTextPosition")
-        self.label_ScoreboardTextPosition.setIndent(5)
-
-        self.gridLayout_14.addWidget(self.label_ScoreboardTextPosition, 0, 0, 1, 1)
-
-        self.spinBox_ScoreboardTextPositionY = QSpinBox(self.groupBox_ScoreboardText)
-        self.spinBox_ScoreboardTextPositionY.setObjectName(u"spinBox_ScoreboardTextPositionY")
-        self.spinBox_ScoreboardTextPositionY.setMinimumSize(QSize(60, 0))
-        self.spinBox_ScoreboardTextPositionY.setMinimum(1)
-        self.spinBox_ScoreboardTextPositionY.setMaximum(1080)
-
-        self.gridLayout_14.addWidget(self.spinBox_ScoreboardTextPositionY, 0, 2, 1, 1)
-
-        self.spinBox_ScoreboardTextHeight = QSpinBox(self.groupBox_ScoreboardText)
-        self.spinBox_ScoreboardTextHeight.setObjectName(u"spinBox_ScoreboardTextHeight")
-        self.spinBox_ScoreboardTextHeight.setMinimumSize(QSize(60, 0))
-        self.spinBox_ScoreboardTextHeight.setMinimum(1)
-        self.spinBox_ScoreboardTextHeight.setMaximum(1080)
-
-        self.gridLayout_14.addWidget(self.spinBox_ScoreboardTextHeight, 1, 2, 1, 1)
-
-        self.spinBox_ScoreboardTextPositionX = QSpinBox(self.groupBox_ScoreboardText)
-        self.spinBox_ScoreboardTextPositionX.setObjectName(u"spinBox_ScoreboardTextPositionX")
-        self.spinBox_ScoreboardTextPositionX.setMinimumSize(QSize(60, 0))
-        self.spinBox_ScoreboardTextPositionX.setMinimum(1)
-        self.spinBox_ScoreboardTextPositionX.setMaximum(1920)
-
-        self.gridLayout_14.addWidget(self.spinBox_ScoreboardTextPositionX, 0, 1, 1, 1)
-
-
-        self.verticalLayout_4.addLayout(self.gridLayout_14)
-
-        self.horizontalLayout_3 = QHBoxLayout()
+        self.horizontalLayout_3 = QHBoxLayout(self.groupBox_ScoreboardText)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.pushButton = QPushButton(self.groupBox_ScoreboardText)
         self.pushButton.setObjectName(u"pushButton")
@@ -682,28 +627,31 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_3.addWidget(self.pushButton)
 
-        self.pushButton_ChoseScoreboardBgColor = QPushButton(self.groupBox_ScoreboardText)
-        self.pushButton_ChoseScoreboardBgColor.setObjectName(u"pushButton_ChoseScoreboardBgColor")
-        sizePolicy1.setHeightForWidth(self.pushButton_ChoseScoreboardBgColor.sizePolicy().hasHeightForWidth())
-        self.pushButton_ChoseScoreboardBgColor.setSizePolicy(sizePolicy1)
-        self.pushButton_ChoseScoreboardBgColor.setMinimumSize(QSize(140, 0))
+        self.label_ScoreboardTextPosition = QLabel(self.groupBox_ScoreboardText)
+        self.label_ScoreboardTextPosition.setObjectName(u"label_ScoreboardTextPosition")
+        self.label_ScoreboardTextPosition.setIndent(11)
 
-        self.horizontalLayout_3.addWidget(self.pushButton_ChoseScoreboardBgColor)
+        self.horizontalLayout_3.addWidget(self.label_ScoreboardTextPosition)
 
-        self.pushButton_ChoseScoreboardFgColor = QPushButton(self.groupBox_ScoreboardText)
-        self.pushButton_ChoseScoreboardFgColor.setObjectName(u"pushButton_ChoseScoreboardFgColor")
-        sizePolicy1.setHeightForWidth(self.pushButton_ChoseScoreboardFgColor.sizePolicy().hasHeightForWidth())
-        self.pushButton_ChoseScoreboardFgColor.setSizePolicy(sizePolicy1)
-        self.pushButton_ChoseScoreboardFgColor.setMinimumSize(QSize(140, 0))
+        self.spinBox_ScoreboardTextPositionX = QSpinBox(self.groupBox_ScoreboardText)
+        self.spinBox_ScoreboardTextPositionX.setObjectName(u"spinBox_ScoreboardTextPositionX")
+        self.spinBox_ScoreboardTextPositionX.setMinimumSize(QSize(60, 0))
+        self.spinBox_ScoreboardTextPositionX.setMinimum(1)
+        self.spinBox_ScoreboardTextPositionX.setMaximum(1920)
 
-        self.horizontalLayout_3.addWidget(self.pushButton_ChoseScoreboardFgColor)
+        self.horizontalLayout_3.addWidget(self.spinBox_ScoreboardTextPositionX)
 
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.spinBox_ScoreboardTextPositionY = QSpinBox(self.groupBox_ScoreboardText)
+        self.spinBox_ScoreboardTextPositionY.setObjectName(u"spinBox_ScoreboardTextPositionY")
+        self.spinBox_ScoreboardTextPositionY.setMinimumSize(QSize(60, 0))
+        self.spinBox_ScoreboardTextPositionY.setMinimum(1)
+        self.spinBox_ScoreboardTextPositionY.setMaximum(1080)
 
-        self.horizontalLayout_3.addItem(self.horizontalSpacer)
+        self.horizontalLayout_3.addWidget(self.spinBox_ScoreboardTextPositionY)
 
+        self.horizontalSpacer_13 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
-        self.verticalLayout_4.addLayout(self.horizontalLayout_3)
+        self.horizontalLayout_3.addItem(self.horizontalSpacer_13)
 
 
         self.verticalLayout_20.addWidget(self.groupBox_ScoreboardText)
@@ -888,7 +836,7 @@ class Ui_MainWindow(object):
         self.scrollArea_Obstacles.setWidgetResizable(True)
         self.scrollAreaWidgetContents_Obstacle = QWidget()
         self.scrollAreaWidgetContents_Obstacle.setObjectName(u"scrollAreaWidgetContents_Obstacle")
-        self.scrollAreaWidgetContents_Obstacle.setGeometry(QRect(0, 0, 882, 676))
+        self.scrollAreaWidgetContents_Obstacle.setGeometry(QRect(0, 0, 68, 36))
         self.verticalLayout_17 = QVBoxLayout(self.scrollAreaWidgetContents_Obstacle)
         self.verticalLayout_17.setObjectName(u"verticalLayout_17")
         self.verticalSpacer_ObstacleFrequency_1 = QSpacerItem(20, 0, QSizePolicy.Minimum, QSizePolicy.Expanding)
@@ -962,7 +910,7 @@ class Ui_MainWindow(object):
         self.scrollArea_Collectibles.setWidgetResizable(True)
         self.scrollAreaWidgetContents_Collectibles = QWidget()
         self.scrollAreaWidgetContents_Collectibles.setObjectName(u"scrollAreaWidgetContents_Collectibles")
-        self.scrollAreaWidgetContents_Collectibles.setGeometry(QRect(0, 0, 882, 676))
+        self.scrollAreaWidgetContents_Collectibles.setGeometry(QRect(0, 0, 68, 36))
         self.verticalLayout_15 = QVBoxLayout(self.scrollAreaWidgetContents_Collectibles)
         self.verticalLayout_15.setObjectName(u"verticalLayout_15")
         self.verticalSpacer_13 = QSpacerItem(20, 0, QSizePolicy.Minimum, QSizePolicy.Expanding)
@@ -1270,7 +1218,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.tabWidget_Game.setCurrentIndex(2)
+        self.tabWidget_Game.setCurrentIndex(1)
         self.tabWidget_Objects.setCurrentIndex(0)
 
 
@@ -1386,11 +1334,8 @@ class Ui_MainWindow(object):
         self.label_ScoreboardImageWidth.setText(QCoreApplication.translate("MainWindow", u"Size", None))
         self.label_ScoreboardImagePosition.setText(QCoreApplication.translate("MainWindow", u"Position", None))
         self.groupBox_ScoreboardText.setTitle(QCoreApplication.translate("MainWindow", u"Text", None))
-        self.label_ScoreboardTextWidth.setText(QCoreApplication.translate("MainWindow", u"Size", None))
-        self.label_ScoreboardTextPosition.setText(QCoreApplication.translate("MainWindow", u"Position", None))
         self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Select font", None))
-        self.pushButton_ChoseScoreboardBgColor.setText(QCoreApplication.translate("MainWindow", u"Background color", None))
-        self.pushButton_ChoseScoreboardFgColor.setText(QCoreApplication.translate("MainWindow", u"Foreground color", None))
+        self.label_ScoreboardTextPosition.setText(QCoreApplication.translate("MainWindow", u"Position on screen ", None))
         self.tabWidget_Game.setTabText(self.tabWidget_Game.indexOf(self.tabAppearance), QCoreApplication.translate("MainWindow", u"Appearance", None))
 #if QT_CONFIG(statustip)
         self.tabObjects.setStatusTip(QCoreApplication.translate("MainWindow", u"Define visual elements", None))

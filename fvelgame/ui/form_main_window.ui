@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>944</width>
-    <height>946</height>
+    <height>832</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,7 +30,7 @@
        <bool>true</bool>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tabGame">
        <property name="enabled">
@@ -367,7 +367,7 @@
              <x>0</x>
              <y>0</y>
              <width>904</width>
-             <height>795</height>
+             <height>681</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_13">
@@ -780,8 +780,8 @@
                     </item>
                     <item>
                      <layout class="QGridLayout" name="gridLayout_13">
-                      <item row="1" column="1">
-                       <widget class="QSpinBox" name="spinBox_ScoreboardImageWidth">
+                      <item row="0" column="1">
+                       <widget class="QSpinBox" name="spinBox_ScoreboardImagePositionX">
                         <property name="minimumSize">
                          <size>
                           <width>60</width>
@@ -796,29 +796,6 @@
                         </property>
                        </widget>
                       </item>
-                      <item row="1" column="4">
-                       <widget class="QCheckBox" name="checkBox_ScoreboardImageKeepAspectRatio">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="text">
-                         <string>Keep aspect ratio</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="1" column="0">
-                       <widget class="QLabel" name="label_ScoreboardImageWidth">
-                        <property name="text">
-                         <string>Size</string>
-                        </property>
-                        <property name="indent">
-                         <number>5</number>
-                        </property>
-                       </widget>
-                      </item>
                       <item row="0" column="0">
                        <widget class="QLabel" name="label_ScoreboardImagePosition">
                         <property name="text">
@@ -829,8 +806,8 @@
                         </property>
                        </widget>
                       </item>
-                      <item row="0" column="1">
-                       <widget class="QSpinBox" name="spinBox_ScoreboardImagePositionX">
+                      <item row="0" column="4">
+                       <widget class="QSpinBox" name="spinBox_ScoreboardImageWidth">
                         <property name="minimumSize">
                          <size>
                           <width>60</width>
@@ -861,7 +838,17 @@
                         </property>
                        </widget>
                       </item>
-                      <item row="1" column="2">
+                      <item row="0" column="3">
+                       <widget class="QLabel" name="label_ScoreboardImageWidth">
+                        <property name="text">
+                         <string>Size</string>
+                        </property>
+                        <property name="indent">
+                         <number>5</number>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="5">
                        <widget class="QSpinBox" name="spinBox_ScoreboardImageHeight">
                         <property name="minimumSize">
                          <size>
@@ -877,6 +864,19 @@
                         </property>
                        </widget>
                       </item>
+                      <item row="0" column="6">
+                       <widget class="QCheckBox" name="checkBox_ScoreboardImageKeepAspectRatio">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="text">
+                         <string>Keep aspect ratio</string>
+                        </property>
+                       </widget>
+                      </item>
                      </layout>
                     </item>
                    </layout>
@@ -887,175 +887,74 @@
                    <property name="title">
                     <string>Text</string>
                    </property>
-                   <layout class="QVBoxLayout" name="verticalLayout_4">
+                   <layout class="QHBoxLayout" name="horizontalLayout_3">
                     <item>
-                     <layout class="QGridLayout" name="gridLayout_14">
-                      <item row="1" column="0">
-                       <widget class="QLabel" name="label_ScoreboardTextWidth">
-                        <property name="text">
-                         <string>Size</string>
-                        </property>
-                        <property name="indent">
-                         <number>5</number>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="0" column="3">
-                       <spacer name="horizontalSpacer_13">
-                        <property name="orientation">
-                         <enum>Qt::Horizontal</enum>
-                        </property>
-                        <property name="sizeHint" stdset="0">
-                         <size>
-                          <width>40</width>
-                          <height>20</height>
-                         </size>
-                        </property>
-                       </spacer>
-                      </item>
-                      <item row="1" column="1">
-                       <widget class="QSpinBox" name="spinBox_ScoreboardTextWidth">
-                        <property name="minimumSize">
-                         <size>
-                          <width>60</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="minimum">
-                         <number>1</number>
-                        </property>
-                        <property name="maximum">
-                         <number>1920</number>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="0" column="0">
-                       <widget class="QLabel" name="label_ScoreboardTextPosition">
-                        <property name="text">
-                         <string>Position</string>
-                        </property>
-                        <property name="indent">
-                         <number>5</number>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="0" column="2">
-                       <widget class="QSpinBox" name="spinBox_ScoreboardTextPositionY">
-                        <property name="minimumSize">
-                         <size>
-                          <width>60</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="minimum">
-                         <number>1</number>
-                        </property>
-                        <property name="maximum">
-                         <number>1080</number>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="1" column="2">
-                       <widget class="QSpinBox" name="spinBox_ScoreboardTextHeight">
-                        <property name="minimumSize">
-                         <size>
-                          <width>60</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="minimum">
-                         <number>1</number>
-                        </property>
-                        <property name="maximum">
-                         <number>1080</number>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="0" column="1">
-                       <widget class="QSpinBox" name="spinBox_ScoreboardTextPositionX">
-                        <property name="minimumSize">
-                         <size>
-                          <width>60</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="minimum">
-                         <number>1</number>
-                        </property>
-                        <property name="maximum">
-                         <number>1920</number>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
+                     <widget class="QPushButton" name="pushButton">
+                      <property name="minimumSize">
+                       <size>
+                        <width>140</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>Configure text</string>
+                      </property>
+                     </widget>
                     </item>
                     <item>
-                     <layout class="QHBoxLayout" name="horizontalLayout_3">
-                      <item>
-                       <widget class="QPushButton" name="pushButton">
-                        <property name="minimumSize">
-                         <size>
-                          <width>140</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>Select font</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QPushButton" name="pushButton_ChoseScoreboardBgColor">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                         <size>
-                          <width>140</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>Background color</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QPushButton" name="pushButton_ChoseScoreboardFgColor">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                         <size>
-                          <width>140</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>Foreground color</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <spacer name="horizontalSpacer">
-                        <property name="orientation">
-                         <enum>Qt::Horizontal</enum>
-                        </property>
-                        <property name="sizeHint" stdset="0">
-                         <size>
-                          <width>40</width>
-                          <height>20</height>
-                         </size>
-                        </property>
-                       </spacer>
-                      </item>
-                     </layout>
+                     <widget class="QLabel" name="label_ScoreboardTextPosition">
+                      <property name="text">
+                       <string>Position on screen </string>
+                      </property>
+                      <property name="indent">
+                       <number>11</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QSpinBox" name="spinBox_ScoreboardTextPositionX">
+                      <property name="minimumSize">
+                       <size>
+                        <width>60</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="minimum">
+                       <number>1</number>
+                      </property>
+                      <property name="maximum">
+                       <number>1920</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QSpinBox" name="spinBox_ScoreboardTextPositionY">
+                      <property name="minimumSize">
+                       <size>
+                        <width>60</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="minimum">
+                       <number>1</number>
+                      </property>
+                      <property name="maximum">
+                       <number>1080</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_13">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
                     </item>
                    </layout>
                   </widget>
@@ -1437,8 +1336,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>882</width>
-                 <height>676</height>
+                 <width>68</width>
+                 <height>36</height>
                 </rect>
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_17">
@@ -1597,8 +1496,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>882</width>
-                 <height>676</height>
+                 <width>68</width>
+                 <height>36</height>
                 </rect>
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_15">

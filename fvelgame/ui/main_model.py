@@ -3,7 +3,7 @@
 import sys, tempfile
 
 from PySide6.QtCore       import QProcess, QUrl
-from PySide6.QtGui        import QPixmap
+from PySide6.QtGui        import QPixmap, QFont
 from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
 
 from pathlib import Path
@@ -140,25 +140,28 @@ class MainModel:
 
         tools.draw_meta_image(ui.label_ScoreboardImage, score.image)
 
-        rect = score.text_rect
-        ui.spinBox_ScoreboardTextPositionX.setValue(rect[0])
-        ui.spinBox_ScoreboardTextPositionY.setValue(rect[1])
-        ui.spinBox_ScoreboardTextHeight   .setValue(rect[2])
-        ui.spinBox_ScoreboardTextWidth    .setValue(rect[3])
+        pos = score.text_position
+        ui.spinBox_ScoreboardTextPositionX.setValue(pos[0])
+        ui.spinBox_ScoreboardTextPositionY.setValue(pos[1])
 
-        pos  = score.image_position
-        size = score.image.size    
-        ui.spinBox_ScoreboardImagePositionX.setValue(pos [0])
-        ui.spinBox_ScoreboardImagePositionY.setValue(pos [1])
-        ui.spinBox_ScoreboardImageHeight   .setValue(size[0])
-        ui.spinBox_ScoreboardImageWidth    .setValue(size[1])
+        if score.image:
+            pos  = score.image_position
+            size = score.image.size    
+            ui.spinBox_ScoreboardImagePositionX.setValue(pos [0])
+            ui.spinBox_ScoreboardImagePositionY.setValue(pos [1])
+            ui.spinBox_ScoreboardImageHeight   .setValue(size[0])
+            ui.spinBox_ScoreboardImageWidth    .setValue(size[1])
         
         ui.checkBox_ScoreboardImageKeepAspectRatio.setChecked(True)
 
-        bg = 'background-color: rgb({},{},{});'.format(*(score.text_bgcolor))
-        fg = 'color:            rgb({},{},{});'.format(*(score.text_fgcolor))
-        ui.label_ScoreboardExample.setStyleSheet(f'QLabel{{ {bg} {fg} }}')
+        css = 'color: rgb({},{},{});'.format(*(score.text_fgcolor))
 
+        if score.text_bgcolor:
+            css += ' background-color: rgb({},{},{});'.format(*(score.text_bgcolor))
+
+        ui.label_ScoreboardExample.setStyleSheet(f'QLabel{{ {css} }}')
+        ui.label_ScoreboardExample.setFont(QFont('Times', score.text_font_size))
+    
     #--------------------------------------------------------------------------#
     def start_view_tab_objects(self):
 
