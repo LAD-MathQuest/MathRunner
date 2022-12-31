@@ -41,15 +41,15 @@ def draw_help(surf, name, description, vertical):
     fgcolor      = (255,255,255)
     bgcolor      = None
 
-    ost = OnScreenText(font,
-                       font_size,
-                       line_spacing,
-                       position,
-                       num_lines,
-                       num_columns,
-                       column_width,
-                       fgcolor,
-                       bgcolor)
+    ost = OnScreenText.Table(font,
+                             font_size,
+                             line_spacing,
+                             position,
+                             num_lines,
+                             num_columns,
+                             column_width,
+                             fgcolor,
+                             bgcolor)
 
     area = ost.area.copy()
     area.center = (gp.SCREEN_SIZE[0]//2, gp.SCREEN_SIZE[1]//2)

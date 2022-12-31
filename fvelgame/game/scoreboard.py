@@ -32,15 +32,15 @@ class Scoreboard:
         n_lin = 3
         n_col = 2
 
-        self.ost = OnScreenText(self.text_font,
-                                self.text_font_size,
-                                self.text_spacing,
-                                self.text_position,
-                                n_lin, 
-                                n_col, 
-                                ['Velocidade: ', '000000'],
-                                self.text_fgcolor, 
-                                self.text_bgcolor)
+        self.ost = OnScreenText.Table(self.text_font,
+                                      self.text_font_size,
+                                      self.text_spacing,
+                                      self.text_position,
+                                      n_lin, 
+                                      n_col, 
+                                      ['Velocidade: ', '000000'],
+                                      self.text_fgcolor, 
+                                      self.text_bgcolor)
 
         self.text_rect = pygame.Rect(self.text_position, self.ost.size)
 

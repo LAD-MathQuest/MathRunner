@@ -27,15 +27,15 @@ def draw_ost(surf, font):
 
     column_width = ['Velocidade: ', ' 0.123.456.789 ']
 
-    ost = OnScreenText(font, 
-                       font_size, 
-                       line_spacing, 
-                       position,
-                       n_lin, 
-                       n_col, 
-                       column_width,
-                       fgcolor, 
-                       bgcolor)
+    ost = OnScreenText.Table(font, 
+                             font_size, 
+                             line_spacing, 
+                             position,
+                             n_lin, 
+                             n_col, 
+                             column_width,
+                             fgcolor, 
+                             bgcolor)
 
     text = [ [str(Path(font).stem).replace('_',' ')],
              [''],

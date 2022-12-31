@@ -20,47 +20,45 @@ if __name__ == '__main__':
     #--------------------------------------------------------------------------#
 
     font         = None
-    font_size    = 48
+    font_size    = 24
     line_spacing = 1.5
     position     = (100,100)
-    fgcolor      = (20,20,200)
-    bgcolor      = (70,70, 70)
+    width        = 600
+    fgcolor      = (255,255,255)
+    bgcolor      = None
 
-    n_lin = 6
-    n_col = 4
-
-    # column_width = 100
-    # column_width = [90, 99, 99, 10]
-    column_width = ['Linha 0:'] + ['1'+'0'*5+'2']*(n_col-2) + ['|']
-
-    ost = OnScreenText(font, 
-                       font_size, 
-                       line_spacing, 
-                       position,
-                       n_lin, 
-                       n_col, 
-                       column_width,
-                       fgcolor, 
-                       bgcolor)
+    ost = OnScreenText.Paragraph(font, 
+                                 font_size, 
+                                 line_spacing, 
+                                 position,
+                                 width,
+                                 fgcolor, 
+                                 bgcolor)
 
     #--------------------------------------------------------------------------#
 
     display = pygame.display.set_mode((900,600))
     display.fill((100,100,100))
 
-    ost_area = pygame.Rect(position, ost.size)
-    pygame.draw.rect(display, (90,90,190), ost_area.inflate(10,10))
-    pygame.draw.rect(display, (90,90,140), ost_area)
+    ost_area = pygame.Rect(position, (width,400))
+    pygame.draw.rect(display, (50,50,50), ost_area)
 
     #--------------------------------------------------------------------------#
     
-    for ii in range(n_lin):
+    text = ['Título',
+            'Subtítulo',
+            '', 
+            'Percebemos, cada vez mais, que o comprometimento entre as equipes não pode mais se dissociar dos procedimentos normalmente adotados.',
+            '', 
+            '''String com várias linhas
+Linha 1
+Linha 2
+Linha 3
+Última linha
+'''
+            ]
 
-        ost.draw_cell( display, ii, 0,      f'Linha {ii+1}:', '<' )
-        ost.draw_cell( display, ii, n_col-1, '|',             '>' )
-        
-        for jj in range(1,n_col-1):
-            ost.draw_cell( display, ii, jj, f'{10**(ii+1) + jj+1}', '>' )
+    ost.draw( display, text )
 
     #--------------------------------------------------------------------------#
     
