@@ -1,12 +1,25 @@
 
 # FVelGame
 
+## In progress...
+
+- Scoreboard
+  - Allow creator to choose what is show on scoreboard
+  - Allow creator to write a scoreboard title
+  - GUI
+    - Show preview using selected font
+    - Implement font selection
+
+- Fist scatch of image editor dialog
+
 ## TODO
 
 ### New features
+
 - Implement achievements
   - 5 stars, the creator choses the score of each star
 - Implement a initial screen
+- Allow creator to make margins kill the player
 
 #### Game engine
 
@@ -14,9 +27,7 @@
   - Take care of spawning objects outside screen
 - Implement blits of track and background images using mask
 - Implement function evaluation
-- Play crash sound before show game over
 - Add transparent option to MetaImage
-- Allow creator to make margins kill the player
 - Take care of background images smaller than screen
 
 #### Games
@@ -45,10 +56,6 @@
   - Add a duplicate button
   - Replace select by edit button
 
-- Scoreboard
-  - Show preview using selecte font
-  - Implement font selection
-
 - Implement a simple image editor 
   - Set size
   - Fill with color
@@ -60,13 +67,18 @@
 
 ### Bugs
 
+- Remove delay before playing sounds
+
 ### Improvements
 
 ### Windows
 
-## In progress...
+- Configure default Qt theme to show button bar icons
 
 ## DONE
+
+2022-12-30
+- Size of OST is now defined by font size 
 
 2022-12-28
 - Keep ratio of images 

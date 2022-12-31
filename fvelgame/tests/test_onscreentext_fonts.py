@@ -16,27 +16,36 @@ from game.onscreentext import OnScreenText
 #------------------------------------------------------------------------------#
 def draw_ost(surf, font):
 
-    fgcolor  = (250,250,250)
-    bgcolor  = (50,50,50)
-    ost_area = pygame.Rect( 100, 150, 700, 300 )
+    font_size    = 36
+    line_spacing = 1.5
+    position     = (100,100)
+    fgcolor      = (250,250,250)
+    bgcolor      = (50,50,50)
 
     n_lin = 7
     n_col = 2
-    ost = OnScreenText( font, ost_area, n_lin, n_col, fgcolor, bgcolor )
 
-    ost.column_width( ['Velocidade: ', ' 0.123.456.789 '] )
+    column_width = ['Velocidade: ', ' 0.123.456.789 ']
 
-    ost.draw( surf, 0, 0, str(Path(font).stem).replace('_',' '), '<' )
+    ost = OnScreenText(font, 
+                       font_size, 
+                       line_spacing, 
+                       position,
+                       n_lin, 
+                       n_col, 
+                       column_width,
+                       fgcolor, 
+                       bgcolor)
 
-    ost.draw( surf, 2, 0, 'Pontos:'     )
-    ost.draw( surf, 3, 0, 'Velocidade:' )
-    ost.draw( surf, 4, 0, 'Tempo:'      )
+    text = [ [str(Path(font).stem).replace('_',' ')],
+             [''],
+             ['Pontos:',     '0.123.456.789'],
+             ['Velocidade:', '0.123.456.789'],
+             ['Tempo:',      '0.123.456.789'],
+             [''],
+             ['ÁáàãâÉéÍíõôúüÇç ←↑↓→'] ];
 
-    ost.draw( surf, 2, 1, '0.123.456.789', '>' )
-    ost.draw( surf, 3, 1, '0.123.456.789', '>' )
-    ost.draw( surf, 4, 1, '0.123.456.789', '>' )
-
-    ost.draw( surf, 6, 0, 'ÁáàãâÉéÍíõôúüÇç ←↑↓→', '<' )
+    ost.draw( surf, text, '<>' )
 
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':

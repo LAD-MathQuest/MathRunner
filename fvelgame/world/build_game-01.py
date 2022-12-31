@@ -63,16 +63,18 @@ if __name__ == '__main__':
     meta.track_image = None
 
     path_score = path_scoreboards/'frame_neon.png'
-    imag_score = MetaImage((400,160), path=path_score)
+    imag_score = MetaImage((390,160), path=path_score)
 
     path_font = path_fonts/'Electronic_Highway_Sign.ttf'
 
     meta.scoreboard = MetaScoreboard(image          = imag_score, 
-                                     image_position = (55,67), 
+                                     image_position = (54,67), 
                                      text_font      = path_font,
-                                     text_rect      = (103,100,100,100),
+                                     text_font_size = 28,
+                                     text_spacing   = 1.2,
+                                     text_position  = (103,100),
                                      text_bgcolor   = (90,93,102),
-                                     text_fgcolor   = (0, 229, 255)) # (0, 204, 255)) # (102, 255, 51))
+                                     text_fgcolor   = (0,204,255))
 
     # Player
     #--------------------------------------------------------------------------#

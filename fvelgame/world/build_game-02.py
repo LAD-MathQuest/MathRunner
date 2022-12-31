@@ -60,9 +60,11 @@ if __name__ == '__main__':
     meta.track_image = MetaImage(color=(102,153,153))
 
     path_font = path_fonts/'Party_Confetti.ttf'
-    meta.scoreboard = MetaScoreboard(text_font    = path_font,
-                                     text_rect    = (200,23,100,100),
-                                     text_bgcolor = (55,55,55))
+    meta.scoreboard = MetaScoreboard(text_font      = path_font,
+                                     text_font_size = 28,
+                                     text_spacing   = 1,
+                                     text_position  = (160,20),
+                                     text_bgcolor   = (55,55,55))
 
     # Player
     #--------------------------------------------------------------------------#

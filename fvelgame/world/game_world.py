@@ -21,6 +21,9 @@ from world.meta_world import MetaWorld
 def surface_from_meta_image(meta):
     '''Create a pygame surface from a MetaImage object'''
 
+    if not meta:
+        return None
+
     if meta.path:
         surf = pygame.image.load(meta.path).convert_alpha()
         surf = pygame.transform.scale(surf, meta.size )
@@ -50,14 +53,27 @@ class ScoreboardParam:
     #--------------------------------------------------------------------------#
     def __init__(self, meta):
 
-        self.image      = surface_from_meta_image(meta.image)
-        self.image_rect = pygame.Rect(meta.image_position, 
-                                      self.image.get_size())
+        self.title = meta.title
 
-        self.text_rect    = pygame.Rect(meta.text_rect)
-        self.text_font    = meta.text_font
-        self.text_bgcolor = meta.text_bgcolor
-        self.text_fgcolor = meta.text_fgcolor
+        self.text_font      = meta.text_font
+        self.text_font_size = meta.text_font_size
+        self.text_spacing   = meta.text_spacing
+        self.text_position  = meta.text_position
+        self.text_bgcolor   = meta.text_bgcolor
+        self.text_fgcolor   = meta.text_fgcolor
+
+        self.show_points   = meta.show_points  
+        self.show_velocity = meta.show_velocity
+        self.show_time     = meta.show_time    
+
+        self.draw_image = bool(meta.image)
+
+        if self.draw_image:
+            self.image      = surface_from_meta_image(meta.image)
+            self.image_rect = pygame.Rect(meta.image_position, self.image.get_size())
+        else:
+            self.image      = None
+            self.image_rect = pygame.Rect(0,0,0,0)
 
 #------------------------------------------------------------------------------#
 class GameWorld:
@@ -91,10 +107,12 @@ class GameWorld:
         self.background_scrolls = meta.background_scrolls
         
         # Track
-        self.draw_track = bool(meta.track_image)
-        
+        self.draw_track  = bool(meta.track_image)
+
         if self.draw_track:
             self.track_image = surface_from_meta_image(meta.track_image)
+        else:
+            self.track_image = None
 
         # Scoreboard
         self.param_scoreboard = ScoreboardParam(meta.scoreboard)
