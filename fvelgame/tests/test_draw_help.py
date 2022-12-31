@@ -15,10 +15,18 @@ from game.draw_help import draw_help
 if __name__ == '__main__':
 
     name = 'Nome do Jogo'
-    desc = '''Descição do Jogo.
-É importante questionar o quanto o comprometimento entre as equipes estende o
-alcance e a importância dos procedimentos normalmente adotados. 
-'''
+    desc = '''Descrição do Jogo: 
+              É importante questionar o quanto o comprometimento entre as 
+              equipes estende o alcance e a importância dos procedimentos 
+              normalmente adotados.
+              É importante questionar o quanto o comprometimento entre as 
+              equipes estende o alcance e a importância dos procedimentos 
+              normalmente adotados.
+              É importante questionar o quanto o comprometimento entre as 
+              equipes estende o alcance e a importância dos procedimentos 
+              normalmente adotados.'''
+
+    desc = ' '.join(desc.split())
 
     pygame.init()
     clock = pygame.time.Clock()
@@ -26,7 +34,7 @@ alcance e a importância dos procedimentos normalmente adotados.
     display = pygame.display.set_mode((0,0))
     display.fill((60,60,60))
 
-    draw_help( display, name, desc, True )
+    draw_help( display, name, desc, vertical=True )
 
     while True:
         for event in pygame.event.get():

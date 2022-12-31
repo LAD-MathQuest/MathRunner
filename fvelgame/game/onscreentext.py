@@ -123,7 +123,7 @@ class OnScreenText_Table:
 
         # Text size and area
 
-        self.size = (self.width, self.height)
+        self.size = [self.width, self.height]
         self.area = pygame.Rect( self.position, self.size)
 
     #--------------------------------------------------------------------------#
@@ -150,7 +150,7 @@ class OnScreenText_Table:
             self.cell_x[ii+1] = self.cell_x[ii] + self.cell_w[ii]
 
         self.width = self.cell_x[-1]
-        self.size  = (self.width, self.height)
+        self.size  = [self.width, self.height]
         self.area  = pygame.Rect( self.position, self.size)
 
     #--------------------------------------------------------------------------#
@@ -168,7 +168,7 @@ class OnScreenText_Table:
             self.cell_x[ii+1] = self.cell_x[ii] + self.cell_w[ii]
 
         self.width = self.cell_x[-1]
-        self.size  = (self.width, self.height)
+        self.size  = [self.width, self.height]
         self.area  = pygame.Rect( self.position, self.size)
 
     #--------------------------------------------------------------------------#
@@ -259,13 +259,13 @@ class OnScreenText_Paragraph:
         self.first_line_y = self.font.get_sized_ascender()
         self.line_skip    = line_spacing * self.font.get_sized_height()
         self.descender    = 1 - self.font.get_sized_descender() 
-        self.last_line    = 0
+        self.next_line    = 0
 
         self.height = self.first_line_y + self.descender
 
         # Text size and area
 
-        self.size = (self.width, self.height)
+        self.size = [self.width, self.height]
         self.area = pygame.Rect( self.position, self.size)
 
     #--------------------------------------------------------------------------#
@@ -284,7 +284,7 @@ class OnScreenText_Paragraph:
         '''Set new paragraph width'''
 
         self.width = eval_width(self.font, width)
-        self.size  = (self.width, self.height)
+        self.size  = [self.width, self.height]
         self.area  = pygame.Rect( self.position, self.size)
 
     #--------------------------------------------------------------------------#
@@ -313,34 +313,32 @@ class OnScreenText_Paragraph:
     #--------------------------------------------------------------------------#
     def _draw_str(self, surf, content, ii, align):
 
-        text_w = self.font.get_rect(content).width
+        str_width = lambda ss : self.font.get_rect(ss).width
+
+        content_width = str_width(content)
         
-        if text_w <= self.width:
+        if content_width <= self.width:
             ii = self._draw_line(surf, content, ii, align)
             return ii
 
-        words  = content.split()
-        word_w = [ self.font.get_rect(ww).width for ww in words ]
+        words = content.split()
 
-        # Last drawed word
-        nn = 0
+        line_try = words.pop(0)
+        line_str = words.pop(0)
 
-        while nn < len(words):
+        for word in words:
 
-            line_width = 0
-            jj = nn
+            line_try += ' ' + word
 
-            while line_width < self.width and jj < len(words):
-                line_width += word_w[jj]
-                jj += 1
+            if str_width(line_try) < self.width:
+                line_str = line_try
+            else:
+                ii = self._draw_line(surf, line_str, ii, align)
+                line_try = word
+                line_str = word
 
-            if  jj < len(words):
-                jj -= 1
-                
-            line_str = ' '.join(words[nn:jj])
-            nn = jj
-
-            ii = self._draw_line(surf, line_str, ii, align)
+        if line_try:
+            ii = self._draw_line(surf, line_try, ii, align)
 
         return ii
 
@@ -359,7 +357,7 @@ class OnScreenText_Paragraph:
     #--------------------------------------------------------------------------#
     def draw(self, surf, content, line=None, align='<'):
         
-        ii = self.last_line if not line else line
+        ii = self.next_line if not line else line
 
         if type(content) in (list, tuple):
             for cc in content:
@@ -368,10 +366,12 @@ class OnScreenText_Paragraph:
         else:
             ii = self._draw_full_str(surf, content, ii, align)
 
-        if ii > self.last_line:
-            self.last_line = ii
-            self.height    = self.first_line_y + self.last_line*self.line_skip + self.descender
-            self.size      = (self.width, self.height)
-            self.area      = pygame.Rect( self.position, self.size)
+        if ii > self.next_line:
+            self.next_line   = ii
+            self.height      = self.first_line_y               \
+                             + self.next_line * self.line_skip \
+                             + self.descender
+            self.size[1]     = self.height
+            self.area.height = self.height
 
 #------------------------------------------------------------------------------#
