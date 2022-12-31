@@ -3,22 +3,13 @@
 
 ## In progress...
 
-- Scoreboard
-  - Allow creator to choose what is show on scoreboard
-  - Allow creator to write a scoreboard title
-  - GUI
-    - Show preview using selected font
-    - Implement font selection
-
-- Fist scatch of image editor dialog
-
 ## TODO
 
 ### New features
 
-- Implement achievements
-  - 5 stars, the creator choses the score of each star
+- Implement achievements: 5 stars, the creator choses the score of each star
 - Implement a initial screen
+- Implement print screen
 - Allow creator to make margins kill the player
 
 #### Game engine
@@ -28,7 +19,7 @@
 - Implement blits of track and background images using mask
 - Implement function evaluation
 - Add transparent option to MetaImage
-- Take care of background images smaller than screen
+- Implement track scrolling
 
 #### Games
 
@@ -36,12 +27,14 @@
   - Vertical scrolling
 
 - student
+  - Adjust confident student image to better scale down
   - add sounds
   - add background
   - add track image
 
 #### Graphical Interface
 
+- Export track mask
 - Implement callbacks
 - Implement undo
 - Set proper maximum values to positions and sizes based on vertical em horizontal scrolling
@@ -50,6 +43,13 @@
   - play, stop, pause, quit
 
 - Implement appearence preview
+
+- Scoreboard
+  - Allow creator to choose what is show on scoreboard
+  - Allow creator to write a scoreboard title
+  - GUI
+    - Show preview using selected font
+    - Implement font selection
 
 - Replace select by edit on image forms
 - On object forms
@@ -74,11 +74,16 @@
 ### Windows
 
 - Configure default Qt theme to show button bar icons
+- Create instalator and standalony executable
 
 ## DONE
 
+2022-12-31
+- Take care of background images smaller than screen
+
 2022-12-30
 - Size of OST is now defined by font size 
+- Fist scratch of image editor dialog
 
 2022-12-28
 - Keep ratio of images 
