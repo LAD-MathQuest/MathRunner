@@ -3,7 +3,7 @@
 '''This module defines the MetaWorld class.
 
 It stores all information about the GameWorld in an intermediate state
-between Pyside and PyGame being independent of both libraries. This class 
+between Pyside and PyGame being independent of both libraries. This class
 must be saved in a binary file and used to create a GameWorld.
 '''
 
@@ -24,18 +24,15 @@ class MetaImage:
 
     #--------------------------------------------------------------------------#
     def __init__(self, size=SCREEN_SIZE, color=(0,0,0), path=None ):
-        '''Create a MetaImage.
-
-        Height (size[1]) equal to None means to keep the image aspect ratio
-        '''
+        '''Create a MetaImage'''
 
         self.size  = size  # (width, height)
-        self.color = color
+        self.color = color # (R,G,B)
         self.path  = path
 
 #------------------------------------------------------------------------------#
 class MetaObject:
-    '''Describes game objects.'''
+    '''Describes game objects'''
 
     #--------------------------------------------------------------------------#
     def __init__(self, image, score=0, sound=None, volume=1.0 ):
@@ -43,14 +40,14 @@ class MetaObject:
         self.image  = image   # MetaImage
         self.score  = score
         self.sound  = sound   # Sound path
-        self.volume = volume  # Sound volume 
+        self.volume = volume  # Sound volume
 
 #------------------------------------------------------------------------------#
 class MetaScoreboard:
-    '''Describes the game scoreboard.'''
+    '''Describes the game scoreboard'''
 
     #--------------------------------------------------------------------------#
-    def __init__(self, 
+    def __init__(self,
                  title          = None,
                  text_font      = None,
                  text_font_size = 32,
@@ -68,14 +65,14 @@ class MetaScoreboard:
 
         self.text_font      = text_font
         self.text_font_size = text_font_size
-        self.text_spacing   = text_spacing  
+        self.text_spacing   = text_spacing
         self.text_position  = text_position
         self.text_bgcolor   = text_bgcolor
         self.text_fgcolor   = text_fgcolor
 
-        self.show_points   = show_points  
+        self.show_points   = show_points
         self.show_velocity = show_velocity
-        self.show_time     = show_time    
+        self.show_time     = show_time
 
         self.image          = image
         self.image_position = text_position if not image_position else image_position
@@ -85,7 +82,7 @@ class MetaWorld:
 
     #--------------------------------------------------------------------------#
     def __init__( self ):
-        '''Create a default MetaWorld.'''
+        '''Create a default MetaWorld'''
 
         # Software
         #----------------------------------------------------------------------#
@@ -95,10 +92,10 @@ class MetaWorld:
         self.soft_description = 'Um jogo para explorar funções'
         self.soft_icon        = None
 
-        # Game 
+        # Game
         #----------------------------------------------------------------------#
 
-        self.game_vertical        = True   
+        self.game_vertical        = True
         self.game_time_bonus      = 1     # Score points bonnus per second
         self.game_ambience        = None  # Ambience sound
         self.game_ambience_volume = 1.0   # Sound volume
@@ -108,7 +105,7 @@ class MetaWorld:
 
         self.background_image   = MetaImage(color=(39,38,67))
         self.background_scrolls = False
-        
+
         # If track_image if null the game will not draw the track
         self.track_image           = MetaImage(color=(38,90,90))
         self.track_boundaries_kill = False
@@ -130,14 +127,14 @@ class MetaWorld:
         self.obstacles_frequency = 4 # Average occurrences per second
         self.obstacles = []
 
-        imag_obstacle = MetaImage( (70,70), color=color )
-        self.obstacles.append( MetaObject( imag_obstacle, points ) )
- 
-        imag_obstacle = MetaImage( (100,40), color=color )
-        self.obstacles.append( MetaObject( imag_obstacle, points ) )
- 
-        imag_obstacle = MetaImage( (40,100), color=color )
-        self.obstacles.append( MetaObject( imag_obstacle, points ) )
+        imag_obstacle = MetaImage((70,70), color=color)
+        self.obstacles.append( MetaObject( imag_obstacle, points ))
+
+        imag_obstacle = MetaImage((100,40), color=color)
+        self.obstacles.append( MetaObject( imag_obstacle, points ))
+
+        imag_obstacle = MetaImage((40,100), color=color)
+        self.obstacles.append( MetaObject( imag_obstacle, points ))
 
         # Collectibles
         #----------------------------------------------------------------------#
@@ -148,33 +145,33 @@ class MetaWorld:
         self.collectibles_frequency = 1
         self.collectibles = []
 
-        imag_collectible = MetaImage( (50,50), color=color )
-        self.collectibles.append( MetaObject( imag_collectible, points ) )
+        imag_collectible = MetaImage((50,50), color=color)
+        self.collectibles.append( MetaObject(imag_collectible, points))
 
         imag_collectible = MetaImage( (30,80), color=color )
-        self.collectibles.append( MetaObject( imag_collectible, points ) )
+        self.collectibles.append( MetaObject(imag_collectible, points))
 
         # Functions
         #----------------------------------------------------------------------#
 
-        self.velocity = VelocityFunction(0.50, 0.01)
-        self.margins  = MarginFunctions (0.35, 0.65)
+        self.velocity = VelocityFunction('0.5 + 0.01*t')
+        self.margins  = MarginFunctions ('0.35', '0.65')
 
     #--------------------------------------------------------------------------#
     def save(self, path):
-        '''Save itself using pickle.'''
+        '''Save itself using pickle'''
 
         with open(path, 'wb') as file:
             pickle.dump(self,file)
 
     #--------------------------------------------------------------------------#
     def load(path):
-        '''Load a pickled file and returna MetaWorld object.'''
+        '''Load a pickled file and return a MetaWorld object'''
 
         with open(path, 'rb') as file:
             meta = pickle.load(file)
 
-        # TODO Simple data validation
+        # TODO File data validation
 
         return meta
 

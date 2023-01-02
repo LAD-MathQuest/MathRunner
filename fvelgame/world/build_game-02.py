@@ -17,7 +17,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parents[1]))
 
 from world.functions  import VelocityFunction, MarginFunctions
-from world.meta_world import MetaImage, MetaObject, MetaScoreboard, MetaWorld 
+from world.meta_world import MetaImage, MetaObject, MetaScoreboard, MetaWorld
 
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
@@ -27,7 +27,7 @@ if __name__ == '__main__':
     path_resources   = Path(__file__).parents[1]/'resources'
     path_backgrounds = path_resources/'backgrounds'
     path_scoreboards = path_resources/'scoreboards'
-    path_objects     = path_resources/'objects' 
+    path_objects     = path_resources/'objects'
     path_sounds      = path_resources/'sounds'
     path_fonts       = path_resources/'fonts'
     path_games       = path_resources/'games'
@@ -44,7 +44,7 @@ if __name__ == '__main__':
     meta.soft_description = 'A confident student runs from studying and seeks only playing video games.'
     meta.soft_icon        = None
 
-    # Game 
+    # Game
     #--------------------------------------------------------------------------#
 
     meta.game_vertical   = False
@@ -56,7 +56,7 @@ if __name__ == '__main__':
 
     meta.background_image   = MetaImage(color=(55,55,55))
     meta.background_scrolls = False
-    
+
     meta.track_image = MetaImage(color=(102,153,153))
 
     path_font = path_fonts/'Party_Confetti.ttf'
@@ -85,14 +85,14 @@ if __name__ == '__main__':
 
     # Image sizes
     # file = [ (110,143), (168,130), (92,124),
-    #          (207,155), (203,103), (166,111), 
+    #          (207,155), (203,103), (166,111),
     #          (135,147), (204,114), (227,148) ]
-    sizes = [ (80,104),  (100,77), (80,108), 
+    sizes = [ (80,104),  (100,77), (80,108),
               (100,75),  (100,51), (100,67),
               (100,109), (100,56), (160,104) ]
 
     for ii in range(9):
-        
+
         path_obstacle = path_objects / f'book-{ii+1}.png'
         imag_obstacle = MetaImage(sizes[ii], path=path_obstacle)
 
@@ -118,8 +118,8 @@ if __name__ == '__main__':
     # Functions
     #--------------------------------------------------------------------------#
 
-    meta.velocity = VelocityFunction( 0.25, 0.005 )
-    meta.margins  = MarginFunctions ( 0.12, 0.900 )
+    meta.velocity = VelocityFunction('0.25 + 0.005*t')
+    meta.margins  = MarginFunctions ('0.12', '0.9')
 
     # Saving
     #--------------------------------------------------------------------------#

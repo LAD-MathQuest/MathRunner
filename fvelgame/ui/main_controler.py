@@ -1,8 +1,10 @@
 #------------------------------------------------------------------------------#
 
+import numpy as np
+
 from PySide6.QtGui     import QPalette
-from PySide6.QtWidgets import (QApplication, 
-                               QFileDialog, 
+from PySide6.QtWidgets import (QApplication,
+                               QFileDialog,
                                QMessageBox,
                                QVBoxLayout,
                                QLabel)
@@ -39,32 +41,45 @@ class MainControler:
         pm = self.ui.plotMargins
 
         # Get the default window background
-        color = self.win.palette().color(QPalette.Window)  
+        color = self.win.palette().color(QPalette.Window)
 
         pv.setBackground(color)
         pv.setTitle('Velocity')
         pv.setLabel('left',   'Velocity (screens/second)')
         pv.setLabel('bottom', 'Time (seconds)'           )
         pv.showGrid(x=True, y=True)
-        pv.setXRange(0, par.PLOT_MAX_TIME, padding=0)
-        pv.setYRange(0, 1,                 padding=0)
+        pv.setXRange(0, par.PLOT_MAX_T, padding=0)
+        pv.setYRange(0, 1,              padding=0)
 
         pen = pg.mkPen(color=(0, 0, 255), width=2)
-        self.plot_velocity_data = pv.plot((0, par.PLOT_MAX_TIME), (0.5, 0.5), pen=pen)
+        self.plot_velocity_data = pv.plot((0, par.PLOT_MAX_T), (0.5, 0.5), pen=pen)
 
         pm.setBackground(color)
         pm.setTitle('Margins' )
         pm.setLabel('left',   'Margins (screen fraction)')
         pm.setLabel('bottom', 'Time (seconds)'           )
         pm.showGrid(x=True, y=True)
-        pm.setXRange(0, par.PLOT_MAX_TIME, padding=0)
-        pm.setYRange(0, 1,                 padding=0)
+        pm.setXRange(0, par.PLOT_MAX_X, padding=0)
+        pm.setYRange(0, 1,              padding=0)
 
-        pen = pg.mkPen(color=(0, 0, 255), width=2)
-        self.plot_margin_min_data = pm.plot((0, par.PLOT_MAX_TIME), (0.3, 0.3), pen=pen)
+        pen_min = pg.mkPen(color=(  0, 0, 255), width=2)
+        pen_max = pg.mkPen(color=(255, 0, 255), width=2)
+        pen_aux = pg.mkPen(None)
+        brush   = pg.mkBrush(color=(100, 100, 160))
 
-        pen = pg.mkPen(color=(255, 0, 255), width=2)
-        self.plot_margin_max_data = pm.plot((0, par.PLOT_MAX_TIME), (0.7, 0.7), pen=pen)
+        p_min = pg.PlotDataItem(np.array((0,par.PLOT_MAX_X)), np.array((0.1, 0.1)), pen=pen_min)
+        p_max = pg.PlotDataItem(np.array((0,par.PLOT_MAX_X)), np.array((0.9, 0.9)), pen=pen_max)
+        p_aux = pg.PlotDataItem(np.array((0,par.PLOT_MAX_X)), np.array((0.9, 0.9)), pen=pen_aux)
+        pfill = pg.FillBetweenItem(p_min, p_aux, brush=brush)
+
+        pm.addItem(p_min)
+        pm.addItem(p_max)
+        pm.addItem(p_aux)
+        pm.addItem(pfill)
+
+        self.plot_margin_min_data = p_min
+        self.plot_margin_max_data = p_max
+        self.plot_margin_aux_data = p_aux
 
     #--------------------------------------------------------------------------#
     def init_objects(self):
@@ -151,6 +166,12 @@ class MainControler:
         ui.doubleSpinBox_ObstaclesFrequency   .valueChanged.connect( self.obstacles_frequency_changed    )
         ui.doubleSpinBox_CollectiblesFrequency.valueChanged.connect( self.collectibles_frequency_changed )
 
+        #--- Velocity and Margins Tabs signals --------------------------------#
+
+        ui.lineEdit_FunctionVelocity    .editingFinished.connect( self.function_velocity_changed      )
+        ui.lineEdit_FunctionTrackMinimum.editingFinished.connect( self.function_track_minimum_changed )
+        ui.lineEdit_FunctionTrackMaximum.editingFinished.connect( self.function_track_maximum_changed )
+
     #--------------------------------------------------------------------------#
     # Action calls
     #--------------------------------------------------------------------------#
@@ -160,7 +181,7 @@ class MainControler:
 
         if not self.confirm_deletion():
             return
-            
+
         self.file_name = ''
         self.start_new()
 
@@ -170,7 +191,7 @@ class MainControler:
         if not self.confirm_deletion():
             return
 
-        path  = par.RESOURCES / 'games' 
+        path  = par.RESOURCES / 'games'
         fname = self.get_open_fname('Chose a game description', path, 'game' )
 
         if fname:
@@ -231,7 +252,7 @@ class MainControler:
     #--------------------------------------------------------------------------#
     def obstacles_frequency_changed(self):
         pass
-    
+
     #--------------------------------------------------------------------------#
     def collectibles_frequency_changed(self):
         pass
@@ -285,6 +306,24 @@ class MainControler:
         self.num_collectibles -= 1
 
     #--------------------------------------------------------------------------#
+    def function_velocity_changed(self):
+
+        func = self.ui.lineEdit_FunctionVelocity.text()
+        self.model.update_velocity_function(func)
+
+    #--------------------------------------------------------------------------#
+    def function_track_minimum_changed(self):
+
+        func = self.ui.lineEdit_FunctionTrackMinimum.text()
+        self.model.update_track_minimum_function(func)
+
+    #--------------------------------------------------------------------------#
+    def function_track_maximum_changed(self):
+
+        func = self.ui.lineEdit_FunctionTrackMaximum.text()
+        self.model.update_track_maximum_function(func)
+
+    #--------------------------------------------------------------------------#
     # Internal tasks
     #--------------------------------------------------------------------------#
 
@@ -336,28 +375,28 @@ class MainControler:
 
     #--------------------------------------------------------------------------#
     def get_open_fname( self, title, path, ext ):
-        fname, _ = QFileDialog.getOpenFileName( parent  = self.win, 
-                                                caption = title, 
+        fname, _ = QFileDialog.getOpenFileName( parent  = self.win,
+                                                caption = title,
                                                 dir     = str(path),
                                                 filter  = '*.' + ext )
         return fname
-    
+
     #--------------------------------------------------------------------------#
     def get_save_fname( self, title, ext, suggestion = '' ):
 
         if not suggestion:
             suggestion = self.last_dir
 
-        fname, _ = QFileDialog.getSaveFileName( parent  = self.win, 
-                                                caption = title, 
-                                                dir     = suggestion, 
+        fname, _ = QFileDialog.getSaveFileName( parent  = self.win,
+                                                caption = title,
+                                                dir     = suggestion,
                                                 filter  = '*.' + ext )
         if fname:
             ee = '.' + ext
             nn = len(ee)
             if len(fname) < nn or fname[-nn:] != ee:
                 fname += ee
-    
+
         return fname
 
 #------------------------------------------------------------------------------#

@@ -30,7 +30,6 @@ def draw_help(surf, name, description, vertical):
 
     width    = 800
     position = ((gp.SCREEN_SIZE[0]//2-width)//2, top)
-    print(width, position)
 
     ost = OnScreenText.Paragraph(font,
                                  font_size,
@@ -43,9 +42,9 @@ def draw_help(surf, name, description, vertical):
     ## pygame.draw.rect(surf,(100,0,100),(position[0],0,width,1080))
     ## pygame.draw.rect(surf,(  0,0,100),ost.area)
 
-    ost.draw(surf, name)         
-    ost.draw(surf, '')         
-    ost.draw(surf, description)         
+    ost.draw(surf, name)
+    ost.draw(surf, '')
+    ost.draw(surf, description)
 
 
     #--- Commands -------------------------------------------------------------#
@@ -84,6 +83,6 @@ def draw_help(surf, name, description, vertical):
 
     ## pygame.draw.rect(surf,(0,0,100),ost.area)
 
-    ost.draw(surf, info)         
+    ost.draw(surf, info)
 
 #------------------------------------------------------------------------------#

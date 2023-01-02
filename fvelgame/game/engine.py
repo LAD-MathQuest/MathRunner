@@ -30,7 +30,7 @@ def surface_tiling(surf, tile, vertical):
         step_y      = -step_y
 
     nh = math.ceil(s_height / t_height)
-    nw = math.ceil(s_width  / t_width ) 
+    nw = math.ceil(s_width  / t_width )
 
     rr = rect.copy()
 
@@ -107,7 +107,7 @@ class Engine:
 
             display = pygame.display.get_surface()
             size    = display.get_size()
-            resized = pygame.transform.scale(self.display, size) 
+            resized = pygame.transform.scale(self.display, size)
 
             display.blit(resized, (0,0))
 
@@ -125,8 +125,8 @@ class Engine:
 
             self.clock.tick(gp.FPS//10)
 
-        self.show_help() 
-        self.show_help() 
+        self.show_help()
+        self.show_help()
 
     #--------------------------------------------------------------------------#
     def wait(self, showing_help=False):
@@ -135,7 +135,7 @@ class Engine:
 
         while True:
             for event in pygame.event.get():
-        
+
                 if event.type == pygame.QUIT:
                     return False
 
@@ -179,7 +179,7 @@ class Engine:
 
         while True:
             for event in pygame.event.get():
-        
+
                 if event.type == pygame.QUIT:
                     SoundMixer.stop_music()
                     pygame.quit()
@@ -187,14 +187,14 @@ class Engine:
 
                 elif event.type == pygame.WINDOWFOCUSLOST:
                     self.wait_for_focus()
-        
+
                 elif event.type == self.event_restart:
                     SoundMixer.stop_music()
                     return True
-        
+
                 elif event.type == self.event_new_obstacle:
                     self.new_obstacle()
-        
+
                 elif event.type == self.event_new_collectible:
                     self.new_collectible()
 
@@ -221,10 +221,10 @@ class Engine:
 
                     elif event.key == pygame.K_MINUS:
                         SoundMixer.volume_down()
-        
+
             self.update()
             self.clock.tick(gp.FPS)
-    
+
     #------------------------------------------------------------------------------#
     def start(self):
 
@@ -235,8 +235,7 @@ class Engine:
         self.velocity     = self.world.eval_velocity(self.elapsed_time)
 
         GameObjects.init(self.vertical)
-
-        GameObjects.create_player(self.world.param_player, 
+        GameObjects.create_player(self.world.param_player,
                                   self.world.player_speed,
                                   self.world.get_player_boundaries())
 
@@ -279,13 +278,13 @@ class Engine:
         else: # Background has same size or is larger than screen
 
             rect = pygame.Rect((0,0), gp.SCREEN_SIZE)
-            
+
             if self.vertical:
                 rect.bottom = w_height
 
             bg_image.blit(w_image, (0,0), rect)
 
-        self.bg_image     = bg_image    
+        self.bg_image     = bg_image
         self.bg_show_rect = None
 
     #--------------------------------------------------------------------------#
@@ -313,7 +312,7 @@ class Engine:
 
             self.bg_top_start = w_height
             self.bg_image     = pygame.Surface((s_width, w_height+s_height))
-            
+
             self.bg_image.blit(w_image, (0,s_height))
             self.bg_image.blit(w_image, (0,0), (0,w_height-s_height,s_width,s_height) )
 
@@ -357,7 +356,7 @@ class Engine:
 
             self.bg_top_start = w_bg_height
             self.bg_image     = pygame.Surface((sc_width, w_bg_height+sc_height))
-            
+
             self.bg_image.blit(w_bg_image, (0,sc_height))
             self.bg_image.blit(w_bg_image, (0,0), (0,w_bg_height-sc_height,sc_width,sc_height) )
 
@@ -375,7 +374,7 @@ class Engine:
 
         if not self.bg_scrolls:
             return
-        
+
         if self.vertical:
             self.bg_show_rect.top -= self.velocity
 
@@ -397,7 +396,7 @@ class Engine:
     def draw_game_over(self):
 
         self.display.fill( (60,60,60), None, pygame.BLEND_MULT )
-        
+
         size = self.display.get_rect().height // 6
         font = pygame.freetype.Font( gp.DEFAULT_FONT, size )
 
@@ -420,7 +419,7 @@ class Engine:
             self.draw_game_over()
 
         self.flip()
-        
+
     #--------------------------------------------------------------------------#
     def game_over(self):
 
@@ -434,7 +433,7 @@ class Engine:
         else:
             event = pygame.QUIT
 
-        GameObjects.kill_all() 
+        GameObjects.kill_all()
 
         pygame.event.clear()
         pygame.event.post(pygame.event.Event(event))
@@ -444,7 +443,7 @@ class Engine:
     #--------------------------------------------------------------------------#
     def show_help(self):
 
-        draw_help(self.display, 
+        draw_help(self.display,
                   self.world.soft_name,
                   self.world.soft_description,
                   self.vertical)
@@ -468,9 +467,9 @@ class Engine:
         self.draw()
 
         GameObjects.check_collectible()
-        
+
         if GameObjects.check_collision():
-            self.game_over()            
+            self.game_over()
 
     #--------------------------------------------------------------------------#
     def new_obstacle(self):
@@ -488,7 +487,7 @@ class Engine:
             return
 
         self.last_object_rect = rect
-    
+
         self.set_timer_obstacles()
 
     #--------------------------------------------------------------------------#
@@ -515,10 +514,10 @@ class Engine:
 
         if not delay:
             rr = random.uniform(self.world.obstacles_min_delay,
-                                self.world.obstacles_max_delay) 
+                                self.world.obstacles_max_delay)
 
             delay = int(10000 / self.velocity * rr)
-    
+
         pygame.time.set_timer(self.event_new_obstacle, delay)
 
     #--------------------------------------------------------------------------#
@@ -529,7 +528,7 @@ class Engine:
                                 self.world.collectibles_max_delay)
 
             delay = int(10000 / self.velocity * rr)
-    
+
         pygame.time.set_timer(self.event_new_collectible, delay)
 
 #------------------------------------------------------------------------------#

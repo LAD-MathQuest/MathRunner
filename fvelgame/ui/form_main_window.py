@@ -29,7 +29,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(944, 832)
+        MainWindow.resize(718, 596)
         self.action_Run = QAction(MainWindow)
         self.action_Run.setObjectName(u"action_Run")
         icon = QIcon()
@@ -367,7 +367,7 @@ class Ui_MainWindow(object):
         self.scrollArea_Appearance.setWidgetResizable(True)
         self.scrollAreaWidgetContents_Appearance = QWidget()
         self.scrollAreaWidgetContents_Appearance.setObjectName(u"scrollAreaWidgetContents_Appearance")
-        self.scrollAreaWidgetContents_Appearance.setGeometry(QRect(0, 0, 904, 681))
+        self.scrollAreaWidgetContents_Appearance.setGeometry(QRect(0, 0, 787, 615))
         self.verticalLayout_13 = QVBoxLayout(self.scrollAreaWidgetContents_Appearance)
         self.verticalLayout_13.setObjectName(u"verticalLayout_13")
         self.groupBox_Background = QGroupBox(self.scrollAreaWidgetContents_Appearance)
@@ -557,36 +557,6 @@ class Ui_MainWindow(object):
 
         self.gridLayout_13 = QGridLayout()
         self.gridLayout_13.setObjectName(u"gridLayout_13")
-        self.spinBox_ScoreboardImageWidth = QSpinBox(self.groupBox_ScoreboardImage)
-        self.spinBox_ScoreboardImageWidth.setObjectName(u"spinBox_ScoreboardImageWidth")
-        self.spinBox_ScoreboardImageWidth.setMinimumSize(QSize(60, 0))
-        self.spinBox_ScoreboardImageWidth.setMinimum(1)
-        self.spinBox_ScoreboardImageWidth.setMaximum(1920)
-
-        self.gridLayout_13.addWidget(self.spinBox_ScoreboardImageWidth, 1, 1, 1, 1)
-
-        self.checkBox_ScoreboardImageKeepAspectRatio = QCheckBox(self.groupBox_ScoreboardImage)
-        self.checkBox_ScoreboardImageKeepAspectRatio.setObjectName(u"checkBox_ScoreboardImageKeepAspectRatio")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.checkBox_ScoreboardImageKeepAspectRatio.sizePolicy().hasHeightForWidth())
-        self.checkBox_ScoreboardImageKeepAspectRatio.setSizePolicy(sizePolicy2)
-
-        self.gridLayout_13.addWidget(self.checkBox_ScoreboardImageKeepAspectRatio, 1, 4, 1, 1)
-
-        self.label_ScoreboardImageWidth = QLabel(self.groupBox_ScoreboardImage)
-        self.label_ScoreboardImageWidth.setObjectName(u"label_ScoreboardImageWidth")
-        self.label_ScoreboardImageWidth.setIndent(5)
-
-        self.gridLayout_13.addWidget(self.label_ScoreboardImageWidth, 1, 0, 1, 1)
-
-        self.label_ScoreboardImagePosition = QLabel(self.groupBox_ScoreboardImage)
-        self.label_ScoreboardImagePosition.setObjectName(u"label_ScoreboardImagePosition")
-        self.label_ScoreboardImagePosition.setIndent(5)
-
-        self.gridLayout_13.addWidget(self.label_ScoreboardImagePosition, 0, 0, 1, 1)
-
         self.spinBox_ScoreboardImagePositionX = QSpinBox(self.groupBox_ScoreboardImage)
         self.spinBox_ScoreboardImagePositionX.setObjectName(u"spinBox_ScoreboardImagePositionX")
         self.spinBox_ScoreboardImagePositionX.setMinimumSize(QSize(60, 0))
@@ -594,6 +564,20 @@ class Ui_MainWindow(object):
         self.spinBox_ScoreboardImagePositionX.setMaximum(1920)
 
         self.gridLayout_13.addWidget(self.spinBox_ScoreboardImagePositionX, 0, 1, 1, 1)
+
+        self.label_ScoreboardImagePosition = QLabel(self.groupBox_ScoreboardImage)
+        self.label_ScoreboardImagePosition.setObjectName(u"label_ScoreboardImagePosition")
+        self.label_ScoreboardImagePosition.setIndent(5)
+
+        self.gridLayout_13.addWidget(self.label_ScoreboardImagePosition, 0, 0, 1, 1)
+
+        self.spinBox_ScoreboardImageWidth = QSpinBox(self.groupBox_ScoreboardImage)
+        self.spinBox_ScoreboardImageWidth.setObjectName(u"spinBox_ScoreboardImageWidth")
+        self.spinBox_ScoreboardImageWidth.setMinimumSize(QSize(60, 0))
+        self.spinBox_ScoreboardImageWidth.setMinimum(1)
+        self.spinBox_ScoreboardImageWidth.setMaximum(1920)
+
+        self.gridLayout_13.addWidget(self.spinBox_ScoreboardImageWidth, 0, 4, 1, 1)
 
         self.spinBox_ScoreboardImagePositionY = QSpinBox(self.groupBox_ScoreboardImage)
         self.spinBox_ScoreboardImagePositionY.setObjectName(u"spinBox_ScoreboardImagePositionY")
@@ -603,13 +587,29 @@ class Ui_MainWindow(object):
 
         self.gridLayout_13.addWidget(self.spinBox_ScoreboardImagePositionY, 0, 2, 1, 1)
 
+        self.label_ScoreboardImageWidth = QLabel(self.groupBox_ScoreboardImage)
+        self.label_ScoreboardImageWidth.setObjectName(u"label_ScoreboardImageWidth")
+        self.label_ScoreboardImageWidth.setIndent(5)
+
+        self.gridLayout_13.addWidget(self.label_ScoreboardImageWidth, 0, 3, 1, 1)
+
         self.spinBox_ScoreboardImageHeight = QSpinBox(self.groupBox_ScoreboardImage)
         self.spinBox_ScoreboardImageHeight.setObjectName(u"spinBox_ScoreboardImageHeight")
         self.spinBox_ScoreboardImageHeight.setMinimumSize(QSize(60, 0))
         self.spinBox_ScoreboardImageHeight.setMinimum(1)
         self.spinBox_ScoreboardImageHeight.setMaximum(1080)
 
-        self.gridLayout_13.addWidget(self.spinBox_ScoreboardImageHeight, 1, 2, 1, 1)
+        self.gridLayout_13.addWidget(self.spinBox_ScoreboardImageHeight, 0, 5, 1, 1)
+
+        self.checkBox_ScoreboardImageKeepAspectRatio = QCheckBox(self.groupBox_ScoreboardImage)
+        self.checkBox_ScoreboardImageKeepAspectRatio.setObjectName(u"checkBox_ScoreboardImageKeepAspectRatio")
+        sizePolicy2 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.checkBox_ScoreboardImageKeepAspectRatio.sizePolicy().hasHeightForWidth())
+        self.checkBox_ScoreboardImageKeepAspectRatio.setSizePolicy(sizePolicy2)
+
+        self.gridLayout_13.addWidget(self.checkBox_ScoreboardImageKeepAspectRatio, 0, 6, 1, 1)
 
 
         self.verticalLayout.addLayout(self.gridLayout_13)
@@ -955,45 +955,25 @@ class Ui_MainWindow(object):
         self.tabVelocity = QWidget()
         self.tabVelocity.setObjectName(u"tabVelocity")
         self.tabVelocity.setEnabled(True)
-        self.layout_TabVelocity = QHBoxLayout(self.tabVelocity)
-        self.layout_TabVelocity.setObjectName(u"layout_TabVelocity")
+        self.verticalLayout_4 = QVBoxLayout(self.tabVelocity)
+        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.gridLayout_7 = QGridLayout()
         self.gridLayout_7.setObjectName(u"gridLayout_7")
-        self.doubleSpinBox_VelocityA = QDoubleSpinBox(self.tabVelocity)
-        self.doubleSpinBox_VelocityA.setObjectName(u"doubleSpinBox_VelocityA")
-        self.doubleSpinBox_VelocityA.setMinimumSize(QSize(90, 0))
-        self.doubleSpinBox_VelocityA.setDecimals(3)
-
-        self.gridLayout_7.addWidget(self.doubleSpinBox_VelocityA, 0, 1, 1, 1)
-
         self.label_VelocityA = QLabel(self.tabVelocity)
         self.label_VelocityA.setObjectName(u"label_VelocityA")
         self.label_VelocityA.setMinimumSize(QSize(40, 0))
-        self.label_VelocityA.setAlignment(Qt.AlignCenter)
+        self.label_VelocityA.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.label_VelocityA.setIndent(2)
 
-        self.gridLayout_7.addWidget(self.label_VelocityA, 0, 0, 1, 1)
+        self.gridLayout_7.addWidget(self.label_VelocityA, 1, 0, 1, 1)
 
-        self.label_VelocityB = QLabel(self.tabVelocity)
-        self.label_VelocityB.setObjectName(u"label_VelocityB")
-        self.label_VelocityB.setMinimumSize(QSize(40, 0))
-        self.label_VelocityB.setAlignment(Qt.AlignCenter)
-        self.label_VelocityB.setIndent(2)
+        self.lineEdit_FunctionVelocity = QLineEdit(self.tabVelocity)
+        self.lineEdit_FunctionVelocity.setObjectName(u"lineEdit_FunctionVelocity")
 
-        self.gridLayout_7.addWidget(self.label_VelocityB, 1, 0, 1, 1)
-
-        self.doubleSpinBox_VelocityB = QDoubleSpinBox(self.tabVelocity)
-        self.doubleSpinBox_VelocityB.setObjectName(u"doubleSpinBox_VelocityB")
-        self.doubleSpinBox_VelocityB.setDecimals(6)
-
-        self.gridLayout_7.addWidget(self.doubleSpinBox_VelocityB, 1, 1, 1, 1)
-
-        self.verticalSpacer_9 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.gridLayout_7.addItem(self.verticalSpacer_9, 2, 0, 1, 1)
+        self.gridLayout_7.addWidget(self.lineEdit_FunctionVelocity, 1, 1, 1, 1)
 
 
-        self.layout_TabVelocity.addLayout(self.gridLayout_7)
+        self.verticalLayout_4.addLayout(self.gridLayout_7)
 
         self.plotVelocity = PlotWidget(self.tabVelocity)
         self.plotVelocity.setObjectName(u"plotVelocity")
@@ -1002,164 +982,67 @@ class Ui_MainWindow(object):
         sizePolicy3.setVerticalStretch(0)
         sizePolicy3.setHeightForWidth(self.plotVelocity.sizePolicy().hasHeightForWidth())
         self.plotVelocity.setSizePolicy(sizePolicy3)
+        self.plotVelocity.setAutoFillBackground(True)
 
-        self.layout_TabVelocity.addWidget(self.plotVelocity)
+        self.verticalLayout_4.addWidget(self.plotVelocity)
 
         self.tabWidget_Game.addTab(self.tabVelocity, "")
         self.tabMargins = QWidget()
         self.tabMargins.setObjectName(u"tabMargins")
         self.tabMargins.setEnabled(True)
-        self.layout_TabMargins = QHBoxLayout(self.tabMargins)
-        self.layout_TabMargins.setObjectName(u"layout_TabMargins")
+        self.verticalLayout_5 = QVBoxLayout(self.tabMargins)
+        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.verticalLayout_3 = QVBoxLayout()
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.gridLayout_5 = QGridLayout()
         self.gridLayout_5.setObjectName(u"gridLayout_5")
-        self.label_8 = QLabel(self.tabMargins)
-        self.label_8.setObjectName(u"label_8")
-        self.label_8.setMinimumSize(QSize(40, 0))
-        self.label_8.setIndent(2)
+        self.lineEdit_FunctionTrackMaximum = QLineEdit(self.tabMargins)
+        self.lineEdit_FunctionTrackMaximum.setObjectName(u"lineEdit_FunctionTrackMaximum")
 
-        self.gridLayout_5.addWidget(self.label_8, 1, 0, 1, 1)
+        self.gridLayout_5.addWidget(self.lineEdit_FunctionTrackMaximum, 1, 2, 1, 1)
 
-        self.doubleSpinBox_MarginRight = QDoubleSpinBox(self.tabMargins)
-        self.doubleSpinBox_MarginRight.setObjectName(u"doubleSpinBox_MarginRight")
-        self.doubleSpinBox_MarginRight.setDecimals(6)
-        self.doubleSpinBox_MarginRight.setMaximum(1.000000000000000)
-        self.doubleSpinBox_MarginRight.setSingleStep(0.100000000000000)
+        self.lineEdit_FunctionTrackMinimum = QLineEdit(self.tabMargins)
+        self.lineEdit_FunctionTrackMinimum.setObjectName(u"lineEdit_FunctionTrackMinimum")
 
-        self.gridLayout_5.addWidget(self.doubleSpinBox_MarginRight, 1, 1, 1, 1)
+        self.gridLayout_5.addWidget(self.lineEdit_FunctionTrackMinimum, 0, 2, 1, 1)
 
-        self.label_5 = QLabel(self.tabMargins)
-        self.label_5.setObjectName(u"label_5")
-        self.label_5.setMinimumSize(QSize(40, 0))
-        self.label_5.setIndent(2)
+        self.label_TrackMaximum = QLabel(self.tabMargins)
+        self.label_TrackMaximum.setObjectName(u"label_TrackMaximum")
+        self.label_TrackMaximum.setMinimumSize(QSize(40, 0))
+        self.label_TrackMaximum.setIndent(2)
 
-        self.gridLayout_5.addWidget(self.label_5, 0, 0, 1, 1)
+        self.gridLayout_5.addWidget(self.label_TrackMaximum, 1, 0, 1, 1)
 
-        self.doubleSpinBox_MarginLeft = QDoubleSpinBox(self.tabMargins)
-        self.doubleSpinBox_MarginLeft.setObjectName(u"doubleSpinBox_MarginLeft")
-        self.doubleSpinBox_MarginLeft.setMinimumSize(QSize(90, 0))
-        self.doubleSpinBox_MarginLeft.setDecimals(6)
-        self.doubleSpinBox_MarginLeft.setMaximum(1.000000000000000)
-        self.doubleSpinBox_MarginLeft.setSingleStep(0.100000000000000)
+        self.label_TrackMinimum = QLabel(self.tabMargins)
+        self.label_TrackMinimum.setObjectName(u"label_TrackMinimum")
+        self.label_TrackMinimum.setMinimumSize(QSize(40, 0))
+        self.label_TrackMinimum.setIndent(2)
 
-        self.gridLayout_5.addWidget(self.doubleSpinBox_MarginLeft, 0, 1, 1, 1)
+        self.gridLayout_5.addWidget(self.label_TrackMinimum, 0, 0, 1, 1)
+
+        self.label_TrackMinimumEqual = QLabel(self.tabMargins)
+        self.label_TrackMinimumEqual.setObjectName(u"label_TrackMinimumEqual")
+
+        self.gridLayout_5.addWidget(self.label_TrackMinimumEqual, 0, 1, 1, 1)
+
+        self.label_TrackMaximumEqual = QLabel(self.tabMargins)
+        self.label_TrackMaximumEqual.setObjectName(u"label_TrackMaximumEqual")
+
+        self.gridLayout_5.addWidget(self.label_TrackMaximumEqual, 1, 1, 1, 1)
 
 
         self.verticalLayout_3.addLayout(self.gridLayout_5)
 
-        self.checkBox = QCheckBox(self.tabMargins)
-        self.checkBox.setObjectName(u"checkBox")
-        self.checkBox.setEnabled(False)
 
-        self.verticalLayout_3.addWidget(self.checkBox)
-
-        self.groupBox = QGroupBox(self.tabMargins)
-        self.groupBox.setObjectName(u"groupBox")
-        self.groupBox.setEnabled(False)
-        self.gridLayout_10 = QGridLayout(self.groupBox)
-        self.gridLayout_10.setObjectName(u"gridLayout_10")
-        self.label_32 = QLabel(self.groupBox)
-        self.label_32.setObjectName(u"label_32")
-        self.label_32.setMinimumSize(QSize(30, 0))
-        self.label_32.setAlignment(Qt.AlignCenter)
-
-        self.gridLayout_10.addWidget(self.label_32, 0, 0, 1, 1)
-
-        self.doubleSpinBox_7 = QDoubleSpinBox(self.groupBox)
-        self.doubleSpinBox_7.setObjectName(u"doubleSpinBox_7")
-
-        self.gridLayout_10.addWidget(self.doubleSpinBox_7, 1, 1, 1, 1)
-
-        self.label_33 = QLabel(self.groupBox)
-        self.label_33.setObjectName(u"label_33")
-        self.label_33.setMinimumSize(QSize(30, 0))
-        self.label_33.setAlignment(Qt.AlignCenter)
-
-        self.gridLayout_10.addWidget(self.label_33, 1, 0, 1, 1)
-
-        self.doubleSpinBox_6 = QDoubleSpinBox(self.groupBox)
-        self.doubleSpinBox_6.setObjectName(u"doubleSpinBox_6")
-
-        self.gridLayout_10.addWidget(self.doubleSpinBox_6, 0, 1, 1, 1)
-
-
-        self.verticalLayout_3.addWidget(self.groupBox)
-
-        self.groupBox_2 = QGroupBox(self.tabMargins)
-        self.groupBox_2.setObjectName(u"groupBox_2")
-        self.groupBox_2.setEnabled(False)
-        self.gridLayout_11 = QGridLayout(self.groupBox_2)
-        self.gridLayout_11.setObjectName(u"gridLayout_11")
-        self.label_35 = QLabel(self.groupBox_2)
-        self.label_35.setObjectName(u"label_35")
-        self.label_35.setMinimumSize(QSize(30, 0))
-        self.label_35.setAlignment(Qt.AlignCenter)
-
-        self.gridLayout_11.addWidget(self.label_35, 0, 0, 1, 1)
-
-        self.doubleSpinBox_9 = QDoubleSpinBox(self.groupBox_2)
-        self.doubleSpinBox_9.setObjectName(u"doubleSpinBox_9")
-
-        self.gridLayout_11.addWidget(self.doubleSpinBox_9, 0, 1, 1, 1)
-
-        self.label_34 = QLabel(self.groupBox_2)
-        self.label_34.setObjectName(u"label_34")
-        self.label_34.setMinimumSize(QSize(30, 0))
-        self.label_34.setAlignment(Qt.AlignCenter)
-
-        self.gridLayout_11.addWidget(self.label_34, 1, 0, 1, 1)
-
-        self.doubleSpinBox_8 = QDoubleSpinBox(self.groupBox_2)
-        self.doubleSpinBox_8.setObjectName(u"doubleSpinBox_8")
-
-        self.gridLayout_11.addWidget(self.doubleSpinBox_8, 1, 1, 1, 1)
-
-
-        self.verticalLayout_3.addWidget(self.groupBox_2)
-
-        self.groupBox_6 = QGroupBox(self.tabMargins)
-        self.groupBox_6.setObjectName(u"groupBox_6")
-        self.groupBox_6.setEnabled(False)
-        self.gridLayout_26 = QGridLayout(self.groupBox_6)
-        self.gridLayout_26.setObjectName(u"gridLayout_26")
-        self.label_24 = QLabel(self.groupBox_6)
-        self.label_24.setObjectName(u"label_24")
-
-        self.gridLayout_26.addWidget(self.label_24, 0, 0, 1, 1)
-
-        self.label_25 = QLabel(self.groupBox_6)
-        self.label_25.setObjectName(u"label_25")
-
-        self.gridLayout_26.addWidget(self.label_25, 1, 0, 1, 1)
-
-        self.spinBox_7 = QSpinBox(self.groupBox_6)
-        self.spinBox_7.setObjectName(u"spinBox_7")
-
-        self.gridLayout_26.addWidget(self.spinBox_7, 1, 1, 1, 1)
-
-        self.spinBox_8 = QSpinBox(self.groupBox_6)
-        self.spinBox_8.setObjectName(u"spinBox_8")
-
-        self.gridLayout_26.addWidget(self.spinBox_8, 0, 1, 1, 1)
-
-
-        self.verticalLayout_3.addWidget(self.groupBox_6)
-
-        self.verticalSpacer_10 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.verticalLayout_3.addItem(self.verticalSpacer_10)
-
-
-        self.layout_TabMargins.addLayout(self.verticalLayout_3)
+        self.verticalLayout_5.addLayout(self.verticalLayout_3)
 
         self.plotMargins = PlotWidget(self.tabMargins)
         self.plotMargins.setObjectName(u"plotMargins")
         sizePolicy3.setHeightForWidth(self.plotMargins.sizePolicy().hasHeightForWidth())
         self.plotMargins.setSizePolicy(sizePolicy3)
+        self.plotMargins.setAutoFillBackground(True)
 
-        self.layout_TabMargins.addWidget(self.plotMargins)
+        self.verticalLayout_5.addWidget(self.plotMargins)
 
         self.tabWidget_Game.addTab(self.tabMargins, "")
 
@@ -1168,7 +1051,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 944, 23))
+        self.menubar.setGeometry(QRect(0, 0, 718, 23))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuHelp = QMenu(self.menubar)
@@ -1218,7 +1101,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.tabWidget_Game.setCurrentIndex(1)
+        self.tabWidget_Game.setCurrentIndex(4)
         self.tabWidget_Objects.setCurrentIndex(0)
 
 
@@ -1330,11 +1213,11 @@ class Ui_MainWindow(object):
         self.label_ScoreboardExample.setText(QCoreApplication.translate("MainWindow", u"Text Example", None))
         self.groupBox_ScoreboardImage.setTitle(QCoreApplication.translate("MainWindow", u"Image", None))
         self.pushButton_SelectScoreboardImage.setText(QCoreApplication.translate("MainWindow", u"Edit Image", None))
-        self.checkBox_ScoreboardImageKeepAspectRatio.setText(QCoreApplication.translate("MainWindow", u"Keep aspect ratio", None))
-        self.label_ScoreboardImageWidth.setText(QCoreApplication.translate("MainWindow", u"Size", None))
         self.label_ScoreboardImagePosition.setText(QCoreApplication.translate("MainWindow", u"Position", None))
+        self.label_ScoreboardImageWidth.setText(QCoreApplication.translate("MainWindow", u"Size", None))
+        self.checkBox_ScoreboardImageKeepAspectRatio.setText(QCoreApplication.translate("MainWindow", u"Keep aspect ratio", None))
         self.groupBox_ScoreboardText.setTitle(QCoreApplication.translate("MainWindow", u"Text", None))
-        self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Select font", None))
+        self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Configure text", None))
         self.label_ScoreboardTextPosition.setText(QCoreApplication.translate("MainWindow", u"Position on screen ", None))
         self.tabWidget_Game.setTabText(self.tabWidget_Game.indexOf(self.tabAppearance), QCoreApplication.translate("MainWindow", u"Appearance", None))
 #if QT_CONFIG(statustip)
@@ -1356,24 +1239,15 @@ class Ui_MainWindow(object):
 #if QT_CONFIG(statustip)
         self.tabVelocity.setStatusTip(QCoreApplication.translate("MainWindow", u"Define scrolling velocity", None))
 #endif // QT_CONFIG(statustip)
-        self.label_VelocityA.setText(QCoreApplication.translate("MainWindow", u"a", None))
-        self.label_VelocityB.setText(QCoreApplication.translate("MainWindow", u"b", None))
+        self.label_VelocityA.setText(QCoreApplication.translate("MainWindow", u"v(t) =", None))
         self.tabWidget_Game.setTabText(self.tabWidget_Game.indexOf(self.tabVelocity), QCoreApplication.translate("MainWindow", u"Velocity", None))
 #if QT_CONFIG(statustip)
         self.tabMargins.setStatusTip(QCoreApplication.translate("MainWindow", u"Define track margins", None))
 #endif // QT_CONFIG(statustip)
-        self.label_8.setText(QCoreApplication.translate("MainWindow", u"Right", None))
-        self.label_5.setText(QCoreApplication.translate("MainWindow", u"Left", None))
-        self.checkBox.setText(QCoreApplication.translate("MainWindow", u"Symmetrical", None))
-        self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"Left", None))
-        self.label_32.setText(QCoreApplication.translate("MainWindow", u"a", None))
-        self.label_33.setText(QCoreApplication.translate("MainWindow", u"b", None))
-        self.groupBox_2.setTitle(QCoreApplication.translate("MainWindow", u"Rigth", None))
-        self.label_35.setText(QCoreApplication.translate("MainWindow", u"a", None))
-        self.label_34.setText(QCoreApplication.translate("MainWindow", u"b", None))
-        self.groupBox_6.setTitle(QCoreApplication.translate("MainWindow", u"Symmetrical", None))
-        self.label_24.setText(QCoreApplication.translate("MainWindow", u"Center", None))
-        self.label_25.setText(QCoreApplication.translate("MainWindow", u"Radius", None))
+        self.label_TrackMaximum.setText(QCoreApplication.translate("MainWindow", u"Maximum(x)", None))
+        self.label_TrackMinimum.setText(QCoreApplication.translate("MainWindow", u"Minimum(x)", None))
+        self.label_TrackMinimumEqual.setText(QCoreApplication.translate("MainWindow", u"=", None))
+        self.label_TrackMaximumEqual.setText(QCoreApplication.translate("MainWindow", u"=", None))
         self.tabWidget_Game.setTabText(self.tabWidget_Game.indexOf(self.tabMargins), QCoreApplication.translate("MainWindow", u"Margins", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))

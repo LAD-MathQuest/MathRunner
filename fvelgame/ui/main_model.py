@@ -1,6 +1,7 @@
 #------------------------------------------------------------------------------#
 
 import sys, tempfile
+import numpy as np
 
 from PySide6.QtCore       import QProcess, QUrl
 from PySide6.QtGui        import QPixmap, QFont
@@ -35,7 +36,7 @@ class MainModel:
 
     #--------------------------------------------------------------------------#
     def save(self, filename):
-        pass
+        self.meta.save(filename)
 
     #--------------------------------------------------------------------------#
     def run(self):
@@ -54,25 +55,8 @@ class MainModel:
     def ambience_play(self):
 
         tools.play_sound(self.win,
-                         self.meta.game_ambience, 
+                         self.meta.game_ambience,
                          self.meta.game_ambience_volume)
-
-    #--------------------------------------------------------------------------#
-    def eval_velocity(self, t_min, t_max ):
-
-        tt = (t_min, t_max)
-        vv = (self.meta.velocity.eval(tt[0]), self.meta.velocity.eval(tt[1]))
-
-        return (tt, vv)
-
-    #--------------------------------------------------------------------------#
-    def eval_margins(self, t_min, t_max ):
-
-        tt = (t_min, t_max)
-        ll = (self.meta.margins.eval_min(tt[0]), self.meta.margins.eval_min(tt[1]))
-        rr = (self.meta.margins.eval_max(tt[0]), self.meta.margins.eval_max(tt[1]))
-
-        return (tt, ll, rr)
 
     #--------------------------------------------------------------------------#
     def start_view(self):
@@ -117,7 +101,7 @@ class MainModel:
         meta = self.meta
 
         #--- Background -------------------------------------------------------#
-        
+
         tools.draw_meta_image(ui.label_BackgroundImage, meta.background_image)
 
         ui.checkBox_BackgroundImageScrolls.setChecked(meta.background_scrolls)
@@ -146,12 +130,12 @@ class MainModel:
 
         if score.image:
             pos  = score.image_position
-            size = score.image.size    
+            size = score.image.size
             ui.spinBox_ScoreboardImagePositionX.setValue(pos [0])
             ui.spinBox_ScoreboardImagePositionY.setValue(pos [1])
             ui.spinBox_ScoreboardImageHeight   .setValue(size[0])
             ui.spinBox_ScoreboardImageWidth    .setValue(size[1])
-        
+
         ui.checkBox_ScoreboardImageKeepAspectRatio.setChecked(True)
 
         css = 'color: rgb({},{},{});'.format(*(score.text_fgcolor))
@@ -161,7 +145,7 @@ class MainModel:
 
         ui.label_ScoreboardExample.setStyleSheet(f'QLabel{{ {css} }}')
         ui.label_ScoreboardExample.setFont(QFont('Times', score.text_font_size))
-    
+
     #--------------------------------------------------------------------------#
     def start_view_tab_objects(self):
 
@@ -178,7 +162,7 @@ class MainModel:
         ui.spinBox_PlayerWidth. setValue(player.image.size[0])
         ui.spinBox_PlayerHeight.setValue(player.image.size[1])
         ui.spinBox_PlayerSpeed .setValue(meta.player_speed)
-        
+
         ui.checkBox_PlayerKeepAspectRatio.setChecked(True)
 
         #--- Obstacles---------------------------------------------------------#
@@ -191,7 +175,7 @@ class MainModel:
             con.new_obstacle_widget().meta_to_object(meta_op)
 
         #--- Collectibles -----------------------------------------------------#
-        
+
         ui.doubleSpinBox_CollectiblesFrequency.setValue(meta.collectibles_frequency)
 
         con.clear_collectible_widgets()
@@ -202,28 +186,77 @@ class MainModel:
     #--------------------------------------------------------------------------#
     def start_view_tab_velocity(self):
 
-        ui    = self.ui
-        meta  = self.meta
+        ui   = self.ui
+        meta = self.meta
 
-        ui.doubleSpinBox_VelocityA.setValue(meta.velocity.a)
-        ui.doubleSpinBox_VelocityB.setValue(meta.velocity.b)
+        ui.lineEdit_FunctionVelocity.setText( meta.velocity.get_function() )
 
-        tt, vv = self.eval_velocity(0, par.PLOT_MAX_TIME)
+        tt = np.arange(0, par.PLOT_MAX_T, 0.1)
+        vv = meta.velocity.eval(tt)
 
         self.con.plot_velocity_data.setData(tt, vv)
 
     #--------------------------------------------------------------------------#
     def start_view_tab_margins(self):
 
-        ui    = self.ui
-        meta  = self.meta
+        ui   = self.ui
+        meta = self.meta
 
-        ui.doubleSpinBox_MarginLeft .setValue(meta.margins.const_min)
-        ui.doubleSpinBox_MarginRight.setValue(meta.margins.const_max)
+        ui.lineEdit_FunctionTrackMinimum.setText( meta.margins.get_function_min() )
+        ui.lineEdit_FunctionTrackMaximum.setText( meta.margins.get_function_max() )
 
-        tt, ll, rr = self.eval_margins(0, par.PLOT_MAX_TIME)
+        xx     = np.arange(0, par.PLOT_MAX_X, 0.1)
+        mm, MM = meta.margins.eval(xx)
 
-        self.con.plot_margin_min_data.setData(tt, ll)
-        self.con.plot_margin_max_data.setData(tt, rr)
+        self.con.plot_margin_min_data.setData(xx, mm)
+        self.con.plot_margin_max_data.setData(xx, MM)
+
+        self.update_track_aux_function()
+
+    #--------------------------------------------------------------------------#
+    def update_velocity_function(self, func):
+
+        self.meta.velocity.set_function          (func)
+        self.ui.lineEdit_FunctionVelocity.setText(func)
+
+        tt = np.arange(0, par.PLOT_MAX_T, 0.1)
+        vv = self.meta.velocity.eval(tt)
+
+        self.con.plot_velocity_data.setData(tt, vv)
+        self.update_track_aux_function()
+
+    #--------------------------------------------------------------------------#
+    def update_track_minimum_function(self, func):
+
+        self.meta.margins.set_function_min           (func)
+        self.ui.lineEdit_FunctionTrackMinimum.setText(func)
+
+        xx = np.arange(0, par.PLOT_MAX_X, 0.1)
+        mm = self.meta.margins.eval_min(xx)
+
+        self.con.plot_margin_min_data.setData(xx, mm)
+        self.update_track_aux_function()
+
+    #--------------------------------------------------------------------------#
+    def update_track_maximum_function(self, func):
+
+        self.meta.margins.set_function_max           (func)
+        self.ui.lineEdit_FunctionTrackMaximum.setText(func)
+
+        xx = np.arange(0, par.PLOT_MAX_X, 0.1)
+        MM = self.meta.margins.eval_max(xx)
+
+        self.con.plot_margin_max_data.setData(xx, MM)
+        self.update_track_aux_function()
+
+    #--------------------------------------------------------------------------#
+    def update_track_aux_function(self):
+
+        xx = self.con.plot_margin_min_data.xData
+
+        y_aux = np.maximum(self.con.plot_margin_min_data.yData,
+                           self.con.plot_margin_max_data.yData)
+
+        self.con.plot_margin_aux_data.setData(xx, y_aux)
 
 #------------------------------------------------------------------------------#

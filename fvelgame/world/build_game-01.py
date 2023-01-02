@@ -17,7 +17,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parents[1]))
 
 from world.functions  import VelocityFunction, MarginFunctions
-from world.meta_world import MetaImage, MetaObject, MetaScoreboard, MetaWorld 
+from world.meta_world import MetaImage, MetaObject, MetaScoreboard, MetaWorld
 
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
@@ -27,7 +27,7 @@ if __name__ == '__main__':
     path_resources   = Path(__file__).parents[1]/'resources'
     path_backgrounds = path_resources/'backgrounds'
     path_scoreboards = path_resources/'scoreboards'
-    path_objects     = path_resources/'objects' 
+    path_objects     = path_resources/'objects'
     path_sounds      = path_resources/'sounds'
     path_fonts       = path_resources/'fonts'
     path_games       = path_resources/'games'
@@ -44,10 +44,10 @@ if __name__ == '__main__':
     meta.soft_description = 'Simple racing game with treasures and obstacles'
     meta.soft_icon        = None
 
-    # Game 
+    # Game
     #--------------------------------------------------------------------------#
 
-    meta.game_vertical   = True   
+    meta.game_vertical   = True
     meta.game_time_bonus = 1
     meta.game_ambience   = path_sounds/'music-1.mp3'
 
@@ -59,7 +59,7 @@ if __name__ == '__main__':
 
     meta.background_image   = imag_background
     meta.background_scrolls = True
-    
+
     meta.track_image = None
 
     path_score = path_scoreboards/'frame_neon.png'
@@ -67,8 +67,8 @@ if __name__ == '__main__':
 
     path_font = path_fonts/'Electronic_Highway_Sign.ttf'
 
-    meta.scoreboard = MetaScoreboard(image          = imag_score, 
-                                     image_position = (54,67), 
+    meta.scoreboard = MetaScoreboard(image          = imag_score,
+                                     image_position = (54,67),
                                      text_font      = path_font,
                                      text_font_size = 28,
                                      text_spacing   = 1.2,
@@ -88,7 +88,7 @@ if __name__ == '__main__':
     # Obstacles
     #--------------------------------------------------------------------------#
 
-    path_crash = path_sounds/'car_crash.mp3'   
+    path_crash = path_sounds/'car_crash.mp3'
     points = 10
     volume = 0.9
 
@@ -96,7 +96,7 @@ if __name__ == '__main__':
     meta.obstacles = []
 
     for ii in range(2,10):
-        
+
         path_obstacle = path_objects/f'sport_car-{ii}.png'
         imag_obstacle = MetaImage((40,90), path=path_obstacle)
 
@@ -106,7 +106,7 @@ if __name__ == '__main__':
     # Collectibles
     #--------------------------------------------------------------------------#
 
-    path_collect = path_sounds/'collect-ring.mp3'   
+    path_collect = path_sounds/'collect-ring.mp3'
     points = 100
     volume = 0.2
 
@@ -117,27 +117,27 @@ if __name__ == '__main__':
 
         path_collectible = path_objects/f'precious_stone-{ii}.png'
         imag_collectible = MetaImage((46,38), path=path_collectible)
-        
+
         collectible = MetaObject(imag_collectible, points, path_collect, volume)
         meta.collectibles.append(collectible)
 
     # Oil spill
-    path_collect = path_sounds/'car_drift.mp3'   
+    path_collect = path_sounds/'car_drift.mp3'
     points = -200
     volume = 1.0
 
     # File image size [312, 344]
     path_collectible = path_objects/'oil_spill.png'
     imag_collectible = MetaImage((100,110), path=path_collectible)
-    
+
     collectible = MetaObject(imag_collectible, points, path_collect, volume)
     meta.collectibles.append(collectible)
 
     # Functions
     #--------------------------------------------------------------------------#
 
-    meta.velocity = VelocityFunction( 0.40, 0.02 )
-    meta.margins  = MarginFunctions ( 0.35, 0.65 )
+    meta.velocity = VelocityFunction('0.4 + 0.02*t')
+    meta.margins  = MarginFunctions ('0.35', '0.65')
 
     # Saving
     #--------------------------------------------------------------------------#

@@ -12,6 +12,7 @@ Here the lengths are measured in pixels.
 
 #------------------------------------------------------------------------------#
 
+import math
 import pygame
 
 import game.game_params as gp
@@ -62,9 +63,9 @@ class ScoreboardParam:
         self.text_bgcolor   = meta.text_bgcolor
         self.text_fgcolor   = meta.text_fgcolor
 
-        self.show_points   = meta.show_points  
+        self.show_points   = meta.show_points
         self.show_velocity = meta.show_velocity
-        self.show_time     = meta.show_time    
+        self.show_time     = meta.show_time
 
         self.draw_image = bool(meta.image)
 
@@ -86,18 +87,18 @@ class GameWorld:
         # Software
         #----------------------------------------------------------------------#
 
-        self.soft_name        = meta.soft_name       
-        self.soft_author      = meta.soft_author     
+        self.soft_name        = meta.soft_name
+        self.soft_author      = meta.soft_author
         self.soft_description = meta.soft_description
-        self.soft_icon        = meta.soft_icon       
+        self.soft_icon        = meta.soft_icon
 
-        # Game 
+        # Game
         #----------------------------------------------------------------------#
 
-        self.game_vertical        = meta.game_vertical  
+        self.game_vertical        = meta.game_vertical
         self.game_time_bonus      = meta.game_time_bonus
-        self.game_ambience        = meta.game_ambience  
-        self.game_ambience_volume = meta.game_ambience_volume  
+        self.game_ambience        = meta.game_ambience
+        self.game_ambience_volume = meta.game_ambience_volume
 
         # Appearance
         #----------------------------------------------------------------------#
@@ -105,7 +106,7 @@ class GameWorld:
         # Background
         self.background_image   = surface_from_meta_image(meta.background_image)
         self.background_scrolls = meta.background_scrolls
-        
+
         # Track
         self.draw_track  = bool(meta.track_image)
 
@@ -147,8 +148,8 @@ class GameWorld:
         #----------------------------------------------------------------------#
 
         self.velocity = meta.velocity
-        self.margins  = meta.margins 
-        
+        self.margins  = meta.margins
+
         if self.game_vertical:
             self.vel_scale = gp.SCREEN_SIZE[1] / gp.FPS
         else:
@@ -157,7 +158,7 @@ class GameWorld:
         # Initializing background and track
         #----------------------------------------------------------------------#
 
-        min_, lenght = self.margins.eval(0)
+        min_, lenght = self.margins.eval_length(0)
 
         if self.game_vertical:
             left  = int( gp.SCREEN_SIZE[0] * min_   )
@@ -169,15 +170,15 @@ class GameWorld:
             self.track_rect = pygame.Rect( 0, top, gp.SCREEN_SIZE[0], height )
 
         if self.draw_track:
-            self.background_image.blit( self.track_image, 
-                                        self.track_rect, 
+            self.background_image.blit( self.track_image,
+                                        self.track_rect,
                                         self.track_rect )
 
     #--------------------------------------------------------------------------#
     def eval_velocity(self, time):
         ''' Eval scrolling velocity in pixels'''
 
-        return int(self.velocity.eval(time) * self.vel_scale)
+        return math.ceil(self.velocity.eval(time) * self.vel_scale)
 
     #--------------------------------------------------------------------------#
     def eval_margins(self, time):
