@@ -162,14 +162,28 @@ class MetaWorld:
         '''Save itself using pickle'''
 
         with open(path, 'wb') as file:
-            pickle.dump(self,file)
+            self.write(file)
+
+    #--------------------------------------------------------------------------#
+    def write(self, file):
+        '''Write itself to file using pickle'''
+
+        pickle.dump(self, file)
 
     #--------------------------------------------------------------------------#
     def load(path):
         '''Load a pickled file and return a MetaWorld object'''
 
         with open(path, 'rb') as file:
-            meta = pickle.load(file)
+            meta = MetaWorld.read(file)
+        
+        return meta
+
+    #--------------------------------------------------------------------------#
+    def read(file):
+        '''Read a pickled file and return a MetaWorld object'''
+
+        meta = pickle.load(file)
 
         # TODO File data validation
 

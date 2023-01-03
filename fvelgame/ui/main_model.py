@@ -1,6 +1,6 @@
 #------------------------------------------------------------------------------#
 
-import sys, tempfile
+import sys, tempfile, os
 import numpy as np
 
 from PySide6.QtCore       import QProcess, QUrl
@@ -41,15 +41,21 @@ class MainModel:
     #--------------------------------------------------------------------------#
     def run(self):
 
-        temp = tempfile.NamedTemporaryFile( prefix='meta_', suffix='.game' )
-        name = str(temp.name)
-
-        self.meta.save(name)
-
+        temp = tempfile.NamedTemporaryFile(mode='wb', 
+                                           prefix='meta_', 
+                                           suffix='.game',
+                                           delete = False)
+        
+        self.meta.write(temp)
+        temp.close()
+        
         run_game = str(Path(__file__).parents[1]/'game'/'run_game.py')
+        name = str(temp.name)
 
         self.p = QProcess()
         self.p.execute(sys.executable, [run_game, name])
+
+        os.remove(name)
 
     #--------------------------------------------------------------------------#
     def ambience_play(self):
