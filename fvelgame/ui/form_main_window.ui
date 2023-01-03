@@ -1336,7 +1336,7 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>68</width>
+                 <width>98</width>
                  <height>36</height>
                 </rect>
                </property>
@@ -1496,7 +1496,7 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>68</width>
+                 <width>98</width>
                  <height>36</height>
                 </rect>
                </property>
@@ -1803,8 +1803,8 @@
   </widget>
   <action name="action_Run">
    <property name="icon">
-    <iconset theme="media-playback-start">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/resources/icons/theme/media-playback-start.png</normaloff>:/icons/resources/icons/theme/media-playback-start.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Run Game</string>
@@ -1818,8 +1818,8 @@
   </action>
   <action name="action_Exit">
    <property name="icon">
-    <iconset theme="application-exit">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/resources/icons/theme/exit.png</normaloff>:/icons/resources/icons/theme/exit.png</iconset>
    </property>
    <property name="text">
     <string>Exit</string>
@@ -1836,8 +1836,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset theme="help-about">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/resources/icons/theme/help-about.png</normaloff>:/icons/resources/icons/theme/help-about.png</iconset>
    </property>
    <property name="text">
     <string>About</string>
@@ -1848,8 +1848,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset theme="help-contents">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/resources/icons/theme/help-contextual.png</normaloff>:/icons/resources/icons/theme/help-contextual.png</iconset>
    </property>
    <property name="text">
     <string>Contents</string>
@@ -1863,8 +1863,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset theme="edit-undo">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/resources/icons/theme/edit-undo.png</normaloff>:/icons/resources/icons/theme/edit-undo.png</iconset>
    </property>
    <property name="text">
     <string>Undo</string>
@@ -1881,8 +1881,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset theme="edit-redo">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/resources/icons/theme/edit-redo.png</normaloff>:/icons/resources/icons/theme/edit-redo.png</iconset>
    </property>
    <property name="text">
     <string>Redo</string>
@@ -1899,8 +1899,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset theme="document-revert">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/resources/icons/theme/document-revert.png</normaloff>:/icons/resources/icons/theme/document-revert.png</iconset>
    </property>
    <property name="text">
     <string>Reset</string>
@@ -1908,8 +1908,8 @@
   </action>
   <action name="action_New">
    <property name="icon">
-    <iconset theme="document-new">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/resources/icons/theme/document-new.png</normaloff>:/icons/resources/icons/theme/document-new.png</iconset>
    </property>
    <property name="text">
     <string>&amp;New</string>
@@ -1923,8 +1923,8 @@
   </action>
   <action name="action_Open">
    <property name="icon">
-    <iconset theme="document-open">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/resources/icons/theme/document-open.png</normaloff>:/icons/resources/icons/theme/document-open.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Open...</string>
@@ -1941,8 +1941,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset theme="document-save">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/resources/icons/theme/document-save.png</normaloff>:/icons/resources/icons/theme/document-save.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Save</string>
@@ -1959,8 +1959,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset theme="application-x-executable">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/resources/icons/theme/system-run.png</normaloff>:/icons/resources/icons/theme/system-run.png</iconset>
    </property>
    <property name="text">
     <string>Build</string>
@@ -1977,8 +1977,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset theme="document-save-as">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/resources/icons/theme/document-save-as.png</normaloff>:/icons/resources/icons/theme/document-save-as.png</iconset>
    </property>
    <property name="text">
     <string>Save As...</string>
@@ -1993,6 +1993,8 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

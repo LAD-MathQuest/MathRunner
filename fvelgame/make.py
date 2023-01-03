@@ -25,7 +25,7 @@ from pathlib import Path
 #------------------------------------------------------------------------------#
 # Common functions and variables
 #------------------------------------------------------------------------------#
-    
+
 here = Path(__file__).parent
 
 #------------------------------------------------------------------------------#
@@ -99,8 +99,10 @@ def make_default():
         py_file = ui_file.with_suffix('.py')
         run( f'pyside6-uic -g python {ui_file} -o {py_file}' )
 
+    run( 'pyside6-rcc resources.qrc -o resources_rc.py' )
+
     world_make.make_default()
-    
+
 #------------------------------------------------------------------------------#
 def make_dist():
     '''Execute PyInstaller to build a distribution'''
@@ -124,7 +126,7 @@ def make_dist():
     path_app       = here           / 'fvelgame.py'
     path_resources = here           / 'resources'
     path_icon      = path_resources / 'icons' / 'fvelgame.ico'
-    
+
     installer.run([ str(path_app),
                     '--name=FVelGame',
                    f'--icon={path_icon}',

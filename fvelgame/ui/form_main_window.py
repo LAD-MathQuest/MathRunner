@@ -24,6 +24,7 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QDoubleSpinBox, QFrame,
     QTabWidget, QToolBar, QVBoxLayout, QWidget)
 
 from pyqtgraph import PlotWidget
+import resources_rc
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -33,130 +34,70 @@ class Ui_MainWindow(object):
         self.action_Run = QAction(MainWindow)
         self.action_Run.setObjectName(u"action_Run")
         icon = QIcon()
-        iconThemeName = u"media-playback-start"
-        if QIcon.hasThemeIcon(iconThemeName):
-            icon = QIcon.fromTheme(iconThemeName)
-        else:
-            icon.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
-
+        icon.addFile(u":/icons/resources/icons/theme/media-playback-start.png", QSize(), QIcon.Normal, QIcon.Off)
         self.action_Run.setIcon(icon)
         self.action_Exit = QAction(MainWindow)
         self.action_Exit.setObjectName(u"action_Exit")
         icon1 = QIcon()
-        iconThemeName = u"application-exit"
-        if QIcon.hasThemeIcon(iconThemeName):
-            icon1 = QIcon.fromTheme(iconThemeName)
-        else:
-            icon1.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
-
+        icon1.addFile(u":/icons/resources/icons/theme/exit.png", QSize(), QIcon.Normal, QIcon.Off)
         self.action_Exit.setIcon(icon1)
         self.action_About = QAction(MainWindow)
         self.action_About.setObjectName(u"action_About")
         self.action_About.setEnabled(False)
         icon2 = QIcon()
-        iconThemeName = u"help-about"
-        if QIcon.hasThemeIcon(iconThemeName):
-            icon2 = QIcon.fromTheme(iconThemeName)
-        else:
-            icon2.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
-
+        icon2.addFile(u":/icons/resources/icons/theme/help-about.png", QSize(), QIcon.Normal, QIcon.Off)
         self.action_About.setIcon(icon2)
         self.action_Contents = QAction(MainWindow)
         self.action_Contents.setObjectName(u"action_Contents")
         self.action_Contents.setEnabled(False)
         icon3 = QIcon()
-        iconThemeName = u"help-contents"
-        if QIcon.hasThemeIcon(iconThemeName):
-            icon3 = QIcon.fromTheme(iconThemeName)
-        else:
-            icon3.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
-
+        icon3.addFile(u":/icons/resources/icons/theme/help-contextual.png", QSize(), QIcon.Normal, QIcon.Off)
         self.action_Contents.setIcon(icon3)
         self.action_Undo = QAction(MainWindow)
         self.action_Undo.setObjectName(u"action_Undo")
         self.action_Undo.setEnabled(False)
         icon4 = QIcon()
-        iconThemeName = u"edit-undo"
-        if QIcon.hasThemeIcon(iconThemeName):
-            icon4 = QIcon.fromTheme(iconThemeName)
-        else:
-            icon4.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
-
+        icon4.addFile(u":/icons/resources/icons/theme/edit-undo.png", QSize(), QIcon.Normal, QIcon.Off)
         self.action_Undo.setIcon(icon4)
         self.action_Redo = QAction(MainWindow)
         self.action_Redo.setObjectName(u"action_Redo")
         self.action_Redo.setEnabled(False)
         icon5 = QIcon()
-        iconThemeName = u"edit-redo"
-        if QIcon.hasThemeIcon(iconThemeName):
-            icon5 = QIcon.fromTheme(iconThemeName)
-        else:
-            icon5.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
-
+        icon5.addFile(u":/icons/resources/icons/theme/edit-redo.png", QSize(), QIcon.Normal, QIcon.Off)
         self.action_Redo.setIcon(icon5)
         self.action_Reset = QAction(MainWindow)
         self.action_Reset.setObjectName(u"action_Reset")
         self.action_Reset.setEnabled(False)
         icon6 = QIcon()
-        iconThemeName = u"document-revert"
-        if QIcon.hasThemeIcon(iconThemeName):
-            icon6 = QIcon.fromTheme(iconThemeName)
-        else:
-            icon6.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
-
+        icon6.addFile(u":/icons/resources/icons/theme/document-revert.png", QSize(), QIcon.Normal, QIcon.Off)
         self.action_Reset.setIcon(icon6)
         self.action_New = QAction(MainWindow)
         self.action_New.setObjectName(u"action_New")
         icon7 = QIcon()
-        iconThemeName = u"document-new"
-        if QIcon.hasThemeIcon(iconThemeName):
-            icon7 = QIcon.fromTheme(iconThemeName)
-        else:
-            icon7.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
-
+        icon7.addFile(u":/icons/resources/icons/theme/document-new.png", QSize(), QIcon.Normal, QIcon.Off)
         self.action_New.setIcon(icon7)
         self.action_Open = QAction(MainWindow)
         self.action_Open.setObjectName(u"action_Open")
         icon8 = QIcon()
-        iconThemeName = u"document-open"
-        if QIcon.hasThemeIcon(iconThemeName):
-            icon8 = QIcon.fromTheme(iconThemeName)
-        else:
-            icon8.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
-
+        icon8.addFile(u":/icons/resources/icons/theme/document-open.png", QSize(), QIcon.Normal, QIcon.Off)
         self.action_Open.setIcon(icon8)
         self.action_Save = QAction(MainWindow)
         self.action_Save.setObjectName(u"action_Save")
         self.action_Save.setEnabled(False)
         icon9 = QIcon()
-        iconThemeName = u"document-save"
-        if QIcon.hasThemeIcon(iconThemeName):
-            icon9 = QIcon.fromTheme(iconThemeName)
-        else:
-            icon9.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
-
+        icon9.addFile(u":/icons/resources/icons/theme/document-save.png", QSize(), QIcon.Normal, QIcon.Off)
         self.action_Save.setIcon(icon9)
         self.action_Build = QAction(MainWindow)
         self.action_Build.setObjectName(u"action_Build")
         self.action_Build.setEnabled(False)
         icon10 = QIcon()
-        iconThemeName = u"application-x-executable"
-        if QIcon.hasThemeIcon(iconThemeName):
-            icon10 = QIcon.fromTheme(iconThemeName)
-        else:
-            icon10.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
-
+        icon10.addFile(u":/icons/resources/icons/theme/system-run.png", QSize(), QIcon.Normal, QIcon.Off)
         self.action_Build.setIcon(icon10)
         self.action_Save_as = QAction(MainWindow)
         self.action_Save_as.setObjectName(u"action_Save_as")
         self.action_Save_as.setEnabled(False)
         icon11 = QIcon()
-        iconThemeName = u"document-save-as"
-        if QIcon.hasThemeIcon(iconThemeName):
-            icon11 = QIcon.fromTheme(iconThemeName)
-        else:
-            icon11.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
-
+        icon11.addFile(u":/icons/resources/icons/theme/document-save-as.png", QSize(), QIcon.Normal, QIcon.Off)
         self.action_Save_as.setIcon(icon11)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
@@ -836,7 +777,7 @@ class Ui_MainWindow(object):
         self.scrollArea_Obstacles.setWidgetResizable(True)
         self.scrollAreaWidgetContents_Obstacle = QWidget()
         self.scrollAreaWidgetContents_Obstacle.setObjectName(u"scrollAreaWidgetContents_Obstacle")
-        self.scrollAreaWidgetContents_Obstacle.setGeometry(QRect(0, 0, 68, 36))
+        self.scrollAreaWidgetContents_Obstacle.setGeometry(QRect(0, 0, 98, 36))
         self.verticalLayout_17 = QVBoxLayout(self.scrollAreaWidgetContents_Obstacle)
         self.verticalLayout_17.setObjectName(u"verticalLayout_17")
         self.verticalSpacer_ObstacleFrequency_1 = QSpacerItem(20, 0, QSizePolicy.Minimum, QSizePolicy.Expanding)
@@ -910,7 +851,7 @@ class Ui_MainWindow(object):
         self.scrollArea_Collectibles.setWidgetResizable(True)
         self.scrollAreaWidgetContents_Collectibles = QWidget()
         self.scrollAreaWidgetContents_Collectibles.setObjectName(u"scrollAreaWidgetContents_Collectibles")
-        self.scrollAreaWidgetContents_Collectibles.setGeometry(QRect(0, 0, 68, 36))
+        self.scrollAreaWidgetContents_Collectibles.setGeometry(QRect(0, 0, 98, 36))
         self.verticalLayout_15 = QVBoxLayout(self.scrollAreaWidgetContents_Collectibles)
         self.verticalLayout_15.setObjectName(u"verticalLayout_15")
         self.verticalSpacer_13 = QSpacerItem(20, 0, QSizePolicy.Minimum, QSizePolicy.Expanding)
