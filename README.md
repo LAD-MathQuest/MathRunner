@@ -77,39 +77,42 @@ To install python and run FVelGame follow the steps:
     pip install -r requirements.txt
     ```
 
-3. Preparing the game resources
+3. Building internal dependencies and resources
 
-    Go to directory `fvelgame-git/fvelgame/resources/games/`
+    Go to directory `fvelgame-git/fvelgame/`
 
-    Execute the script `game-01.py` to create the `game-01.pkl`
+    Execute the script `make.py`
 
     ```
-    python game-01.py
+    python make.py
     ```
 
 4. Executing
 
-    To execute the graphical interface go to directory `fvelgame-git/fvelgame` and run
+    To execute the graphical interface go to directory `fvelgame-git/fvelgame/` and run
 
     ```
     python fvelgame.py
     ```
 
-    To execute the default game got to directory `fvelgame-git/fvelgame/game` and run
+    To execute the default game run
 
     ```
-    python run_game.py
+    python ./game/run_game.py
     ```
 
-    To execute the game-01 use
+    To execute another game use
 
     ```
-    python run_game.py ../resources/games/game-01.pkl
+    python ./game/run_game.py ./resources/games/racing.game
     ```
 
 ## Technologies
 
-This program is implemented in Python and uses the following libraries
+This program is implemented in Python and uses the libraries
 
 - [pygame](https://www.pygame.org)
 - [PySide6](https://wiki.qt.io/Qt_for_Python)
+- [Numpy](https://numpy.org)
+- [NumExpr](https://pypi.org/project/numexpr/2.6.1)
+- [PyQtGraph](https://pypi.org/project/pyqtgraph)
