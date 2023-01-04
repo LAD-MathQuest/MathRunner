@@ -1,12 +1,12 @@
 #------------------------------------------------------------------------------#
 
-'''This script builds a Game example.
+'''This script builds a Game example
 
 Author: Luis D'Afonseca
 Name:   Racing
 
 Description
-Simple racing game with treasures and obstacles.
+Simple racing game with treasures and obstacles
 '''
 
 #------------------------------------------------------------------------------#

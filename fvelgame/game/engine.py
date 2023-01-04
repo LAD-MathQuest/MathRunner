@@ -11,36 +11,7 @@ from game.objects     import GameObjects
 from game.sound_mixer import SoundMixer
 from game.scoreboard  import Scoreboard
 from game.draw_help   import draw_help
-
-#------------------------------------------------------------------------------#
-def surface_tiling(surf, tile, vertical):
-
-    t_width  = tile.get_width ()
-    t_height = tile.get_height()
-
-    s_width  = surf.get_width ()
-    s_height = surf.get_height()
-
-    rect   = pygame.Rect((0,0), (t_width,t_height))
-    step_x = t_width
-    step_y = t_height
-
-    if vertical:
-        rect.bottom = s_height
-        step_y      = -step_y
-
-    nh = math.ceil(s_height / t_height)
-    nw = math.ceil(s_width  / t_width )
-
-    rr = rect.copy()
-
-    for ii in range(nh):
-        for jj in range(nw):
-            surf.blit(tile, rr)
-            rr.move_ip(step_x, 0)
-
-        rr.left = rect.left
-        rr.move_ip(0, step_y)
+from game.background  import Background
 
 #------------------------------------------------------------------------------#
 class Engine:
@@ -48,21 +19,18 @@ class Engine:
     #--------------------------------------------------------------------------#
     def __init__(self, world):
 
-        self.world = world
-        self.clock = pygame.time.Clock()
-
-        self.vertical = world.game_vertical
+        self.world        = world
+        self.vertical     = world.game_vertical
+        self.clock        = pygame.time.Clock()
+        self.background   = Background(world)
+        self.scoreboard   = Scoreboard(world.param_scoreboard)
+        self.at_game_over = False
 
         self.set_display()
-        self.set_background()
 
         SoundMixer.load_music(world.game_ambience, world.game_ambience_volume)
 
-        self.scoreboard = Scoreboard(world.param_scoreboard)
-
-        self.at_game_over = False
-
-        # Blocks unused events
+        # Block unused events
         pygame.event.set_blocked([pygame.MOUSEMOTION,
                                   pygame.MOUSEBUTTONUP,
                                   pygame.MOUSEBUTTONDOWN,
@@ -81,7 +49,7 @@ class Engine:
                                   pygame.MOUSEWHEEL,
                                   pygame.MULTIGESTURE,
                                   pygame.TEXTEDITING,
-                                  pygame.TEXTINPUT  ])
+                                  pygame.TEXTINPUT])
 
         self.event_restart         = pygame.USEREVENT + 1
         self.event_new_obstacle    = pygame.USEREVENT + 2
@@ -116,12 +84,12 @@ class Engine:
     #--------------------------------------------------------------------------#
     def wait_for_focus(self):
 
-        wait = True
+        keep_waiting = True
 
-        while wait:
+        while keep_waiting:
             for event in pygame.event.get():
                 if event.type == pygame.WINDOWFOCUSGAINED:
-                    wait = False
+                    keep_waiting = False
 
             self.clock.tick(gp.FPS//10)
 
@@ -232,165 +200,36 @@ class Engine:
 
         self.start_time   = pygame.time.get_ticks()
         self.elapsed_time = 0
-        self.velocity     = self.world.eval_velocity(self.elapsed_time)
+
+        self.update_velocity()
 
         GameObjects.init(self.vertical)
         GameObjects.create_player(self.world.param_player,
                                   self.world.player_speed,
-                                  self.world.get_player_boundaries())
+                                  self.get_player_boundaries())
 
         self.draw()
+        play = self.wait()
 
-        if self.wait():
+        if play:
             self.new_obstacle()
             self.set_timer_collectibles()
-            return True
 
-        else:
-            return False
+        return play
 
     #--------------------------------------------------------------------------#
-    def set_background(self):
+    def draw(self):
 
-        self.bg_scrolls = self.world.background_scrolls
+        score = GameObjects.score + int(self.world.game_time_bonus * self.elapsed_time)
 
-        if self.bg_scrolls:
-            self.set_background_scrolling()
-        else:
-            self.set_background_not_scrolling()
+        self.background.draw(self.display)
+        self.scoreboard.draw(self.display, score, self.velocity, self.elapsed_time)
+        GameObjects    .draw(self.display)
 
-    #--------------------------------------------------------------------------#
-    def set_background_not_scrolling(self):
+        if self.at_game_over:
+            self.draw_game_over()
 
-        w_image  = self.world.background_image
-        w_width  = w_image.get_width ()
-        w_height = w_image.get_height()
-
-        s_width  = gp.SCREEN_SIZE[0]
-        s_height = gp.SCREEN_SIZE[1]
-
-        bg_image = pygame.Surface(gp.SCREEN_SIZE)
-
-        if w_width < s_width or w_height < s_height:
-
-            surface_tiling(bg_image, w_image, self.vertical)
-
-        else: # Background has same size or is larger than screen
-
-            rect = pygame.Rect((0,0), gp.SCREEN_SIZE)
-
-            if self.vertical:
-                rect.bottom = w_height
-
-            bg_image.blit(w_image, (0,0), rect)
-
-        self.bg_image     = bg_image
-        self.bg_show_rect = None
-
-    #--------------------------------------------------------------------------#
-    def set_background_scrolling(self):
-
-        w_image  = self.world.background_image
-        w_width  = w_image.get_width ()
-        w_height = w_image.get_height()
-
-        s_width  = gp.SCREEN_SIZE[0]
-        s_height = gp.SCREEN_SIZE[1]
-
-        if self.vertical:
-
-            if w_width < s_width or w_height < s_height:
-
-                n_height = math.ceil(s_height / w_height) * w_height
-                n_image  = pygame.Surface((s_width, n_height))
-
-                surface_tiling(n_image, w_image, self.vertical)
-
-                w_image  = n_image
-                w_width  = s_width
-                w_height = n_height
-
-            self.bg_top_start = w_height
-            self.bg_image     = pygame.Surface((s_width, w_height+s_height))
-
-            self.bg_image.blit(w_image, (0,s_height))
-            self.bg_image.blit(w_image, (0,0), (0,w_height-s_height,s_width,s_height) )
-
-        else: # Horizontal scrolling
-
-            if w_width < s_width or w_height < s_height:
-
-                n_width = math.ceil(s_width / w_width) * w_width
-                n_image = pygame.Surface((n_width, s_height))
-
-                surface_tiling(n_image, w_image, self.vertical)
-
-                w_image  = n_image
-                w_width  = n_width
-                w_height = s_height
-
-            self.bg_max_width = w_width + s_width
-            self.bg_image     = pygame.Surface((self.bg_max_width, s_height))
-
-            self.bg_image.blit(w_image, (0,0))
-            self.bg_image.blit(w_image, (w_width,0), (0,0,s_width,s_height) )
-
-        self.bg_show_rect = pygame.Rect((0,0), gp.SCREEN_SIZE)
-
-
-        self.bg_scrolls = self.world.background_scrolls
-
-        if not self.bg_scrolls:
-            self.bg_image     = self.world.background_image
-            self.bg_show_rect = None
-            return
-
-        w_bg_image  = self.world.background_image
-        w_bg_width  = w_bg_image.get_width ()
-        w_bg_height = w_bg_image.get_height()
-
-        sc_width  = gp.SCREEN_SIZE[0]
-        sc_height = gp.SCREEN_SIZE[1]
-
-        if self.vertical:
-
-            self.bg_top_start = w_bg_height
-            self.bg_image     = pygame.Surface((sc_width, w_bg_height+sc_height))
-
-            self.bg_image.blit(w_bg_image, (0,sc_height))
-            self.bg_image.blit(w_bg_image, (0,0), (0,w_bg_height-sc_height,sc_width,sc_height) )
-
-        else:
-            self.bg_max_width = w_bg_width + sc_width
-            self.bg_image     = pygame.Surface((self.bg_max_width, sc_height))
-
-            self.bg_image.blit(w_bg_image, (0,0))
-            self.bg_image.blit(w_bg_image, (sc_width+1,0), (0,0,sc_width,sc_height) )
-
-        self.bg_show_rect = pygame.Rect((0,0), gp.SCREEN_SIZE)
-
-    #--------------------------------------------------------------------------#
-    def update_background(self):
-
-        if not self.bg_scrolls:
-            return
-
-        if self.vertical:
-            self.bg_show_rect.top -= self.velocity
-
-            if self.bg_show_rect.top < 0:
-                self.bg_show_rect.top = self.bg_top_start + self.bg_show_rect.top
-
-        else:
-            self.bg_show_rect.right += self.velocity
-
-            if self.bg_show_rect.right > self.bg_max_width:
-                self.bg_show_rect.right += gp.SCREEN_SIZE[0] - self.bg_max_width
-
-    #--------------------------------------------------------------------------#
-    def draw_background(self):
-
-        self.display.blit(self.bg_image, (0,0), self.bg_show_rect)
+        self.flip()
 
     #--------------------------------------------------------------------------#
     def draw_game_over(self):
@@ -405,22 +244,6 @@ class Engine:
         font.render_to( self.display, rect, None, (200,20,20) )
 
     #--------------------------------------------------------------------------#
-    def draw(self):
-
-        self.draw_background()
-
-        score = GameObjects.score + int(self.world.game_time_bonus * self.elapsed_time)
-
-        self.scoreboard.draw(self.display, score, self.velocity, self.elapsed_time)
-
-        GameObjects.draw(self.display)
-
-        if self.at_game_over:
-            self.draw_game_over()
-
-        self.flip()
-
-    #--------------------------------------------------------------------------#
     def game_over(self):
 
         self.at_game_over = True
@@ -428,10 +251,8 @@ class Engine:
         SoundMixer.stop_music()
         self.draw()
 
-        if self.wait():
-            event = self.event_restart
-        else:
-            event = pygame.QUIT
+        play  = self.wait()
+        event = self.event_restart if play else pygame.QUIT
 
         GameObjects.kill_all()
 
@@ -450,19 +271,20 @@ class Engine:
 
         self.flip()
 
-        if not self.wait(showing_help=True):
+        play = self.wait(showing_help=True)
+
+        if not play:
             pygame.event.clear()
             pygame.event.post(pygame.event.Event(pygame.QUIT))
 
     #--------------------------------------------------------------------------#
     def update(self):
 
-        self.elapsed_time = (pygame.time.get_ticks() - self.start_time) / 1000
-        self.velocity     = self.world.eval_velocity(self.elapsed_time)
+        self.update_velocity()
 
-        self.update_background()
+        self.background.update(self.displacement)
 
-        GameObjects.update(self.velocity, self.world.get_player_boundaries())
+        GameObjects.update(self.displacement, self.get_player_boundaries())
 
         self.draw()
 
@@ -516,7 +338,7 @@ class Engine:
             rr = random.uniform(self.world.obstacles_min_delay,
                                 self.world.obstacles_max_delay)
 
-            delay = int(10000 / self.velocity * rr)
+            delay = int(10000 / self.displacement * rr)
 
         pygame.time.set_timer(self.event_new_obstacle, delay)
 
@@ -527,8 +349,20 @@ class Engine:
             rr = random.uniform(self.world.collectibles_min_delay,
                                 self.world.collectibles_max_delay)
 
-            delay = int(10000 / self.velocity * rr)
+            delay = int(10000 / self.displacement * rr)
 
         pygame.time.set_timer(self.event_new_collectible, delay)
+
+    #--------------------------------------------------------------------------#
+    def get_player_boundaries(self):
+
+        return self.world.get_player_boundaries()
+
+    #--------------------------------------------------------------------------#
+    def update_velocity(self):
+
+        self.elapsed_time = (pygame.time.get_ticks() - self.start_time) / 1000
+        self.velocity     = self.world.eval_velocity(self.elapsed_time)
+        self.displacement = self.velocity
 
 #------------------------------------------------------------------------------#

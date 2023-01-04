@@ -20,6 +20,7 @@
 - Implement function evaluation
 - Add transparent option to MetaImage
 - Implement track scrolling
+- Stop computing elapsed_time when showing the help message
 
 #### Games
 

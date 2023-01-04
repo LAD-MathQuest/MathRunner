@@ -3,10 +3,10 @@
 '''This script builds a Game example
 
 Author: Luis D'Afonseca
-Name:   Student
+Name:   Deep Sea
 
 Description
-A confident student runs from studying and seeks only playing video games
+An underwater adventure
 '''
 
 #------------------------------------------------------------------------------#
@@ -22,7 +22,7 @@ from world.meta_world import MetaImage, MetaObject, MetaScoreboard, MetaWorld
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
 
-    print('Building game 02: Student...')
+    print('Building game 03: Deep Seas...')
 
     path_resources   = Path(__file__).parents[1]/'resources'
     path_backgrounds = path_resources/'backgrounds'
@@ -39,16 +39,16 @@ if __name__ == '__main__':
     # Software
     #--------------------------------------------------------------------------#
 
-    meta.soft_name        = 'Student'
+    meta.soft_name        = 'Deep Sea'
     meta.soft_author      = "Luis D'Afonseca"
-    meta.soft_description = 'A confident student runs from studying and seeks only playing video games'
+    meta.soft_description = 'An underwater adventure'
     meta.soft_icon        = None
 
     # Game
     #--------------------------------------------------------------------------#
 
     meta.game_vertical   = False
-    meta.game_time_bonus = -2
+    meta.game_time_bonus = 10
     meta.game_ambience   = None
 
     # Appearance
@@ -57,7 +57,7 @@ if __name__ == '__main__':
     meta.background_image   = MetaImage(color=(55,55,55))
     meta.background_scrolls = False
 
-    meta.track_image = MetaImage(color=(102,153,153))
+    meta.track_image = MetaImage(color=(26, 34, 76))
 
     path_font = path_fonts/'Party_Confetti.ttf'
     meta.scoreboard = MetaScoreboard(text_font      = path_font,
@@ -69,62 +69,42 @@ if __name__ == '__main__':
     # Player
     #--------------------------------------------------------------------------#
 
-    path_player = path_objects/'confident_student.png'
-    imag_player = MetaImage((90,140), path=path_player)
-
+    imag_player       = MetaImage((90,40), color=(80, 86, 93))
     meta.player       = MetaObject(imag_player)
     meta.player_speed = 800
 
     # Obstacles
     #--------------------------------------------------------------------------#
 
-    points = -10
+    points = 10
 
     meta.obstacles_frequency = 3
     meta.obstacles = []
 
-    # Image sizes
-    # file = [ (110,143), (168,130), (92,124),
-    #          (207,155), (203,103), (166,111),
-    #          (135,147), (204,114), (227,148) ]
-    sizes = [ (80,104),  (100,77), (80,108),
-              (100,75),  (100,51), (100,67),
-              (100,109), (100,56), (160,104) ]
-
-    for ii in range(9):
-
-        path_obstacle = path_objects / f'book-{ii+1}.png'
-        imag_obstacle = MetaImage(sizes[ii], path=path_obstacle)
-
-        meta.obstacles.append(MetaObject(imag_obstacle, points))
+    imag_obstacle = MetaImage((80,30), color=(200,50,50))
+    meta.obstacles.append(MetaObject(imag_obstacle, points))
 
     # Collectibles
     #--------------------------------------------------------------------------#
 
-    points = -100
+    points = 100
 
     meta.collectibles_frequency = 1
     meta.collectibles = []
 
-    # Image sizes
-    # file = [ (197, 133), (224, 221), (227, 219), (168, 223), (202, 133) ]
-    sizes = [ (100,68), (100,99), (100,96), (80,106), (100,66) ]
-
-    for ii in range(5):
-        path_collectible = path_objects / f'video_game_controller-{ii+1}.png'
-        imag_collectible = MetaImage(sizes[ii], path=path_collectible)
-        meta.collectibles.append(MetaObject(imag_collectible, points))
+    imag_collectible = MetaImage((50,50), color=(242, 182, 0))
+    meta.collectibles.append(MetaObject(imag_collectible, points))
 
     # Functions
     #--------------------------------------------------------------------------#
 
     meta.velocity = VelocityFunction('0.25 + 0.005*t')
-    meta.margins  = MarginFunctions ('0.12', '0.9')
+    meta.margins  = MarginFunctions ('0.12', '0.9 + 0.1*sin(pi*x/4)')
 
     # Saving
     #--------------------------------------------------------------------------#
 
-    path = path_games/'student.game'
+    path = path_games/'deep_sea.game'
 
     print(F'Writing: {path}')
 
