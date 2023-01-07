@@ -183,4 +183,14 @@ class Background:
 
         surf.blit(self.bg_image, (0,0), self.bg_show_rect)
 
+    #--------------------------------------------------------------------------#
+    def get_player_boundaries(self):
+
+        return self.world.get_player_boundaries()
+
+    #--------------------------------------------------------------------------#
+    def get_spawn_boundaries(self):
+
+        return self.world.get_spawn_boundaries()
+
 #------------------------------------------------------------------------------#

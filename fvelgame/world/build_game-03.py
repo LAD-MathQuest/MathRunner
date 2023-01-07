@@ -41,7 +41,7 @@ if __name__ == '__main__':
 
     meta.soft_name        = 'Deep Sea'
     meta.soft_author      = "Luis D'Afonseca"
-    meta.soft_description = 'An underwater adventure'
+    meta.soft_description = "Uma aventura em baixo d'água"
     meta.soft_icon        = None
 
     # Game

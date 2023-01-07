@@ -33,7 +33,7 @@ def eval_width(font, span, num_columns=1):
     if type(span) in (list, tuple):
 
         widths = [0]*num_columns
-        
+
         for ii, ss in enumerate(span):
             widths[ii] = get_width(ss)
 
@@ -60,13 +60,13 @@ class OnScreenText_Table:
     '''
 
     #--------------------------------------------------------------------------#
-    def __init__(self, 
+    def __init__(self,
                  font         = None,
                  font_size    = 22,
                  line_spacing = 1.5,
                  position     = (0,0),
-                 num_lines    = 1, 
-                 num_columns  = 1, 
+                 num_lines    = 1,
+                 num_columns  = 1,
                  column_width = 100,
                  fgcolor      = (255,255,255),
                  bgcolor      = (0,0,0)):
@@ -159,7 +159,7 @@ class OnScreenText_Table:
 
         Args:
             ii (int) :          Column index
-            span (int ou str) : Width in pixels or fitting string 
+            span (int ou str) : Width in pixels or fitting string
         '''
 
         self.cell_w[jj] = eval_width(self.font, column_widths)
@@ -217,7 +217,7 @@ class OnScreenText_Paragraph:
     '''
 
     #--------------------------------------------------------------------------#
-    def __init__(self, 
+    def __init__(self,
                  font         = None,
                  font_size    = 22,
                  line_spacing = 1.5,
@@ -245,8 +245,7 @@ class OnScreenText_Paragraph:
 
         self.position = position
 
-        if not font:
-            font = gp.DEFAULT_FONT
+        if not font: font = gp.DEFAULT_FONT
 
         self.font        = pygame.freetype.Font(font, font_size)
         self.font.origin = True
@@ -258,8 +257,8 @@ class OnScreenText_Paragraph:
 
         self.first_line_y = self.font.get_sized_ascender()
         self.line_skip    = line_spacing * self.font.get_sized_height()
-        self.descender    = 1 - self.font.get_sized_descender() 
-        self.next_line    = 0
+        self.descender    = 1 - self.font.get_sized_descender()
+        self.last_line    = 0
 
         self.height = self.first_line_y + self.descender
 
@@ -290,7 +289,7 @@ class OnScreenText_Paragraph:
     #--------------------------------------------------------------------------#
     def _draw_line(self, surf, content, ii, align):
 
-        xx = self.position[0] 
+        xx = self.position[0]
         yy = self.position[1] + self.first_line_y + ii*self.line_skip
 
         if align != '<':
@@ -316,7 +315,7 @@ class OnScreenText_Paragraph:
         str_width = lambda ss : self.font.get_rect(ss).width
 
         content_width = str_width(content)
-        
+
         if content_width <= self.width:
             ii = self._draw_line(surf, content, ii, align)
             return ii
@@ -324,7 +323,7 @@ class OnScreenText_Paragraph:
         words = content.split()
 
         line_try = words.pop(0)
-        line_str = words.pop(0)
+        line_str = line_try
 
         for word in words:
 
@@ -356,8 +355,8 @@ class OnScreenText_Paragraph:
 
     #--------------------------------------------------------------------------#
     def draw(self, surf, content, line=None, align='<'):
-        
-        ii = self.next_line if not line else line
+
+        ii = self.last_line if not line else line
 
         if type(content) in (list, tuple):
             for cc in content:
@@ -366,12 +365,13 @@ class OnScreenText_Paragraph:
         else:
             ii = self._draw_full_str(surf, content, ii, align)
 
-        if ii > self.next_line:
-            self.next_line   = ii
+        if ii > self.last_line:
+            self.last_line   = ii
             self.height      = self.first_line_y               \
-                             + self.next_line * self.line_skip \
+                             + self.last_line * self.line_skip \
                              + self.descender
             self.size[1]     = self.height
             self.area.height = self.height
+
 
 #------------------------------------------------------------------------------#

@@ -41,7 +41,9 @@ if __name__ == '__main__':
 
     meta.soft_name        = 'Student'
     meta.soft_author      = "Luis D'Afonseca"
-    meta.soft_description = 'A confident student runs from studying and seeks only playing video games'
+    meta.soft_description = '''Um estudante confiante só quer saber de jogar videogames
+
+Perca o máximo de pontos fugindo dos livros e jogando videogames'''
     meta.soft_icon        = None
 
     # Game

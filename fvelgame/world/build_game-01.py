@@ -41,7 +41,7 @@ if __name__ == '__main__':
 
     meta.soft_name        = 'Racing'
     meta.soft_author      = "Luis D'Afonseca"
-    meta.soft_description = 'Simple racing game with treasures and obstacles'
+    meta.soft_description = 'Um jogo de corrida onde o jogador deve evitar os obstáculos e coletar as joias'
     meta.soft_icon        = None
 
     # Game

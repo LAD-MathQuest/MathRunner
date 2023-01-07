@@ -2,8 +2,6 @@
 
 import pygame
 import random
-import time
-import math
 
 import game.game_params as gp
 
@@ -14,17 +12,31 @@ from game.draw_help   import draw_help
 from game.background  import Background
 
 #------------------------------------------------------------------------------#
+
+# Game status
+STATUS_WELCOME  = 0
+STATUS_STARTING = 1
+STATUS_PLAYING  = 2
+STATUS_GAMEOVER = 3
+
+# Exception used to quit the game
+class QuitGame(Exception):
+    '''Raised to quit the game'''
+    pass
+
+WAIT_FPS = gp.FPS // 10
+TIME_STEP = 1 / gp.FPS
+
+#------------------------------------------------------------------------------#
 class Engine:
 
     #--------------------------------------------------------------------------#
     def __init__(self, world):
 
-        self.world        = world
-        self.vertical     = world.game_vertical
-        self.clock        = pygame.time.Clock()
-        self.background   = Background(world)
-        self.scoreboard   = Scoreboard(world.param_scoreboard)
-        self.at_game_over = False
+        self.world      = world
+        self.clock      = pygame.time.Clock()
+        self.background = Background(world)
+        self.scoreboard = Scoreboard(world.param_scoreboard)
 
         self.set_display()
 
@@ -82,64 +94,91 @@ class Engine:
         pygame.display.flip()
 
     #--------------------------------------------------------------------------#
+    def run(self):
+
+        try:
+            self.start(STATUS_WELCOME)
+
+            while True:
+                self.game_loop()
+                self.start(STATUS_STARTING)
+
+        except QuitGame:
+            SoundMixer.stop_music()
+            pygame.quit()
+
+    #------------------------------------------------------------------------------#
+    def start(self, status):
+
+        self.status = status
+        self.elapsed_time = 0
+        self.eval_velocity()
+
+        GameObjects.init(self.world.game_vertical)
+        GameObjects.create_player(self.world.param_player,
+                                  self.world.player_speed,
+                                  self.background.get_player_boundaries())
+
+        self.last_object_rect = pygame.Rect(0,0,0,0)
+
+        self.draw()
+        self.wait()
+        self.new_obstacle()
+        self.set_timer_collectibles()
+
+    #--------------------------------------------------------------------------#
     def wait_for_focus(self):
 
-        keep_waiting = True
+        SoundMixer.stop_music()
 
-        while keep_waiting:
-            for event in pygame.event.get():
-                if event.type == pygame.WINDOWFOCUSGAINED:
-                    keep_waiting = False
+        while True:
 
-            self.clock.tick(gp.FPS//10)
+            event = pygame.event.wait()
 
+            if   event.type == pygame.QUIT:              raise QuitGame
+            elif event.type == pygame.WINDOWFOCUSGAINED: break
+
+            self.clock.tick(WAIT_FPS)
+
+        self.draw()
         self.show_help()
-        self.show_help()
+        SoundMixer.play_music()
 
     #--------------------------------------------------------------------------#
     def wait(self, showing_help=False):
 
+        SoundMixer.stop_music()
         pygame.event.clear()
 
         while True:
-            for event in pygame.event.get():
 
-                if event.type == pygame.QUIT:
-                    return False
+            event = pygame.event.wait()
 
-                elif event.type == pygame.WINDOWFOCUSLOST:
-                    self.wait_for_focus()
+            if   event.type == pygame.QUIT:            raise QuitGame
+            elif event.type == pygame.WINDOWFOCUSLOST: self.wait_for_focus()
+            elif event.type == pygame.KEYDOWN:
 
-                elif event.type == pygame.KEYDOWN:
-                    if event.key in [ pygame.K_q, pygame.K_ESCAPE ]:
-                        return False
+                SoundMixer.parse_key(event.key)
 
-                    elif event.key in [ pygame.K_h, pygame.K_F1, pygame.K_SPACE ]:
-                        if showing_help:
-                            self.draw()
-                            return True
-                        else:
-                            self.show_help()
+                if   event.key in [pygame.K_q, pygame.K_ESCAPE]: raise QuitGame
+                elif event.key in [pygame.K_h, pygame.K_F1, pygame.K_SPACE]:
 
-                    elif event.key == pygame.K_m:
-                        SoundMixer.toggle_mute()
-
-                    elif event.key == pygame.K_n:
-                        SoundMixer.toggle_play_music()
-
-                    elif event.key in [ pygame.K_PLUS, pygame.K_EQUALS ]:
-                        SoundMixer.volume_up()
-
-                    elif event.key == pygame.K_MINUS:
-                        SoundMixer.volume_down()
-
+                    if showing_help: # exit help
+                        self.draw()
+                        break
                     else:
-                        return True
+                        self.show_help()
+                else:
+                    break
 
-            self.clock.tick(gp.FPS//10)
+            self.clock.tick(WAIT_FPS)
+
+        SoundMixer.play_music()
 
     #--------------------------------------------------------------------------#
     def game_loop(self):
+
+        self.status = STATUS_PLAYING
 
         SoundMixer.play_music()
 
@@ -148,74 +187,23 @@ class Engine:
         while True:
             for event in pygame.event.get():
 
-                if event.type == pygame.QUIT:
-                    SoundMixer.stop_music()
-                    pygame.quit()
-                    return False
-
-                elif event.type == pygame.WINDOWFOCUSLOST:
-                    self.wait_for_focus()
-
-                elif event.type == self.event_restart:
-                    SoundMixer.stop_music()
-                    return True
-
-                elif event.type == self.event_new_obstacle:
-                    self.new_obstacle()
-
-                elif event.type == self.event_new_collectible:
-                    self.new_collectible()
-
+                if   event.type == pygame.QUIT:                raise QuitGame
+                elif event.type == pygame.WINDOWFOCUSLOST:     self.wait_for_focus()
+                elif event.type == self.event_restart:         return
+                elif event.type == self.event_new_obstacle:    self.new_obstacle()
+                elif event.type == self.event_new_collectible: self.new_collectible()
                 elif event.type == pygame.KEYDOWN:
 
-                    if event.key in [ pygame.K_q, pygame.K_ESCAPE ]:
-                        SoundMixer.stop_music()
-                        pygame.quit()
-                        return False
+                    SoundMixer.parse_key(event.key)
 
-                    elif event.key in [ pygame.K_h, pygame.K_F1, pygame.K_SPACE ]:
-                        SoundMixer.stop_music()
-                        self.show_help()
-                        SoundMixer.play_music()
-
-                    elif event.key == pygame.K_m:
-                        SoundMixer.toggle_mute()
-
-                    elif event.key == pygame.K_n:
-                        SoundMixer.toggle_play_music()
-
-                    elif event.key in [ pygame.K_PLUS, pygame.K_EQUALS ]:
-                        SoundMixer.volume_up()
-
-                    elif event.key == pygame.K_MINUS:
-                        SoundMixer.volume_down()
+                    if   event.key in [pygame.K_q, pygame.K_ESCAPE]:             raise QuitGame
+                    elif event.key in [pygame.K_h, pygame.K_F1, pygame.K_SPACE]: self.show_help()
 
             self.update()
+            self.draw  ()
+
             self.clock.tick(gp.FPS)
-
-    #------------------------------------------------------------------------------#
-    def start(self):
-
-        self.last_object_rect = pygame.Rect(0,0,0,0)
-
-        self.start_time   = pygame.time.get_ticks()
-        self.elapsed_time = 0
-
-        self.update_velocity()
-
-        GameObjects.init(self.vertical)
-        GameObjects.create_player(self.world.param_player,
-                                  self.world.player_speed,
-                                  self.get_player_boundaries())
-
-        self.draw()
-        play = self.wait()
-
-        if play:
-            self.new_obstacle()
-            self.set_timer_collectibles()
-
-        return play
+            self.elapsed_time += TIME_STEP
 
     #--------------------------------------------------------------------------#
     def draw(self):
@@ -226,10 +214,35 @@ class Engine:
         self.scoreboard.draw(self.display, score, self.velocity, self.elapsed_time)
         GameObjects    .draw(self.display)
 
-        if self.at_game_over:
-            self.draw_game_over()
+        if   self.status == STATUS_WELCOME:  self.draw_welcome  ()
+        elif self.status == STATUS_STARTING: self.draw_starting ()
+        elif self.status == STATUS_GAMEOVER: self.draw_game_over()
 
         self.flip()
+
+    #--------------------------------------------------------------------------#
+    def draw_welcome(self):
+
+        self.display.fill( (150,150,150), None, pygame.BLEND_MULT )
+
+        size = self.display.get_rect().height // 10
+        font = pygame.freetype.Font( gp.DEFAULT_FONT, size )
+
+        rect = font.get_rect(self.world.soft_name)
+        rect.center = self.display.get_rect().center
+        font.render_to( self.display, rect, None, (200,200,200) )
+
+    #--------------------------------------------------------------------------#
+    def draw_starting(self):
+
+        self.display.fill( (150,150,150), None, pygame.BLEND_MULT )
+
+        size = self.display.get_rect().height // 14
+        font = pygame.freetype.Font( gp.DEFAULT_FONT, size )
+
+        rect = font.get_rect('Pressione qualquer tecla')
+        rect.center = self.display.get_rect().center
+        font.render_to( self.display, rect, None, (200,200,200) )
 
     #--------------------------------------------------------------------------#
     def draw_game_over(self):
@@ -244,60 +257,49 @@ class Engine:
         font.render_to( self.display, rect, None, (200,20,20) )
 
     #--------------------------------------------------------------------------#
-    def game_over(self):
-
-        self.at_game_over = True
-
-        SoundMixer.stop_music()
-        self.draw()
-
-        play  = self.wait()
-        event = self.event_restart if play else pygame.QUIT
-
-        GameObjects.kill_all()
-
-        pygame.event.clear()
-        pygame.event.post(pygame.event.Event(event))
-
-        self.at_game_over = False
-
-    #--------------------------------------------------------------------------#
     def show_help(self):
 
         draw_help(self.display,
                   self.world.soft_name,
                   self.world.soft_description,
-                  self.vertical)
+                  self.world.game_vertical)
 
         self.flip()
+        self.wait(showing_help=True)
 
-        play = self.wait(showing_help=True)
+    #--------------------------------------------------------------------------#
+    def game_over(self):
 
-        if not play:
-            pygame.event.clear()
-            pygame.event.post(pygame.event.Event(pygame.QUIT))
+        self.status = STATUS_GAMEOVER
+
+        SoundMixer.stop_music()
+
+        self.draw()
+        self.wait()
+
+        GameObjects.kill_all()
+
+        pygame.event.clear()
+        pygame.event.post(pygame.event.Event(self.event_restart))
+
+        self.status = STATUS_PLAYING
 
     #--------------------------------------------------------------------------#
     def update(self):
 
-        self.update_velocity()
-
+        self.eval_velocity()
         self.background.update(self.displacement)
 
-        GameObjects.update(self.displacement, self.get_player_boundaries())
-
-        self.draw()
-
+        GameObjects.update(self.displacement, self.background.get_player_boundaries())
         GameObjects.check_collectible()
 
-        if GameObjects.check_collision():
-            self.game_over()
+        if GameObjects.check_collision(): self.game_over()
 
     #--------------------------------------------------------------------------#
     def new_obstacle(self):
 
         ob = random.choice(self.world.param_obstacles)
-        sb = self.world.get_spawn_boundaries()
+        sb = self.background.get_spawn_boundaries()
 
         sprite = GameObjects.create_obstacle(ob, sb)
         rect   = sprite.rect
@@ -309,14 +311,13 @@ class Engine:
             return
 
         self.last_object_rect = rect
-
         self.set_timer_obstacles()
 
     #--------------------------------------------------------------------------#
     def new_collectible(self):
 
         ob = random.choice(self.world.param_collectibles)
-        sb = self.world.get_spawn_boundaries()
+        sb = self.background.get_spawn_boundaries()
 
         sprite = GameObjects.create_collectible(ob, sb)
         rect   = sprite.rect
@@ -328,7 +329,6 @@ class Engine:
             return
 
         self.last_object_rect = rect
-
         self.set_timer_collectibles()
 
     #--------------------------------------------------------------------------#
@@ -354,14 +354,8 @@ class Engine:
         pygame.time.set_timer(self.event_new_collectible, delay)
 
     #--------------------------------------------------------------------------#
-    def get_player_boundaries(self):
+    def eval_velocity(self):
 
-        return self.world.get_player_boundaries()
-
-    #--------------------------------------------------------------------------#
-    def update_velocity(self):
-
-        self.elapsed_time = (pygame.time.get_ticks() - self.start_time) / 1000
         self.velocity     = self.world.eval_velocity(self.elapsed_time)
         self.displacement = self.velocity
 

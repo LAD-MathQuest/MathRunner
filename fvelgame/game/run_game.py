@@ -16,45 +16,28 @@ from world.game_world import GameWorld
 from game.engine      import Engine
 
 #------------------------------------------------------------------------------#
-def main(meta):
-    '''
-    This function runs the game
+def main():
+    '''Runs the game'''
 
-        meta: MetaWorld object
-    '''
-
-    pygame.init()
-    pygame.mouse.set_visible(False)
-    pygame.display.set_mode( (0,0), pygame.FULLSCREEN )
-
-    world  = GameWorld(meta)
-    engine = Engine  (world)
-    
-    while True:
-    
-        # Restart engine and waits for user press any key
-        if not engine.start():
-            break
-    
-        # Main game loop
-        if not engine.game_loop():
-            break
-
-    pygame.quit()
-
-#------------------------------------------------------------------------------#
-if __name__ == '__main__':
-    
     import argparse
 
     parser = argparse.ArgumentParser(description='FVelGame')
     parser.add_argument( 'world', help='Game World file name', nargs='?' )
     args = parser.parse_args()
 
-    meta = MetaWorld.load(args.world) if args.world else MetaWorld()
+    pygame.init()
+    pygame.mouse.set_visible(False)
+    pygame.display.set_mode( (0,0), pygame.FULLSCREEN )
 
-    main(meta)
+    meta   = MetaWorld.load(args.world) if args.world else MetaWorld()
+    world  = GameWorld(meta)
+    engine = Engine  (world)
+
+    engine.run()
 
     sys.exit()
+
+#------------------------------------------------------------------------------#
+if __name__ == '__main__': main()
 
 #------------------------------------------------------------------------------#

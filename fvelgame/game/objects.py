@@ -42,12 +42,12 @@ class GameObjects():
     def kill_all():
 
         for sprt in GameObjects.sprites:
-            sprt.kill() 
+            sprt.kill()
 
     #--------------------------------------------------------------------------#
     def check_collision():
 
-        sprt = sprite.spritecollideany(GameObjects.player, 
+        sprt = sprite.spritecollideany(GameObjects.player,
                                        GameObjects.obstacles,
                                        sprite.collide_mask)
 
@@ -59,7 +59,7 @@ class GameObjects():
     #--------------------------------------------------------------------------#
     def check_collectible():
 
-        sprt = sprite.spritecollideany(GameObjects.player, 
+        sprt = sprite.spritecollideany(GameObjects.player,
                                        GameObjects.collectibles,
                                        sprite.collide_mask)
 
@@ -75,27 +75,27 @@ class GameObjects():
 
         GameObjects.player = Player(object_param, speed, boundaries)
         GameObjects.player.add(GameObjects.sprites)
-        
+
         return GameObjects.player
 
     #--------------------------------------------------------------------------#
     def create_obstacle(object_param, boundaries):
 
         sprt = ScrollingObject(object_param, boundaries, True)
-        
+
         sprt.add(GameObjects.sprites  )
         sprt.add(GameObjects.obstacles)
-        
+
         return sprt
 
     #--------------------------------------------------------------------------#
     def create_collectible( object_param, boundaries ):
 
         sprt = ScrollingObject(object_param, boundaries)
-        
+
         sprt.add(GameObjects.sprites     )
         sprt.add(GameObjects.collectibles)
-        
+
         return sprt
 
 #------------------------------------------------------------------------------#
@@ -107,14 +107,18 @@ class GameObject(sprite.Sprite):
     def __init__(self, object_param):
         '''Create a GameObject'''
 
-        super().__init__() 
-        
+        super().__init__()
+
         self.image  = object_param.image
         self.rect   = self.image.get_rect()
         self.mask   = pygame.mask.from_surface(self.image)
         self.score  = object_param.score
-        self.sound  = object_param.sound
-        self.volume = object_param.volume
+
+        if object_param.sound:
+            self.sound  = SoundMixer.load_sound(object_param.sound)
+            self.volume = object_param.volume
+        else:
+            self.sound = None
 
     #--------------------------------------------------------------------------#
     def play_sound(self):
@@ -182,7 +186,7 @@ class ScrollingObject(GameObject):
         if GameObjects.vertical:
 
             aa = self.rect.width // 2
-            
+
             if aa > boundaries[1] - boundaries[0]:
                 xx = ( boundaries[1] + boundaries[0] ) // 2
             else:
@@ -194,7 +198,7 @@ class ScrollingObject(GameObject):
         else:
 
             aa = self.rect.height // 2
-            
+
             if aa > boundaries[1] - boundaries[0]:
                 yy = ( boundaries[1] + boundaries[0] ) // 2
             else:
