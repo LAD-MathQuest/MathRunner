@@ -61,10 +61,11 @@ def eval_function(values, func, var_name):
 class VelocityFunction:
     '''Define the scrolling velocity in screens per second
 
-    velocity = 1 means the length of the screen scrolls completelly
+    The velocity is a function of time in seconds
+
+    Velocity = 1 means the length of the screen scrolls completelly
     in one second.
     '''
-
 
     #--------------------------------------------------------------------------#
     def __init__(self, func=''):
@@ -85,7 +86,12 @@ class VelocityFunction:
 #------------------------------------------------------------------------------#
 #------------------------------------------------------------------------------#
 class MarginFunctions:
-    '''Define minimal and maximal (left and rigth) track margins.'''
+    '''Define minimal and maximal (left and rigth) track margins
+
+    Margins are funcion of the displacement in screen units
+
+    The values are in fractions of the screen length
+    '''
 
     #--------------------------------------------------------------------------#
     def __init__(self, func_min='', func_max=''):

@@ -57,7 +57,9 @@ if __name__ == '__main__':
     meta.background_image   = MetaImage(color=(55,55,55))
     meta.background_scrolls = False
 
-    meta.track_image = MetaImage(color=(26, 34, 76))
+    meta.track_image   = MetaImage(color=(26, 34, 76))
+    meta.track_scrolls = False
+    meta.track_kills   = (False, True)
 
     path_font = path_fonts/'Party_Confetti.ttf'
     meta.scoreboard = MetaScoreboard(text_font      = path_font,

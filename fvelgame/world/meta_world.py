@@ -107,8 +107,9 @@ class MetaWorld:
         self.background_scrolls = False
 
         # If track_image if null the game will not draw the track
-        self.track_image           = MetaImage(color=(38,90,90))
-        self.track_boundaries_kill = False
+        self.track_image   = MetaImage(color=(38,90,90))
+        self.track_scrolls = False
+        self.track_kills   = (False, False)
 
         self.scoreboard = MetaScoreboard()
 
@@ -176,7 +177,7 @@ class MetaWorld:
 
         with open(path, 'rb') as file:
             meta = MetaWorld.read(file)
-        
+
         return meta
 
     #--------------------------------------------------------------------------#

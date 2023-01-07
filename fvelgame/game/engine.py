@@ -2,6 +2,7 @@
 
 import pygame
 import random
+import math
 
 import game.game_params as gp
 
@@ -37,6 +38,9 @@ class Engine:
         self.clock      = pygame.time.Clock()
         self.background = Background(world)
         self.scoreboard = Scoreboard(world.param_scoreboard)
+
+        ii = 1 if self.world.game_vertical else 0
+        self.velocity_to_displacement_scale = gp.SCREEN_SIZE[ii] * TIME_STEP
 
         self.set_display()
 
@@ -356,7 +360,7 @@ class Engine:
     #--------------------------------------------------------------------------#
     def eval_velocity(self):
 
-        self.velocity     = self.world.eval_velocity(self.elapsed_time)
-        self.displacement = self.velocity
+        self.velocity     = self.world.velocity.eval(self.elapsed_time)
+        self.displacement = math.ceil(self.velocity * self.velocity_to_displacement_scale)
 
 #------------------------------------------------------------------------------#

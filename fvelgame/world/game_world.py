@@ -8,11 +8,8 @@ An instance of GameWoclass is created from an instance of MetaWorld.
 Here the lengths are measured in pixels.
 '''
 
-# TODO take scrolling direction in account
-
 #------------------------------------------------------------------------------#
 
-import math
 import pygame
 
 import game.game_params as gp
@@ -108,12 +105,9 @@ class GameWorld:
         self.background_scrolls = meta.background_scrolls
 
         # Track
-        self.draw_track  = bool(meta.track_image)
-
-        if self.draw_track:
-            self.track_image = surface_from_meta_image(meta.track_image)
-        else:
-            self.track_image = None
+        self.track_image   = surface_from_meta_image(meta.track_image)
+        self.track_scrolls = meta.track_scrolls
+        self.track_kills   = meta.track_kills
 
         # Scoreboard
         self.param_scoreboard = ScoreboardParam(meta.scoreboard)
@@ -149,58 +143,6 @@ class GameWorld:
 
         self.velocity = meta.velocity
         self.margins  = meta.margins
-
-        if self.game_vertical:
-            self.vel_scale = gp.SCREEN_SIZE[1] / gp.FPS
-        else:
-            self.vel_scale = gp.SCREEN_SIZE[0] / gp.FPS
-
-        # Initializing background and track
-        #----------------------------------------------------------------------#
-
-        min_, lenght = self.margins.eval_length(0)
-
-        if self.game_vertical:
-            left  = int( gp.SCREEN_SIZE[0] * min_   )
-            width = int( gp.SCREEN_SIZE[0] * lenght )
-            self.track_rect = pygame.Rect( left, 0, width, gp.SCREEN_SIZE[1] )
-        else:
-            top    = int( gp.SCREEN_SIZE[1] * min_   )
-            height = int( gp.SCREEN_SIZE[1] * lenght )
-            self.track_rect = pygame.Rect( 0, top, gp.SCREEN_SIZE[0], height )
-
-        if self.draw_track:
-            self.background_image.blit( self.track_image,
-                                        self.track_rect,
-                                        self.track_rect )
-
-    #--------------------------------------------------------------------------#
-    def eval_velocity(self, time):
-        ''' Eval scrolling velocity in pixels'''
-
-        return math.ceil(self.velocity.eval(time) * self.vel_scale)
-
-    #--------------------------------------------------------------------------#
-    def eval_margins(self, time):
-        ''' Eval margins in pixels'''
-
-        pass
-
-    #--------------------------------------------------------------------------#
-    def get_player_boundaries(self):
-
-        if self.game_vertical:
-            return [self.track_rect.left, self.track_rect.right]
-        else:
-            return [self.track_rect.top, self.track_rect.bottom]
-
-    #--------------------------------------------------------------------------#
-    def get_spawn_boundaries(self):
-
-        if self.game_vertical:
-            return [self.track_rect.left, self.track_rect.right]
-        else:
-            return [self.track_rect.top, self.track_rect.bottom]
 
 #------------------------------------------------------------------------------#
 

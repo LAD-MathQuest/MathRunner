@@ -60,7 +60,9 @@ if __name__ == '__main__':
     meta.background_image   = imag_background
     meta.background_scrolls = True
 
-    meta.track_image = None
+    meta.track_image   = None
+    meta.track_scrolls = False
+    meta.track_kills   = (False, False)
 
     path_score = path_scoreboards/'frame_neon.png'
     imag_score = MetaImage((390,160), path=path_score)

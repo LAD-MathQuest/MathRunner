@@ -43,14 +43,33 @@ class Background:
 
         self.world    = world
         self.vertical = world.game_vertical
+        self.velocity = world.velocity
+        self.margins  = world.margins
 
-        self.bg_scrolls = self.world.background_scrolls
-        # self.tr_scrolls = self.world.track_scrolls
+        self.bg_scrolls = world.background_scrolls
 
-        if self.bg_scrolls:
-            self.set_background_scrolling()
+        if self.bg_scrolls: self.set_background_scrolling    ()
+        else:               self.set_background_not_scrolling()
+
+        # Initializing track
+
+        self.tr_image   = world.track_image
+        self.tr_scrolls = world.track_scrolls
+        self.tr_kills   = world.track_kills
+
+        min_, lenght = self.margins.eval_length(0)
+
+        if self.vertical:
+            left  = int(gp.SCREEN_SIZE[0] * min_  )
+            width = int(gp.SCREEN_SIZE[0] * lenght)
+            self.tr_rect = pygame.Rect(left, 0, width, gp.SCREEN_SIZE[1])
         else:
-            self.set_background_not_scrolling()
+            top    = int(gp.SCREEN_SIZE[1] * min_  )
+            height = int(gp.SCREEN_SIZE[1] * lenght)
+            self.tr_rect = pygame.Rect(0, top, gp.SCREEN_SIZE[0], height)
+
+        if self.tr_image:
+            self.bg_image.blit(self.tr_image, self.tr_rect, self.tr_rect)
 
     #--------------------------------------------------------------------------#
     def set_background_not_scrolling(self):
@@ -186,11 +205,13 @@ class Background:
     #--------------------------------------------------------------------------#
     def get_player_boundaries(self):
 
-        return self.world.get_player_boundaries()
+        if self.vertical: return [self.tr_rect.left, self.tr_rect.right]
+        else:             return [self.tr_rect.top, self.tr_rect.bottom]
 
     #--------------------------------------------------------------------------#
     def get_spawn_boundaries(self):
 
-        return self.world.get_spawn_boundaries()
+        if self.vertical: return [self.tr_rect.left, self.tr_rect.right]
+        else:             return [self.tr_rect.top, self.tr_rect.bottom]
 
 #------------------------------------------------------------------------------#

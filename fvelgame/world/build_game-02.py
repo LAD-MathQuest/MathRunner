@@ -59,7 +59,9 @@ Perca o máximo de pontos fugindo dos livros e jogando videogames'''
     meta.background_image   = MetaImage(color=(55,55,55))
     meta.background_scrolls = False
 
-    meta.track_image = MetaImage(color=(102,153,153))
+    meta.track_image   = MetaImage(color=(102,153,153))
+    meta.track_scrolls = False
+    meta.track_kills   = (False, False)
 
     path_font = path_fonts/'Party_Confetti.ttf'
     meta.scoreboard = MetaScoreboard(text_font      = path_font,
