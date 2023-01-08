@@ -23,7 +23,7 @@ from pathlib import Path
 #------------------------------------------------------------------------------#
 # Common functions and variables
 #------------------------------------------------------------------------------#
-    
+
 here = Path(__file__).parent
 
 #------------------------------------------------------------------------------#
@@ -80,7 +80,7 @@ def make_default():
     '''Build the default target'''
 
     print(f'{here.name}: Making default target...')
-    for file in here.glob('build_game-*.py'):
+    for file in here.glob('build*.py'):
         run_python(file)
 
 #------------------------------------------------------------------------------#

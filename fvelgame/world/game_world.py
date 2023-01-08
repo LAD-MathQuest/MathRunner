@@ -24,9 +24,13 @@ def surface_from_meta_image(meta):
 
     if meta.path:
         surf = pygame.image.load(meta.path).convert_alpha()
-        surf = pygame.transform.scale(surf, meta.size )
+
+        if meta.size:
+            surf = pygame.transform.scale(surf, meta.size )
+
     else:
-        surf = pygame.Surface(meta.size)
+        size = meta.size if meta.size else gp.SCREEN_SIZE
+        surf = pygame.Surface(size)
         surf.fill(meta.color)
 
     return surf

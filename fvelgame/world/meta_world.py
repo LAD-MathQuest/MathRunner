@@ -11,9 +11,6 @@ must be saved in a binary file and used to create a GameWorld.
 
 import pickle
 
-# Default screen resolution
-SCREEN_SIZE = (1920, 1080)
-
 #------------------------------------------------------------------------------#
 
 from world.functions import VelocityFunction, MarginFunctions
@@ -23,7 +20,7 @@ class MetaImage:
     '''Describes an image to be used on game.'''
 
     #--------------------------------------------------------------------------#
-    def __init__(self, size=SCREEN_SIZE, color=(0,0,0), path=None ):
+    def __init__(self, size=None, color=(0,0,0), path=None ):
         '''Create a MetaImage'''
 
         self.size  = size  # (width, height)
