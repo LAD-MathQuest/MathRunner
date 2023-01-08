@@ -19,8 +19,7 @@ from world.meta_world import MetaWorld
 def surface_from_meta_image(meta):
     '''Create a pygame surface from a MetaImage object'''
 
-    if not meta:
-        return None
+    if not meta: return None
 
     if meta.path:
         surf = pygame.image.load(meta.path).convert_alpha()
@@ -146,7 +145,7 @@ class GameWorld:
         #----------------------------------------------------------------------#
 
         self.velocity = meta.velocity
-        self.margins  = meta.margins
+        self.boundary = meta.boundary
 
 #------------------------------------------------------------------------------#
 

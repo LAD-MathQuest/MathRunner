@@ -16,7 +16,7 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).parents[1]))
 
-from world.functions  import VelocityFunction, MarginFunctions
+from world.functions  import VelocityFunction, BoundaryFunctions
 from world.meta_world import MetaImage, MetaObject, MetaScoreboard, MetaWorld
 
 #------------------------------------------------------------------------------#
@@ -138,8 +138,8 @@ if __name__ == '__main__':
     # Functions
     #--------------------------------------------------------------------------#
 
-    meta.velocity = VelocityFunction('0.4 + 0.02*t')
-    meta.margins  = MarginFunctions ('0.35', '0.65')
+    meta.velocity = VelocityFunction ('0.4 + 0.02*t')
+    meta.boundary = BoundaryFunctions('0.35', '0.65')
 
     # Saving
     #--------------------------------------------------------------------------#

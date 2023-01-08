@@ -187,11 +187,38 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_8">
              <item>
-              <widget class="QCheckBox" name="checkBox_TrackKills">
+              <widget class="QLabel" name="label_TrackKills">
                <property name="text">
                 <string>Touching track boundaries kills the player</string>
                </property>
               </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="checkBox_TrackMinimumKills">
+               <property name="text">
+                <string>Minimum</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="checkBox_TrackMaximumKills">
+               <property name="text">
+                <string>Maximum</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
              </item>
             </layout>
            </item>
@@ -365,7 +392,7 @@
            <property name="geometry">
             <rect>
              <x>0</x>
-             <y>0</y>
+             <y>-32</y>
              <width>787</width>
              <height>615</height>
             </rect>
@@ -1336,7 +1363,7 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>98</width>
+                 <width>68</width>
                  <height>36</height>
                 </rect>
                </property>
@@ -1496,7 +1523,7 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>98</width>
+                 <width>68</width>
                  <height>36</height>
                 </rect>
                </property>
@@ -1639,15 +1666,15 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tabMargins">
+      <widget class="QWidget" name="tabBoundary">
        <property name="enabled">
         <bool>true</bool>
        </property>
        <property name="statusTip">
-        <string>Define track margins</string>
+        <string>Define track boundary</string>
        </property>
        <attribute name="title">
-        <string>Margins</string>
+        <string>Boundary</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_5">
         <item>
@@ -1711,7 +1738,7 @@
          </layout>
         </item>
         <item>
-         <widget class="PlotWidget" name="plotMargins" native="true">
+         <widget class="PlotWidget" name="plotBoundary" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>

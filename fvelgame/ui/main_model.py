@@ -41,14 +41,14 @@ class MainModel:
     #--------------------------------------------------------------------------#
     def run(self):
 
-        temp = tempfile.NamedTemporaryFile(mode='wb', 
-                                           prefix='meta_', 
+        temp = tempfile.NamedTemporaryFile(mode='wb',
+                                           prefix='meta_',
                                            suffix='.game',
                                            delete = False)
-        
+
         self.meta.write(temp)
         temp.close()
-        
+
         run_game = str(Path(__file__).parents[1]/'game'/'run_game.py')
         name = str(temp.name)
 
@@ -71,7 +71,7 @@ class MainModel:
       self.start_view_tab_appearence()
       self.start_view_tab_objects   ()
       self.start_view_tab_velocity  ()
-      self.start_view_tab_margins   ()
+      self.start_view_tab_boundary  ()
 
     #--------------------------------------------------------------------------#
     def start_view_tab_game(self):
@@ -90,7 +90,9 @@ class MainModel:
         else:
             ui.radioButton_HorizontalScrolling.setChecked(True)
 
-        ui.checkBox_TrackKills.setChecked(meta.track_boundaries_kill)
+        ui.checkBox_TrackMinimumKills.setChecked(meta.track_kills[0])
+        ui.checkBox_TrackMaximumKills.setChecked(meta.track_kills[1])
+
         ui.doubleSpinBox_ScoreTimeBonus.setValue(meta.game_time_bonus)
 
         if meta.game_ambience:
@@ -203,19 +205,19 @@ class MainModel:
         self.con.plot_velocity_data.setData(tt, vv)
 
     #--------------------------------------------------------------------------#
-    def start_view_tab_margins(self):
+    def start_view_tab_boundary(self):
 
         ui   = self.ui
         meta = self.meta
 
-        ui.lineEdit_FunctionTrackMinimum.setText( meta.margins.get_function_min() )
-        ui.lineEdit_FunctionTrackMaximum.setText( meta.margins.get_function_max() )
+        ui.lineEdit_FunctionTrackMinimum.setText( meta.boundary.get_function_min() )
+        ui.lineEdit_FunctionTrackMaximum.setText( meta.boundary.get_function_max() )
 
         xx     = np.arange(0, par.PLOT_MAX_X, 0.1)
-        mm, MM = meta.margins.eval(xx)
+        mm, MM = meta.boundary.eval(xx)
 
-        self.con.plot_margin_min_data.setData(xx, mm)
-        self.con.plot_margin_max_data.setData(xx, MM)
+        self.con.plot_boundary_min_data.setData(xx, mm)
+        self.con.plot_boundary_max_data.setData(xx, MM)
 
         self.update_track_aux_function()
 
@@ -234,35 +236,35 @@ class MainModel:
     #--------------------------------------------------------------------------#
     def update_track_minimum_function(self, func):
 
-        self.meta.margins.set_function_min           (func)
+        self.meta.boundary.set_function_min           (func)
         self.ui.lineEdit_FunctionTrackMinimum.setText(func)
 
         xx = np.arange(0, par.PLOT_MAX_X, 0.1)
-        mm = self.meta.margins.eval_min(xx)
+        mm = self.meta.boundary.eval_min(xx)
 
-        self.con.plot_margin_min_data.setData(xx, mm)
+        self.con.plot_boundary_min_data.setData(xx, mm)
         self.update_track_aux_function()
 
     #--------------------------------------------------------------------------#
     def update_track_maximum_function(self, func):
 
-        self.meta.margins.set_function_max           (func)
+        self.meta.boundary.set_function_max           (func)
         self.ui.lineEdit_FunctionTrackMaximum.setText(func)
 
         xx = np.arange(0, par.PLOT_MAX_X, 0.1)
-        MM = self.meta.margins.eval_max(xx)
+        MM = self.meta.boundary.eval_max(xx)
 
-        self.con.plot_margin_max_data.setData(xx, MM)
+        self.con.plot_boundary_max_data.setData(xx, MM)
         self.update_track_aux_function()
 
     #--------------------------------------------------------------------------#
     def update_track_aux_function(self):
 
-        xx = self.con.plot_margin_min_data.xData
+        xx = self.con.plot_boundary_min_data.xData
 
-        y_aux = np.maximum(self.con.plot_margin_min_data.yData,
-                           self.con.plot_margin_max_data.yData)
+        y_aux = np.maximum(self.con.plot_boundary_min_data.yData,
+                           self.con.plot_boundary_max_data.yData)
 
-        self.con.plot_margin_aux_data.setData(xx, y_aux)
+        self.con.plot_boundary_aux_data.setData(xx, y_aux)
 
 #------------------------------------------------------------------------------#

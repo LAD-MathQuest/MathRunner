@@ -16,6 +16,7 @@ def surface_tiling(surf, tile):
 
     rect = pygame.Rect((0,0), (t_width,t_height))
 
+
     step_x = t_width
     step_y = t_height
 
@@ -61,7 +62,7 @@ class BackgroundHorizontal:
     def __init__(self, world):
 
         self.world    = world
-        self.margins  = world.margins
+        self.boundary = world.boundary
 
         self.bg_scrolls = world.background_scrolls
 
@@ -76,7 +77,7 @@ class BackgroundHorizontal:
         self.tr_image   = world.track_image
         self.tr_scrolls = world.track_scrolls
 
-        tr_min, lenght = self.margins.eval_length(0)
+        tr_min, lenght = self.boundary.eval_length(0)
 
         top    = int(gp.SCREEN_SIZE[1] * tr_min)
         height = int(gp.SCREEN_SIZE[1] * lenght)

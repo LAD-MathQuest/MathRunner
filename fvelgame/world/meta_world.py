@@ -13,7 +13,7 @@ import pickle
 
 #------------------------------------------------------------------------------#
 
-from world.functions import VelocityFunction, MarginFunctions
+from world.functions import VelocityFunction, BoundaryFunctions
 
 #------------------------------------------------------------------------------#
 class MetaImage:
@@ -152,8 +152,8 @@ class MetaWorld:
         # Functions
         #----------------------------------------------------------------------#
 
-        self.velocity = VelocityFunction('0.5 + 0.01*t')
-        self.margins  = MarginFunctions ('0.35', '0.65')
+        self.velocity = VelocityFunction ('0.5 + 0.01*t')
+        self.boundary = BoundaryFunctions('0.35', '0.65')
 
     #--------------------------------------------------------------------------#
     def save(self, path):

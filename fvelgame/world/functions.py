@@ -2,11 +2,11 @@
 
 '''This module defines the function objects.
 
-    The VelocityFunction is used to compute scrolling velocity
-    The MarginFunctions  is used to compute track margins
+    The VelocityFunction  is used to compute scrolling velocity
+    The BoundaryFunctions is used to compute track boundaries
 
     The computed values are proportional to the screen, i.e.,
-    the velocity is computed in screens per second and the margins are
+    the velocity is computed in screens per second and the boundaries are
     computed as proportion of screen.
 '''
 
@@ -85,10 +85,10 @@ class VelocityFunction:
 
 #------------------------------------------------------------------------------#
 #------------------------------------------------------------------------------#
-class MarginFunctions:
-    '''Define minimal and maximal (left and rigth) track margins
+class BoundaryFunctions:
+    '''Define minimal and maximal (left and rigth) track boundaries
 
-    Margins are funcion of the displacement in screen units
+    Boundaries are funcion of the displacement in screen units
 
     The values are in fractions of the screen length
     '''
@@ -130,7 +130,7 @@ class MarginFunctions:
 
     #--------------------------------------------------------------------------#
     def eval_length(self, xx):
-        '''Eval margins and return minimum and length'''
+        '''Eval Boundaries and return minimum and length'''
 
         mm = eval_function(xx, self.func_min, 'x')
         MM = eval_function(xx, self.func_max, 'x')

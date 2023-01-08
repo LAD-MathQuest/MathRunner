@@ -62,7 +62,7 @@ class BackgroundVertical:
     def __init__(self, world):
 
         self.world    = world
-        self.margins  = world.margins
+        self.boundary = world.boundary
 
         self.bg_scrolls = world.background_scrolls
 
@@ -77,7 +77,7 @@ class BackgroundVertical:
         self.tr_image   = world.track_image
         self.tr_scrolls = world.track_scrolls
 
-        tr_min, lenght = self.margins.eval_length(0)
+        tr_min, lenght = self.boundary.eval_length(0)
 
         left  = int(gp.SCREEN_SIZE[0] * tr_min)
         width = int(gp.SCREEN_SIZE[0] * lenght)

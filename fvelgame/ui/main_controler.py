@@ -38,7 +38,7 @@ class MainControler:
     def init_plots(self):
 
         pv = self.ui.plotVelocity
-        pm = self.ui.plotMargins
+        pm = self.ui.plotBoundary
 
         # Get the default window background
         color = self.win.palette().color(QPalette.Window)
@@ -55,9 +55,9 @@ class MainControler:
         self.plot_velocity_data = pv.plot((0, par.PLOT_MAX_T), (0.5, 0.5), pen=pen)
 
         pm.setBackground(color)
-        pm.setTitle('Margins' )
-        pm.setLabel('left',   'Margins (screen fraction)')
-        pm.setLabel('bottom', 'Time (seconds)'           )
+        pm.setTitle('Boundary' )
+        pm.setLabel('left',   'Boundary (screen fraction)')
+        pm.setLabel('bottom', 'Time (seconds)'            )
         pm.showGrid(x=True, y=True)
         pm.setXRange(0, par.PLOT_MAX_X, padding=0)
         pm.setYRange(0, 1,              padding=0)
@@ -77,9 +77,9 @@ class MainControler:
         pm.addItem(p_aux)
         pm.addItem(pfill)
 
-        self.plot_margin_min_data = p_min
-        self.plot_margin_max_data = p_max
-        self.plot_margin_aux_data = p_aux
+        self.plot_boundary_min_data = p_min
+        self.plot_boundary_max_data = p_max
+        self.plot_boundary_aux_data = p_aux
 
     #--------------------------------------------------------------------------#
     def init_objects(self):
@@ -166,7 +166,7 @@ class MainControler:
         ui.doubleSpinBox_ObstaclesFrequency   .valueChanged.connect( self.obstacles_frequency_changed    )
         ui.doubleSpinBox_CollectiblesFrequency.valueChanged.connect( self.collectibles_frequency_changed )
 
-        #--- Velocity and Margins Tabs signals --------------------------------#
+        #--- Velocity and Boundary Tabs signals -------------------------------#
 
         ui.lineEdit_FunctionVelocity    .editingFinished.connect( self.function_velocity_changed      )
         ui.lineEdit_FunctionTrackMinimum.editingFinished.connect( self.function_track_minimum_changed )

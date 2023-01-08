@@ -16,7 +16,7 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).parents[1]))
 
-from world.functions  import VelocityFunction, MarginFunctions
+from world.functions  import VelocityFunction, BoundaryFunctions
 from world.meta_world import MetaImage, MetaObject, MetaScoreboard, MetaWorld
 
 #------------------------------------------------------------------------------#
@@ -122,8 +122,8 @@ Perca o máximo de pontos fugindo dos livros e jogando videogames'''
     # Functions
     #--------------------------------------------------------------------------#
 
-    meta.velocity = VelocityFunction('0.25 + 0.005*t')
-    meta.margins  = MarginFunctions ('0.12', '0.9')
+    meta.velocity = VelocityFunction ('0.25 + 0.005*t')
+    meta.boundary = BoundaryFunctions('0.12', '0.9')
 
     # Saving
     #--------------------------------------------------------------------------#
