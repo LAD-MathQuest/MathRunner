@@ -1,4 +1,9 @@
 #------------------------------------------------------------------------------#
+'''Defines classes to handle game objects
+
+Only the GameObjects class should the imported from this module.
+It handles all necessary object actions
+'''
 
 import random
 import pygame
@@ -10,56 +15,99 @@ import game.game_params as gp
 from   game.sound_mixer import SoundMixer
 
 #------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 class GameObjects():
+    '''Class to handle all object actions throw static functions'''
 
-    vertical     = True
-    score        = 0
+    score  = None
+    killed = None
 
-    player       = None
-    sprites      = sprite.Group()
+    player       = sprite.GroupSingle()
     obstacles    = sprite.Group()
     collectibles = sprite.Group()
 
     #--------------------------------------------------------------------------#
     def init(vertical):
+        '''Initializes the object module
 
-        GameObjects.vertical = vertical
-        GameObjects.score    = 0
+        Args:
+            vertical(bool): True if the game scrolls vertically
+        '''
+
+        GameObjects.score  = 0
+        GameObjects.killed = None
+
+        if vertical:
+            GameObjects.PlayerClass    = PlayerVertical
+            GameObjects.ScrollingClass = ScrollingObjectVertical
+        else:
+            GameObjects.PlayerClass    = PlayerHorizontal
+            GameObjects.ScrollingClass = ScrollingObjectHorizontal
 
     #--------------------------------------------------------------------------#
-    def draw(display):
+    def draw(surface):
+        '''Draws all objects on surface
 
-        GameObjects.sprites.draw(display)
+        Args:
+            surface (pygame.surface): Surface where the objects will be drawn
+        '''
+
+        GameObjects.collectibles.draw(surface)
+        GameObjects.obstacles   .draw(surface)
+        GameObjects.player      .draw(surface)
 
     #--------------------------------------------------------------------------#
-    def update(velocity, boundaries):
+    def update(displacement, boundary):
+        '''Updates all objects
 
-        GameObjects.velocity          = velocity
-        GameObjects.player_boundaries = boundaries
-        GameObjects.sprites.update()
+        Args:
+            displacement(int): Scrolling objects displacement in pixels
+            boundary(int,int): Minimum and maximum player positions
+        '''
+
+        GameObjects.displacement = displacement
+
+        GameObjects.collectibles.update()
+        GameObjects.obstacles   .update()
+
+        GameObjects.killed = GameObjects.player.sprite.update(boundary)
 
     #--------------------------------------------------------------------------#
     def kill_all():
+        '''Kill all sprites'''
 
-        for sprt in GameObjects.sprites:
-            sprt.kill()
+        GameObjects.killed = False
+
+        for sprt in GameObjects.collectibles: sprt.kill()
+        for sprt in GameObjects.obstacles:    sprt.kill()
+
+        GameObjects().player.sprite.kill()
 
     #--------------------------------------------------------------------------#
     def check_collision():
+        '''Check for collision between player and any obstacle
 
-        sprt = sprite.spritecollideany(GameObjects.player,
+        Returns:
+            The collided sprite
+        '''
+
+        sprt = sprite.spritecollideany(GameObjects.player.sprite,
                                        GameObjects.obstacles,
                                        sprite.collide_mask)
 
-        if sprt:
-            sprt.play_sound()
+        if sprt: sprt.play_sound()
 
         return sprt
 
     #--------------------------------------------------------------------------#
     def check_collectible():
+        '''Check for collision between player and any collectible
 
-        sprt = sprite.spritecollideany(GameObjects.player,
+        Returns:
+            The collided sprite
+        '''
+
+        sprt = sprite.spritecollideany(GameObjects.player.sprite,
                                        GameObjects.collectibles,
                                        sprite.collide_mask)
 
@@ -71,48 +119,71 @@ class GameObjects():
         return sprt
 
     #--------------------------------------------------------------------------#
-    def create_player(object_param, speed, boundaries):
+    def create_player(object_param, speed, boundary, boundary_kills):
+        '''Create the player sprite
 
-        GameObjects.player = Player(object_param, speed, boundaries)
-        GameObjects.player.add(GameObjects.sprites)
+        Args:
+            object_param(ObjectParam): Parameters to create the player sprite
+            speed(int): Speed in pixels the player can move sideways
+            boundary(int,int): Track boundary
+            boundary_kills(bool,bool): True if player dies touching the boundary
+        '''
 
-        return GameObjects.player
+        GameObjects.player.sprite = GameObjects.PlayerClass(object_param,
+                                                            speed,
+                                                            boundary,
+                                                            boundary_kills)
+        GameObjects.killed = True
+
+        return GameObjects.player.sprite
 
     #--------------------------------------------------------------------------#
-    def create_obstacle(object_param, boundaries):
+    def create_obstacle(object_param, boundary):
+        '''Creates a new obstacle
 
-        sprt = ScrollingObject(object_param, boundaries, True)
+        Args:
+            object_param(ObjectParam): Parameters to create the player sprite
+            boundary(int,int): Track boundary
+        '''
 
-        sprt.add(GameObjects.sprites  )
+        sprt = GameObjects.ScrollingClass(object_param, boundary, obstacle=True)
         sprt.add(GameObjects.obstacles)
 
         return sprt
 
     #--------------------------------------------------------------------------#
-    def create_collectible( object_param, boundaries ):
+    def create_collectible(object_param, boundary):
+        '''Creates a new collectible
 
-        sprt = ScrollingObject(object_param, boundaries)
+        Args:
+            object_param(ObjectParam): Parameters to create the player sprite
+            boundary(int,int): Track boundary
+        '''
 
-        sprt.add(GameObjects.sprites     )
+        sprt = GameObjects.ScrollingClass(object_param, boundary, obstacle=False)
         sprt.add(GameObjects.collectibles)
 
         return sprt
 
 #------------------------------------------------------------------------------#
 #------------------------------------------------------------------------------#
-#------------------------------------------------------------------------------#
 class GameObject(sprite.Sprite):
+    '''Class to define all game objects'''
 
     #--------------------------------------------------------------------------#
     def __init__(self, object_param):
-        '''Create a GameObject'''
+        '''Create a new GameObject
+
+        Args:
+            object_param(ObjectParam): Parameters to create the player sprite
+        '''
 
         super().__init__()
 
-        self.image  = object_param.image
-        self.rect   = self.image.get_rect()
-        self.mask   = pygame.mask.from_surface(self.image)
-        self.score  = object_param.score
+        self.image = object_param.image
+        self.rect  = self.image.get_rect()
+        self.mask  = pygame.mask.from_surface(self.image)
+        self.score = object_param.score
 
         if object_param.sound:
             self.sound  = SoundMixer.load_sound(object_param.sound)
@@ -122,100 +193,188 @@ class GameObject(sprite.Sprite):
 
     #--------------------------------------------------------------------------#
     def play_sound(self):
-        '''Play collision sound if it exists.'''
+        '''Play collision sound if it exists'''
 
         if self.sound:
             SoundMixer.play_sound(self.sound, self.volume)
 
 #------------------------------------------------------------------------------#
-class Player(GameObject):
+#------------------------------------------------------------------------------#
+class PlayerVertical(GameObject):
+    '''Class to define the player object for a vertically scrolling game'''
 
     #--------------------------------------------------------------------------#
-    def __init__(self, object_param, speed, boundaries):
+    def __init__(self, object_param, speed, boundary, boundary_kills):
+        '''Create the player object
+
+        Args:
+            object_param(ObjectParam): Parameters to create the player sprite
+            speed(int): Speed in pixels the player can move sideways
+            boundary(int,int): Track boundary
+            boundary_kills(bool,bool): True if player dies touching the boundary
+        '''
 
         super().__init__(object_param)
 
-        if GameObjects.vertical:
-            self.rect.centerx = (boundaries[0]+boundaries[1]) // 2
-            self.rect.bottom  = int( 0.99*gp.SCREEN_SIZE[1] )
-        else:
-            self.rect.centery = (boundaries[0]+boundaries[1]) // 2
-            self.rect.left    = int( 0.03*gp.SCREEN_SIZE[0] )
-
         self.speed = speed
+        self.kills = boundary_kills
+
+        self.rect.centerx = (boundary[0]+boundary[1]) // 2
+        self.rect.bottom  = int( 0.99*gp.SCREEN_SIZE[1] )
 
     #--------------------------------------------------------------------------#
-    def update(self):
+    def update(self, boundary):
+        '''Updates player on a vertically scrolling game
+
+        Args:
+            boundary(int,int): Track boundary
+
+        Returns:
+            True if player was killed
+        '''
+
+        bd_min = boundary[0]
+        bd_max = boundary[1]
+
+        if self.kills[0] and self.rect.left  <= bd_min: return True
+        if self.kills[1] and self.rect.right >= bd_max: return True
 
         pressed_keys = pygame.key.get_pressed()
 
-        min_ = GameObjects.player_boundaries[0]
-        max_ = GameObjects.player_boundaries[1]
+        if pressed_keys[K_LEFT] or pressed_keys[K_a]:
+            self.rect.move_ip(-self.speed, 0)
 
-        if GameObjects.vertical:
+        elif pressed_keys[K_RIGHT] or pressed_keys[K_d]:
+            self.rect.move_ip(self.speed, 0)
 
-            if pressed_keys[K_LEFT] or pressed_keys[K_a]:
-                if self.rect.left-self.speed > min_:
-                    self.rect.move_ip( -self.speed, 0 )
+        if self.rect.left  < bd_min: self.rect.left  = bd_min
+        if self.rect.right > bd_max: self.rect.right = bd_max
 
-            elif pressed_keys[K_RIGHT] or pressed_keys[K_d]:
-                if self.rect.right+self.speed < max_:
-                    self.rect.move_ip( self.speed, 0 )
-
-        else:
-
-            if pressed_keys[K_UP] or pressed_keys[K_w]:
-                if self.rect.top-self.speed > min_:
-                    self.rect.move_ip( 0, -self.speed )
-
-            elif pressed_keys[K_DOWN] or pressed_keys[K_s]:
-                if self.rect.bottom+self.speed < max_:
-                    self.rect.move_ip( 0, self.speed )
+        return False
 
 #------------------------------------------------------------------------------#
-class ScrollingObject(GameObject):
+#------------------------------------------------------------------------------#
+class PlayerHorizontal(GameObject):
+    '''Class to define the player object for a vertically scrolling game'''
 
     #--------------------------------------------------------------------------#
-    def __init__(self, object_param, boundaries, obstacle=False):
-        '''Create a ScrollingObject'''
+    def __init__(self, object_param, speed, boundary, boundary_kills):
+        '''Create the player object
+
+        Args:
+            object_param(ObjectParam): Parameters to create the player sprite
+            speed(int): Speed in pixels the player can move sideways
+            boundary(int,int): Track boundary
+            boundary_kills(bool,bool): True if player dies touching the boundary
+        '''
 
         super().__init__(object_param)
 
-        self.obstacle = obstacle
+        self.speed = speed
+        self.kills = boundary_kills
 
-        if GameObjects.vertical:
+        self.rect.centery = (boundary[0]+boundary[1]) // 2
+        self.rect.left    = int( 0.03*gp.SCREEN_SIZE[0] )
 
-            aa = self.rect.width // 2
+    #--------------------------------------------------------------------------#
+    def update(self, boundary):
+        '''Updates player on an horizontally scrolling game
 
-            if aa > boundaries[1] - boundaries[0]:
-                xx = ( boundaries[1] + boundaries[0] ) // 2
-            else:
-                xx = random.randint( boundaries[0]+aa, boundaries[1]-aa )
+        Args:
+            boundary(int,int): Track boundary
 
-            self.rect.centerx = xx
-            self.rect.bottom  = 0
+        Returns:
+            True if player was killed
+        '''
 
-        else:
+        bd_min = boundary[0]
+        bd_max = boundary[1]
 
-            aa = self.rect.height // 2
+        if self.kills[0] and self.rect.top    <= bd_min: return True
+        if self.kills[1] and self.rect.bottom >= bd_max: return True
 
-            if aa > boundaries[1] - boundaries[0]:
-                yy = ( boundaries[1] + boundaries[0] ) // 2
-            else:
-                yy = random.randint( boundaries[0]+aa, boundaries[1]-aa )
+        pressed_keys = pygame.key.get_pressed()
 
-            self.rect.centery = yy
-            self.rect.left    = gp.SCREEN_SIZE[0]
+        if pressed_keys[K_UP] or pressed_keys[K_w]:
+            self.rect.move_ip(0, -self.speed)
+
+        elif pressed_keys[K_DOWN] or pressed_keys[K_s]:
+            self.rect.move_ip(0, self.speed)
+
+        if self.rect.top    < bd_min: self.rect.top    = bd_min
+        if self.rect.bottom > bd_max: self.rect.bottom = bd_max
+
+        return False
+
+#------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
+def eval_position(ob_lenght, boundary):
+
+    bd_min = boundary[0]
+    bd_max = boundary[1]
+
+    aa = ob_lenght // 2
+
+    if aa >= bd_max-bd_min: return (bd_max + bd_min) // 2
+    else:                   return random.randint(bd_min+aa, bd_max-aa)
+
+#------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
+class ScrollingObjectVertical(GameObject):
+    '''Class to define scrolling objects for vertically scrolling games'''
+
+    #--------------------------------------------------------------------------#
+    def __init__(self, object_param, boundary, obstacle=False):
+        '''Create a scrolling object
+
+        Args:
+            boundary(int,int): Track boundary
+            obstacle(bool): True if object is an obstacle
+        '''
+
+        super().__init__(object_param)
+
+        self.obstacle     = obstacle
+        self.rect.centerx = eval_position(self.rect.width, boundary)
+        self.rect.bottom  = 0
 
     #--------------------------------------------------------------------------#
     def update(self):
+        '''Updates object scrolling it by GameObjects.displacement'''
 
-        if GameObjects.vertical:
-            self.rect.move_ip( 0, GameObjects.velocity )
-            out = self.rect.top > gp.SCREEN_SIZE[1]
-        else:
-            self.rect.move_ip( -GameObjects.velocity, 0 )
-            out = self.rect.right < 1
+        self.rect.move_ip(0, GameObjects.displacement)
+        out = self.rect.top > gp.SCREEN_SIZE[1]
+
+        if self.obstacle and out:
+             GameObjects.score += self.score
+             self.kill()
+
+#------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
+class ScrollingObjectHorizontal(GameObject):
+    '''Class to define scrolling objects for horizontally scrolling games'''
+
+    #--------------------------------------------------------------------------#
+    def __init__(self, object_param, boundary, obstacle=False):
+        '''Create a scrolling object
+
+        Args:
+            boundary(int,int): Track boundary
+            obstacle(bool): True if object is an obstacle
+        '''
+
+        super().__init__(object_param)
+
+        self.obstacle     = obstacle
+        self.rect.centery = eval_position(self.rect.height, boundary)
+        self.rect.left    = gp.SCREEN_SIZE[0]
+
+    #--------------------------------------------------------------------------#
+    def update(self):
+        '''Updates object scrolling it by GameObjects.displacement'''
+
+        self.rect.move_ip(-GameObjects.displacement, 0)
+        out = self.rect.right < 1
 
         if self.obstacle and out:
              GameObjects.score += self.score

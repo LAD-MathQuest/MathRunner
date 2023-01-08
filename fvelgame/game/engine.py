@@ -1,4 +1,5 @@
 #------------------------------------------------------------------------------#
+'''Defines game Engine class'''
 
 import pygame
 import random
@@ -21,18 +22,22 @@ STATUS_PLAYING  = 2
 STATUS_GAMEOVER = 3
 
 # Exception used to quit the game
-class QuitGame(Exception):
-    '''Raised to quit the game'''
-    pass
+class QuitGame(Exception): pass
 
-WAIT_FPS = gp.FPS // 10
+WAIT_FPS  = gp.FPS // 10
 TIME_STEP = 1 / gp.FPS
 
 #------------------------------------------------------------------------------#
 class Engine:
+    '''Game engine'''
 
     #--------------------------------------------------------------------------#
     def __init__(self, world):
+        '''Initialization of Game Engine
+
+        Args:
+            world(GameWorld): The GameWorld that defines the game
+        '''
 
         self.world      = world
         self.clock      = pygame.time.Clock()
@@ -73,6 +78,7 @@ class Engine:
 
     #--------------------------------------------------------------------------#
     def set_display(self):
+        '''Initializes the display surface and remembers if it needs resize'''
 
         display = pygame.display.get_surface()
         size    = tuple(display.get_size())
@@ -86,6 +92,7 @@ class Engine:
 
     #--------------------------------------------------------------------------#
     def flip(self):
+        '''Resizes display if needed and calls pygame.display.flip'''
 
         if self.needs_resize:
 
@@ -99,6 +106,7 @@ class Engine:
 
     #--------------------------------------------------------------------------#
     def run(self):
+        '''Run the game'''
 
         try:
             self.start(STATUS_WELCOME)
@@ -113,6 +121,11 @@ class Engine:
 
     #------------------------------------------------------------------------------#
     def start(self, status):
+        '''Initializes a game instance
+
+        Args:
+            status(int): Game status, it can be STATUS_WELCOME ou STATUS_STARTING
+        '''
 
         self.status = status
         self.elapsed_time = 0
@@ -121,7 +134,8 @@ class Engine:
         GameObjects.init(self.world.game_vertical)
         GameObjects.create_player(self.world.param_player,
                                   self.world.player_speed,
-                                  self.background.get_player_boundaries())
+                                  self.background.get_player_boundaries(),
+                                  self.world.track_kills)
 
         self.last_object_rect = pygame.Rect(0,0,0,0)
 
@@ -132,6 +146,10 @@ class Engine:
 
     #--------------------------------------------------------------------------#
     def wait_for_focus(self):
+        '''Waits for the process to receive focus
+
+        Shows help screen on return
+        '''
 
         SoundMixer.stop_music()
 
@@ -150,6 +168,13 @@ class Engine:
 
     #--------------------------------------------------------------------------#
     def wait(self, showing_help=False):
+        '''Wait for user action
+
+        This function is used when showing information screens
+
+        Args:
+            show_help(bool): True when showing help message
+        '''
 
         SoundMixer.stop_music()
         pygame.event.clear()
@@ -181,6 +206,7 @@ class Engine:
 
     #--------------------------------------------------------------------------#
     def game_loop(self):
+        '''The main game loop'''
 
         self.status = STATUS_PLAYING
 
@@ -211,6 +237,7 @@ class Engine:
 
     #--------------------------------------------------------------------------#
     def draw(self):
+        '''Main draw function'''
 
         score = GameObjects.score + int(self.world.game_time_bonus * self.elapsed_time)
 
@@ -226,42 +253,39 @@ class Engine:
 
     #--------------------------------------------------------------------------#
     def draw_welcome(self):
+        '''Draws the welcome message'''
 
-        self.display.fill( (150,150,150), None, pygame.BLEND_MULT )
+        self.display.fill((150,150,150), None, pygame.BLEND_MULT)
 
         size = self.display.get_rect().height // 10
-        font = pygame.freetype.Font( gp.DEFAULT_FONT, size )
+        font = pygame.freetype.Font(gp.DEFAULT_FONT, size)
 
         rect = font.get_rect(self.world.soft_name)
         rect.center = self.display.get_rect().center
-        font.render_to( self.display, rect, None, (200,200,200) )
+        font.render_to(self.display, rect, None, (200,200,200))
 
     #--------------------------------------------------------------------------#
     def draw_starting(self):
+        '''Draws the game starting message'''
 
-        self.display.fill( (150,150,150), None, pygame.BLEND_MULT )
-
-        size = self.display.get_rect().height // 14
-        font = pygame.freetype.Font( gp.DEFAULT_FONT, size )
-
-        rect = font.get_rect('Pressione qualquer tecla')
-        rect.center = self.display.get_rect().center
-        font.render_to( self.display, rect, None, (200,200,200) )
+        self.display.fill((130,130,130), None, pygame.BLEND_MULT)
 
     #--------------------------------------------------------------------------#
     def draw_game_over(self):
+        '''Draws the game over message'''
 
-        self.display.fill( (60,60,60), None, pygame.BLEND_MULT )
+        self.display.fill((60,60,60), None, pygame.BLEND_MULT)
 
         size = self.display.get_rect().height // 6
-        font = pygame.freetype.Font( gp.DEFAULT_FONT, size )
+        font = pygame.freetype.Font(gp.DEFAULT_FONT, size)
 
         rect = font.get_rect('Game Over')
         rect.center = self.display.get_rect().center
-        font.render_to( self.display, rect, None, (200,20,20) )
+        font.render_to(self.display, rect, None, (200,20,20))
 
     #--------------------------------------------------------------------------#
     def show_help(self):
+        '''Draw help screen and enter wait mode'''
 
         draw_help(self.display,
                   self.world.soft_name,
@@ -273,6 +297,7 @@ class Engine:
 
     #--------------------------------------------------------------------------#
     def game_over(self):
+        '''Handles game over'''
 
         self.status = STATUS_GAMEOVER
 
@@ -290,6 +315,7 @@ class Engine:
 
     #--------------------------------------------------------------------------#
     def update(self):
+        '''Updates all game elements and checks for collisions'''
 
         self.eval_velocity()
         self.background.update(self.displacement)
@@ -297,10 +323,12 @@ class Engine:
         GameObjects.update(self.displacement, self.background.get_player_boundaries())
         GameObjects.check_collectible()
 
-        if GameObjects.check_collision(): self.game_over()
+        if GameObjects.killed or GameObjects.check_collision():
+            self.game_over()
 
     #--------------------------------------------------------------------------#
     def new_obstacle(self):
+        '''Creates a new obstale object'''
 
         ob = random.choice(self.world.param_obstacles)
         sb = self.background.get_spawn_boundaries()
@@ -319,6 +347,7 @@ class Engine:
 
     #--------------------------------------------------------------------------#
     def new_collectible(self):
+        '''Creates a new collectible object'''
 
         ob = random.choice(self.world.param_collectibles)
         sb = self.background.get_spawn_boundaries()
@@ -337,6 +366,11 @@ class Engine:
 
     #--------------------------------------------------------------------------#
     def set_timer_obstacles(self, delay=None):
+        '''Restarts timer to raise next obstacle creation event
+
+        Args:
+            delay(int): Delay value in milliseconds
+        '''
 
         if not delay:
             rr = random.uniform(self.world.obstacles_min_delay,
@@ -348,6 +382,11 @@ class Engine:
 
     #--------------------------------------------------------------------------#
     def set_timer_collectibles(self, delay=None):
+        '''Restarts timer to raise next collectible creation event
+
+        Args:
+            delay(int): Delay value in milliseconds
+        '''
 
         if not delay:
             rr = random.uniform(self.world.collectibles_min_delay,
@@ -359,6 +398,7 @@ class Engine:
 
     #--------------------------------------------------------------------------#
     def eval_velocity(self):
+        '''Evals velocity and displacement values'''
 
         self.velocity     = self.world.velocity.eval(self.elapsed_time)
         self.displacement = math.ceil(self.velocity * self.velocity_to_displacement_scale)
