@@ -34,15 +34,19 @@ class GameObjects():
             vertical(bool): True if the game scrolls vertically
         '''
 
-        GameObjects.score  = 0
-        GameObjects.killed = None
-
         if vertical:
             GameObjects.PlayerClass    = PlayerVertical
             GameObjects.ScrollingClass = ScrollingObjectVertical
         else:
             GameObjects.PlayerClass    = PlayerHorizontal
             GameObjects.ScrollingClass = ScrollingObjectHorizontal
+
+    #--------------------------------------------------------------------------#
+    def start():
+        '''Starts objects for a new game'''
+
+        GameObjects.score  = 0
+        GameObjects.killed = None
 
     #--------------------------------------------------------------------------#
     def draw(surface):

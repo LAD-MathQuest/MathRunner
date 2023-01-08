@@ -11,7 +11,9 @@ from game.objects     import GameObjects
 from game.sound_mixer import SoundMixer
 from game.scoreboard  import Scoreboard
 from game.draw_help   import draw_help
-from game.background  import Background
+
+from game.background_horizontal import BackgroundHorizontal
+from game.background_vertical   import BackgroundVertical
 
 #------------------------------------------------------------------------------#
 
@@ -41,11 +43,16 @@ class Engine:
 
         self.world      = world
         self.clock      = pygame.time.Clock()
-        self.background = Background(world)
         self.scoreboard = Scoreboard(world.param_scoreboard)
 
-        ii = 1 if self.world.game_vertical else 0
-        self.velocity_to_displacement_scale = gp.SCREEN_SIZE[ii] * TIME_STEP
+        if world.game_vertical:
+            self.background         = BackgroundVertical(world)
+            self.displacement_scale = gp.SCREEN_SIZE[1] * TIME_STEP
+        else:
+            self.background         = BackgroundHorizontal(world)
+            self.displacement_scale = gp.SCREEN_SIZE[0] * TIME_STEP
+
+        GameObjects.init(world.game_vertical)
 
         self.set_display()
 
@@ -131,7 +138,7 @@ class Engine:
         self.elapsed_time = 0
         self.eval_velocity()
 
-        GameObjects.init(self.world.game_vertical)
+        GameObjects.start()
         GameObjects.create_player(self.world.param_player,
                                   self.world.player_speed,
                                   self.background.get_player_boundaries(),
@@ -401,6 +408,6 @@ class Engine:
         '''Evals velocity and displacement values'''
 
         self.velocity     = self.world.velocity.eval(self.elapsed_time)
-        self.displacement = math.ceil(self.velocity * self.velocity_to_displacement_scale)
+        self.displacement = math.ceil(self.velocity * self.displacement_scale)
 
 #------------------------------------------------------------------------------#
