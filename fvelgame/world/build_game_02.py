@@ -22,7 +22,7 @@ from world.meta_world import MetaImage, MetaObject, MetaScoreboard, MetaWorld
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
 
-    print('Building game 02: Student...')
+    print('Building game 02: Student')
 
     path_resources   = Path(__file__).parents[1]/'resources'
     path_backgrounds = path_resources/'backgrounds'
@@ -39,11 +39,11 @@ if __name__ == '__main__':
     # Software
     #--------------------------------------------------------------------------#
 
+    game_file_name        = 'student.game'
     meta.soft_name        = 'Student'
     meta.soft_author      = "Luis D'Afonseca"
-    meta.soft_description = '''Um estudante confiante só quer saber de jogar videogames
-
-Perca o máximo de pontos fugindo dos livros e jogando videogames'''
+    meta.soft_description = '''Um estudante confiante só quer saber de jogar videogames\n
+                               Perca o máximo de pontos fugindo dos livros e jogando videogames'''
     meta.soft_icon        = None
 
     # Game
@@ -128,10 +128,7 @@ Perca o máximo de pontos fugindo dos livros e jogando videogames'''
     # Saving
     #--------------------------------------------------------------------------#
 
-    path = path_games/'student.game'
-
-    print(F'Writing: {path}')
-
+    path = path_games/game_file_name
     meta.save(path)
 
 #------------------------------------------------------------------------------#

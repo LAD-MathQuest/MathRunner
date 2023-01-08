@@ -1,5 +1,11 @@
 #------------------------------------------------------------------------------#
-'''This script builds a game test'''
+'''Test game 01
+
+Tilling background and track
+Vertical scrollling
+Background doesn't scroll
+Track doesn't scroll
+'''
 
 #------------------------------------------------------------------------------#
 
@@ -14,7 +20,7 @@ from world.meta_world import MetaImage, MetaObject, MetaScoreboard, MetaWorld
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
 
-    print('Building game 03: Deep Seas...')
+    print('Building test game 01')
 
     path_resources = Path(__file__).parents[1]/'resources'
     path_backgrounds = path_resources/'backgrounds'
@@ -32,9 +38,10 @@ if __name__ == '__main__':
     # Software
     #--------------------------------------------------------------------------#
 
+    game_file_name        = 'test-01.game'
     meta.soft_name        = 'Test 01'
     meta.soft_author      = "Luis D'Afonseca"
-    meta.soft_description = 'Teste 01'
+    meta.soft_description = meta.soft_name
     meta.soft_icon        = None
 
     # Game
@@ -92,15 +99,12 @@ if __name__ == '__main__':
     #--------------------------------------------------------------------------#
 
     meta.velocity = VelocityFunction ('0.25 + 0.005*t')
-    meta.boundary = BoundaryFunctions('0.12', '0.9 + 0.1*sin(pi*x/4)')
+    meta.boundary = BoundaryFunctions('0.3', '0.6 + 0.1*sin(pi*x/4)')
 
     # Saving
     #--------------------------------------------------------------------------#
 
-    path = path_games/'test-01.game'
-
-    print(F'Writing: {path}')
-
+    path = path_games/game_file_name
     meta.save(path)
 
 #------------------------------------------------------------------------------#

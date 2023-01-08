@@ -1,12 +1,10 @@
 #------------------------------------------------------------------------------#
+'''Test game 07
 
-'''This script builds a Game example
-
-Author: Luis D'Afonseca
-Name:   Deep Sea
-
-Description
-An underwater adventure
+Tilling background and track
+Horizontal scrollling
+Background scrolls
+Track doesn't scrolls
 '''
 
 #------------------------------------------------------------------------------#
@@ -22,15 +20,16 @@ from world.meta_world import MetaImage, MetaObject, MetaScoreboard, MetaWorld
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
 
-    print('Building game 03: Deep Seas')
+    print('Building test game 07')
 
-    path_resources   = Path(__file__).parents[1]/'resources'
+    path_resources = Path(__file__).parents[1]/'resources'
     path_backgrounds = path_resources/'backgrounds'
     path_scoreboards = path_resources/'scoreboards'
     path_objects     = path_resources/'objects'
     path_sounds      = path_resources/'sounds'
     path_fonts       = path_resources/'fonts'
     path_games       = path_resources/'games'
+    path_tests       = path_resources/'tests'
 
     #--------------------------------------------------------------------------#
 
@@ -39,10 +38,10 @@ if __name__ == '__main__':
     # Software
     #--------------------------------------------------------------------------#
 
-    game_file_name        = 'deep_sea.game'
-    meta.soft_name        = 'Deep Sea'
+    game_file_name        = 'test-07.game'
+    meta.soft_name        = 'Test 07'
     meta.soft_author      = "Luis D'Afonseca"
-    meta.soft_description = "Uma aventura em baixo d'água"
+    meta.soft_description = meta.soft_name
     meta.soft_icon        = None
 
     # Game
@@ -55,16 +54,14 @@ if __name__ == '__main__':
     # Appearance
     #--------------------------------------------------------------------------#
 
-    meta.background_image   = MetaImage(color=(55,55,55))
-    meta.background_scrolls = False
+    meta.background_image   = MetaImage(path=path_tests/'tile-blue.png')
+    meta.background_scrolls = True
 
-    meta.track_image   = MetaImage(color=(26, 34, 76))
+    meta.track_image   = MetaImage(path=path_tests/'tile-green.png',size=(400,400))
     meta.track_scrolls = False
     meta.track_kills   = (False, True)
 
-    path_font = path_fonts/'Party_Confetti.ttf'
-    meta.scoreboard = MetaScoreboard(text_font      = path_font,
-                                     text_font_size = 28,
+    meta.scoreboard = MetaScoreboard(text_font_size = 28,
                                      text_spacing   = 1,
                                      text_position  = (160,20),
                                      text_bgcolor   = (55,55,55))
