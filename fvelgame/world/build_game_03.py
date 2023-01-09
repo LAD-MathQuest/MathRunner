@@ -55,15 +55,17 @@ if __name__ == '__main__':
     # Appearance
     #--------------------------------------------------------------------------#
 
-    meta.background_image   = MetaImage(color=(55,55,55))
-    meta.background_scrolls = False
+    meta.background_image   = MetaImage(path=path_backgrounds/'deep_sea_background.png')
+    meta.background_scrolls = True
 
-    meta.track_image   = MetaImage(color=(26, 34, 76))
+    meta.track_image   = MetaImage(color=(0, 91, 223))
     meta.track_scrolls = False
     meta.track_kills   = (False, True)
 
     path_font = path_fonts/'Party_Confetti.ttf'
-    meta.scoreboard = MetaScoreboard(text_font      = path_font,
+    meta.scoreboard = MetaScoreboard(image=MetaImage(color=(55,55,55),size=(230,100)),
+                                     image_position=(153,13),
+                                     text_font      = path_font,
                                      text_font_size = 28,
                                      text_spacing   = 1,
                                      text_position  = (160,20),
@@ -72,8 +74,8 @@ if __name__ == '__main__':
     # Player
     #--------------------------------------------------------------------------#
 
-    imag_player       = MetaImage((90,40), color=(80, 86, 93))
-    meta.player       = MetaObject(imag_player)
+    imag_player = MetaImage(path=path_objects/'submarine.png')
+    meta.player = MetaObject(imag_player)
     meta.player_speed = 800
 
     # Obstacles
@@ -84,7 +86,7 @@ if __name__ == '__main__':
     meta.obstacles_frequency = 3
     meta.obstacles = []
 
-    imag_obstacle = MetaImage((80,30), color=(200,50,50))
+    imag_obstacle = MetaImage(path=path_objects/'mine.png')
     meta.obstacles.append(MetaObject(imag_obstacle, points))
 
     # Collectibles
@@ -95,14 +97,17 @@ if __name__ == '__main__':
     meta.collectibles_frequency = 1
     meta.collectibles = []
 
-    imag_collectible = MetaImage((50,50), color=(242, 182, 0))
+    imag_collectible = MetaImage(path=path_objects/'diver-01.png')
+    meta.collectibles.append(MetaObject(imag_collectible, points))
+
+    imag_collectible = MetaImage(path=path_objects/'diver-02.png')
     meta.collectibles.append(MetaObject(imag_collectible, points))
 
     # Functions
     #--------------------------------------------------------------------------#
 
     meta.velocity = VelocityFunction ('0.25 + 0.005*t')
-    meta.boundary = BoundaryFunctions('0.12', '0.9 + 0.1*sin(pi*x/4)')
+    meta.boundary = BoundaryFunctions('0.18', '0.9 + 0.1*sin(pi*x/4)')
 
     # Saving
     #--------------------------------------------------------------------------#
