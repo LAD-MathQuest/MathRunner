@@ -5,22 +5,23 @@
 
 ## TODO
 
+- Implement build structure
+
 ### New features
 
 - Implement achievements: 5 stars, the creator choses the score of each star
 - Implement a initial screen
 - Implement print screen
-- Allow creator to make margins kill the player
 
 #### Game engine
 
 - Implement variable tracks
   - Take care of spawning objects outside screen
 - Implement blits of track and background images using mask
-- Implement function evaluation
 - Add transparent option to MetaImage
-- Implement track scrolling
 - Stop computing elapsed_time when showing the help message
+- Use get_bounding_rect() to get objects real rectangle
+- Implement save MetaWorld storing all resources files in a zip directory
 
 #### Games
 
@@ -39,6 +40,7 @@
 - Implement callbacks
 - Implement undo
 - Set proper maximum values to positions and sizes based on vertical em horizontal scrolling
+- Replace minimum/maximum to left/rigth or top/bottom depending on scrooling direction
 
 - Implement simple media player
   - play, stop, pause, quit
@@ -52,17 +54,12 @@
     - Show preview using selected font
     - Implement font selection
 
-- Replace select by edit on image forms
-- On object forms
-  - Add a duplicate button
-  - Replace select by edit button
-
 - Implement a simple image editor 
   - Set size
   - Fill with color
   - Load image
   - Add transparency
-  - Rotate
+  - Rotate and flip
   - Crop
   - Zoom
 
@@ -70,14 +67,20 @@
 
 - Remove delay before playing sounds
 
-### Improvements
-
 ### Windows
 
-- Configure default Qt theme to show button bar icons
 - Create instalator and standalony executable
 
 ## DONE
+
+- Implement track scrolling
+- Implement function evaluation
+- Configure default Qt theme to show button bar icons
+- Allow creator to make margins kill the player
+- Replace select by edit on image forms
+- On object forms
+  - Add a duplicate button
+  - Replace select by edit button
 
 2022-12-31
 - Take care of background images smaller than screen
