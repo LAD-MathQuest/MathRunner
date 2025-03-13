@@ -131,7 +131,7 @@ class Engine:
         '''Initializes a game instance
 
         Args:
-            status(int): Game status, it can be STATUS_WELCOME ou STATUS_STARTING
+            status(int): Game status, it can be STATUS_WELCOME or STATUS_STARTING
         '''
 
         self.status = status

@@ -17,7 +17,7 @@ from   game.sound_mixer import SoundMixer
 #------------------------------------------------------------------------------#
 #------------------------------------------------------------------------------#
 class GameObjects():
-    '''Class to handle all object actions throw static functions'''
+    '''Class to handle all object actions through static functions'''
 
     score  = None
     killed = None
