@@ -56,7 +56,7 @@ if __name__ == '__main__':
     # Appearance
     #--------------------------------------------------------------------------#
 
-    meta.background_image   = MetaImage(path=path_backgrounds/'background.png', size=(1920,1080))
+    meta.background_image   = MetaImage(path=path_backgrounds/'magical_woods.png', size=(1920,1080))
     meta.background_scrolls = True
 
     meta.track_image   = False
