@@ -50,7 +50,7 @@ if __name__ == '__main__':
 
     meta.game_vertical   = False
     meta.game_time_bonus = 10
-    meta.game_ambience   = path_sounds/'07 IDDQD.wav'
+    meta.game_ambience   = path_sounds/'music_theme_wizard.wav'
     meta.game_ambience_volume = 0.1
 
     # Appearance
