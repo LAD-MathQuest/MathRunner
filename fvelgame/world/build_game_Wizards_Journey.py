@@ -39,16 +39,16 @@ if __name__ == '__main__':
     # Software
     #--------------------------------------------------------------------------#
 
-    game_file_name        = "wizard's_jorney.game"
-    meta.soft_name        = "Wizard's Journey"
+    game_file_name        = "wizards_jorney.game"
+    meta.soft_name        = "Wizards Journey"
     meta.soft_author      = "Samuel Lopes"
-    meta.soft_description = "Uma aventura magica em uma floresta"
+    meta.soft_description = "Fuja das criaturas malignas enquanto avança em uma floresta mágica"
     meta.soft_icon        = None
 
     # Game
     #--------------------------------------------------------------------------#
 
-    meta.game_vertical   = False
+    meta.game_vertical   = True
     meta.game_time_bonus = 10
     meta.game_ambience   = path_sounds/'music_theme_wizard.wav'
     meta.game_ambience_volume = 0.1
@@ -109,7 +109,7 @@ if __name__ == '__main__':
     #--------------------------------------------------------------------------#
 
     meta.velocity = VelocityFunction('0.25 + 0.005*t')
-    meta.boundary = BoundaryFunctions('0.18', '0.9 + 0.1*sin(pi*x/4)')
+    meta.boundary = BoundaryFunctions('0.3','0.7')
 
     # Saving
     #--------------------------------------------------------------------------#
