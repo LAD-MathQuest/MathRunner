@@ -1,5 +1,5 @@
 .. MathRunner documentation master file, created by
-   sphinx-quickstart on Thu May  1 22:36:11 2025.
+   sphinx-quickstart on Fri May  2 00:14:26 2025.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
@@ -14,7 +14,7 @@ documentation for details.
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-  
+
    game
    ui
    world
