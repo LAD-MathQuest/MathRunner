@@ -29,8 +29,8 @@ if __name__ == '__main__':
 
     game_file_name        = 'Math_Meows.game'
     meta.soft_name        = 'Maths & Meows'
-    meta.soft_author      = "Luiz Fernando Rocha Lopes"
-    meta.soft_description = "Escape the physicists and grab the kittens!"
+    meta.soft_author      = "Nandnn"
+    meta.soft_description = "Help the math teacher save the kittens, watch out for the cars!"
     meta.soft_icon        = path_objects/'Teacher_PixelArt.png'
 
     # Game
@@ -44,7 +44,7 @@ if __name__ == '__main__':
     # Appearance
     #--------------------------------------------------------------------------#
 
-    meta.background_image   = MetaImage(path=path_backgrounds/'Campus_Background.png', size=(1920,1080))
+    meta.background_image   = MetaImage(path=path_backgrounds/'campus_Background.png', size=(1920,1080))
     meta.background_scrolls = True
 
     meta.track_image   = False
@@ -75,7 +75,13 @@ if __name__ == '__main__':
     meta.obstacles_frequency = 3
     meta.obstacles = []
 
-    imag_obstacle = MetaImage(path=path_objects/'Scientist_PixelArt.png', size=(170,140))
+    imag_obstacle = MetaImage(path=path_objects/'carBlue.png',size=(231,120)) #size (largura, altura);
+    meta.obstacles.append(MetaObject(imag_obstacle, points))
+
+    imag_obstacle = MetaImage(path=path_objects/'carRed.png',size=(230,130))
+    meta.obstacles.append(MetaObject(imag_obstacle, points))
+
+    imag_obstacle = MetaImage(path=path_objects/'carGreen.png',size=(224,126))
     meta.obstacles.append(MetaObject(imag_obstacle, points))
 
     # Collectibles
@@ -87,14 +93,14 @@ if __name__ == '__main__':
     meta.collectibles_frequency = 1
     meta.collectibles = []
 
-    imag_collectible = MetaImage(path=path_objects/'Cat_PixelArt_01.png', size=(180,120))
+    imag_collectible = MetaImage(path=path_objects/'Cat_PixelArt_01.png', size=(160,100))
     meta.collectibles.append(MetaObject(imag_collectible, points, path_collect, volume))
 
     path_collect = path_sounds/'meow_02.mp3'
     points = 100
     volume = 0.4
 
-    imag_collectible = MetaImage(path=path_objects/'Cat_PixelArt_02.png', size=(180,120))
+    imag_collectible = MetaImage(path=path_objects/'Cat_PixelArt_02.png', size=(160,100))
     meta.collectibles.append(MetaObject(imag_collectible, points, path_collect, volume))
 
     # Functions
