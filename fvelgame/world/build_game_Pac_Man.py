@@ -3,10 +3,10 @@
 '''This script builds a Game example
 
 Author: Emanuelle Lima
-Name:   Pac Man
+Name: Pac Man
 
 Description
-Simple racing game with treasures and obstacles
+A magical adventure with Wizard
 '''
 
 #------------------------------------------------------------------------------#
@@ -16,13 +16,13 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).parents[1]))
 
-from world.functions  import VelocityFunction, BoundaryFunctions
+from world.functions import VelocityFunction, BoundaryFunctions
 from world.meta_world import MetaImage, MetaObject, MetaScoreboard, MetaWorld
 
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
 
-    print('Building game 01: PacoMan')
+    print("Building game: PacMan")
 
     path_resources   = Path(__file__).parents[1]/'resources'
     path_backgrounds = path_resources/'backgrounds'
@@ -39,103 +39,92 @@ if __name__ == '__main__':
     # Software
     #--------------------------------------------------------------------------#
 
-    game_file_name        = 'pacoman.game'
-    meta.soft_name        = 'Racing'
+    game_file_name        = "pacman.game"
+    meta.soft_name        = "Pac Man"
     meta.soft_author      = "Emanuelle Lima"
-    meta.soft_description = 'Um jogo de corrida onde o jogador deve evitar os obstáculos e coletar as joias'
+    meta.soft_description = "Ajude o Pac Man a fugir dos fantasmas e a comer cerejas"
     meta.soft_icon        = None
 
     # Game
     #--------------------------------------------------------------------------#
 
     meta.game_vertical   = False
-    meta.game_time_bonus = 1
-    meta.game_ambience   = path_sounds/'pacoman.mp3'
+    meta.game_time_bonus = 10
+    meta.game_ambience   = path_sounds/'pacman.mp3'
+    meta.game_ambience_volume = 0.7
 
     # Appearance
     #--------------------------------------------------------------------------#
 
-    path_background = path_backgrounds/'mazepacoman.png'
-    imag_background = MetaImage((1920,6000), path=path_background)
-
-    meta.background_image   = imag_background
+    meta.background_image   = MetaImage(path=path_backgrounds/'pistapacman.png', size=(1920,1080))
     meta.background_scrolls = True
 
-    meta.track_image   = None
+    meta.track_image   = False
     meta.track_scrolls = False
     meta.track_kills   = (False, False)
 
-    path_score = path_scoreboards/'frame_neon.png'
-    imag_score = MetaImage((390,160), path=path_score)
-
-    path_font = path_fonts/'Electronic_Highway_Sign.ttf'
-
-    meta.scoreboard = MetaScoreboard(image          = imag_score,
-                                     image_position = (54,67),
+    path_font = path_fonts/'Arcade.ttf'
+    meta.scoreboard = MetaScoreboard(image=MetaImage(color=(59,29,139),size=(280,100)),
+                                     image_position=(153,13),
                                      text_font      = path_font,
-                                     text_font_size = 28,
-                                     text_spacing   = 1.2,
-                                     text_position  = (103,100),
-                                     text_bgcolor   = (90,93,102),
-                                     text_fgcolor   = (0,204,255))
+                                     text_font_size = 15,
+                                     text_spacing   = 1.3,
+                                     text_position  = (160,20),
+                                     text_bgcolor   = (59,29,139))
 
     # Player
     #--------------------------------------------------------------------------#
 
-    path_player = path_objects/'pacoman.png'
-    imag_player = MetaImage(size=(100,108), path=path_player)
-
-    meta.player       = MetaObject(imag_player)
-    meta.player_speed = 200
+    imag_player = MetaImage(path=path_objects/'pacman.png', size=(130,130))
+    meta.player = MetaObject(imag_player)
+    meta.player_speed = 800
 
     # Obstacles
     #--------------------------------------------------------------------------#
-    
+
     points = 10
 
-    meta.obstacles_frequency = 3
+    meta.obstacles_frequency = 2
     meta.obstacles = []
 
-    imag_obstacle = MetaImage(path=path_objects/'ghostman.png', size=(100,100))
+    imag_obstacle = MetaImage(path=path_objects/'fantasmavermelho.png', size=(130,130))
     meta.obstacles.append(MetaObject(imag_obstacle, points))
 
+    imag_obstacle = MetaImage(path=path_objects/'fantasmaverde.png', size=(130,130))
+    meta.obstacles.append(MetaObject(imag_obstacle, points))
 
+    imag_obstacle = MetaImage(path=path_objects/'fantasmaazul.png', size=(130,130))
+    meta.obstacles.append(MetaObject(imag_obstacle, points))
 
     # Collectibles
     #--------------------------------------------------------------------------#
 
-    path_collect = path_sounds/'collect-ring.mp3'
     points = 100
-    volume = 0.2
+    volume = 1.5
 
     meta.collectibles_frequency = 1
     meta.collectibles = []
 
-    for ii in range(1,5):
+    imag_collectible = MetaImage(path=path_objects/'cereja.png', size=(120,120))
+    meta.collectibles.append(MetaObject(imag_collectible, points, sound=path_sounds/'pacmaneat.mp3', volume=1.0))
 
-        path_collectible = path_objects/f'precious_stone-{ii}.png'
-        imag_collectible = MetaImage((46,38), path=path_collectible)
-
-        collectible = MetaObject(imag_collectible, points, path_collect, volume)
-        meta.collectibles.append(collectible)
-
+    
     # Oil spill
-    path_collect = path_sounds/'car_drift.mp3'
-    points = -200
-    volume = 1.0
+    path_collect = path_sounds/'pacmanpain.mp3'
 
     # File image size [312, 344]
-    path_collectible = path_objects/'oil_spill.png'
+    path_collectible = path_objects/'cerejaveneno.png'
     imag_collectible = MetaImage((100,110), path=path_collectible)
 
     collectible = MetaObject(imag_collectible, points, path_collect, volume)
     meta.collectibles.append(collectible)
 
+
     # Functions
     #--------------------------------------------------------------------------#
 
     meta.velocity = VelocityFunction ('0.2 + 0.01*t')
-    meta.boundary = BoundaryFunctions('0.18', '0.9 + 0.1*sin(pi*x/4)')
+    meta.boundary = BoundaryFunctions('0.1', '0.9')
 
     # Saving
     #--------------------------------------------------------------------------#
