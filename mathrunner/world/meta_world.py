@@ -84,7 +84,7 @@ class MetaWorld:
         # Software
         #----------------------------------------------------------------------#
 
-        self.soft_name        = 'FVelGame'
+        self.soft_name        = 'MathRunner'
         self.soft_author      = "Luis D'Afonseca"
         self.soft_description = 'Um jogo para explorar funções'
         self.soft_icon        = None
@@ -146,7 +146,7 @@ class MetaWorld:
         imag_collectible = MetaImage((50,50), color=color)
         self.collectibles.append( MetaObject(imag_collectible, points))
 
-        imag_collectible = MetaImage( (30,80), color=color )
+        imag_collectible = MetaImage((30,80), color=color )
         self.collectibles.append( MetaObject(imag_collectible, points))
 
         # Functions

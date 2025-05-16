@@ -1,6 +1,6 @@
 #------------------------------------------------------------------------------#
 
-'''This script builds a Game example
+'''Build game Student
 
 Author: Luis D'Afonseca
 Name:   Student
@@ -22,7 +22,7 @@ from world.meta_world import MetaImage, MetaObject, MetaScoreboard, MetaWorld
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
 
-    print('Building game 02: Student')
+    print('Building: Student')
 
     path_resources   = Path(__file__).parents[1]/'resources'
     path_backgrounds = path_resources/'backgrounds'
@@ -42,8 +42,7 @@ if __name__ == '__main__':
     game_file_name        = 'student.game'
     meta.soft_name        = 'Student'
     meta.soft_author      = "Luis D'Afonseca"
-    meta.soft_description = '''Um estudante confiante só quer saber de jogar videogames\n
-                               Perca o máximo de pontos fugindo dos livros e jogando videogames'''
+    meta.soft_description = '''Um estudante confiante só quer saber de jogar videogames\nPerca o máximo de pontos fugindo dos livros e jogando videogames'''
     meta.soft_icon        = None
 
     # Game
@@ -52,6 +51,7 @@ if __name__ == '__main__':
     meta.game_vertical   = False
     meta.game_time_bonus = -2
     meta.game_ambience   = None
+    meta.game_ambience_volume = 0.4 
 
     # Appearance
     #--------------------------------------------------------------------------#

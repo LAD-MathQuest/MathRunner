@@ -1,3 +1,13 @@
+#------------------------------------------------------------------------------#
+
+'''Build game 
+
+Author: 
+Name: 
+
+Description
+
+'''
 
 #------------------------------------------------------------------------------#
 
@@ -12,7 +22,7 @@ from world.meta_world import MetaImage, MetaObject, MetaScoreboard, MetaWorld
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
 
-    print('Building game 04: Healthy Run')
+    print('Building: Healthy Run')
 
     path_resources   = Path(__file__).parents[1]/'resources'
     path_backgrounds = path_resources/'backgrounds'
@@ -41,6 +51,7 @@ if __name__ == '__main__':
     meta.game_vertical   = True
     meta.game_time_bonus = 10
     meta.game_ambience   = path_sounds/'music_healthy.mp3'
+    meta.game_ambience_volume = 0.4 
 
     # Appearance
     #--------------------------------------------------------------------------#
@@ -65,7 +76,7 @@ if __name__ == '__main__':
     # Player
     #--------------------------------------------------------------------------#
 
-    imag_player = MetaImage(path=path_objects/'girl.png')
+    imag_player = MetaImage(size=(75, 167), path=path_objects/'girl.png')
     meta.player = MetaObject(imag_player)
     meta.player_speed = 800
 

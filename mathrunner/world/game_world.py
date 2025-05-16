@@ -3,7 +3,7 @@
 
 The GameWorld class stores all parameters defined by the game creator
 using pygame structures to be used directly by de Engine.
-An instance of GameWoclass is created from an instance of MetaWorld.
+An instance of GameWorld class is created from an instance of MetaWorld.
 
 Here the lengths are measured in pixels.
 '''

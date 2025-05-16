@@ -1,10 +1,12 @@
 #------------------------------------------------------------------------------#
-'''Space game 
 
-Tilling background and track
-Vertical scrollling
-Background scrolls
-Track doesn't scrolls
+'''Build game Space
+
+Author: Luis D'Afonseca
+Name:   Racing
+
+Description
+Simple racing game with treasures and obstacles
 '''
 
 #------------------------------------------------------------------------------#
@@ -20,16 +22,15 @@ from world.meta_world import MetaImage, MetaObject, MetaScoreboard, MetaWorld
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
 
-    print('Building Space Game')
+    print('Building: Space Game')
 
-    path_resources = Path(__file__).parents[1]/'resources'
+    path_resources   = Path(__file__).parents[1]/'resources'
     path_backgrounds = path_resources/'backgrounds'
     path_scoreboards = path_resources/'scoreboards'
     path_objects     = path_resources/'objects'
     path_sounds      = path_resources/'sounds'
     path_fonts       = path_resources/'fonts'
     path_games       = path_resources/'games'
-    path_tests       = path_resources/'tests'
 
     #--------------------------------------------------------------------------#
 
@@ -50,10 +51,10 @@ if __name__ == '__main__':
     meta.game_vertical   = True
     meta.game_time_bonus = 10
     meta.game_ambience   = None
+    meta.game_ambience_volume = 0.4 
 
     # Appearance
     #--------------------------------------------------------------------------#
-
    
     path_background = path_backgrounds/'space.png'
     imag_background = MetaImage((1500,1500), path=path_background)
@@ -78,13 +79,16 @@ if __name__ == '__main__':
                                      text_position  = (103,100),
                                      text_bgcolor   = (90,93,102),
                                      text_fgcolor   = (0,204,255))
+
     # Player
     #--------------------------------------------------------------------------#
+
     path_player = path_objects/'rocket.png'
     imag_player = MetaImage((320,320), path=path_player)
 
     meta.player       = MetaObject(imag_player)
     meta.player_speed = 400
+    
     # Obstacles
     #--------------------------------------------------------------------------#
 
@@ -102,6 +106,7 @@ if __name__ == '__main__':
 
         obstacle = MetaObject(imag_obstacle, points, path_crash, volume)
         meta.obstacles.append(obstacle)
+
     # Collectibles
     #--------------------------------------------------------------------------#
 
@@ -126,4 +131,3 @@ if __name__ == '__main__':
     meta.save(path)
 
 #------------------------------------------------------------------------------#
-

@@ -1,6 +1,6 @@
 #------------------------------------------------------------------------------#
 
-'''This script builds a Game example
+'''Build game Pac Man
 
 Author: Emanuelle Lima
 Name: Pac Man
@@ -16,13 +16,13 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).parents[1]))
 
-from world.functions import VelocityFunction, BoundaryFunctions
+from world.functions  import VelocityFunction, BoundaryFunctions
 from world.meta_world import MetaImage, MetaObject, MetaScoreboard, MetaWorld
 
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
 
-    print("Building game: PacMan")
+    print('Building: Pac Man')
 
     path_resources   = Path(__file__).parents[1]/'resources'
     path_backgrounds = path_resources/'backgrounds'
@@ -56,7 +56,10 @@ if __name__ == '__main__':
     # Appearance
     #--------------------------------------------------------------------------#
 
-    meta.background_image   = MetaImage(path=path_backgrounds/'pistapacman.png', size=(1920,1080))
+    path_background = path_backgrounds/'pistapacman.png'
+    imag_background = MetaImage((1920,1080), path=path_background)
+    
+    meta.background_image = imag_background
     meta.background_scrolls = True
 
     meta.track_image   = False

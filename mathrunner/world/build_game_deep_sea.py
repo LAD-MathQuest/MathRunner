@@ -1,6 +1,6 @@
 #------------------------------------------------------------------------------#
 
-'''This script builds a Game example
+'''Build game Deep Sea
 
 Author: Luis D'Afonseca
 Name:   Deep Sea
@@ -22,7 +22,7 @@ from world.meta_world import MetaImage, MetaObject, MetaScoreboard, MetaWorld
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
 
-    print('Building game 03: Deep Seas')
+    print('Building: Deep Seas')
 
     path_resources   = Path(__file__).parents[1]/'resources'
     path_backgrounds = path_resources/'backgrounds'
@@ -51,11 +51,15 @@ if __name__ == '__main__':
     meta.game_vertical   = False
     meta.game_time_bonus = 10
     meta.game_ambience   = None
+    meta.game_ambience_volume = 0.4 
 
     # Appearance
     #--------------------------------------------------------------------------#
 
-    meta.background_image   = MetaImage(path=path_backgrounds/'deep_sea_background.png')
+    path_background = path_backgrounds/'deep_sea_background.png'
+    imag_background = MetaImage(path=path_background)
+
+    meta.background_image   = imag_background
     meta.background_scrolls = True
 
     meta.track_image   = MetaImage(color=(0, 91, 223))
@@ -74,7 +78,7 @@ if __name__ == '__main__':
     # Player
     #--------------------------------------------------------------------------#
 
-    imag_player = MetaImage(path=path_objects/'submarine.png')
+    imag_player = MetaImage(size=(120, 75), path=path_objects/'submarine.png')
     meta.player = MetaObject(imag_player)
     meta.player_speed = 800
 
@@ -86,7 +90,7 @@ if __name__ == '__main__':
     meta.obstacles_frequency = 3
     meta.obstacles = []
 
-    imag_obstacle = MetaImage(path=path_objects/'mine.png')
+    imag_obstacle = MetaImage(size=(50, 54), path=path_objects/'mine.png')
     meta.obstacles.append(MetaObject(imag_obstacle, points))
 
     # Collectibles
@@ -97,10 +101,10 @@ if __name__ == '__main__':
     meta.collectibles_frequency = 1
     meta.collectibles = []
 
-    imag_collectible = MetaImage(path=path_objects/'diver-01.png')
+    imag_collectible = MetaImage(size=(90, 69), path=path_objects/'diver-01.png')
     meta.collectibles.append(MetaObject(imag_collectible, points))
 
-    imag_collectible = MetaImage(path=path_objects/'diver-02.png')
+    imag_collectible = MetaImage(size=(110, 41), path=path_objects/'diver-02.png')
     meta.collectibles.append(MetaObject(imag_collectible, points))
 
     # Functions

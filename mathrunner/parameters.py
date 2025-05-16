@@ -27,8 +27,8 @@ RESOURCES = Path(__file__).resolve().parent / 'resources'
 
 AUTHOR  = "Luis A. D'Afonseca"
 VERSION = '0.0.1 - alpha'
-TITLE   = 'FVelGame'
-MYAPPID = 'Prof_Luis_A_DAfonseca.FVelGame.designer'
+TITLE   = 'MathRunner'
+MYAPPID = 'Prof_Luis_A_DAfonseca.MathRunner.designer'
 
 ABOUT = f"""
 Desenvolvedor: {AUTHOR}

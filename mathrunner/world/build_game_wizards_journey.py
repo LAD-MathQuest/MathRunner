@@ -1,6 +1,6 @@
 #------------------------------------------------------------------------------#
 
-'''This script builds a Game example
+'''Build game Wizard's Journey
 
 Author: Samuel Lopes
 Name: Wizard's Journey
@@ -16,13 +16,13 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).parents[1]))
 
-from world.functions import VelocityFunction, BoundaryFunctions
+from world.functions  import VelocityFunction, BoundaryFunctions
 from world.meta_world import MetaImage, MetaObject, MetaScoreboard, MetaWorld
 
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
 
-    print("Building game: Wizard's Journey")
+    print("Building: Wizard's Journey")
 
     path_resources   = Path(__file__).parents[1]/'resources'
     path_backgrounds = path_resources/'backgrounds'
@@ -40,7 +40,7 @@ if __name__ == '__main__':
     #--------------------------------------------------------------------------#
 
     game_file_name        = "wizards_jorney.game"
-    meta.soft_name        = "Wizards Journey"
+    meta.soft_name        = "Wizard's Journey"
     meta.soft_author      = "Samuel Lopes"
     meta.soft_description = "Fuja das criaturas malignas enquanto avança em uma floresta mágica"
     meta.soft_icon        = None
@@ -55,8 +55,11 @@ if __name__ == '__main__':
 
     # Appearance
     #--------------------------------------------------------------------------#
+   
+    path_background = path_backgrounds/'magical_woods.png'
+    imag_background = MetaImage((1920,1080), path=path_background)
 
-    meta.background_image   = MetaImage(path=path_backgrounds/'magical_woods.png', size=(1920,1080))
+    meta.background_image   = imag_background
     meta.background_scrolls = True
 
     meta.track_image   = False
@@ -89,9 +92,9 @@ if __name__ == '__main__':
 
     imag_obstacle = MetaImage(path=path_objects/'dragon.png', size=(120,140))
     meta.obstacles.append(MetaObject(imag_obstacle, points))
-    imag_obstacle = MetaImage(path=path_objects/'woodSpirit.png', size=(120,140))
+    imag_obstacle = MetaImage(path=path_objects/'wood_spirit.png', size=(120,140))
     meta.obstacles.append(MetaObject(imag_obstacle, points))
-    imag_obstacle = MetaImage(path=path_objects/'evilSpirit.png', size=(120,140))
+    imag_obstacle = MetaImage(path=path_objects/'evil_spirit.png', size=(120,140))
     meta.obstacles.append(MetaObject(imag_obstacle, points))
 
     # Collectibles

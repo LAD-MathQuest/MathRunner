@@ -123,12 +123,12 @@ def make_dist():
 
     print(f'{here.name}: Creating a distribution package for {os_name}...')
 
-    path_app       = here           / 'fvelgame.py'
+    path_app       = here           / 'mathrunner.py'
     path_resources = here           / 'resources'
-    path_icon      = path_resources / 'icons' / 'fvelgame.ico'
+    path_icon      = path_resources / 'icons' / 'mathrunner.ico'
 
     installer.run([ str(path_app),
-                    '--name=FVelGame',
+                    '--name=MathRunner',
                    f'--icon={path_icon}',
                    f'--add-data={path_resources}{sep}resources',
                    f'--specpath={path_spec}',

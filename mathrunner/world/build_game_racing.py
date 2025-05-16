@@ -1,6 +1,6 @@
 #------------------------------------------------------------------------------#
 
-'''This script builds a Game example
+'''Build game Racing
 
 Author: Luis D'Afonseca
 Name:   Racing
@@ -22,7 +22,7 @@ from world.meta_world import MetaImage, MetaObject, MetaScoreboard, MetaWorld
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
 
-    print('Building game 01: Racing')
+    print('Building: Racing')
 
     path_resources   = Path(__file__).parents[1]/'resources'
     path_backgrounds = path_resources/'backgrounds'
@@ -51,6 +51,7 @@ if __name__ == '__main__':
     meta.game_vertical   = True
     meta.game_time_bonus = 1
     meta.game_ambience   = path_sounds/'music-1.mp3'
+    meta.game_ambience_volume = 0.4 
 
     # Appearance
     #--------------------------------------------------------------------------#

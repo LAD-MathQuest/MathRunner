@@ -1,3 +1,15 @@
+#------------------------------------------------------------------------------#
+
+'''Build game 
+
+Author: 
+Name: 
+
+Description
+
+'''
+
+#------------------------------------------------------------------------------#
 
 import sys
 from pathlib import Path
@@ -10,7 +22,7 @@ from world.meta_world import MetaImage, MetaObject, MetaScoreboard, MetaWorld
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
 
-    print('Building Game : Math Meows')
+    print('Building: Math Meows')
 
     path_resources   = Path(__file__).parents[1]/'resources'
     path_backgrounds = path_resources/'backgrounds'
@@ -27,7 +39,7 @@ if __name__ == '__main__':
     # Software
     #--------------------------------------------------------------------------#
 
-    game_file_name        = 'Math_Meows.game'
+    game_file_name        = 'math_meows.game'
     meta.soft_name        = 'Maths & Meows'
     meta.soft_author      = "Nandnn"
     meta.soft_description = "Help the math teacher save the kittens, watch out for the cars!"
@@ -44,7 +56,10 @@ if __name__ == '__main__':
     # Appearance
     #--------------------------------------------------------------------------#
 
-    meta.background_image   = MetaImage(path=path_backgrounds/'campus_Background.png', size=(1920,1080))
+    path_background = path_backgrounds/'campus_background.png'
+    imag_background = MetaImage((1920,1800), path=path_background)
+
+    meta.background_image   = imag_background
     meta.background_scrolls = True
 
     meta.track_image   = False
@@ -63,7 +78,7 @@ if __name__ == '__main__':
     # Player
     #--------------------------------------------------------------------------#
 
-    imag_player = MetaImage(path=path_objects/'Teacher_PixelArt.png', size=(170,130))
+    imag_player = MetaImage(path=path_objects/'teacher.png', size=(170,130))
     meta.player = MetaObject(imag_player)
     meta.player_speed = 800
 
@@ -75,13 +90,13 @@ if __name__ == '__main__':
     meta.obstacles_frequency = 3
     meta.obstacles = []
 
-    imag_obstacle = MetaImage(path=path_objects/'carBlue.png',size=(231,120)) #size (largura, altura);
+    imag_obstacle = MetaImage(path=path_objects/'car_blue.png',size=(231,120)) #size (largura, altura);
     meta.obstacles.append(MetaObject(imag_obstacle, points))
 
-    imag_obstacle = MetaImage(path=path_objects/'carRed.png',size=(230,130))
+    imag_obstacle = MetaImage(path=path_objects/'car_red.png',size=(230,130))
     meta.obstacles.append(MetaObject(imag_obstacle, points))
 
-    imag_obstacle = MetaImage(path=path_objects/'carGreen.png',size=(224,126))
+    imag_obstacle = MetaImage(path=path_objects/'car_green.png',size=(224,126))
     meta.obstacles.append(MetaObject(imag_obstacle, points))
 
     # Collectibles
@@ -93,14 +108,14 @@ if __name__ == '__main__':
     meta.collectibles_frequency = 1
     meta.collectibles = []
 
-    imag_collectible = MetaImage(path=path_objects/'Cat_PixelArt_01.png', size=(160,100))
+    imag_collectible = MetaImage(path=path_objects/'cat-1.png', size=(160,100))
     meta.collectibles.append(MetaObject(imag_collectible, points, path_collect, volume))
 
     path_collect = path_sounds/'meow_02.mp3'
     points = 100
     volume = 0.4
 
-    imag_collectible = MetaImage(path=path_objects/'Cat_PixelArt_02.png', size=(160,100))
+    imag_collectible = MetaImage(path=path_objects/'cat-2.png', size=(160,100))
     meta.collectibles.append(MetaObject(imag_collectible, points, path_collect, volume))
 
     # Functions

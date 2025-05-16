@@ -21,7 +21,7 @@ def main():
 
     import argparse
 
-    parser = argparse.ArgumentParser(description='FVelGame')
+    parser = argparse.ArgumentParser(description='MathRunner')
     parser.add_argument( 'world', help='Game World file name', nargs='?' )
     args = parser.parse_args()
 

@@ -1,6 +1,6 @@
 #------------------------------------------------------------------------------#
 
-'''This script builds a Game example
+'''Build game Monkey in Danger
 
 Author: Merc
 Name:   Monkey in danger
@@ -11,10 +11,8 @@ Monkey ir running away from one of its predators, the snakes.
 
 #------------------------------------------------------------------------------#
 
-import random
 import sys
 from pathlib import Path
-
 
 sys.path.append(str(Path(__file__).parents[1]))
 
@@ -24,7 +22,7 @@ from world.meta_world import MetaImage, MetaObject, MetaScoreboard, MetaWorld
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
 
-    print('Building game: Monkey in danger')
+    print('Building: Monkey in danger')
 
     path_resources   = Path(__file__).parents[1]/'resources'
     path_backgrounds = path_resources/'backgrounds'
@@ -53,9 +51,11 @@ if __name__ == '__main__':
     meta.game_vertical   = True
     meta.game_time_bonus = 10
     meta.game_ambience   = path_sounds/'music-1.mp3'
+    meta.game_ambience_volume = 0.4 
 
     # Appearance
     #--------------------------------------------------------------------------#
+
     path_background = path_backgrounds/'selva_vertical.png'
     imag_background = MetaImage((1536,1024), path=path_background)
     
@@ -122,8 +122,6 @@ if __name__ == '__main__':
 
     path = path_games/game_file_name
     meta.save(path)
-
-
 
 #------------------------------------------------------------------------------#
 
