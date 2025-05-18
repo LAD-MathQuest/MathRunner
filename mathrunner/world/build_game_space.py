@@ -41,8 +41,8 @@ if __name__ == '__main__':
 
     game_file_name        = 'space.game'
     meta.soft_name        = 'space'
-    meta.soft_author      = "Daniel C'risto"
-    meta.soft_description = meta.soft_name
+    meta.soft_author      = "Cristo"
+    meta.soft_description = 'Desvie dos Asteroides e resgate os Astronautas'
     meta.soft_icon        = None
 
     # Game
@@ -50,7 +50,7 @@ if __name__ == '__main__':
 
     meta.game_vertical   = True
     meta.game_time_bonus = 10
-    meta.game_ambience   = None
+    meta.game_ambience   = path_sounds/'music_healthy.mp3'
     meta.game_ambience_volume = 0.4 
 
     # Appearance
@@ -66,7 +66,7 @@ if __name__ == '__main__':
     meta.track_scrolls = False
     meta.track_kills   = (False, False)
 
-    path_score = path_scoreboards/'frame_neon.png'
+    path_score = path_scoreboards/'space_display.png'
     imag_score = MetaImage((390,160), path=path_score)
 
     path_font = path_fonts/'Electronic_Highway_Sign.ttf'
@@ -115,9 +115,14 @@ if __name__ == '__main__':
     meta.collectibles_frequency = 1
     meta.collectibles = []
 
-    imag_collectible = MetaImage((50,50), color=(242, 182, 0))
+    imag_collectible = MetaImage(size=(128, 128), path=path_objects/'astronaut-green.png')
+    meta.collectibles.append(MetaObject(imag_collectible, points))
+    
+    imag_collectible = MetaImage(size=(128, 128), path=path_objects/'astronaut-white.png')
     meta.collectibles.append(MetaObject(imag_collectible, points))
 
+    imag_collectible = MetaImage(size=(128, 128), path=path_objects/'astronaut-brown.png')
+    meta.collectibles.append(MetaObject(imag_collectible, points))
     # Functions
     #--------------------------------------------------------------------------#
 
