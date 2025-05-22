@@ -140,8 +140,11 @@ if __name__ == '__main__':
     # Functions
     #--------------------------------------------------------------------------#
 
-    meta.velocity = VelocityFunction ('0.4 + 0.02*t')
-    meta.boundary = BoundaryFunctions('0.35', '0.65')
+    meta.velocity = VelocityFunction('0.4 + 0.02*t')
+    meta.boundary = BoundaryFunctions(
+      '0.35 - min(0.05, max(0, 0.1+cos(pi*x/11)))', 
+      '0.65 + min(0.05, max(0, cos(pi*x/5)))'
+    )
 
     # Saving
     #--------------------------------------------------------------------------#

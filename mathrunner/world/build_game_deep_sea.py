@@ -68,7 +68,7 @@ if __name__ == '__main__':
 
     path_font = path_fonts/'Party_Confetti.ttf'
     meta.scoreboard = MetaScoreboard(image=MetaImage(color=(55,55,55),size=(230,100)),
-                                     image_position=(153,13),
+                                     image_position = (153,13),
                                      text_font      = path_font,
                                      text_font_size = 28,
                                      text_spacing   = 1,
@@ -111,7 +111,7 @@ if __name__ == '__main__':
     #--------------------------------------------------------------------------#
 
     meta.velocity = VelocityFunction ('0.25 + 0.005*t')
-    meta.boundary = BoundaryFunctions('0.18', '0.9 + 0.1*sin(pi*x/4)')
+    meta.boundary = BoundaryFunctions('0.18', '0.85+0.1*sen(pi*x/4)+0.05*sen(pi*x/2)')
 
     # Saving
     #--------------------------------------------------------------------------#
