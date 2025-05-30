@@ -10,6 +10,7 @@
     computed as proportion of screen.
 '''
 
+import re
 import numpy   as np
 import numexpr as ne
 
@@ -47,7 +48,90 @@ def numexpr_to_pt(func):
     return func
 
 #------------------------------------------------------------------------------#
+def replace_min_with_where(s):
+
+    result = ''
+    i = 0
+
+    while i < len(s):
+
+        if s[i:i+4] == 'min(':
+            i += 4
+            start = i
+            depth = 1
+            arg1 = ''
+            arg2 = ''
+            comma_found = False
+
+            while i < len(s) and depth > 0:
+                if s[i] == '(':
+                    depth += 1
+                elif s[i] == ')':
+                    depth -= 1
+                elif s[i] == ',' and depth == 1 and not comma_found:
+                    arg1 = s[start:i].strip()
+                    start = i + 1
+                    comma_found = True
+                i += 1
+
+            if comma_found:
+                arg2 = s[start:i-1].strip()
+                replacement = f'where({arg1}<{arg2}, {arg1}, {arg2})'
+                result += replacement
+            else:
+                # fallback: malformed min call, keep original
+                result += 'min('
+        else:
+            result += s[i]
+            i += 1
+
+    return result
+
+#------------------------------------------------------------------------------#
+def replace_max_with_where(s):
+
+    result = ''
+    i = 0
+
+    while i < len(s):
+
+        if s[i:i+4] == 'max(':
+            i += 4
+            start = i
+            depth = 1
+            arg1 = ''
+            arg2 = ''
+            comma_found = False
+
+            while i < len(s) and depth > 0:
+                if s[i] == '(':
+                    depth += 1
+                elif s[i] == ')':
+                    depth -= 1
+                elif s[i] == ',' and depth == 1 and not comma_found:
+                    arg1 = s[start:i].strip()
+                    start = i + 1
+                    comma_found = True
+                i += 1
+
+            if comma_found:
+                arg2 = s[start:i-1].strip()
+                replacement = f'where({arg1}>{arg2}, {arg1}, {arg2})'
+                result += replacement
+            else:
+                # fallback: malformed max call, keep original
+                result += 'max('
+        else:
+            result += s[i]
+            i += 1
+
+    return result
+
+#------------------------------------------------------------------------------#
 def eval_function(values, func, var_name):
+
+    func = replace_min_with_where(func)
+    func = replace_max_with_where(func)
 
     ff = ne.evaluate(func, local_dict={var_name:values, 'e':np.e, 'pi':np.pi})
 

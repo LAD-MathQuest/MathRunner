@@ -28,7 +28,10 @@ def main():
     pygame.init()
     pygame.display.set_mode( (0,0), pygame.FULLSCREEN )
     pygame.mouse.set_visible(False)
+<<<<<<< HEAD
     pygame.mouse.set_pos(0,0)
+=======
+>>>>>>> eec805743e80addc745114ea0a8a360e23e85cd4
 
     meta   = MetaWorld.load(args.world) if args.world else MetaWorld()
     world  = GameWorld(meta)
