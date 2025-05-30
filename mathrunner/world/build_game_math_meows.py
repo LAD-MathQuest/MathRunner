@@ -57,7 +57,7 @@ if __name__ == '__main__':
     #--------------------------------------------------------------------------#
 
     path_background = path_backgrounds/'campus_background.png'
-    imag_background = MetaImage((1920,1800), path=path_background)
+    imag_background = MetaImage((2130,1231), path=path_background)
 
     meta.background_image   = imag_background
     meta.background_scrolls = True

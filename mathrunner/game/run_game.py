@@ -26,8 +26,9 @@ def main():
     args = parser.parse_args()
 
     pygame.init()
-    pygame.mouse.set_visible(False)
     pygame.display.set_mode( (0,0), pygame.FULLSCREEN )
+    pygame.mouse.set_visible(False)
+    pygame.mouse.set_pos(0,0)
 
     meta   = MetaWorld.load(args.world) if args.world else MetaWorld()
     world  = GameWorld(meta)
