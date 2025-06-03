@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>JanelaPrincipal</string>
+   <string>MathRunner</string> <!-- Janela principal -->
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="enabled">
@@ -40,7 +40,7 @@
         <string/>
        </property>
        <property name="statusTip">
-        <string>Define game properties</string>
+        <string>Definir propriedades do jogo</string>
        </property>
        <attribute name="title">
         <string>Jogo</string>
@@ -49,7 +49,7 @@
         <item>
          <widget class="QGroupBox" name="groupBox_Software">
           <property name="title">
-           <string>Software</string>
+           <string>Programa</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_17">
            <item row="1" column="0">
@@ -62,7 +62,7 @@
            <item row="2" column="0">
             <widget class="QPushButton" name="pushButton_IconSelect">
              <property name="text">
-              <string>Icon</string>
+              <string>Ícone</string>
              </property>
             </widget>
            </item>
@@ -306,7 +306,7 @@
                 <bool>false</bool>
                </property>
                <property name="text">
-                <string>Jogar</string>
+                <string>Tocar</string>
                </property>
               </widget>
              </item>
@@ -763,7 +763,7 @@
                  <item>
                   <widget class="QGroupBox" name="groupBox_ScoreboardImage">
                    <property name="title">
-                    <string>Image</string>
+                    <string>Imagem</string>
                    </property>
                    <layout class="QVBoxLayout" name="verticalLayout">
                     <item>
@@ -912,7 +912,7 @@
                  <item>
                   <widget class="QGroupBox" name="groupBox_ScoreboardText">
                    <property name="title">
-                    <string>Text</string>
+                    <string>Texto</string>
                    </property>
                    <layout class="QHBoxLayout" name="horizontalLayout_3">
                     <item>
@@ -1015,10 +1015,10 @@
         <bool>true</bool>
        </property>
        <property name="statusTip">
-        <string>Define visual elements</string>
+        <string>Definir elementos visuais</string>
        </property>
        <attribute name="title">
-        <string>Objects</string>
+        <string>Objetos</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_11">
         <item>
@@ -1028,7 +1028,7 @@
           </property>
           <widget class="QWidget" name="tab_Player">
            <attribute name="title">
-            <string>Player</string>
+            <string>Jogador</string>
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_21">
             <item>
@@ -1102,7 +1102,7 @@
                       </size>
                      </property>
                      <property name="text">
-                      <string>Edit Image</string>
+                      <string>Editar Imagem</string>
                      </property>
                     </widget>
                    </item>
@@ -1126,7 +1126,7 @@
                    <item row="1" column="0">
                     <widget class="QLabel" name="label_PlayerSpeed">
                      <property name="text">
-                      <string>Speed</string>
+                      <string>Velocidade</string>
                      </property>
                      <property name="margin">
                       <number>1</number>
@@ -1171,7 +1171,7 @@
                       </size>
                      </property>
                      <property name="text">
-                      <string>Size</string>
+                      <string>Tamanho</string>
                      </property>
                      <property name="margin">
                       <number>1</number>
@@ -1190,7 +1190,7 @@
                       </sizepolicy>
                      </property>
                      <property name="text">
-                      <string>Keep aspect ratio</string>
+                      <string>Manter a proporção</string>
                      </property>
                     </widget>
                    </item>
@@ -1289,7 +1289,7 @@
           </widget>
           <widget class="QWidget" name="tab_Obstacles">
            <attribute name="title">
-            <string>Obstacles</string>
+            <string>Obstáculos</string>
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_22">
             <item>
@@ -1303,7 +1303,7 @@
                  </size>
                 </property>
                 <property name="text">
-                 <string>Obstacles frequency</string>
+                 <string>Frequência dos Obstáculos</string>
                 </property>
                 <property name="margin">
                  <number>1</number>
@@ -1442,7 +1442,7 @@
               <item>
                <widget class="QPushButton" name="pushButton_NewObstacle">
                 <property name="text">
-                 <string>New</string>
+                 <string>Novo</string>
                 </property>
                </widget>
               </item>
@@ -1452,7 +1452,7 @@
           </widget>
           <widget class="QWidget" name="tab_Collectibles">
            <attribute name="title">
-            <string>Collectibles</string>
+            <string>Colecionáveis</string>
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_23">
             <item>
@@ -1466,7 +1466,7 @@
                  </size>
                 </property>
                 <property name="text">
-                 <string>Collectibles frequency</string>
+                 <string>Frequência dos Colecionáveis</string>
                 </property>
                 <property name="margin">
                  <number>1</number>
@@ -1602,7 +1602,7 @@
               <item>
                <widget class="QPushButton" name="pushButton_NewCollectible">
                 <property name="text">
-                 <string>New</string>
+                 <string>Novo</string>
                 </property>
                </widget>
               </item>
@@ -1619,10 +1619,10 @@
         <bool>true</bool>
        </property>
        <property name="statusTip">
-        <string>Define scrolling velocity</string>
+        <string>Definir velocidade de rolagem</string>
        </property>
        <attribute name="title">
-        <string>Velocity</string>
+        <string>Velocidade</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
@@ -1671,10 +1671,10 @@
         <bool>true</bool>
        </property>
        <property name="statusTip">
-        <string>Define track boundary</string>
+        <string>Definir borda da pista</string> <!-- achar uma tradução melhor para track bourdary -->
        </property>
        <attribute name="title">
-        <string>Boundary</string>
+        <string>Borda</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_5">
         <item>
@@ -1696,7 +1696,7 @@
                </size>
               </property>
               <property name="text">
-               <string>Maximum(x)</string>
+               <string>Máximo(x)</string>
               </property>
               <property name="indent">
                <number>2</number>
@@ -1712,7 +1712,7 @@
                </size>
               </property>
               <property name="text">
-               <string>Minimum(x)</string>
+               <string>Mínimo(x)</string>
               </property>
               <property name="indent">
                <number>2</number>
@@ -1767,7 +1767,7 @@
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>File</string>
+     <string>Arquivo</string>
     </property>
     <addaction name="separator"/>
     <addaction name="action_New"/>
@@ -1779,14 +1779,14 @@
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
-     <string>Help</string>
+     <string>Ajuda</string>
     </property>
     <addaction name="action_Contents"/>
     <addaction name="action_About"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
-     <string>Edit</string>
+     <string>Editar</string>
     </property>
     <addaction name="action_Undo"/>
     <addaction name="action_Redo"/>
@@ -1795,7 +1795,7 @@
    </widget>
    <widget class="QMenu" name="menuGame">
     <property name="title">
-     <string>Game</string>
+     <string>Jogo</string>
     </property>
     <addaction name="action_Run"/>
     <addaction name="action_Build"/>
@@ -1808,7 +1808,7 @@
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
-    <string>toolBar</string>
+    <string>Barra de ferramentas</string>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -1834,10 +1834,10 @@
      <normaloff>:/icons/resources/icons/theme/media-playback-start.png</normaloff>:/icons/resources/icons/theme/media-playback-start.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Run Game</string>
+    <string>&amp;Rodar jogo</string>
    </property>
    <property name="statusTip">
-    <string>Run game</string>
+    <string>Rodar jogo</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Return</string>
@@ -1849,10 +1849,10 @@
      <normaloff>:/icons/resources/icons/theme/exit.png</normaloff>:/icons/resources/icons/theme/exit.png</iconset>
    </property>
    <property name="text">
-    <string>Exit</string>
+    <string>Sair</string>
    </property>
    <property name="statusTip">
-    <string>Exit game editor</string>
+    <string>Sair do editor de jogo</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
@@ -1867,7 +1867,7 @@
      <normaloff>:/icons/resources/icons/theme/help-about.png</normaloff>:/icons/resources/icons/theme/help-about.png</iconset>
    </property>
    <property name="text">
-    <string>About</string>
+    <string>Sobre</string>
    </property>
   </action>
   <action name="action_Contents">
@@ -1879,10 +1879,10 @@
      <normaloff>:/icons/resources/icons/theme/help-contextual.png</normaloff>:/icons/resources/icons/theme/help-contextual.png</iconset>
    </property>
    <property name="text">
-    <string>Contents</string>
+    <string>Conteúdos</string>
    </property>
    <property name="statusTip">
-    <string>Help contents</string>
+    <string>Conteúdos de Ajuda</string>
    </property>
   </action>
   <action name="action_Undo">
@@ -1894,10 +1894,10 @@
      <normaloff>:/icons/resources/icons/theme/edit-undo.png</normaloff>:/icons/resources/icons/theme/edit-undo.png</iconset>
    </property>
    <property name="text">
-    <string>Undo</string>
+    <string>Desfazer</string>
    </property>
    <property name="statusTip">
-    <string>Undo</string>
+    <string>Desfazer</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Z</string>
@@ -1912,10 +1912,10 @@
      <normaloff>:/icons/resources/icons/theme/edit-redo.png</normaloff>:/icons/resources/icons/theme/edit-redo.png</iconset>
    </property>
    <property name="text">
-    <string>Redo</string>
+    <string>Refazer</string>
    </property>
    <property name="statusTip">
-    <string>Redo</string>
+    <string>Refazer</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+Z</string>
@@ -1930,7 +1930,7 @@
      <normaloff>:/icons/resources/icons/theme/document-revert.png</normaloff>:/icons/resources/icons/theme/document-revert.png</iconset>
    </property>
    <property name="text">
-    <string>Reset</string>
+    <string>Resetar</string>
    </property>
   </action>
   <action name="action_New">
@@ -1939,10 +1939,10 @@
      <normaloff>:/icons/resources/icons/theme/document-new.png</normaloff>:/icons/resources/icons/theme/document-new.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;New</string>
+    <string>&amp;Novo</string>
    </property>
    <property name="statusTip">
-    <string>Create new game definition</string>
+    <string>Criar nova definição de jogo</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
@@ -1954,10 +1954,10 @@
      <normaloff>:/icons/resources/icons/theme/document-open.png</normaloff>:/icons/resources/icons/theme/document-open.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Open...</string>
+    <string>&amp;Abrir...</string>
    </property>
    <property name="statusTip">
-    <string>Open game definition</string>
+    <string>Abrir definição de jogo</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
@@ -1972,10 +1972,10 @@
      <normaloff>:/icons/resources/icons/theme/document-save.png</normaloff>:/icons/resources/icons/theme/document-save.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Save</string>
+    <string>&amp;Salvar</string>
    </property>
    <property name="statusTip">
-    <string>Save game definition</string>
+    <string>Salvar definição de jogo</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
@@ -1990,10 +1990,10 @@
      <normaloff>:/icons/resources/icons/theme/system-run.png</normaloff>:/icons/resources/icons/theme/system-run.png</iconset>
    </property>
    <property name="text">
-    <string>Build</string>
+    <string>Construir</string>
    </property>
    <property name="statusTip">
-    <string>Build game executable</string>
+    <string>Construir executável do jogo</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+B</string>
@@ -2008,7 +2008,7 @@
      <normaloff>:/icons/resources/icons/theme/document-save-as.png</normaloff>:/icons/resources/icons/theme/document-save-as.png</iconset>
    </property>
    <property name="text">
-    <string>Save As...</string>
+    <string>Salvar Como...</string>
    </property>
   </action>
  </widget>

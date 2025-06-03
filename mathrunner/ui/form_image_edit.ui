@@ -11,14 +11,14 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Janela Principal</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
      <widget class="QLabel" name="label">
       <property name="text">
-       <string>Image Display</string>
+       <string>Exibição de Imagem</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -38,7 +38,7 @@
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>File</string>
+     <string>Arquivo</string>
     </property>
     <addaction name="actionNew"/>
     <addaction name="actionNew_shape"/>
@@ -47,7 +47,7 @@
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
-     <string>Edit</string>
+     <string>Editar</string>
     </property>
     <addaction name="actionUndo"/>
     <addaction name="actionRedo"/>
@@ -65,7 +65,7 @@
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
-    <string>toolBar</string>
+    <string>Barra de Ferramentas</string>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -81,7 +81,7 @@
     <iconset theme="document-new"/>
    </property>
    <property name="text">
-    <string>New from image</string>
+    <string>Novo de imagem</string> <!-- achar uma tradução melhor para new from imagem -->
    </property>
   </action>
   <action name="actionOpen">
@@ -89,7 +89,7 @@
     <iconset theme="document-open"/>
    </property>
    <property name="text">
-    <string>Open</string>
+    <string>Abrir</string>
    </property>
   </action>
   <action name="actionSelect">
@@ -97,57 +97,57 @@
     <iconset theme="document-save"/>
    </property>
    <property name="text">
-    <string>Select</string>
+    <string>Selecionar</string>
    </property>
   </action>
   <action name="actionCancel">
    <property name="text">
-    <string>Cancel</string>
+    <string>Cancelar</string>
    </property>
   </action>
   <action name="actionNew_shape">
    <property name="text">
-    <string>New shape</string>
+    <string>Nova forma</string>
    </property>
   </action>
   <action name="actionFill_color">
    <property name="text">
-    <string>Fill color</string>
+    <string>Preencher cor</string>
    </property>
   </action>
   <action name="actionFlip_left_right">
    <property name="text">
-    <string>Flip left right</string>
+    <string>Girar para o lado</string> <!-- flip left right -->
    </property>
   </action>
   <action name="actionFlip_up_down">
    <property name="text">
-    <string>Flip up down</string>
+    <string>Girar para cima</string>
    </property>
   </action>
   <action name="actionRotate_90">
    <property name="text">
-    <string>Rotate 90</string>
+    <string>Rotacionar 90</string>
    </property>
   </action>
   <action name="actionCrop">
    <property name="text">
-    <string>Crop</string>
+    <string>Cortar</string>
    </property>
   </action>
   <action name="actionSet_transparence">
    <property name="text">
-    <string>Set transparency</string>
+    <string>Transparência</string>
    </property>
   </action>
   <action name="actionUndo">
    <property name="text">
-    <string>Undo</string>
+    <string>Desfazer</string>
    </property>
   </action>
   <action name="actionRedo">
    <property name="text">
-    <string>Redo</string>
+    <string>Refazer</string>
    </property>
   </action>
  </widget>

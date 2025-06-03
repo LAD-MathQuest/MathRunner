@@ -11,13 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Diálogo</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QGroupBox" name="groupBox_3">
      <property name="title">
-      <string>Font</string>
+      <string>Fonte</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_4">
       <item>
@@ -32,7 +32,7 @@
         <item row="3" column="0">
          <widget class="QRadioButton" name="radioButton_3">
           <property name="text">
-           <string>Load from file</string>
+           <string>Carregar do arquivo</string>
           </property>
          </widget>
         </item>
@@ -44,7 +44,7 @@
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>Select</string>
+             <string>Selecionar</string>
             </property>
            </widget>
           </item>
@@ -69,14 +69,14 @@
         <item row="2" column="0">
          <widget class="QRadioButton" name="radioButton">
           <property name="text">
-           <string>System font</string>
+           <string>Fonte do sistema</string>
           </property>
          </widget>
         </item>
         <item row="0" column="0">
          <widget class="QRadioButton" name="radioButton_2">
           <property name="text">
-           <string>Resource font</string>
+           <string>Fonte de recurso</string>
           </property>
           <property name="checked">
            <bool>true</bool>
@@ -90,7 +90,7 @@
         <item>
          <widget class="QLabel" name="label_9">
           <property name="text">
-           <string>Font size</string>
+           <string>Tamanho da fonte</string>
           </property>
           <property name="indent">
            <number>5</number>
@@ -113,7 +113,7 @@
         <item>
          <widget class="QLabel" name="label_10">
           <property name="text">
-           <string>Line spacing</string>
+           <string>Espaçamento entre linhas</string>
           </property>
           <property name="indent">
            <number>7</number>
@@ -155,7 +155,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Font color</string>
+           <string>Cor da fonte</string>
           </property>
          </widget>
         </item>
@@ -168,7 +168,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Background color</string>
+           <string>Cor de fundo</string>
           </property>
          </widget>
         </item>
@@ -182,13 +182,13 @@
      <item>
       <widget class="QGroupBox" name="groupBox">
        <property name="title">
-        <string>Contents</string>
+        <string>Conteúdos</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <widget class="QCheckBox" name="checkBox_2">
           <property name="text">
-           <string>Game name</string>
+           <string>Nome do jogo</string>
           </property>
           <property name="checked">
            <bool>true</bool>
@@ -200,7 +200,7 @@
           <item>
            <widget class="QCheckBox" name="checkBox_4">
             <property name="text">
-             <string>Text</string>
+             <string>Texto</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -219,7 +219,7 @@
         <item>
          <widget class="QCheckBox" name="checkBox">
           <property name="text">
-           <string>Points</string>
+           <string>Pontos</string>
           </property>
           <property name="checked">
            <bool>true</bool>
@@ -229,7 +229,7 @@
         <item>
          <widget class="QCheckBox" name="checkBox_3">
           <property name="text">
-           <string>Velocity</string>
+           <string>Velocidade</string>
           </property>
           <property name="checked">
            <bool>true</bool>
@@ -239,7 +239,7 @@
         <item>
          <widget class="QCheckBox" name="checkBox_5">
           <property name="text">
-           <string>Elapsed time</string>
+           <string>Tempo decorrido</string>
           </property>
           <property name="checked">
            <bool>true</bool>
@@ -255,7 +255,7 @@
         <bool>true</bool>
        </property>
        <property name="title">
-        <string>Preview</string>
+        <string>Pré visualização</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
