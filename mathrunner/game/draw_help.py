@@ -7,7 +7,7 @@ import game.game_params as gp
 from game.onscreentext import OnScreenText
 
 #------------------------------------------------------------------------------#
-def draw_help(surf, name, description, vertical):
+def draw_help(surf, name,author, description, vertical):
     '''Draw the help message on screen
 
     Args:
@@ -45,8 +45,9 @@ def draw_help(surf, name, description, vertical):
     ost.draw(surf, name)
     ost.draw(surf, '')
     ost.draw(surf, description)
-
-
+    ost.draw(surf, '')
+    ost.draw(surf, 'Criador da fase: '+  author)
+    ost.draw(surf, '')
     #--- Commands -------------------------------------------------------------#
 
     if vertical:
@@ -86,3 +87,4 @@ def draw_help(surf, name, description, vertical):
     ost.draw(surf, info)
 
 #------------------------------------------------------------------------------#
+

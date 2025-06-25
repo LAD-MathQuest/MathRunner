@@ -41,7 +41,7 @@ if __name__ == '__main__':
 
     game_file_name        = 'space.game'
     meta.soft_name        = 'space'
-    meta.soft_author      = "Cristo"
+    meta.soft_author      = "Daniel Cristo"
     meta.soft_description = 'Desvie dos Asteroides e resgate os Astronautas'
     meta.soft_icon        = None
 
@@ -62,7 +62,7 @@ if __name__ == '__main__':
     meta.background_image   = imag_background
     meta.background_scrolls = True
 
-    meta.track_image   = None
+    meta.track_image   = MetaImage(color=(0,0,255))
     meta.track_scrolls = False
     meta.track_kills   = (False, False)
 

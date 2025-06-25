@@ -296,6 +296,7 @@ class Engine:
 
         draw_help(self.display,
                   self.world.soft_name,
+                  self.world.soft_author,
                   self.world.soft_description,
                   self.world.game_vertical)
 
