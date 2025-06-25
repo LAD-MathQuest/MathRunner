@@ -4,7 +4,7 @@
 from pathlib import Path
 
 # Frames per second
-FPS = 60
+FPS = 30
 
 # Default screen resolution (FullHD)
 SCREEN_SIZE = (1920, 1080)
