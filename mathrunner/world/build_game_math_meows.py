@@ -51,7 +51,7 @@ if __name__ == '__main__':
     meta.game_vertical   = False
     meta.game_time_bonus = 10
     meta.game_ambience   = path_sounds/'music_theme_16bits.mp3'
-    meta.game_ambience_volume = 0.4 
+    meta.game_ambience_volume = 0
 
     # Appearance
     #--------------------------------------------------------------------------#
@@ -103,7 +103,7 @@ if __name__ == '__main__':
     #--------------------------------------------------------------------------#
     path_collect = path_sounds/'meow_01.mp3'
     points = 100
-    volume = 0.4
+    volume = 0
 
     meta.collectibles_frequency = 1
     meta.collectibles = []
@@ -113,7 +113,7 @@ if __name__ == '__main__':
 
     path_collect = path_sounds/'meow_02.mp3'
     points = 100
-    volume = 0.4
+    volume = 0
 
     imag_collectible = MetaImage(path=path_objects/'cat-2.png', size=(160,100))
     meta.collectibles.append(MetaObject(imag_collectible, points, path_collect, volume))
