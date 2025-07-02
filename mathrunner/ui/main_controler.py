@@ -14,6 +14,18 @@ import parameters as par
 from ui.main_model    import MainModel
 from ui.object_widget import ObjectWidget
 
+from world.meta_world import MetaWorld, MetaImage, MetaObject, MetaScoreboard
+from world.game_world import GameWorld, GameObjectParam
+
+from PySide6.QtGui import QPixmap
+from PySide6.QtCore import Qt
+
+
+from pathlib import Path
+
+import threading
+import pygame
+
 #------------------------------------------------------------------------------#
 class MainControler:
 
@@ -111,13 +123,15 @@ class MainControler:
 
         ui.action_New     .triggered.connect( self.new     )
         ui.action_Open    .triggered.connect( self.open    )
-        ui.action_Save    .triggered.connect( self.save    )
+        ##ui.action_Save    .triggered.connect( self.save    )
+        ui.action_Save.triggered.connect(self.save)
+
         ui.action_Save_as .triggered.connect( self.save_as )
         ui.action_Exit    .triggered.connect( self.exit    )
         # ui.action_Undo    .triggered.connect( self.undo    )
         # ui.action_Redo    .triggered.connect( self.redo    )
         # ui.action_Reset   .triggered.connect( self.reset   )
-        ui.action_Run     .triggered.connect( self.run     )
+        ui.action_Run.triggered.connect(self.run)
         ui.action_Build   .triggered.connect( self.build   )
         ui.action_About   .triggered.connect( self.about   )
         ui.action_Contents.triggered.connect( self.help    )
@@ -136,10 +150,21 @@ class MainControler:
         # ui.pushButton_AmbienceSoundRemove
         ui.pushButton_AmbienceSoundPlay.clicked.connect( self.ambience_play )
         # ui.doubleSpinBox_AmbienceSoundVolume
+        #--- Game Tab signals -------------------------------------------------
+
+        ui.pushButton_AmbienceSoundSelect.clicked.connect(self.select_ambience_sound)   
+        ui.pushButton_AmbienceSoundRemove.clicked.connect(self.ambience_stop)
+
+        ui.action_Save.setEnabled(True)
+        ui.action_Save_as.setEnabled(True)
+
+
+
 
         #--- Appearance Tab signals -------------------------------------------#
 
         # ui.pushButton_SelectBackground
+        ui.pushButton_SelectBackgroundImage.clicked.connect(self.select_background)
         # ui.checkBox_BackgroundScrolls
 
         # ui.checkBox_DrawTrack
@@ -171,9 +196,13 @@ class MainControler:
         ui.lineEdit_FunctionVelocity    .editingFinished.connect( self.function_velocity_changed      )
         ui.lineEdit_FunctionTrackMinimum.editingFinished.connect( self.function_track_minimum_changed )
         ui.lineEdit_FunctionTrackMaximum.editingFinished.connect( self.function_track_maximum_changed )
+       
+        
+
 
     #--------------------------------------------------------------------------#
     # Action calls
+
     #--------------------------------------------------------------------------#
 
     #--------------------------------------------------------------------------#
@@ -201,14 +230,31 @@ class MainControler:
             self.start_view_from_model()
 
     #--------------------------------------------------------------------------#
+
     def save(self):
+        meta = MetaWorld()
 
-        if not self.file_name:
-            self.save_as()
+        meta.soft_name = self.ui.lineEdit_GameName.text()
+        meta.soft_author = self.ui.lineEdit_Author.text()
+        meta.soft_description = self.ui.plainTextEdit_GameDescription.toPlainText()
 
-        elif self.changed:
-            self.model.save( self.file_name )
+        if hasattr(self, 'ambience_sound_file'):
+            meta.game_ambience = self.ambience_sound_file
+            meta.game_ambience_volume = 0.7
+
+        if hasattr(self, 'background_image_file'):
+            meta.background_image = MetaImage((1920, 1080), path=self.background_image_file)
+
+        save_path = self.get_save_fname("Salvar jogo", "game", suggestion=str(par.RESOURCES / "games"))
+
+        if save_path:
+            meta.save(Path(save_path))
+            QMessageBox.information(self.win, "Sucesso", f"Jogo salvo em:\n{save_path}")
             self.changed = False
+
+        self.ui.action_Save.setEnabled(True)
+
+
 
     #--------------------------------------------------------------------------#
     def save_as(self):
@@ -244,11 +290,50 @@ class MainControler:
     #--------------------------------------------------------------------------#
     # Slots
     #--------------------------------------------------------------------------#
+    def select_ambience_sound(self):
+        path = par.RESOURCES / 'sounds'
+        fname = self.get_open_fname('Escolha um som ambiente', path, 'mp3')
+
+        if fname:
+            self.ambience_sound_file = fname  
+        
+        self.ui.pushButton_AmbienceSoundPlay.setEnabled(True)
+        self.ui.pushButton_AmbienceSoundRemove.setEnabled(True)
 
     #--------------------------------------------------------------------------#
     def ambience_play(self):
-        self.model.ambience_play()
+        
+        if hasattr(self, 'ambience_sound_file'):
+            pygame.mixer.init()
+            pygame.mixer.music.load(str(self.ambience_sound_file))
 
+        # volume da interface
+            volume = self.ui.doubleSpinBox_AmbienceSoundVolume.value()
+            pygame.mixer.music.set_volume(volume)
+
+            pygame.mixer.music.play(-1)  # -1: loop infinito
+
+
+    def ambience_stop(self):
+        if pygame.mixer.get_init():  # só tenta parar se estiver inicializado
+            pygame.mixer.music.stop()
+        
+        self.ambience_sound_file = None
+        self.ui.pushButton_AmbienceSoundPlay.setEnabled(False)
+        self.ui.pushButton_AmbienceSoundRemove.setEnabled(False)
+
+
+    def select_background(self):
+        path = par.RESOURCES / 'backgrounds'
+        fname = self.get_open_fname('Escolha uma imagem de fundo', path, 'png')
+
+        if fname:
+            self.background_image_file = Path(fname).relative_to(par.RESOURCES)
+
+            pixmap = QPixmap(str(par.RESOURCES / self.background_image_file))
+            pixmap = pixmap.scaled(228, 128, Qt.KeepAspectRatio)
+
+        self.ui.label_BackgroundImage.setPixmap(pixmap)
     #--------------------------------------------------------------------------#
     def obstacles_frequency_changed(self):
         pass
