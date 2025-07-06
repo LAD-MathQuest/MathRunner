@@ -37,6 +37,9 @@ class MainControler:
 
         self.model = MainModel(self)
 
+        '''pilhas de undo'''
+        self.undo_stack_obstacles = []
+
         self.init_plots  ()
         self.init_objects()
 
@@ -45,7 +48,6 @@ class MainControler:
         self.start_new()
 
         self.connect_signals_and_slots()
-
     #--------------------------------------------------------------------------#
     def init_plots(self):
 
@@ -187,6 +189,8 @@ class MainControler:
 
         ui.pushButton_NewObstacle   .clicked.connect( self.new_obstacle_widget    )
         ui.pushButton_NewCollectible.clicked.connect( self.new_collectible_widget )
+        ui.pushButton_UndoObstacle.clicked.connect(self.undo_obstacle)
+
 
         ui.doubleSpinBox_ObstaclesFrequency   .valueChanged.connect( self.obstacles_frequency_changed    )
         ui.doubleSpinBox_CollectiblesFrequency.valueChanged.connect( self.collectibles_frequency_changed )
@@ -343,6 +347,22 @@ class MainControler:
         pass
 
     #--------------------------------------------------------------------------#
+    class CreateObstacleWidgetAction:
+        def __init__(self, widget, box_layout, obstacles_list):
+            self.widget = widget
+            self.box_layout = box_layout
+            self.obstacles_list = obstacles_list
+
+        def do(self):
+            self.box_layout.addWidget(self.widget)
+            self.obstacles_list.append(self.widget)
+
+        def undo(self):
+            self.box_layout.removeWidget(self.widget)
+            self.widget.setParent(None)  #remove visualmente
+            self.widget.deleteLater()    #libera memória
+            self.obstacles_list.remove(self.widget)
+
     def new_obstacle_widget(self):
 
         widget = ObjectWidget(self.obstacles_area)
@@ -355,7 +375,25 @@ class MainControler:
         self.obstacles.append(widget)
         self.num_obstacles += 1
 
+        
+        # Cria ação de undo/redo
+        action = self.CreateObstacleWidgetAction(
+            widget, self.obstacles_box, self.obstacles
+        )
+        action.do()
+
+        # Salva na pilha de undo
+        self.undo_stack_obstacles.append(action)
+
         return widget
+
+    def undo_obstacle(self):
+        if self.undo_stack_obstacles:
+            action = self.undo_stack_obstacles.pop()
+            action.undo()
+            self.num_obstacles -= 1
+        else:
+            print("Nenhum obstáculo para desfazer")
 
     #--------------------------------------------------------------------------#
     def new_collectible_widget(self):
@@ -376,10 +414,14 @@ class MainControler:
     def remove_obstacle_widget(self, obj_id):
 
         item = self.obstacles_box.takeAt(obj_id)
-        item.widget().deleteLater()
+        if item is not None:
+            widget = item.widget()
+        if widget is not None:
+            widget.deleteLater()
 
-        self.obstacles.pop(obj_id)
-        self.num_obstacles -= 1
+        if 0 <= obj_id < len(self.obstacles):
+            self.obstacles.pop(obj_id)
+            self.num_obstacles -= 1
 
     #--------------------------------------------------------------------------#
     def remove_collectible_widget(self, obj_id):

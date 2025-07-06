@@ -1446,6 +1446,13 @@
                 </property>
                </widget>
               </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_UndoObstacle">
+                <property name="text">
+                 <string>Desfazer</string>
+                </property>
+               </widget>
+              </item>
              </layout>
             </item>
            </layout>

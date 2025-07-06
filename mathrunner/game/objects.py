@@ -154,7 +154,7 @@ class GameObjects():
         sprt.add(GameObjects.obstacles)
 
         return sprt
-
+    
     #--------------------------------------------------------------------------#
     def create_collectible(object_param, boundary):
         '''Creates a new collectible
