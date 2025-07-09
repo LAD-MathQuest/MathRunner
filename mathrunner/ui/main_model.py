@@ -41,9 +41,9 @@ class MainModel:
     #--------------------------------------------------------------------------#
     def run(self):
 
-        temp = tempfile.NamedTemporaryFile(mode='wb',
-                                           prefix='meta_',
-                                           suffix='.game',
+        temp = tempfile.NamedTemporaryFile(mode   = 'wb',
+                                           prefix = 'meta_',
+                                           suffix = '.game',
                                            delete = False)
 
         self.meta.write(temp)
@@ -58,23 +58,19 @@ class MainModel:
         os.remove(name)
 
     #--------------------------------------------------------------------------#
-    def ambience_play(self):
-
-        tools.play_sound(self.win,
-                         self.meta.game_ambience,
-                         self.meta.game_ambience_volume)
+    # Funções para atualizar a interface a partir de informações do modelo
+    #--------------------------------------------------------------------------#
 
     #--------------------------------------------------------------------------#
-    def start_view(self):
-
-      self.start_view_tab_game      ()
-      self.start_view_tab_appearence()
-      self.start_view_tab_objects   ()
-      self.start_view_tab_velocity  ()
-      self.start_view_tab_boundary  ()
+    def update_view(self):
+        self.update_view_tab_game      ()
+        self.update_view_tab_appearence()
+        self.update_view_tab_objects   ()
+        self.update_view_tab_velocity  ()
+        self.update_view_tab_boundary  ()
 
     #--------------------------------------------------------------------------#
-    def start_view_tab_game(self):
+    def update_view_tab_game(self):
 
         ui   = self.ui
         meta = self.meta
@@ -103,7 +99,7 @@ class MainModel:
             ui.pushButton_AmbienceSoundPlay  .setEnabled(False)
 
     #--------------------------------------------------------------------------#
-    def start_view_tab_appearence(self):
+    def update_view_tab_appearence(self):
 
         ui   = self.ui
         meta = self.meta
@@ -155,7 +151,7 @@ class MainModel:
         ui.label_ScoreboardExample.setFont(QFont('Times', score.text_font_size))
 
     #--------------------------------------------------------------------------#
-    def start_view_tab_objects(self):
+    def update_view_tab_objects(self):
 
         ui   = self.ui
         con  = self.con
@@ -192,79 +188,142 @@ class MainModel:
             con.new_collectible_widget().meta_to_object(meta_op)
 
     #--------------------------------------------------------------------------#
-    def start_view_tab_velocity(self):
+    def update_view_tab_velocity(self):
 
         ui   = self.ui
         meta = self.meta
 
-        ui.lineEdit_FunctionVelocity.setText( meta.velocity.get_function() )
-
-        tt = np.arange(0, par.PLOT_MAX_T, 0.1)
-        vv = meta.velocity.eval(tt)
-
-        self.con.plot_velocity_data.setData(tt, vv)
+        ui.lineEdit_FunctionVelocity.setText(meta.velocity.get_function())
 
     #--------------------------------------------------------------------------#
-    def start_view_tab_boundary(self):
+    def update_view_tab_boundary(self):
+
+        ui = self.ui
+        boundary = self.meta.boundary
+
+        ui.lineEdit_FunctionTrackMinimum.setText(boundary.get_function_min())
+        ui.lineEdit_FunctionTrackMaximum.setText(boundary.get_function_max())
+
+    #--------------------------------------------------------------------------#
+    # Atualiza as funções em resposta amudanças na interface
+    #--------------------------------------------------------------------------#
+
+    #--------------------------------------------------------------------------#
+    def change_velocity_function(self, func):
+        self.meta.velocity.set_function(func)
+
+    #--------------------------------------------------------------------------#
+    def change_track_minimum_function(self, func):
+        self.meta.boundary.set_function_min(func)
+
+    #--------------------------------------------------------------------------#
+    def change_track_maximum_function(self, func):
+        self.meta.boundary.set_function_max(func)
+
+
+    #--------------------------------------------------------------------------#
+    # Atualiza o metaword com os dados da interface
+    #--------------------------------------------------------------------------#
+
+    #--------------------------------------------------------------------------#
+    def update_from_view(self):
+
+        self.update_from_view_tab_game      ()
+        self.update_from_view_tab_appearence()
+        self.update_from_view_tab_objects   ()
+
+    #--------------------------------------------------------------------------#
+    def update_from_view_tab_game(self):
 
         ui   = self.ui
         meta = self.meta
 
-        ui.lineEdit_FunctionTrackMinimum.setText( meta.boundary.get_function_min() )
-        ui.lineEdit_FunctionTrackMaximum.setText( meta.boundary.get_function_max() )
+        meta.soft_name   = ui.lineEdit_GameName.text()
+        meta.soft_author = ui.lineEdit_Author  .text()
 
-        xx     = np.arange(0, par.PLOT_MAX_X, 0.1)
-        mm, MM = meta.boundary.eval(xx)
+        meta.soft_description = ui.plainTextEdit_GameDescription.toPlainText()
 
-        self.con.plot_boundary_min_data.setData(xx, mm)
-        self.con.plot_boundary_max_data.setData(xx, MM)
+        meta.game_vertical = ui.radioButton_VertialScrolling.isChecked()
 
-        self.update_track_aux_function()
+        meta.track_kills = [
+            ui.checkBox_TrackMinimumKills.isChecked(),
+            ui.checkBox_TrackMaximumKills.isChecked()
+        ]
 
-    #--------------------------------------------------------------------------#
-    def update_velocity_function(self, func):
+        meta.game_time_bonus = ui.doubleSpinBox_ScoreTimeBonus.value()
 
-        self.meta.velocity.set_function          (func)
-        self.ui.lineEdit_FunctionVelocity.setText(func)
-
-        tt = np.arange(0, par.PLOT_MAX_T, 0.1)
-        vv = self.meta.velocity.eval(tt)
-
-        self.con.plot_velocity_data.setData(tt, vv)
-        self.update_track_aux_function()
+        # TODO: Ler o arquivo de som e o volume
 
     #--------------------------------------------------------------------------#
-    def update_track_minimum_function(self, func):
+    def update_from_view_tab_appearence(self):
 
-        self.meta.boundary.set_function_min           (func)
-        self.ui.lineEdit_FunctionTrackMinimum.setText(func)
+        ui   = self.ui
+        meta = self.meta
 
-        xx = np.arange(0, par.PLOT_MAX_X, 0.1)
-        mm = self.meta.boundary.eval_min(xx)
+        #--- Background -------------------------------------------------------#
 
-        self.con.plot_boundary_min_data.setData(xx, mm)
-        self.update_track_aux_function()
+        # TODO: Ler a imagem de fundo
+        # meta.background_image =
+
+        meta.background_scrolls = ui.checkBox_BackgroundImageScrolls.isChecked()
+
+        #--- Track ------------------------------------------------------------#
+
+        if ui.checkBox_DrawTrack.isChecked():
+
+            # TODO: Ler a imagem da pista
+            # meta.track_image =
+            pass
+
+        else:
+            meta.track_image = null
+
+        #--- Scoreboard -------------------------------------------------------#
+
+        # TODO: Ler a imagem do placar
+        # meta.scoreboard.image =
+
+
+        meta.scoreboard.text_position = [
+            ui.spinBox_ScoreboardTextPositionX.value(),
+            ui.spinBox_ScoreboardTextPositionY.value()
+        ]
+
+        meta.scoreboard.image_position = [
+            ui.spinBox_ScoreboardImagePositionX.value(),
+            ui.spinBox_ScoreboardImagePositionY.value()
+        ]
+
+        # TODO: Ler aspectratio
+        # ui.checkBox_ScoreboardImageKeepAspectRatio.isChecked()
+
+        # TODO: Ler cor e fonte
 
     #--------------------------------------------------------------------------#
-    def update_track_maximum_function(self, func):
+    def update_from_view_tab_objects(self):
 
-        self.meta.boundary.set_function_max           (func)
-        self.ui.lineEdit_FunctionTrackMaximum.setText(func)
+        ui   = self.ui
+        con  = self.con
+        meta = self.meta
 
-        xx = np.arange(0, par.PLOT_MAX_X, 0.1)
-        MM = self.meta.boundary.eval_max(xx)
+        #--- Player -----------------------------------------------------------#
 
-        self.con.plot_boundary_max_data.setData(xx, MM)
-        self.update_track_aux_function()
+        # TODO: Ler imagem do jogador
+        # meta.player =
 
-    #--------------------------------------------------------------------------#
-    def update_track_aux_function(self):
+        meta.player.image.size = [
+            ui.spinBox_PlayerWidth. value(),
+            ui.spinBox_PlayerHeight.value()
+        ]
 
-        xx = self.con.plot_boundary_min_data.xData
+        meta.player_speed = ui.spinBox_PlayerSpeed.value()
 
-        y_aux = np.maximum(self.con.plot_boundary_min_data.yData,
-                           self.con.plot_boundary_max_data.yData)
+        #--- Obstacles---------------------------------------------------------#
 
-        self.con.plot_boundary_aux_data.setData(xx, y_aux)
+        # TODO: Ler obstaculos
+
+        #--- Collectibles -----------------------------------------------------#
+
+        # TODO: Ler colecionaveis
 
 #------------------------------------------------------------------------------#

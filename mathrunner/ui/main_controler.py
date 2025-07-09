@@ -1,18 +1,19 @@
 #------------------------------------------------------------------------------#
 
-import numpy as np
-
 from PySide6.QtGui     import QPalette
 from PySide6.QtWidgets import (QApplication,
                                QFileDialog,
                                QMessageBox,
                                QVBoxLayout,
                                QLabel)
-import pyqtgraph  as pg
 import parameters as par
 
 from ui.main_model    import MainModel
 from ui.object_widget import ObjectWidget
+from ui.plot_velocity import PlotVelocity
+from ui.plot_track    import PlotTrack
+
+import ui.tools as tools
 
 #------------------------------------------------------------------------------#
 class MainControler:
@@ -25,61 +26,19 @@ class MainControler:
 
         self.model = MainModel(self)
 
-        self.init_plots  ()
+        color = self.win.palette().color(QPalette.Window)
+
+        self.plot_velocity = PlotVelocity(self.ui.plotVelocity, color)
+        self.plot_track    = PlotTrack   (self.ui.plotBoundary, color)
+
         self.init_objects()
 
         self.last_dir  = str(par.HOME)
         self.file_name = ''
+
         self.start_new()
 
         self.connect_signals_and_slots()
-
-    #--------------------------------------------------------------------------#
-    def init_plots(self):
-
-        pv = self.ui.plotVelocity
-        pm = self.ui.plotBoundary
-
-        # Get the default window background
-        color = self.win.palette().color(QPalette.Window)
-
-        pv.setBackground(color)
-        pv.setTitle('Velocity')
-        pv.setLabel('left',   'Velocity (screens/second)')
-        pv.setLabel('bottom', 'Time (seconds)'           )
-        pv.showGrid(x=True, y=True)
-        pv.setXRange(0, par.PLOT_MAX_T, padding=0)
-        pv.setYRange(0, 1,              padding=0)
-
-        pen = pg.mkPen(color=(0, 0, 255), width=2)
-        self.plot_velocity_data = pv.plot((0, par.PLOT_MAX_T), (0.5, 0.5), pen=pen)
-
-        pm.setBackground(color)
-        pm.setTitle('Boundary' )
-        pm.setLabel('left',   'Boundary (screen fraction)')
-        pm.setLabel('bottom', 'Time (seconds)'            )
-        pm.showGrid(x=True, y=True)
-        pm.setXRange(0, par.PLOT_MAX_X, padding=0)
-        pm.setYRange(0, 1,              padding=0)
-
-        pen_min = pg.mkPen(color=(  0, 0, 255), width=2)
-        pen_max = pg.mkPen(color=(255, 0, 255), width=2)
-        pen_aux = pg.mkPen(None)
-        brush   = pg.mkBrush(color=(100, 100, 160))
-
-        p_min = pg.PlotDataItem(np.array((0,par.PLOT_MAX_X)), np.array((0.1, 0.1)), pen=pen_min)
-        p_max = pg.PlotDataItem(np.array((0,par.PLOT_MAX_X)), np.array((0.9, 0.9)), pen=pen_max)
-        p_aux = pg.PlotDataItem(np.array((0,par.PLOT_MAX_X)), np.array((0.9, 0.9)), pen=pen_aux)
-        pfill = pg.FillBetweenItem(p_min, p_aux, brush=brush)
-
-        pm.addItem(p_min)
-        pm.addItem(p_max)
-        pm.addItem(p_aux)
-        pm.addItem(pfill)
-
-        self.plot_boundary_min_data = p_min
-        self.plot_boundary_max_data = p_max
-        self.plot_boundary_aux_data = p_aux
 
     #--------------------------------------------------------------------------#
     def init_objects(self):
@@ -160,17 +119,17 @@ class MainControler:
 
         #--- Objects Tab signals ----------------------------------------------#
 
-        ui.pushButton_NewObstacle   .clicked.connect( self.new_obstacle_widget    )
-        ui.pushButton_NewCollectible.clicked.connect( self.new_collectible_widget )
+        ui.pushButton_NewObstacle   .clicked.connect(self.new_obstacle_widget   )
+        ui.pushButton_NewCollectible.clicked.connect(self.new_collectible_widget)
 
-        ui.doubleSpinBox_ObstaclesFrequency   .valueChanged.connect( self.obstacles_frequency_changed    )
-        ui.doubleSpinBox_CollectiblesFrequency.valueChanged.connect( self.collectibles_frequency_changed )
+        ui.doubleSpinBox_ObstaclesFrequency.   valueChanged.connect(self.obstacles_frequency_changed   )
+        ui.doubleSpinBox_CollectiblesFrequency.valueChanged.connect(self.collectibles_frequency_changed)
 
         #--- Velocity and Boundary Tabs signals -------------------------------#
 
-        ui.lineEdit_FunctionVelocity    .editingFinished.connect( self.function_velocity_changed      )
-        ui.lineEdit_FunctionTrackMinimum.editingFinished.connect( self.function_track_minimum_changed )
-        ui.lineEdit_FunctionTrackMaximum.editingFinished.connect( self.function_track_maximum_changed )
+        ui.lineEdit_FunctionVelocity    .editingFinished.connect(self.function_velocity_changed     )
+        ui.lineEdit_FunctionTrackMinimum.editingFinished.connect(self.function_track_minimum_changed)
+        ui.lineEdit_FunctionTrackMaximum.editingFinished.connect(self.function_track_maximum_changed)
 
     #--------------------------------------------------------------------------#
     # Action calls
@@ -213,7 +172,7 @@ class MainControler:
     #--------------------------------------------------------------------------#
     def save_as(self):
         self.file_name = 'get_file_name'
-        self.model.save( self.file_name )
+        self.model.save(self.file_name)
         self.changed = False
 
     #--------------------------------------------------------------------------#
@@ -224,6 +183,7 @@ class MainControler:
     #--------------------------------------------------------------------------#
     def run(self):
         self.block_ui()
+        self.model.update_from_view()
         self.model.run()
 
     #--------------------------------------------------------------------------#
@@ -247,7 +207,9 @@ class MainControler:
 
     #--------------------------------------------------------------------------#
     def ambience_play(self):
-        self.model.ambience_play()
+        tools.play_sound(self.win,
+                         self.model.meta.game_ambience,
+                         self.model.meta.game_ambience_volume)
 
     #--------------------------------------------------------------------------#
     def obstacles_frequency_changed(self):
@@ -309,19 +271,22 @@ class MainControler:
     def function_velocity_changed(self):
 
         func = self.ui.lineEdit_FunctionVelocity.text()
-        self.model.update_velocity_function(func)
+        self.model.change_velocity_function(func)
+        self.plot_velocity.update(self.model.meta.velocity)
 
     #--------------------------------------------------------------------------#
     def function_track_minimum_changed(self):
 
         func = self.ui.lineEdit_FunctionTrackMinimum.text()
-        self.model.update_track_minimum_function(func)
+        self.model.change_track_minimum_function(func)
+        self.plot_track.update(self.model.meta.boundary)
 
     #--------------------------------------------------------------------------#
     def function_track_maximum_changed(self):
 
         func = self.ui.lineEdit_FunctionTrackMaximum.text()
-        self.model.update_track_maximum_function(func)
+        self.model.change_track_maximum_function(func)
+        self.plot_track.update(self.model.meta.boundary)
 
     #--------------------------------------------------------------------------#
     # Internal tasks
@@ -329,9 +294,10 @@ class MainControler:
 
     #--------------------------------------------------------------------------#
     def start_new(self):
-
         self.model.new()
         self.start_view_from_model()
+        self.plot_velocity.update(self.model.meta.velocity)
+        self.plot_track   .update(self.model.meta.boundary)
 
     #--------------------------------------------------------------------------#
     def start_view_from_model(self):
@@ -339,7 +305,10 @@ class MainControler:
         self.ui.tabWidget_Game   .setCurrentIndex(0)
         self.ui.tabWidget_Objects.setCurrentIndex(0)
 
-        self.model.start_view()
+        self.model.update_view()
+        self.plot_velocity.update(self.model.meta.velocity)
+        self.plot_track   .update(self.model.meta.boundary)
+
         self.changed = False
 
     #--------------------------------------------------------------------------#
@@ -368,7 +337,7 @@ class MainControler:
     # Tools
     #--------------------------------------------------------------------------#
 
-    #-------------------------------------------------------------------------#
+    #--------------------------------------------------------------------------#
     def error_box( self, title, message ):
         QMessageBox.critical( self.win, title, message,
                               buttons=QMessageBox.StandardButton.Ok )

@@ -183,6 +183,11 @@ class BoundaryFunctions:
         self.func_max = pt_to_numexpr(func_max)
 
     #--------------------------------------------------------------------------#
+    def set_functions(self, func_min, func_max):
+        self.func_min = pt_to_numexpr(func_min)
+        self.func_max = pt_to_numexpr(func_max)
+
+    #--------------------------------------------------------------------------#
     def set_function_min(self, func):
         self.func_min = pt_to_numexpr(func)
 
