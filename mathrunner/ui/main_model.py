@@ -276,7 +276,7 @@ class MainModel:
             pass
 
         else:
-            meta.track_image = null
+            meta.track_image = None
 
         #--- Scoreboard -------------------------------------------------------#
 

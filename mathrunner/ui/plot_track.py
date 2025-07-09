@@ -16,7 +16,7 @@ class PlotTrack:
         plot.setLabel('bottom', 'Time (seconds)'            )
         plot.showGrid(x=True, y=True)
         plot.setXRange(0, par.PLOT_MAX_X, padding=0)
-        plot.setYRange(0, 1,              padding=0)
+        plot.setYRange(0, 10,             padding=0)
 
         pen_min = pg.mkPen(color=(  0, 0, 255), width=2)
         pen_max = pg.mkPen(color=(255, 0, 255), width=2)

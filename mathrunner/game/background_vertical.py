@@ -55,8 +55,8 @@ class BackgroundVertical:
 
         tr_min, lenght = self.boundary.eval_length(0)
 
-        left  = int(gp.SCREEN_SIZE[0] * tr_min)
-        width = int(gp.SCREEN_SIZE[0] * lenght)
+        left  = int(gp.SCREEN_SIZE[0] * tr_min/10.0)
+        width = int(gp.SCREEN_SIZE[0] * lenght/10.0)
 
         self.bd_rect = pygame.Rect(left, 0, width, gp.SCREEN_SIZE[1])
 
