@@ -59,7 +59,7 @@ if __name__ == '__main__':
 
     meta.track_image   = MetaImage(path=path_tests/'tile-green.png',size=(400,400))
     meta.track_scrolls = True
-    meta.track_kills   = (False, True)
+    meta.track_kills   = (True, True)
 
     meta.scoreboard = MetaScoreboard(text_font_size = 28,
                                      text_spacing   = 1,
@@ -98,8 +98,11 @@ if __name__ == '__main__':
     # Functions
     #--------------------------------------------------------------------------#
 
-    meta.velocity = VelocityFunction ('0.25 + 0.005*t')
-    meta.boundary = BoundaryFunctions('12', '9 + sin(pi*x/40)')
+    meta.velocity = VelocityFunction('0.4 + 0.005*t')
+    meta.boundary = BoundaryFunctions(
+        '2 + 1.5*sin(x/10) + 0.2*cos(0.8*x)', 
+        '8 + 1.5*sin(x/20) + 0.2*cos(1.2*x)'
+    )
 
     # Saving
     #--------------------------------------------------------------------------#

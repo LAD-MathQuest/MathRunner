@@ -1,28 +1,30 @@
 #------------------------------------------------------------------------------#
 
-import pygame
-
-import game.game_params as gp
-import numpy as np
-
-from game.tools      import surface_tile_to_size
 from scrolling_image import ScrollingImage
 from boundaries      import Boundaries
 
 #------------------------------------------------------------------------------#
-class BackgroundHorizontal:
+class Background:
 
     #--------------------------------------------------------------------------#
-    def __init__(self, world):
+    def __init__(self, world, vertical: bool):
 
-        self.background = ScrollingImage(world.background_image, world.background_scrolls)
-
-        self.boundaries = Boundaries(world.boundary)
+        self.background = ScrollingImage(
+            world.background_image,
+            world.background_scrolls,
+            vertical
+        )
 
         self.draw_track = bool(world.track_image)
 
         if self.draw_track:
-            self.track = ScrollingImage(world.track_image, world.track_scrolls)
+            self.track = ScrollingImage(
+                world.track_image,
+                world.track_scrolls,
+                vertical
+            )
+
+        self.boundaries = Boundaries(world.boundary, vertical)
 
     #--------------------------------------------------------------------------#
     def update(self, displacement):

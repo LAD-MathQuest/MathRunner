@@ -11,9 +11,7 @@ from game.objects     import GameObjects
 from game.sound_mixer import SoundMixer
 from game.scoreboard  import Scoreboard
 from game.draw_help   import draw_help
-
-from game.background_horizontal import BackgroundHorizontal
-from game.background_vertical   import BackgroundVertical
+from game.background  import Background
 
 #------------------------------------------------------------------------------#
 
@@ -44,12 +42,11 @@ class Engine:
         self.world      = world
         self.clock      = pygame.time.Clock()
         self.scoreboard = Scoreboard(world.param_scoreboard)
+        self.background = Background(world, world.game_vertical)
 
         if world.game_vertical:
-            self.background         = BackgroundVertical(world)
             self.displacement_scale = gp.SCREEN_SIZE[1] * TIME_STEP
         else:
-            self.background         = BackgroundHorizontal(world)
             self.displacement_scale = gp.SCREEN_SIZE[0] * TIME_STEP
 
         GameObjects.init(world.game_vertical)
