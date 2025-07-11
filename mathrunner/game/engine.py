@@ -24,7 +24,6 @@ STATUS_GAMEOVER = 3
 # Exception used to quit the game
 class QuitGame(Exception): pass
 
-WAIT_FPS  = gp.FPS // 10
 TIME_STEP = 1 / gp.FPS
 
 #------------------------------------------------------------------------------#
@@ -164,8 +163,6 @@ class Engine:
             if   event.type == pygame.QUIT:              raise QuitGame
             elif event.type == pygame.WINDOWFOCUSGAINED: break
 
-            self.clock.tick(WAIT_FPS)
-
         self.draw()
         self.show_help()
         SoundMixer.play_music()
@@ -203,8 +200,6 @@ class Engine:
                         self.show_help()
                 else:
                     break
-
-            self.clock.tick(WAIT_FPS)
 
         SoundMixer.play_music()
 
