@@ -62,8 +62,11 @@ if __name__ == '__main__':
     meta.background_image   = imag_background
     meta.background_scrolls = True
 
-    meta.track_image   = None
-    meta.track_scrolls = False
+    path_track = path_backgrounds/'racing_track.png'
+    imag_track = MetaImage((100,100), path=path_track)
+
+    meta.track_image   = imag_track
+    meta.track_scrolls = True
     meta.track_kills   = (False, False)
 
     path_score = path_scoreboards/'frame_neon.png'
@@ -142,8 +145,8 @@ if __name__ == '__main__':
 
     meta.velocity = VelocityFunction('0.4 + 0.02*t')
     meta.boundary = BoundaryFunctions(
-      '3.5 - min(0.5, max(0, 1+cos(pi*x/110)))',
-      '6.5 + min(0.5, max(0, cos(pi*x/50)))'
+      '3.1 + 2.2*min(0.3, max(0, cos(3.14+x/17)))',
+      '6.8 - 2.2*min(0.3, max(0, cos(3.14+x/11)))'
     )
 
     # Saving
