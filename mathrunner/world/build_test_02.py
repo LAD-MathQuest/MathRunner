@@ -59,7 +59,7 @@ if __name__ == '__main__':
 
     meta.track_image   = MetaImage(path=path_tests/'tile-green.png',size=(400,400))
     meta.track_scrolls = True
-    meta.track_kills   = (True, True)
+    meta.track_kills   = (False, False)
 
     meta.scoreboard = MetaScoreboard(text_font_size = 28,
                                      text_spacing   = 1,
@@ -78,7 +78,7 @@ if __name__ == '__main__':
 
     points = 10
 
-    meta.obstacles_frequency = 3
+    meta.obstacles_frequency = 0.01
     meta.obstacles = []
 
     imag_obstacle = MetaImage((80,30), color=(200,50,50))
@@ -89,7 +89,7 @@ if __name__ == '__main__':
 
     points = 100
 
-    meta.collectibles_frequency = 1
+    meta.collectibles_frequency = 25
     meta.collectibles = []
 
     imag_collectible = MetaImage((50,50), color=(242, 182, 0))

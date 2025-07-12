@@ -41,7 +41,9 @@ class Background:
         self.background.draw(surf)
 
         if self.draw_track:
-            self.track.draw_with_mask(surf, self.boundaries.get_mask())
+            self.track.draw_with_mask(surf, self.boundaries.mask())
+
+        self.boundaries.draw_lines(surf)
 
     #--------------------------------------------------------------------------#
     def get_player_boundaries(self):
