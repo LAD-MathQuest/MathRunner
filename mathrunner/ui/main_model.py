@@ -193,7 +193,7 @@ class MainModel:
         ui   = self.ui
         meta = self.meta
 
-        ui.lineEdit_FunctionVelocity.setText(meta.velocity.get_function())
+        ui.lineEdit_FunctionVelocity.setText(meta.velocity.get_function_orig())
 
     #--------------------------------------------------------------------------#
     def update_view_tab_boundary(self):
@@ -201,8 +201,8 @@ class MainModel:
         ui = self.ui
         boundary = self.meta.boundary
 
-        ui.lineEdit_FunctionTrackMinimum.setText(boundary.get_function_min())
-        ui.lineEdit_FunctionTrackMaximum.setText(boundary.get_function_max())
+        ui.lineEdit_FunctionTrackMinimum.setText(boundary.get_function_min_orig())
+        ui.lineEdit_FunctionTrackMaximum.setText(boundary.get_function_max_orig())
 
     #--------------------------------------------------------------------------#
     # Atualiza as funções em resposta amudanças na interface

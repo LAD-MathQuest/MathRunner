@@ -28,8 +28,8 @@ class MainControler:
 
         color = self.win.palette().color(QPalette.Window)
 
-        self.plot_velocity = PlotVelocity(self.ui.plotVelocity, color)
-        self.plot_track    = PlotTrack   (self.ui.plotBoundary, color)
+        self.plot_velocity = PlotVelocity(self.ui.plotVelocity, color, self.model.meta.velocity)
+        self.plot_track    = PlotTrack   (self.ui.plotBoundary, color, self.model.meta.boundary)
 
         self.init_objects()
 
@@ -272,21 +272,21 @@ class MainControler:
 
         func = self.ui.lineEdit_FunctionVelocity.text()
         self.model.change_velocity_function(func)
-        self.plot_velocity.update(self.model.meta.velocity)
+        self.plot_velocity.update_velocity(self.model.meta.velocity)
 
     #--------------------------------------------------------------------------#
     def function_track_minimum_changed(self):
 
         func = self.ui.lineEdit_FunctionTrackMinimum.text()
         self.model.change_track_minimum_function(func)
-        self.plot_track.update(self.model.meta.boundary)
+        self.plot_track.update_boundary(self.model.meta.boundary)
 
     #--------------------------------------------------------------------------#
     def function_track_maximum_changed(self):
 
         func = self.ui.lineEdit_FunctionTrackMaximum.text()
         self.model.change_track_maximum_function(func)
-        self.plot_track.update(self.model.meta.boundary)
+        self.plot_track.update_boundary(self.model.meta.boundary)
 
     #--------------------------------------------------------------------------#
     # Internal tasks
@@ -296,8 +296,8 @@ class MainControler:
     def start_new(self):
         self.model.new()
         self.start_view_from_model()
-        self.plot_velocity.update(self.model.meta.velocity)
-        self.plot_track   .update(self.model.meta.boundary)
+        self.plot_velocity.update_velocity(self.model.meta.velocity)
+        self.plot_track   .update_boundary(self.model.meta.boundary)
 
     #--------------------------------------------------------------------------#
     def start_view_from_model(self):
@@ -306,8 +306,8 @@ class MainControler:
         self.ui.tabWidget_Objects.setCurrentIndex(0)
 
         self.model.update_view()
-        self.plot_velocity.update(self.model.meta.velocity)
-        self.plot_track   .update(self.model.meta.boundary)
+        self.plot_velocity.update_velocity(self.model.meta.velocity)
+        self.plot_track   .update_boundary(self.model.meta.boundary)
 
         self.changed = False
 
