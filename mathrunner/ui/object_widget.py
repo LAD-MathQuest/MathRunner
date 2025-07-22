@@ -9,7 +9,7 @@ import ui.tools as tools
 class ObjectWidget(QWidget):
 
     #--------------------------------------------------------------------------#
-    def __init__(self, parent=None):
+    def __init__(self, main_controler, parent=None):
 
         super().__init__(parent)
 

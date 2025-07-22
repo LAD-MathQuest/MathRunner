@@ -39,6 +39,7 @@ class MainControler:
 
         '''pilhas de undo'''
         self.undo_stack_obstacles = []
+        self.undo_stack_collectibles = []
 
         self.init_plots  ()
         self.init_objects()
@@ -130,10 +131,10 @@ class MainControler:
 
         ui.action_Save_as .triggered.connect( self.save_as )
         ui.action_Exit    .triggered.connect( self.exit    )
-        # ui.action_Undo    .triggered.connect( self.undo    )
+        ui.action_Undo    .triggered.connect( self.undo    )
         # ui.action_Redo    .triggered.connect( self.redo    )
         # ui.action_Reset   .triggered.connect( self.reset   )
-        ui.action_Run.triggered.connect(self.run)
+        ui.action_Run     .triggered.connect(self.run)
         ui.action_Build   .triggered.connect( self.build   )
         ui.action_About   .triggered.connect( self.about   )
         ui.action_Contents.triggered.connect( self.help    )
@@ -159,9 +160,6 @@ class MainControler:
 
         ui.action_Save.setEnabled(True)
         ui.action_Save_as.setEnabled(True)
-
-
-
 
         #--- Appearance Tab signals -------------------------------------------#
 
@@ -189,8 +187,7 @@ class MainControler:
 
         ui.pushButton_NewObstacle   .clicked.connect( self.new_obstacle_widget    )
         ui.pushButton_NewCollectible.clicked.connect( self.new_collectible_widget )
-        ui.pushButton_UndoObstacle.clicked.connect(self.undo_obstacle)
-
+        #ui.pushButton_UndoObstacle.clicked.connect(self.undo_obstacle)
 
         ui.doubleSpinBox_ObstaclesFrequency   .valueChanged.connect( self.obstacles_frequency_changed    )
         ui.doubleSpinBox_CollectiblesFrequency.valueChanged.connect( self.collectibles_frequency_changed )
@@ -208,7 +205,20 @@ class MainControler:
     # Action calls
 
     #--------------------------------------------------------------------------#
-
+    def undo(self):
+        if self.undo_stack_obstacles:
+            action = self.undo_stack_obstacles.pop()
+            action.undo()
+            if isinstance(action, self.CreateObstacleWidgetAction):
+                self.num_obstacles -= 1
+        elif self.undo_stack_collectibles:
+            action = self.undo_stack_collectibles.pop()
+            action.undo()
+            if isinstance(action, self.CreateCollectibleWidgetAction):
+                self.num_collectibles -= 1
+        else:
+            self.ui.label_Image.clear()
+        
     #--------------------------------------------------------------------------#
     def new(self):
 
@@ -367,6 +377,9 @@ class MainControler:
 
         widget = ObjectWidget(self.obstacles_area)
 
+        widget.ui.pushButton_SoundSelect.clicked.connect(lambda: self.select_obstacle_sound(widget))
+        widget.ui.pushButton_SelectImage.clicked.connect(lambda: self.edit_obstacleImage(widget))
+
         self.obstacles_box.insertWidget(self.num_obstacles, widget)
 
         bar = self.obstacles_area.verticalScrollBar()
@@ -375,7 +388,6 @@ class MainControler:
         self.obstacles.append(widget)
         self.num_obstacles += 1
 
-        
         # Cria ação de undo/redo
         action = self.CreateObstacleWidgetAction(
             widget, self.obstacles_box, self.obstacles
@@ -386,19 +398,53 @@ class MainControler:
         self.undo_stack_obstacles.append(action)
 
         return widget
+    
+    def select_obstacle_sound(self, widget):
+        fname = self.get_open_fname('Escolha um som de contato', None, 'mp3')
 
-    def undo_obstacle(self):
-        if self.undo_stack_obstacles:
-            action = self.undo_stack_obstacles.pop()
-            action.undo()
-            self.num_obstacles -= 1
-        else:
-            print("Nenhum obstáculo para desfazer")
+        if fname:
+            widget.sound_file = fname  
 
+    def edit_obstacleImage(self, widget):
+        fname = self.get_open_fname('Escolha uma imagem', None, 'png')
+
+        if fname:
+            # Salva a imagem atual antes de mudar (para histórico de undo)
+            current_pixmap = widget.ui.label_Image.pixmap()
+            action = self.EditImageAction(widget, current_pixmap)
+            self.undo_stack_obstacles.append(action)
+
+            widget.image_file = fname
+
+            pixmap = QPixmap(str(fname))
+            pixmap = pixmap.scaled(widget.ui.label_Image.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+
+            widget.ui.label_Image.setPixmap(pixmap)
+  
     #--------------------------------------------------------------------------#
+
+    class CreateCollectibleWidgetAction:
+        def __init__(self, widget, box_layout, collectibles_list):
+            self.widget = widget
+            self.box_layout = box_layout
+            self.collectibles_list = collectibles_list
+
+        def do(self):
+            self.box_layout.addWidget(self.widget)
+            self.collectibles_list.append(self.widget)
+
+        def undo(self):
+            self.box_layout.removeWidget(self.widget)
+            self.widget.setParent(None)  #remove visualmente
+            self.widget.deleteLater()    #libera memória
+            self.collectibles_list.remove(self.widget)
+
     def new_collectible_widget(self):
 
         widget = ObjectWidget(self.collectibles_area)
+
+        widget.ui.pushButton_SoundSelect.clicked.connect(lambda: self.select_collectible_sound(widget))
+        widget.ui.pushButton_SelectImage.clicked.connect(lambda: self.edit_collectibleImage(widget))
 
         self.collectibles_box.insertWidget(self.num_collectibles, widget)
 
@@ -408,7 +454,50 @@ class MainControler:
         self.collectibles.append(widget)
         self.num_collectibles += 1
 
+        # Cria ação de undo/redo
+        action = self.CreateCollectibleWidgetAction(
+            widget, self.collectibles_box, self.collectibles
+        )
+        action.do()
+
+        # Salva na pilha de undo
+        self.undo_stack_collectibles.append(action)
+
         return widget
+    
+    def select_collectible_sound(self, widget):
+        fname = self.get_open_fname('Escolha um som de contato', None, 'mp3')
+
+        if fname:
+            widget.sound_file = fname
+
+    def edit_collectibleImage(self, widget):
+        fname = self.get_open_fname('Escolha uma imagem', None, 'png')
+
+        if fname:
+            # Salva a imagem atual antes de mudar (para histórico de undo)
+            current_pixmap = widget.ui.label_Image.pixmap()
+            action = self.EditImageAction(widget, current_pixmap)
+            self.undo_stack_collectibles.append(action)
+
+            widget.image_file = fname
+
+            pixmap = QPixmap(str(fname))
+            pixmap = pixmap.scaled(widget.ui.label_Image.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+
+            widget.ui.label_Image.setPixmap(pixmap)        
+
+    #--------------------------------------------------------------------------#
+    class EditImageAction:
+        def __init__(self, widget, previous_pixmap):
+            self.widget = widget
+            self.previous_pixmap = previous_pixmap
+
+        def undo(self):
+            if self.previous_pixmap:
+                self.widget.ui.label_Image.setPixmap(self.previous_pixmap)
+            else:
+                self.widget.ui.label_Image.clear()
 
     #--------------------------------------------------------------------------#
     def remove_obstacle_widget(self, obj_id):
@@ -427,7 +516,10 @@ class MainControler:
     def remove_collectible_widget(self, obj_id):
 
         item = self.collectibles_box.takeAt(obj_id)
-        item.widget().deleteLater()
+        if item is not None:
+            widget = item.widget()
+        if widget is not None:
+            widget.deleteLater()
 
         self.collectibles.pop(obj_id)
         self.num_collectibles -= 1
