@@ -78,6 +78,11 @@ class Boundaries:
     def eval_polygon(self):
 
         y_min, y_max = self.function.eval(self.x)
+        
+        if not self.vertical:
+            aux = y_min
+            y_min = 100.0 - y_max
+            y_max = 100.0 - aux
 
         u_min = y_min * self.y_scale
         u_max = y_max * self.y_scale

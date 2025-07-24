@@ -2,7 +2,9 @@
 
 import numpy      as np
 import pyqtgraph  as pg
-import parameters as par
+
+PLOT_MAX_X = 100
+PLOT_MAX_F = 100
 
 #------------------------------------------------------------------------------#
 class PlotTrack:
@@ -18,8 +20,8 @@ class PlotTrack:
         plot.setLabel('bottom', 'Time (seconds)'            )
         plot.showGrid(x=True, y=True)
 
-        plot.setXRange(0, par.PLOT_MAX_X, padding=0)
-        plot.setYRange(0, 100,            padding=0)
+        plot.setXRange(0, PLOT_MAX_X, padding=0)
+        plot.setYRange(0, PLOT_MAX_F, padding=0)
 
         pen_raw = pg.mkPen(color=(255, 0,   0), width=1.5)
         pen_min = pg.mkPen(color=(  0, 0, 255), width=2.0)
@@ -27,11 +29,11 @@ class PlotTrack:
         pen_aux = pg.mkPen(None)
         brush   = pg.mkBrush(color=(100, 100, 160))
 
-        p_min_raw = pg.PlotDataItem(np.array((0,par.PLOT_MAX_X)), np.array((10, 10)), pen=pen_raw)
-        p_max_raw = pg.PlotDataItem(np.array((0,par.PLOT_MAX_X)), np.array((90, 90)), pen=pen_raw)
-        p_min     = pg.PlotDataItem(np.array((0,par.PLOT_MAX_X)), np.array((10, 10)), pen=pen_min)
-        p_max     = pg.PlotDataItem(np.array((0,par.PLOT_MAX_X)), np.array((90, 90)), pen=pen_max)
-        p_aux     = pg.PlotDataItem(np.array((0,par.PLOT_MAX_X)), np.array((90, 90)), pen=pen_aux)
+        p_min_raw = pg.PlotDataItem(np.array((0, PLOT_MAX_X)), np.array((10, 10)), pen=pen_raw)
+        p_max_raw = pg.PlotDataItem(np.array((0, PLOT_MAX_X)), np.array((90, 90)), pen=pen_raw)
+        p_min     = pg.PlotDataItem(np.array((0, PLOT_MAX_X)), np.array((10, 10)), pen=pen_min)
+        p_max     = pg.PlotDataItem(np.array((0, PLOT_MAX_X)), np.array((90, 90)), pen=pen_max)
+        p_aux     = pg.PlotDataItem(np.array((0, PLOT_MAX_X)), np.array((90, 90)), pen=pen_aux)
         pfill     = pg.FillBetweenItem(p_min, p_aux, brush=brush)
 
         plot.addItem(p_min_raw)
@@ -68,7 +70,7 @@ class PlotTrack:
     def update_boundary(self, boundary) -> None:
 
         self.boundary = boundary
-        self.update_data(0, par.PLOT_MAX_X)
+        self.update_data(0, PLOT_MAX_X)
 
     #--------------------------------------------------------------------------#
     def update_data(self, x_min, x_max) -> None:

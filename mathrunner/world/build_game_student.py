@@ -123,7 +123,7 @@ if __name__ == '__main__':
     #--------------------------------------------------------------------------#
 
     meta.velocity = VelocityFunction ('25 + 2*t')
-    meta.boundary = BoundaryFunctions('12', '90')
+    meta.boundary = BoundaryFunctions('3', '87')
 
     # Saving
     #--------------------------------------------------------------------------#
