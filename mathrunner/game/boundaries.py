@@ -58,10 +58,10 @@ class Boundaries:
             self.spawn_min_index = self.j_min_index[-6]
             self.spawn_max_index = self.j_max_index[ 5]
 
-        self.x_scale = direction * 10.0 / gp.SCREEN_SIZE[self.x_index]
-        self.y_scale = gp.SCREEN_SIZE[self.y_index] / 10.0
+        self.x_scale = direction * 100.0 / gp.SCREEN_SIZE[self.x_index]
+        self.y_scale = gp.SCREEN_SIZE[self.y_index] / 100.0
 
-        self.x = np.linspace(0, 10, N_POINTS)
+        self.x = np.linspace(0.0, 100.0, N_POINTS)
 
         self.polygon = np.zeros((2*N_POINTS, 2))
         self.ravpoly = self.polygon.ravel() 

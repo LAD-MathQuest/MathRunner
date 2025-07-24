@@ -44,9 +44,9 @@ class Engine:
         self.background = Background(world, world.game_vertical)
 
         if world.game_vertical:
-            self.displacement_scale = gp.SCREEN_SIZE[1] * TIME_STEP
+            self.displacement_scale = gp.SCREEN_SIZE[1] * TIME_STEP / 100.0
         else:
-            self.displacement_scale = gp.SCREEN_SIZE[0] * TIME_STEP
+            self.displacement_scale = gp.SCREEN_SIZE[0] * TIME_STEP / 100.0
 
         GameObjects.init(world.game_vertical)
 

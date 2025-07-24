@@ -31,7 +31,7 @@ class VelocityFunction:
     def set_function(self, func_orig: str) -> None:
         self.fvel_orig = func_orig
         self.fvel_raw  = mf.parse_function(func_orig)
-        self.fvel      = mf.parse_function(f'max(0.1,{func_orig})')
+        self.fvel      = mf.parse_function(f'max(0.01,{self.fvel_raw})')
 
     #--------------------------------------------------------------------------#
     def get_function_orig(self) -> str:
@@ -77,13 +77,13 @@ class BoundaryFunctions:
     def set_function_min(self, func_orig: str) -> None:
         self.fmin_orig = func_orig
         self.fmin_raw  = mf.parse_function(func_orig)
-        self.fmin      = mf.parse_function(f'min(10, max(0,{func_orig}))')
+        self.fmin      = mf.parse_function(f'min(100, max(0,{self.fmin_raw}))')
 
     #--------------------------------------------------------------------------#
     def set_function_max(self, func_orig: str) -> None:
         self.fmax_orig = func_orig
         self.fmax_raw  = mf.parse_function(func_orig)
-        self.fmax      = mf.parse_function(f'min(10, max(0,{func_orig}))')
+        self.fmax      = mf.parse_function(f'min(100, max(0,{self.fmax_raw}))')
 
     #--------------------------------------------------------------------------#
     def get_function_min_orig(self) -> str:

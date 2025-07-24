@@ -152,8 +152,8 @@ class MetaWorld:
         # Functions
         #----------------------------------------------------------------------#
 
-        self.velocity = VelocityFunction ('0.5 + 0.01*t')
-        self.boundary = BoundaryFunctions('3.5', '6.5')
+        self.velocity = VelocityFunction ('25 + 2*t')
+        self.boundary = BoundaryFunctions('35', '65')
 
     #--------------------------------------------------------------------------#
     def save(self, path):
