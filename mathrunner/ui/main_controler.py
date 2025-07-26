@@ -28,6 +28,8 @@ import pygame
 
 #------------------------------------------------------------------------------#
 class MainControler:
+    
+    path = par.RESOURCES
 
     #--------------------------------------------------------------------------#
     def __init__(self, window):
@@ -234,14 +236,11 @@ class MainControler:
         if not self.confirm_deletion():
             return
 
-        path  = par.RESOURCES / 'games'
+        path  = self.path / 'games'
         fname = self.get_open_fname('Chose a game description', path, 'game' )
 
-        if fname:
-            # TODO try:
-            self.file_name = fname
-            self.model.open(self.file_name)
-            self.start_view_from_model()
+        self.model.open(Path(fname))
+        self.start_view_from_model()
 
     #--------------------------------------------------------------------------#
 
@@ -254,17 +253,19 @@ class MainControler:
 
         if hasattr(self, 'ambience_sound_file'):
             meta.game_ambience = self.ambience_sound_file
-            meta.game_ambience_volume = 0.7
-
+            meta.game_ambience_volume = 0.7 #self.ui.doubleSpinBox_AmbienceSoundVolume.value()
+        
         if hasattr(self, 'background_image_file'):
             meta.background_image = MetaImage((1920, 1080), path=self.background_image_file)
 
-        save_path = self.get_save_fname("Salvar jogo", "game", suggestion=str(par.RESOURCES / "games"))
+        save_path = self.get_save_fname("Salvar jogo", "game", suggestion=str(self.path / "games"))
 
         if save_path:
             meta.save(Path(save_path))
             QMessageBox.information(self.win, "Sucesso", f"Jogo salvo em:\n{save_path}")
             self.changed = False
+            self.ui.action_Save.setEnabled(False)
+
 
         self.ui.action_Save.setEnabled(True)
 
@@ -305,49 +306,56 @@ class MainControler:
     # Slots
     #--------------------------------------------------------------------------#
     def select_ambience_sound(self):
-        path = par.RESOURCES / 'sounds'
+        path = self.path / 'sounds'
         fname = self.get_open_fname('Escolha um som ambiente', path, 'mp3')
 
         if fname:
-            self.ambience_sound_file = fname  
+            fname_path = Path(fname)
+            self.ambience_sound_file = fname_path  
         
-        self.ui.pushButton_AmbienceSoundPlay.setEnabled(True)
-        self.ui.pushButton_AmbienceSoundRemove.setEnabled(True)
+            self.ui.pushButton_AmbienceSoundPlay.setEnabled(True)
+            self.ui.pushButton_AmbienceSoundRemove.setEnabled(True)
 
+        self.changed = True
     #--------------------------------------------------------------------------#
     def ambience_play(self):
-        
         if hasattr(self, 'ambience_sound_file'):
             pygame.mixer.init()
+            if pygame.mixer.music.get_busy():
+                pygame.mixer.music.stop()
             pygame.mixer.music.load(str(self.ambience_sound_file))
-
-        # volume da interface
-            volume = self.ui.doubleSpinBox_AmbienceSoundVolume.value()
+            
+            volume = self.ui.doubleSpinBox_AmbienceSoundVolume.value()  # valor de 0.0 a 1.0
             pygame.mixer.music.set_volume(volume)
 
-            pygame.mixer.music.play(-1)  # -1: loop infinito
+            pygame.mixer.music.play(-1) #toca em loop infinito 
+        
+        self.changed = True
 
-
+         
     def ambience_stop(self):
         if pygame.mixer.get_init():  # só tenta parar se estiver inicializado
             pygame.mixer.music.stop()
-        
+
         self.ambience_sound_file = None
         self.ui.pushButton_AmbienceSoundPlay.setEnabled(False)
         self.ui.pushButton_AmbienceSoundRemove.setEnabled(False)
+        self.ui.doubleSpinBox_AmbienceSoundVolume.setEnabled(False)
 
+        self.changed = True
 
     def select_background(self):
-        path = par.RESOURCES / 'backgrounds'
+        path = self.path / 'backgrounds'
         fname = self.get_open_fname('Escolha uma imagem de fundo', path, 'png')
 
         if fname:
-            self.background_image_file = Path(fname).relative_to(par.RESOURCES)
+            self.background_image_file = Path(fname)
 
-            pixmap = QPixmap(str(par.RESOURCES / self.background_image_file))
+            pixmap = QPixmap(str(self.background_image_file))
             pixmap = pixmap.scaled(228, 128, Qt.KeepAspectRatio)
-
-        self.ui.label_BackgroundImage.setPixmap(pixmap)
+            
+            self.ui.label_BackgroundImage.setPixmap(pixmap)
+            self.changed = True
     #--------------------------------------------------------------------------#
     def obstacles_frequency_changed(self):
         pass
