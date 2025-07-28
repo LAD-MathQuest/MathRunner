@@ -1,6 +1,7 @@
 #------------------------------------------------------------------------------#
 
 import numpy as np
+import sys
 
 from PySide6.QtGui     import QPalette
 from PySide6.QtWidgets import (QApplication,
@@ -26,10 +27,11 @@ from pathlib import Path
 import threading
 import pygame
 
+sys.path.append(str(Path(__file__).parents[1]))
 #------------------------------------------------------------------------------#
 class MainControler:
     
-    path = par.RESOURCES
+    path_resources   = Path(__file__).parents[1]/'resources'
 
     #--------------------------------------------------------------------------#
     def __init__(self, window):
@@ -236,8 +238,8 @@ class MainControler:
         if not self.confirm_deletion():
             return
 
-        path  = self.path / 'games'
-        fname = self.get_open_fname('Chose a game description', path, 'game' )
+        path_games = self.path_resources/'games'
+        fname = self.get_open_fname('Chose a game description', path_games, 'game' )
 
         self.model.open(Path(fname))
         self.start_view_from_model()
@@ -258,7 +260,7 @@ class MainControler:
         if hasattr(self, 'background_image_file'):
             meta.background_image = MetaImage((1920, 1080), path=self.background_image_file)
 
-        save_path = self.get_save_fname("Salvar jogo", "game", suggestion=str(self.path / "games"))
+        save_path = self.get_save_fname("Salvar jogo", "game", suggestion=str(self.path_resources / "games"))
 
         if save_path:
             meta.save(Path(save_path))
@@ -273,9 +275,11 @@ class MainControler:
 
     #--------------------------------------------------------------------------#
     def save_as(self):
-        self.file_name = 'get_file_name'
-        self.model.save( self.file_name )
-        self.changed = False
+        save_path = self.get_save_fname("Salvar como", "game", suggestion=str(self.path_resources / "games"))
+        if save_path:
+            self.file_name = save_path
+            self.model.save(self.file_name)
+            self.changed = False
 
     #--------------------------------------------------------------------------#
     def exit(self):
@@ -306,8 +310,8 @@ class MainControler:
     # Slots
     #--------------------------------------------------------------------------#
     def select_ambience_sound(self):
-        path = self.path / 'sounds'
-        fname = self.get_open_fname('Escolha um som ambiente', path, 'mp3')
+        path_sounds = self.path_resources/'sounds'
+        fname = self.get_open_fname('Escolha um som ambiente', path_sounds, 'mp3')
 
         if fname:
             fname_path = Path(fname)
@@ -345,8 +349,8 @@ class MainControler:
         self.changed = True
 
     def select_background(self):
-        path = self.path / 'backgrounds'
-        fname = self.get_open_fname('Escolha uma imagem de fundo', path, 'png')
+        path_backgrounds = self.path_resources/'backgrounds'
+        fname = self.get_open_fname('Escolha uma imagem de fundo', path_backgrounds, 'png')
 
         if fname:
             self.background_image_file = Path(fname)
