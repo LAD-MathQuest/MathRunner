@@ -15,10 +15,6 @@ class Boundaries:
 
         self.vertical  = vertical
         self.function  = function
-        self.min_color = (0,0,0)
-        self.max_color = (0,0,0)
-        self.min_width = 3
-        self.max_width = 3
 
         self.mask_surf = pygame.Surface(gp.SCREEN_SIZE, pygame.SRCALPHA)
 
@@ -107,9 +103,24 @@ class Boundaries:
         return self.mask_surf
 
     #--------------------------------------------------------------------------#
-    def draw_lines(self, surf):
-        pygame.draw.lines(surf, self.min_color, False, self.polygon[0:N_POINTS,:], self.min_width)
-        pygame.draw.lines(surf, self.max_color, False, self.polygon[N_POINTS: ,:], self.max_width)
+    def draw_min_line(self, surf, color, width):
+        pygame.draw.lines(
+            surf, 
+            color, 
+            False, 
+            self.polygon[N_POINTS:, :], 
+            width
+        )
+
+    #--------------------------------------------------------------------------#
+    def draw_max_line(self, surf, color, width):
+        pygame.draw.lines(
+            surf, 
+            color, 
+            False, 
+            self.polygon[0:N_POINTS, :], 
+            width
+        )
 
     #--------------------------------------------------------------------------#
     def player(self):

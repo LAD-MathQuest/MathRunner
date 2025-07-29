@@ -69,6 +69,11 @@ if __name__ == '__main__':
     meta.track_scrolls = True
     meta.track_kills   = (False, False)
 
+    meta.min_color = (0, 0, 0)
+    meta.max_color = (0, 0, 0)
+    meta.min_width = 3
+    meta.max_width = 3
+
     path_score = path_scoreboards/'frame_neon.png'
     imag_score = MetaImage((390,160), path=path_score)
 

@@ -108,6 +108,11 @@ class MetaWorld:
         self.track_scrolls = False
         self.track_kills   = (False, False)
 
+        self.min_color = None
+        self.max_color = None
+        self.min_width = 1
+        self.max_width = 1
+
         self.scoreboard = MetaScoreboard()
 
         # Player

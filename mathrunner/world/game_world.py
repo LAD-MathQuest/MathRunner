@@ -112,6 +112,11 @@ class GameWorld:
         self.track_scrolls = meta.track_scrolls
         self.track_kills   = meta.track_kills
 
+        self.min_color = meta.min_color
+        self.max_color = meta.max_color
+        self.min_width = meta.min_width
+        self.max_width = meta.max_width
+
         # Scoreboard
         self.param_scoreboard = ScoreboardParam(meta.scoreboard)
 

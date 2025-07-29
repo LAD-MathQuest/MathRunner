@@ -61,6 +61,11 @@ if __name__ == '__main__':
     meta.track_scrolls = False
     meta.track_kills   = (True, True)
 
+    meta.min_color = (255, 0, 0)
+    meta.max_color = (255, 0, 0)
+    meta.min_width = 3
+    meta.max_width = 3
+
     meta.scoreboard = MetaScoreboard(text_font_size = 28,
                                      text_spacing   = 1,
                                      text_position  = (160,20),

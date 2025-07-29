@@ -24,6 +24,11 @@ class Background:
                 vertical
             )
 
+        self.min_color = world.min_color
+        self.max_color = world.max_color
+        self.min_width = world.min_width
+        self.max_width = world.max_width
+
         self.boundaries = Boundaries(world.boundary, vertical)
 
     #--------------------------------------------------------------------------#
@@ -43,7 +48,19 @@ class Background:
         if self.draw_track:
             self.track.draw_with_mask(surf, self.boundaries.mask())
 
-        self.boundaries.draw_lines(surf)
+        if self.min_color: 
+            self.boundaries.draw_min_line(
+                surf, 
+                self.min_color, 
+                self.min_width
+            )
+
+        if self.max_color: 
+            self.boundaries.draw_max_line(
+                surf, 
+                self.max_color, 
+                self.max_width
+            )
 
     #--------------------------------------------------------------------------#
     def get_player_boundaries(self):
