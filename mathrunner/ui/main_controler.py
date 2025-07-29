@@ -241,6 +241,7 @@ class MainControler:
         path_games = self.path_resources/'games'
         fname = self.get_open_fname('Chose a game description', path_games, 'game' )
 
+        print(Path(self.path_resources/fname))
         self.model.open(Path(self.path_resources/fname))
         self.start_view_from_model()
 
@@ -255,11 +256,11 @@ class MainControler:
 
         if hasattr(self, 'ambience_sound_file'):
             print(self.ambience_sound_file)
-            meta.game_ambience = self.ambience_sound_file
+            meta.game_ambience = str(self.ambience_sound_file)
             meta.game_ambience_volume = 0.7 #self.ui.doubleSpinBox_AmbienceSoundVolume.value()
         
         if hasattr(self, 'background_image_file'):
-            meta.background_image = MetaImage((1920, 1080), path=self.background_image_file)
+            meta.background_image = MetaImage((1920, 1080), path=str(self.background_image_file))
 
         save_path = self.get_save_fname("Salvar jogo", "game", suggestion=str(self.path_resources / "games"))
 
@@ -614,7 +615,7 @@ class MainControler:
                                                 filter  = '*.' + ext )
         nome_arquivo = fname.rsplit("/", 2)[-1]
         nome_pasta = fname.rsplit("/", 2)[-2]
-        return nome_pasta+'\\'+nome_arquivo
+        return nome_pasta+'/'+nome_arquivo
 
     #--------------------------------------------------------------------------#
     def get_save_fname( self, title, ext, suggestion = '' ):

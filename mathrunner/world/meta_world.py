@@ -18,13 +18,8 @@ from pathlib import Path
 
 from world.functions import VelocityFunction, BoundaryFunctions
 
-sys.path.append(str(Path(__file__).parents[1]))
-
-
-
 #------------------------------------------------------------------------------#
 class MetaImage:
-    path_resources = Path(__file__).parents[1]/'resources'
     '''Describes an image to be used on game.'''
     #--------------------------------------------------------------------------#
     def __init__(self, size=None, color=(0,0,0), path=None ):
@@ -32,23 +27,21 @@ class MetaImage:
 
         self.size  = size  # (width, height)
         self.color = color # (R,G,B)
-        self.path  = None if path==None else Path(str(path))
+        self.path  = None if path==None else str(path)
 
 #------------------------------------------------------------------------------#
 class MetaObject:
     '''Describes game objects'''
-    path_resources   = Path(__file__).parents[1]/'resources'
     #--------------------------------------------------------------------------#
     def __init__(self, image, score=0, sound=None, volume=1.0 ):
 
         self.image  = image   # MetaImage
         self.score  = score
-        self.sound  = sound   # Sound path
+        self.sound  = None if sound==None else str(sound)   # Sound path
         self.volume = volume  # Sound volume
 
 #------------------------------------------------------------------------------#
 class MetaScoreboard:
-    path_resources   = Path(__file__).parents[1]/'resources'
     '''Describes the game scoreboard'''
 
     #--------------------------------------------------------------------------#
@@ -79,7 +72,7 @@ class MetaScoreboard:
         self.show_velocity = show_velocity
         self.show_time     = show_time
 
-        self.image          = None if image==None else Path(self.path_resources/image)
+        self.image          = image
         self.image_position = text_position if not image_position else image_position
 
 #------------------------------------------------------------------------------#
