@@ -43,9 +43,9 @@ def main():
    
     #--- Carregar imagem de fundo ---
     if meta.background_image:
-        img_path = Path(path_resources/meta.background_image.path)
-        print(img_path)
-        background = pygame.image.load(str(img_path)).convert()
+        print(Path(meta.background_image.path))
+        img_path = Path(meta.background_image.path)
+        background = pygame.image.load(img_path).convert()
 
         background = pygame.Surface((1920, 1080))
         background.fill((0, 0, 0))
@@ -56,7 +56,6 @@ def main():
         pygame.mixer.init()
         meta.game_ambience = str(path_resources/meta.game_ambience)
         sound_path = Path(meta.game_ambience)
-        print(meta.game_ambience)
         pygame.mixer.music.load(str(sound_path))
         volume = getattr(meta, 'game_ambience_volume', 1.0)
         pygame.mixer.music.set_volume(volume)

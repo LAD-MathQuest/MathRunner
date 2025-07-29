@@ -254,6 +254,7 @@ class MainControler:
         meta.soft_description = self.ui.plainTextEdit_GameDescription.toPlainText()
 
         if hasattr(self, 'ambience_sound_file'):
+            print(self.ambience_sound_file)
             meta.game_ambience = self.ambience_sound_file
             meta.game_ambience_volume = 0.7 #self.ui.doubleSpinBox_AmbienceSoundVolume.value()
         
@@ -315,6 +316,7 @@ class MainControler:
 
         if fname:
             fname_path = Path(fname)
+            print(fname_path)
             self.ambience_sound_file = fname_path  
         
             self.ui.pushButton_AmbienceSoundPlay.setEnabled(True)
@@ -354,6 +356,7 @@ class MainControler:
         print(fname)
         if fname:
             self.background_image_file = Path(fname)
+            print(self.background_image_file)
             pixmap = QPixmap(str(self.path_resources/self.background_image_file))
             pixmap = pixmap.scaled(228, 128, Qt.KeepAspectRatio)
             

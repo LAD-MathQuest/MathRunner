@@ -32,7 +32,7 @@ class MetaImage:
 
         self.size  = size  # (width, height)
         self.color = color # (R,G,B)
-        self.path  = None if path==None else Path(str(self.path_resources) + "\\" + str(path))
+        self.path  = None if path==None else Path(str(path))
 
 #------------------------------------------------------------------------------#
 class MetaObject:
@@ -43,7 +43,7 @@ class MetaObject:
 
         self.image  = image   # MetaImage
         self.score  = score
-        self.sound  = Path(str(self.path_resources) + "\\" + str(sound))   # Sound path
+        self.sound  = sound   # Sound path
         self.volume = volume  # Sound volume
 
 #------------------------------------------------------------------------------#
