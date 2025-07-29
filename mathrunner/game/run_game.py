@@ -22,18 +22,40 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(description='MathRunner')
-    parser.add_argument( 'world', help='Game World file name', nargs='?' )
+    parser.add_argument('world', help='Game World file name', nargs='?')
     args = parser.parse_args()
 
+    if not args.world:
+        meta = MetaWorld() 
+
+    else:
+        try:
+            meta = MetaWorld.load(args.world)
+
+        except FileNotFoundError:
+            print(f"Error: The file {args.world} was not found.")
+            sys.exit()
+
+        except PermissionError:
+            print(f"Error: You do not have permission to access file {args.world}.")
+            sys.exit()
+
+        except IOError:
+            print(f"Error: An unexpected I/O error occurred while reading file {args.world}.")
+            sys.exit()
+
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
+            sys.exit()
+
     pygame.init()
-    pygame.display.set_mode( (0,0), pygame.FULLSCREEN )
+    pygame.display.set_mode((0,0), pygame.FULLSCREEN)
     
     pygame.mouse.set_visible(False)
-    pygame.mouse.set_pos(0,0)
 
-    meta   = MetaWorld.load(args.world) if args.world else MetaWorld()
-    world  = GameWorld(meta)
-    engine = Engine  (world)
+    world = GameWorld(meta)
+
+    engine = Engine(world)
 
     engine.run()
 
