@@ -241,7 +241,7 @@ class MainControler:
         path_games = self.path_resources/'games'
         fname = self.get_open_fname('Chose a game description', path_games, 'game' )
 
-        self.model.open(Path(fname))
+        self.model.open(Path(self.path_resources/fname))
         self.start_view_from_model()
 
     #--------------------------------------------------------------------------#
@@ -327,7 +327,7 @@ class MainControler:
             pygame.mixer.init()
             if pygame.mixer.music.get_busy():
                 pygame.mixer.music.stop()
-            pygame.mixer.music.load(str(self.ambience_sound_file))
+            pygame.mixer.music.load(str(self.path_resources/self.ambience_sound_file))
             
             volume = self.ui.doubleSpinBox_AmbienceSoundVolume.value()  # valor de 0.0 a 1.0
             pygame.mixer.music.set_volume(volume)
@@ -351,11 +351,10 @@ class MainControler:
     def select_background(self):
         path_backgrounds = self.path_resources/'backgrounds'
         fname = self.get_open_fname('Escolha uma imagem de fundo', path_backgrounds, 'png')
-
+        print(fname)
         if fname:
             self.background_image_file = Path(fname)
-
-            pixmap = QPixmap(str(self.background_image_file))
+            pixmap = QPixmap(str(self.path_resources/self.background_image_file))
             pixmap = pixmap.scaled(228, 128, Qt.KeepAspectRatio)
             
             self.ui.label_BackgroundImage.setPixmap(pixmap)
@@ -428,7 +427,7 @@ class MainControler:
 
             widget.image_file = fname
 
-            pixmap = QPixmap(str(fname))
+            pixmap = QPixmap(str(self.path_resources/fname))
             pixmap = pixmap.scaled(widget.ui.label_Image.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
 
             widget.ui.label_Image.setPixmap(pixmap)
@@ -494,7 +493,7 @@ class MainControler:
 
             widget.image_file = fname
 
-            pixmap = QPixmap(str(fname))
+            pixmap = QPixmap(str(self.path_resources/fname))
             pixmap = pixmap.scaled(widget.ui.label_Image.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
 
             widget.ui.label_Image.setPixmap(pixmap)        
@@ -610,7 +609,9 @@ class MainControler:
                                                 caption = title,
                                                 dir     = str(path),
                                                 filter  = '*.' + ext )
-        return fname
+        nome_arquivo = fname.rsplit("/", 2)[-1]
+        nome_pasta = fname.rsplit("/", 2)[-2]
+        return nome_pasta+'\\'+nome_arquivo
 
     #--------------------------------------------------------------------------#
     def get_save_fname( self, title, ext, suggestion = '' ):

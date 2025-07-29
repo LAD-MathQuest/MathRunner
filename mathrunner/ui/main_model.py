@@ -14,9 +14,12 @@ import ui.tools   as tools
 
 from world.meta_world import MetaWorld
 
+sys.path.append(str(Path(__file__).parents[1]))
+
 #------------------------------------------------------------------------------#
 class MainModel:
 
+    path_resources   = Path(__file__).parents[1]/'resources'
     #--------------------------------------------------------------------------#
     def __init__(self, controler):
 
@@ -109,7 +112,8 @@ class MainModel:
         meta = self.meta
 
         #--- Background -------------------------------------------------------#
-
+        
+        meta.background_image.path = None if meta.background_image.path==None else str(self.path_resources/meta.background_image.path)
         tools.draw_meta_image(ui.label_BackgroundImage, meta.background_image)
 
         ui.checkBox_BackgroundImageScrolls.setChecked(meta.background_scrolls)

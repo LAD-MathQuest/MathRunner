@@ -18,12 +18,10 @@ from world.meta_world import MetaWorld
 from world.game_world import GameWorld
 from game.engine import Engine
 
-
-
 #------------------------------------------------------------------------------#
 def main():
     '''Runs the game'''
-
+    path_resources = Path(__file__).parents[1]/'resources'
     parser = argparse.ArgumentParser(description='MathRunner')
     parser.add_argument('world', help='Game World file name', nargs='?')
     args = parser.parse_args()
@@ -45,7 +43,8 @@ def main():
    
     #--- Carregar imagem de fundo ---
     if meta.background_image:
-        img_path = Path(meta.background_image.path)
+        img_path = Path(path_resources/meta.background_image.path)
+        print(img_path)
         background = pygame.image.load(str(img_path)).convert()
 
         background = pygame.Surface((1920, 1080))
@@ -55,7 +54,9 @@ def main():
     #--- Carregar som ambiente ---
     if meta.game_ambience:
         pygame.mixer.init()
+        meta.game_ambience = str(path_resources/meta.game_ambience)
         sound_path = Path(meta.game_ambience)
+        print(meta.game_ambience)
         pygame.mixer.music.load(str(sound_path))
         volume = getattr(meta, 'game_ambience_volume', 1.0)
         pygame.mixer.music.set_volume(volume)
