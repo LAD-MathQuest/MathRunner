@@ -316,7 +316,7 @@ class MainControler:
         fname = self.get_open_fname('Escolha um som ambiente', path_sounds, 'mp3')
 
         if fname:
-            fname_path = Path(fname)
+            fname_path = fname
             print(fname_path)
             self.ambience_sound_file = fname_path  
         
@@ -356,7 +356,7 @@ class MainControler:
         fname = self.get_open_fname('Escolha uma imagem de fundo', path_backgrounds, 'png')
         print(fname)
         if fname:
-            self.background_image_file = Path(fname)
+            self.background_image_file = fname
             print(self.background_image_file)
             pixmap = QPixmap(str(self.path_resources/self.background_image_file))
             pixmap = pixmap.scaled(228, 128, Qt.KeepAspectRatio)
