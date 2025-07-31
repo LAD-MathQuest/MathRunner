@@ -6,8 +6,8 @@ import subprocess
 
 from PySide6.QtGui import QFont
 
-from world import MetaWorld
-from .     import tools
+from meta import MetaWorld
+from .    import tools
 
 #------------------------------------------------------------------------------#
 class MainModel:

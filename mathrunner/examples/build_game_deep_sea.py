@@ -15,9 +15,14 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).parents[1]))
 
-from world.velocity_function import VelocityFunction 
-from world.boundary_function import BoundaryFunctions
-from world.meta_world import MetaImage, MetaObject, MetaScoreboard, MetaWorld
+from meta import (
+        VelocityFunction,
+        BoundaryFunctions,
+        MetaImage, 
+        MetaObject, 
+        MetaScoreboard, 
+        MetaWorld
+    )
 
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':

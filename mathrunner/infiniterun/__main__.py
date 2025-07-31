@@ -3,17 +3,16 @@
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
+import argparse
 import sys
 from pathlib import Path
-
-import argparse
 
 sys.path.append(str(Path(__file__).parents[1]))
 
 import pygame
 import pygame.freetype
 
-from world.meta_world import MetaWorld
+from meta import MetaWorld
 
 from .world  import GameWorld
 from .engine import Engine
@@ -27,7 +26,7 @@ def main():
     args = parser.parse_args()
 
     if not args.world:
-        meta = MetaWorld() 
+        meta = MetaWorld()
 
     else:
         try:
@@ -51,7 +50,7 @@ def main():
 
     pygame.init()
     pygame.display.set_mode((0,0), pygame.FULLSCREEN)
-    
+
     pygame.mouse.set_visible(False)
 
     world  = GameWorld(meta)
