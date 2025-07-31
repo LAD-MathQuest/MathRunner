@@ -1,9 +1,9 @@
 #------------------------------------------------------------------------------#
 
-from PySide6.QtWidgets     import QWidget
-from ui.form_object_widget import Ui_ObjectWidget
+from PySide6.QtWidgets import QWidget
 
-import ui.tools as tools
+from .form_object_widget import Ui_ObjectWidget
+from .                   import tools
 
 #------------------------------------------------------------------------------#
 class ObjectWidget(QWidget):

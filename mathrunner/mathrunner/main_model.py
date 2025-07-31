@@ -1,14 +1,13 @@
 #------------------------------------------------------------------------------#
 
-import sys
-import tempfile
 import os
+import tempfile
 import subprocess
 
 from PySide6.QtGui import QFont
 
 from world import MetaWorld
-from . import tools
+from .     import tools
 
 #------------------------------------------------------------------------------#
 class MainModel:
@@ -47,11 +46,9 @@ class MainModel:
         self.meta.write(temp)
         temp.close()
 
-        game_file = str(temp.name)
+        subprocess.run(["python", '-m', 'infiniterun', temp.name])
 
-        subprocess.run(["python", '-m', 'game', game_file])
-
-        os.remove(game_file)
+        os.remove(temp.name)
 
     #--------------------------------------------------------------------------#
     # Funções para atualizar a interface a partir de informações do modelo

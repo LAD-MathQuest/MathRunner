@@ -8,11 +8,10 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent))
 
-import ui.gui as gui
+from . import gui
 
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
-
-    sys.exit( gui.main( sys.argv ) )
+    sys.exit(gui.main(sys.argv))
 
 #------------------------------------------------------------------------------#

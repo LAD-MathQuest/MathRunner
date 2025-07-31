@@ -5,14 +5,15 @@ from PySide6.QtWidgets import (QApplication,
                                QFileDialog,
                                QMessageBox,
                                QVBoxLayout)
-import parameters as par
 
-from ui.main_model    import MainModel
-from ui.object_widget import ObjectWidget
-from ui.plot_velocity import PlotVelocity
-from ui.plot_track    import PlotTrack
+from . import parameters as par
+from . import tools
 
-import ui.tools as tools
+from .main_model    import MainModel
+from .object_widget import ObjectWidget
+from .plot_velocity import PlotVelocity
+from .plot_track    import PlotTrack
+
 
 #------------------------------------------------------------------------------#
 class MainControler:
