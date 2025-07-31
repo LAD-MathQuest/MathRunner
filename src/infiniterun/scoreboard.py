@@ -19,15 +19,13 @@ class Scoreboard:
         self.text_bgcolor   = param.text_bgcolor
         self.text_fgcolor   = param.text_fgcolor
 
-        self.show_points   = param.show_points  
+        self.show_points   = param.show_points
         self.show_velocity = param.show_velocity
-        self.show_time     = param.show_time    
+        self.show_time     = param.show_time
 
         self.draw_image = param.draw_image
         self.image      = param.image
         self.image_rect = param.image_rect
-
-        text_rect = pygame.Rect( self.text_position, (100,100))
 
         n_lin = 3
         n_col = 2
@@ -36,10 +34,10 @@ class Scoreboard:
                                       self.text_font_size,
                                       self.text_spacing,
                                       self.text_position,
-                                      n_lin, 
-                                      n_col, 
+                                      n_lin,
+                                      n_col,
                                       ['Velocidade: ', '000000'],
-                                      self.text_fgcolor, 
+                                      self.text_fgcolor,
                                       self.text_bgcolor)
 
         self.text_rect = pygame.Rect(self.text_position, self.ost.size)

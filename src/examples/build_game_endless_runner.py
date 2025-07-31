@@ -107,7 +107,7 @@ if __name__ == '__main__':
 
     for ii in range(2,10):
 
-        path_obstacle = path_objects/f'enemy_spaceship.png'
+        path_obstacle = path_objects/'enemy_spaceship.png'
         imag_obstacle = MetaImage((80,80), path=path_obstacle)
 
         obstacle = MetaObject(imag_obstacle, points, path_crash, volume)
@@ -125,7 +125,7 @@ if __name__ == '__main__':
 
     for ii in range(1,5):
 
-        path_collectible = path_objects/f'ruby.png'
+        path_collectible = path_objects/'ruby.png'
         imag_collectible = MetaImage((46,38), path=path_collectible)
 
         collectible = MetaObject(imag_collectible, points, path_collect, volume)

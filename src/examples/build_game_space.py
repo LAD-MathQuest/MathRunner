@@ -107,7 +107,7 @@ if __name__ == '__main__':
 
     for ii in range(2,10):
 
-        path_obstacle = path_objects/f'asteroid.png'
+        path_obstacle = path_objects/'asteroid.png'
         imag_obstacle = MetaImage((192,192), path=path_obstacle)
 
         obstacle = MetaObject(imag_obstacle, points, path_crash, volume)

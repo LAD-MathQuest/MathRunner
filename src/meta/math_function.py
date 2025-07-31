@@ -27,7 +27,7 @@ def eval_function(values, func: str, var_name: str):
 
     ff = ne.evaluate(func, local_dict={var_name:values, 'e':np.e, 'pi':np.pi})
 
-    if type(values) == np.ndarray and values.size != 1 and ff.size == 1:
+    if type(values) is np.ndarray and values.size != 1 and ff.size == 1:
         ff = np.full(values.shape, ff)
 
     return ff
