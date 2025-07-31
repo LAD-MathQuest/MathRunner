@@ -8,7 +8,6 @@ from pathlib import Path
 #------------------------------------------------------------------------------#
 
 # User home directory
-
 if sys.platform.startswith('win32'):
     HOME = Path.home() / 'Documents'
     if not HOME.is_dir():
@@ -19,8 +18,9 @@ else:
 # Resources  parameters
 #------------------------------------------------------------------------------#
 
-# Resources path
-RESOURCES = Path(__file__).resolve().parent / 'resources'
+# Default games path
+# TODO Definir qual vai ser o path default na versão final
+games_path = Path(__file__).parents[1] / 'games'
 
 # Application  parameters
 #------------------------------------------------------------------------------#
@@ -33,6 +33,6 @@ MYAPPID = 'Prof_Luis_A_DAfonseca.MathRunner.designer'
 ABOUT = f"""
 Desenvolvedor: {AUTHOR}
 Versão: {VERSION}
-Licença: GNU General Public License - Version 3""" 
+Licença: GNU General Public License - Version 3"""
 
 #------------------------------------------------------------------------------#

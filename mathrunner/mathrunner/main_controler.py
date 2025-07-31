@@ -132,7 +132,7 @@ class MainControler:
         ui.lineEdit_FunctionTrackMaximum.editingFinished.connect(self.function_track_maximum_changed)
 
     #--------------------------------------------------------------------------#
-    # Action calls
+    # Action callsrc_py.stat().st_mtime < rc_qt.stat().st_mtime:
     #--------------------------------------------------------------------------#
 
     #--------------------------------------------------------------------------#
@@ -150,8 +150,11 @@ class MainControler:
         if not self.confirm_deletion():
             return
 
-        path  = par.RESOURCES / 'games'
-        fname = self.get_open_fname('Chose a game description', path, 'game' )
+        fname = self.get_open_fname(
+            'Choose a game description',
+            par.games_path,
+            'game'
+        )
 
         if fname:
             # TODO try:
