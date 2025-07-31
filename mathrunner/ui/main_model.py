@@ -1,18 +1,14 @@
 #------------------------------------------------------------------------------#
 
-import sys, tempfile, os
-import numpy as np
+import sys
+import tempfile
+import os
+import subprocess
 
-from PySide6.QtCore       import QProcess, QUrl
-from PySide6.QtGui        import QPixmap, QFont
-from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
+from PySide6.QtGui import QFont
 
-from pathlib import Path
-
-import parameters as par
-import ui.tools   as tools
-
-from world.meta_world import MetaWorld
+from world import MetaWorld
+from . import tools
 
 #------------------------------------------------------------------------------#
 class MainModel:
@@ -41,21 +37,21 @@ class MainModel:
     #--------------------------------------------------------------------------#
     def run(self):
 
-        temp = tempfile.NamedTemporaryFile(mode   = 'wb',
-                                           prefix = 'meta_',
-                                           suffix = '.game',
-                                           delete = False)
+        temp = tempfile.NamedTemporaryFile(
+            mode   = 'wb',
+            prefix = 'meta_',
+            suffix = '.game',
+            delete = False
+        )
 
         self.meta.write(temp)
         temp.close()
 
-        run_game = str(Path(__file__).parents[1]/'game'/'run_game.py')
-        name = str(temp.name)
+        game_file = str(temp.name)
 
-        self.p = QProcess()
-        self.p.execute(sys.executable, [run_game, name])
+        subprocess.run(["python", '-m', 'game', game_file])
 
-        os.remove(name)
+        os.remove(game_file)
 
     #--------------------------------------------------------------------------#
     # Funções para atualizar a interface a partir de informações do modelo
@@ -303,7 +299,6 @@ class MainModel:
     def update_from_view_tab_objects(self):
 
         ui   = self.ui
-        con  = self.con
         meta = self.meta
 
         #--- Player -----------------------------------------------------------#

@@ -1,12 +1,11 @@
 #------------------------------------------------------------------------------#
+'''Build game Monkey in Danger
 
-'''Build game Deep Sea
-
-Author: Luis D'Afonseca
-Name:   Deep Sea
+Author: Merc
+Name:   Monkey in danger
 
 Description
-An underwater adventure
+Monkey ir running away from one of its predators, the snakes.
 '''
 
 #------------------------------------------------------------------------------#
@@ -16,21 +15,23 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).parents[1]))
 
-from world.functions  import VelocityFunction, BoundaryFunctions
+from world.velocity_function import VelocityFunction 
+from world.boundary_function import BoundaryFunctions
 from world.meta_world import MetaImage, MetaObject, MetaScoreboard, MetaWorld
 
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
 
-    print('Building: Deep Seas')
+    print('Building: Monkey in danger')
 
-    path_resources   = Path(__file__).parents[1]/'resources'
+    path_resources   = Path(__file__).parent/'resources'
     path_backgrounds = path_resources/'backgrounds'
     path_scoreboards = path_resources/'scoreboards'
     path_objects     = path_resources/'objects'
     path_sounds      = path_resources/'sounds'
     path_fonts       = path_resources/'fonts'
-    path_games       = path_resources/'games'
+
+    path_games = Path(__file__).parents[1]/'games'
 
     #--------------------------------------------------------------------------#
 
@@ -39,87 +40,83 @@ if __name__ == '__main__':
     # Software
     #--------------------------------------------------------------------------#
 
-    game_file_name        = 'deep_sea.game'
-    meta.soft_name        = 'Deep Sea'
-    meta.soft_author      = "Luis D'Afonseca"
-    meta.soft_description = "Uma aventura em baixo d'água"
+    game_file_name        = 'monkey.game'
+    meta.soft_name        = 'Monkey in danger'
+    meta.soft_author      = "Merc"
+    meta.soft_description = 'Um jogo de corrida onde o macaco deve evitar as cobras e coletar as bananas'
     meta.soft_icon        = None
 
     # Game
     #--------------------------------------------------------------------------#
 
-    meta.game_vertical   = False
+    meta.game_vertical   = True
     meta.game_time_bonus = 10
-    meta.game_ambience   = None
+    meta.game_ambience   = path_sounds/'music-1.mp3'
     meta.game_ambience_volume = 0.4 
 
     # Appearance
     #--------------------------------------------------------------------------#
 
-    path_background = path_backgrounds/'deep_sea_background.png'
-    imag_background = MetaImage(path=path_background)
-
-    meta.background_image   = imag_background
+    path_background = path_backgrounds/'selva_vertical.png'
+    imag_background = MetaImage((1536,1024), path=path_background)
+    
+    meta.background_image = imag_background
     meta.background_scrolls = True
 
-    meta.track_image   = MetaImage(color=(0, 140, 255))
+    meta.track_image   = None
     meta.track_scrolls = False
-    meta.track_kills   = (False, True)
+    meta.track_kills   = (False, False)
 
-    meta.min_color = (19, 43, 63)
-    meta.max_color = None
-    meta.min_width = 3
-    meta.max_width = 1
+    path_score = path_scoreboards/'frame_neon.png'
+    imag_score = MetaImage((390,160), path=path_score)
 
     path_font = path_fonts/'Party_Confetti.ttf'
-    meta.scoreboard = MetaScoreboard(image=MetaImage(color=(55,55,55),size=(230,100)),
-                                     image_position = (153,13),
+    meta.scoreboard = MetaScoreboard(image          = imag_score,
+                                     image_position = (54,67),
                                      text_font      = path_font,
                                      text_font_size = 28,
-                                     text_spacing   = 1,
-                                     text_position  = (160,20),
-                                     text_bgcolor   = (55,55,55))
-
+                                     text_spacing   = 1.2,
+                                     text_position  = (103,100),
+                                     text_bgcolor   = (90,93,102),
+                                     text_fgcolor   = (0,204,255))
     # Player
     #--------------------------------------------------------------------------#
 
-    imag_player = MetaImage(size=(120, 75), path=path_objects/'submarine.png')
-    meta.player = MetaObject(imag_player)
-    meta.player_speed = 800
+    path_player = path_objects/'macaco.png'
+    imag_player = MetaImage((120,200), path=path_player)
+
+    meta.player       = MetaObject(imag_player)
+    meta.player_speed = 400
 
     # Obstacles
     #--------------------------------------------------------------------------#
 
+    
     points = 10
 
     meta.obstacles_frequency = 3
     meta.obstacles = []
 
-    imag_obstacle = MetaImage(size=(50, 54), path=path_objects/'mine.png')
+    imag_obstacle = MetaImage((90, 135), path=path_objects/'cobra.png')
     meta.obstacles.append(MetaObject(imag_obstacle, points))
 
     # Collectibles
     #--------------------------------------------------------------------------#
-
+    path_collect = path_sounds/'collect-ring.mp3'
     points = 100
-
+    volume = 0.2
+   
     meta.collectibles_frequency = 1
     meta.collectibles = []
 
-    imag_collectible = MetaImage(size=(90, 69), path=path_objects/'diver-01.png')
-    meta.collectibles.append(MetaObject(imag_collectible, points))
-
-    imag_collectible = MetaImage(size=(110, 41), path=path_objects/'diver-02.png')
+    imag_collectible = MetaImage(( 110, 135), path=path_objects/'banana.png')
     meta.collectibles.append(MetaObject(imag_collectible, points))
 
     # Functions
     #--------------------------------------------------------------------------#
 
     meta.velocity = VelocityFunction ('25 + 2*t')
-    meta.boundary = BoundaryFunctions(
-        '15.2 + 10*sen(x/80) + 5*sen(x/20)',
-        '86.8'
-    )
+    meta.boundary = BoundaryFunctions('35', '65')
 
     # Saving
     #--------------------------------------------------------------------------#

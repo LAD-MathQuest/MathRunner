@@ -1,5 +1,4 @@
 #------------------------------------------------------------------------------#
-
 '''This module defines the function objects.
 
     The VelocityFunction  is used to compute scrolling velocity
@@ -10,50 +9,8 @@
     computed as proportion of screen.
 '''
 
-import world.math_function as mf
+from .math_function import parse_function, eval_function
 
-#------------------------------------------------------------------------------#
-#------------------------------------------------------------------------------#
-class VelocityFunction:
-    '''Define the scrolling velocity in screens per second
-
-    The velocity is a function of time in seconds
-
-    Velocity = 1 means the length of the screen scrolls completelly
-    in one second.
-    '''
-
-    #--------------------------------------------------------------------------#
-    def __init__(self, func_orig: str = '') -> None:
-        self.set_function(func_orig)
-
-    #--------------------------------------------------------------------------#
-    def set_function(self, func_orig: str) -> None:
-        self.fvel_orig = func_orig
-        self.fvel_raw  = mf.parse_function(func_orig)
-        self.fvel      = mf.parse_function(f'max(0.01,{self.fvel_raw})')
-
-    #--------------------------------------------------------------------------#
-    def get_function_orig(self) -> str:
-        return self.fvel_orig
-
-    #--------------------------------------------------------------------------#
-    def get_function_raw(self) -> str:
-        return self.fvel_raw
-
-    #--------------------------------------------------------------------------#
-    def get_function(self) -> str:
-        return self.fvel
-
-    #--------------------------------------------------------------------------#
-    def eval_raw(self, time):
-        return mf.eval_function(time, self.fvel_raw, 't')
-
-    #--------------------------------------------------------------------------#
-    def eval(self, time):
-        return mf.eval_function(time, self.fvel, 't')
-
-#------------------------------------------------------------------------------#
 #------------------------------------------------------------------------------#
 class BoundaryFunctions:
     '''Define minimal and maximal (left and rigth) track boundaries
@@ -76,14 +33,14 @@ class BoundaryFunctions:
     #--------------------------------------------------------------------------#
     def set_function_min(self, func_orig: str) -> None:
         self.fmin_orig = func_orig
-        self.fmin_raw  = mf.parse_function(func_orig)
-        self.fmin      = mf.parse_function(f'min(100, max(0,{self.fmin_raw}))')
+        self.fmin_raw  = parse_function(func_orig)
+        self.fmin      = parse_function(f'min(100, max(0,{self.fmin_raw}))')
 
     #--------------------------------------------------------------------------#
     def set_function_max(self, func_orig: str) -> None:
         self.fmax_orig = func_orig
-        self.fmax_raw  = mf.parse_function(func_orig)
-        self.fmax      = mf.parse_function(f'min(100, max(0,{self.fmax_raw}))')
+        self.fmax_raw  = parse_function(func_orig)
+        self.fmax      = parse_function(f'min(100, max(0,{self.fmax_raw}))')
 
     #--------------------------------------------------------------------------#
     def get_function_min_orig(self) -> str:
@@ -112,31 +69,31 @@ class BoundaryFunctions:
     #--------------------------------------------------------------------------#
     def eval_raw(self, xx):
         return (
-            mf.eval_function(xx, self.fmin_raw, 'x'),
-            mf.eval_function(xx, self.fmax_raw, 'x')
+            eval_function(xx, self.fmin_raw, 'x'),
+            eval_function(xx, self.fmax_raw, 'x')
         )
 
     #--------------------------------------------------------------------------#
     def eval(self, xx):
         return (
-            mf.eval_function(xx, self.fmin, 'x'),
-            mf.eval_function(xx, self.fmax, 'x')
+            eval_function(xx, self.fmin, 'x'),
+            eval_function(xx, self.fmax, 'x')
         )
 
     #--------------------------------------------------------------------------#
     def eval_min_raw(self, xx):
-        return mf.eval_function(xx, self.fmin_raw, 'x')
+        return eval_function(xx, self.fmin_raw, 'x')
 
     #--------------------------------------------------------------------------#
     def eval_min(self, xx):
-        return mf.eval_function(xx, self.fmin, 'x')
+        return eval_function(xx, self.fmin, 'x')
 
     #--------------------------------------------------------------------------#
     def eval_max_raw(self, xx):
-        return mf.eval_function(xx, self.fmax_raw, 'x')
+        return eval_function(xx, self.fmax_raw, 'x')
 
     #--------------------------------------------------------------------------#
     def eval_max(self, xx):
-        return mf.eval_function(xx, self.fmax, 'x')
+        return eval_function(xx, self.fmax, 'x')
 
 #------------------------------------------------------------------------------#

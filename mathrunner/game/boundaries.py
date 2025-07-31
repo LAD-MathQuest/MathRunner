@@ -1,9 +1,9 @@
 #------------------------------------------------------------------------------#
 
 import pygame
-
-import game.game_params as gp
 import numpy as np
+
+from . import game_params as gp
 
 N_POINTS = 800
 
@@ -68,8 +68,6 @@ class Boundaries:
 
         self.eval_polygon()
         
-        self.first = True
-
     #--------------------------------------------------------------------------#
     def eval_polygon(self):
 

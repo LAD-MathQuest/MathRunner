@@ -1,7 +1,8 @@
 #------------------------------------------------------------------------------#
 
-from pygame        import mixer
-from pygame.locals import *
+from pygame import mixer
+
+import pygame.locals as loc
 
 #------------------------------------------------------------------------------#
 class SoundMixer:
@@ -50,8 +51,10 @@ class SoundMixer:
 
         SoundMixer.playing = not SoundMixer.playing
 
-        if SoundMixer.playing: SoundMixer.play_music()
-        else:                  SoundMixer.stop_music()
+        if SoundMixer.playing:
+            SoundMixer.play_music()
+        else:
+            SoundMixer.stop_music()
 
     #--------------------------------------------------------------------------#
     def load_sound(sound_path):
@@ -70,8 +73,10 @@ class SoundMixer:
 
         SoundMixer.muted = not SoundMixer.muted
 
-        if SoundMixer.muted: SoundMixer.stop_music()
-        else:                SoundMixer.play_music()
+        if SoundMixer.muted:
+            SoundMixer.stop_music()
+        else:
+            SoundMixer.play_music()
 
     #--------------------------------------------------------------------------#
     def volume_up():
@@ -90,9 +95,16 @@ class SoundMixer:
     #--------------------------------------------------------------------------#
     def parse_key(key):
 
-        if   key == K_m:      SoundMixer.toggle_mute      ()
-        elif key == K_n:      SoundMixer.toggle_play_music()
-        elif key == K_EQUALS: SoundMixer.volume_up        ()
-        elif key == K_MINUS:  SoundMixer.volume_down      ()
+        if key == loc.K_m:
+            SoundMixer.toggle_mute()
+
+        elif key == loc.K_n:
+            SoundMixer.toggle_play_music()
+
+        elif key == loc.K_EQUALS:
+            SoundMixer.volume_up()
+
+        elif key == loc.K_MINUS:
+            SoundMixer.volume_down()
 
 #------------------------------------------------------------------------------#

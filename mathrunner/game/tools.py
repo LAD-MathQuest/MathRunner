@@ -18,7 +18,9 @@ def surface_tile_to_size(image, new_size, start_at_bottom=False):
     if old_width >= new_width and old_height >= new_height:
 
         rect = pygame.Rect((0,0), new_size)
-        if start_at_bottom: rect.bottom = old_height
+
+        if start_at_bottom:
+             rect.bottom = old_height
 
         new_image.blit(image, (0,0), rect)
 

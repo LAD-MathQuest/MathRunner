@@ -4,8 +4,7 @@ from PySide6.QtGui     import QPalette
 from PySide6.QtWidgets import (QApplication,
                                QFileDialog,
                                QMessageBox,
-                               QVBoxLayout,
-                               QLabel)
+                               QVBoxLayout)
 import parameters as par
 
 from ui.main_model    import MainModel
@@ -296,8 +295,6 @@ class MainControler:
     def start_new(self):
         self.model.new()
         self.start_view_from_model()
-        self.plot_velocity.update_velocity(self.model.meta.velocity)
-        self.plot_track   .update_boundary(self.model.meta.boundary)
 
     #--------------------------------------------------------------------------#
     def start_view_from_model(self):

@@ -1,11 +1,12 @@
 #------------------------------------------------------------------------------#
-'''Test game 08
+'''Test game 04
 
 Tilling background and track
-Horizontal scrollling
+Vertical scrollling
 Background doesn't scrolls
 Track scrolls
 '''
+
 
 #------------------------------------------------------------------------------#
 
@@ -14,22 +15,23 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).parents[1]))
 
-from world.functions  import VelocityFunction, BoundaryFunctions
+from world.velocity_function import VelocityFunction 
+from world.boundary_function import BoundaryFunctions
 from world.meta_world import MetaImage, MetaObject, MetaScoreboard, MetaWorld
 
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
 
-    print('Building test game 08')
+    print('Building test game 04')
 
-    path_resources = Path(__file__).parents[1]/'resources'
+    path_resources   = Path(__file__).parent/'resources'
     path_backgrounds = path_resources/'backgrounds'
     path_scoreboards = path_resources/'scoreboards'
     path_objects     = path_resources/'objects'
     path_sounds      = path_resources/'sounds'
     path_fonts       = path_resources/'fonts'
-    path_games       = path_resources/'games'
-    path_tests       = path_resources/'tests'
+
+    path_games = Path(__file__).parents[1]/'games'
 
     #--------------------------------------------------------------------------#
 
@@ -38,8 +40,8 @@ if __name__ == '__main__':
     # Software
     #--------------------------------------------------------------------------#
 
-    game_file_name        = 'test-08.game'
-    meta.soft_name        = 'Test 08'
+    game_file_name        = 'test-04.game'
+    meta.soft_name        = 'Test 04'
     meta.soft_author      = "Luis D'Afonseca"
     meta.soft_description = meta.soft_name
     meta.soft_icon        = None
@@ -47,17 +49,18 @@ if __name__ == '__main__':
     # Game
     #--------------------------------------------------------------------------#
 
-    meta.game_vertical   = False
+    meta.game_vertical   = True
     meta.game_time_bonus = 10
     meta.game_ambience   = None
+    meta.game_ambience_volume = 0.4 
 
     # Appearance
     #--------------------------------------------------------------------------#
 
-    meta.background_image   = MetaImage(path=path_tests/'tile-blue.png')
+    meta.background_image   = MetaImage(path=path_backgrounds/'tile-blue.png')
     meta.background_scrolls = False
 
-    meta.track_image   = MetaImage(path=path_tests/'tile-green.png',size=(400,400))
+    meta.track_image   = MetaImage(path=path_backgrounds/'tile-green.png',size=(400,400))
     meta.track_scrolls = True
     meta.track_kills   = (True, True)
 

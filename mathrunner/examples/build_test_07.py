@@ -1,13 +1,12 @@
 #------------------------------------------------------------------------------#
+'''Test game 07
 
-'''Build game 
-
-Author: 
-Name: 
-
-Description
-
+Tilling background and track
+Horizontal scrollling
+Background scrolls
+Track doesn't scrolls
 '''
+
 
 #------------------------------------------------------------------------------#
 
@@ -16,21 +15,23 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).parents[1]))
 
-from world.functions  import VelocityFunction, BoundaryFunctions
+from world.velocity_function import VelocityFunction 
+from world.boundary_function import BoundaryFunctions
 from world.meta_world import MetaImage, MetaObject, MetaScoreboard, MetaWorld
 
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
 
-    print('Building: Math Meows')
+    print('Building test game 07')
 
-    path_resources   = Path(__file__).parents[1]/'resources'
+    path_resources   = Path(__file__).parent/'resources'
     path_backgrounds = path_resources/'backgrounds'
     path_scoreboards = path_resources/'scoreboards'
     path_objects     = path_resources/'objects'
     path_sounds      = path_resources/'sounds'
     path_fonts       = path_resources/'fonts'
-    path_games       = path_resources/'games'
+
+    path_games = Path(__file__).parents[1]/'games'
 
     #--------------------------------------------------------------------------#
 
@@ -39,38 +40,36 @@ if __name__ == '__main__':
     # Software
     #--------------------------------------------------------------------------#
 
-    game_file_name        = 'math_meows.game'
-    meta.soft_name        = 'Maths & Meows'
-    meta.soft_author      = "Nandnn"
-    meta.soft_description = "Help the math teacher save the kittens, watch out for the cars!"
-    meta.soft_icon        = path_objects/'Teacher_PixelArt.png'
+    game_file_name        = 'test-07.game'
+    meta.soft_name        = 'Test 07'
+    meta.soft_author      = "Luis D'Afonseca"
+    meta.soft_description = meta.soft_name
+    meta.soft_icon        = None
 
     # Game
     #--------------------------------------------------------------------------#
 
     meta.game_vertical   = False
     meta.game_time_bonus = 10
-    meta.game_ambience   = path_sounds/'music_theme_16bits.mp3'
+    meta.game_ambience   = None
     meta.game_ambience_volume = 0.4 
 
     # Appearance
     #--------------------------------------------------------------------------#
 
-    path_background = path_backgrounds/'campus_background.png'
-    imag_background = MetaImage((2130,1231), path=path_background)
-
-    meta.background_image   = imag_background
+    meta.background_image   = MetaImage(path=path_backgrounds/'tile-blue.png')
     meta.background_scrolls = True
 
-    meta.track_image   = False
+    meta.track_image   = MetaImage(path=path_backgrounds/'tile-green.png',size=(400,400))
     meta.track_scrolls = False
-    meta.track_kills   = (False, False)
+    meta.track_kills   = (True, True)
 
-    path_font = path_fonts/'Party_Confetti.ttf'
-    meta.scoreboard = MetaScoreboard(image=MetaImage(color=(55,55,55),size=(230,100)),
-                                     image_position=(153,13),
-                                     text_font      = path_font,
-                                     text_font_size = 28,
+    meta.min_color = (255, 0, 0)
+    meta.max_color = (255, 0, 0)
+    meta.min_width = 3
+    meta.max_width = 3
+
+    meta.scoreboard = MetaScoreboard(text_font_size = 28,
                                      text_spacing   = 1,
                                      text_position  = (160,20),
                                      text_bgcolor   = (55,55,55))
@@ -78,8 +77,8 @@ if __name__ == '__main__':
     # Player
     #--------------------------------------------------------------------------#
 
-    imag_player = MetaImage(path=path_objects/'teacher.png', size=(170,130))
-    meta.player = MetaObject(imag_player)
+    imag_player       = MetaImage((90,40), color=(80, 86, 93))
+    meta.player       = MetaObject(imag_player)
     meta.player_speed = 800
 
     # Obstacles
@@ -90,39 +89,28 @@ if __name__ == '__main__':
     meta.obstacles_frequency = 3
     meta.obstacles = []
 
-    imag_obstacle = MetaImage(path=path_objects/'car_blue.png',size=(231,120)) #size (largura, altura);
-    meta.obstacles.append(MetaObject(imag_obstacle, points))
-
-    imag_obstacle = MetaImage(path=path_objects/'car_red.png',size=(230,130))
-    meta.obstacles.append(MetaObject(imag_obstacle, points))
-
-    imag_obstacle = MetaImage(path=path_objects/'car_green.png',size=(224,126))
+    imag_obstacle = MetaImage((80,30), color=(200,50,50))
     meta.obstacles.append(MetaObject(imag_obstacle, points))
 
     # Collectibles
     #--------------------------------------------------------------------------#
-    path_collect = path_sounds/'meow_01.mp3'
+
     points = 100
-    volume = 0.4
 
     meta.collectibles_frequency = 1
     meta.collectibles = []
 
-    imag_collectible = MetaImage(path=path_objects/'cat-1.png', size=(160,100))
-    meta.collectibles.append(MetaObject(imag_collectible, points, path_collect, volume))
-
-    path_collect = path_sounds/'meow_02.mp3'
-    points = 100
-    volume = 0.4
-
-    imag_collectible = MetaImage(path=path_objects/'cat-2.png', size=(160,100))
-    meta.collectibles.append(MetaObject(imag_collectible, points, path_collect, volume))
+    imag_collectible = MetaImage((50,50), color=(242, 182, 0))
+    meta.collectibles.append(MetaObject(imag_collectible, points))
 
     # Functions
     #--------------------------------------------------------------------------#
 
-    meta.velocity = VelocityFunction ('25 + t')
-    meta.boundary = BoundaryFunctions('18', '90')
+    meta.velocity = VelocityFunction('40 + t')
+    meta.boundary = BoundaryFunctions(
+        '20 + 15*sin(x/10) + 2*cos(0.8*x)', 
+        '80 + 15*sin(x/20) + 2*cos(1.2*x)'
+    )
 
     # Saving
     #--------------------------------------------------------------------------#

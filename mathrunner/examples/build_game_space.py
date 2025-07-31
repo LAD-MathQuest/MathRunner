@@ -1,5 +1,4 @@
 #------------------------------------------------------------------------------#
-
 '''Build game Space
 
 Author: Luis D'Afonseca
@@ -16,7 +15,8 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).parents[1]))
 
-from world.functions  import VelocityFunction, BoundaryFunctions
+from world.velocity_function import VelocityFunction 
+from world.boundary_function import BoundaryFunctions
 from world.meta_world import MetaImage, MetaObject, MetaScoreboard, MetaWorld
 
 #------------------------------------------------------------------------------#
@@ -24,13 +24,14 @@ if __name__ == '__main__':
 
     print('Building: Space Game')
 
-    path_resources   = Path(__file__).parents[1]/'resources'
+    path_resources   = Path(__file__).parent/'resources'
     path_backgrounds = path_resources/'backgrounds'
     path_scoreboards = path_resources/'scoreboards'
     path_objects     = path_resources/'objects'
     path_sounds      = path_resources/'sounds'
     path_fonts       = path_resources/'fonts'
-    path_games       = path_resources/'games'
+
+    path_games = Path(__file__).parents[1]/'games'
 
     #--------------------------------------------------------------------------#
 

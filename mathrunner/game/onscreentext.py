@@ -3,7 +3,7 @@
 import pygame
 import pygame.freetype
 
-import game.game_params as gp
+from . import game_params as gp
 
 #------------------------------------------------------------------------------#
 class OnScreenText:
@@ -28,7 +28,8 @@ def eval_width(font, span, num_columns=1):
         span(list) :   List or tuple of ints and/or strings
     '''
 
-    get_width = lambda ss : ss if type(ss) is int else font.get_rect(ss).width
+    def get_width(ss):
+        return ss if type(ss) is int else font.get_rect(ss).width
 
     if type(span) in (list, tuple):
 
@@ -162,7 +163,7 @@ class OnScreenText_Table:
             span (int ou str) : Width in pixels or fitting string
         '''
 
-        self.cell_w[jj] = eval_width(self.font, column_widths)
+        self.cell_w[jj] = eval_width(self.font, column_width)
 
         for ii in range(jj,self.num_columns):
             self.cell_x[ii+1] = self.cell_x[ii] + self.cell_w[ii]
@@ -245,7 +246,8 @@ class OnScreenText_Paragraph:
 
         self.position = position
 
-        if not font: font = gp.DEFAULT_FONT
+        if not font:
+            font = gp.DEFAULT_FONT
 
         self.font        = pygame.freetype.Font(font, font_size)
         self.font.origin = True
@@ -312,7 +314,8 @@ class OnScreenText_Paragraph:
     #--------------------------------------------------------------------------#
     def _draw_str(self, surf, content, ii, align):
 
-        str_width = lambda ss : self.font.get_rect(ss).width
+        def str_width(ss):
+            return self.font.get_rect(ss).width
 
         content_width = str_width(content)
 
@@ -344,7 +347,7 @@ class OnScreenText_Paragraph:
     #--------------------------------------------------------------------------#
     def _draw_full_str(self, surf, content, ii, align):
 
-        if not '\n' in content:
+        if '\n' not in content:
             ii = self._draw_str(surf, content, ii, align)
 
         else:

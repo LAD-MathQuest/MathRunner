@@ -2,9 +2,8 @@
 
 import pygame
 
-import game.game_params as gp
-
-from game.onscreentext import OnScreenText
+from . import game_params as gp
+from .onscreentext import OnScreenText
 
 #------------------------------------------------------------------------------#
 def draw_help(surf, name,author, description, vertical):

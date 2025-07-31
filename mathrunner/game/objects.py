@@ -6,13 +6,13 @@ It handles all necessary object actions
 '''
 
 import random
+
 import pygame
+import pygame.locals as loc
+from   pygame import sprite
 
-from pygame.locals import *
-from pygame        import sprite
-
-import game.game_params as gp
-from   game.sound_mixer import SoundMixer
+from .            import game_params as gp
+from .sound_mixer import SoundMixer
 
 #------------------------------------------------------------------------------#
 #------------------------------------------------------------------------------#
@@ -82,8 +82,11 @@ class GameObjects():
 
         GameObjects.killed = False
 
-        for sprt in GameObjects.collectibles: sprt.kill()
-        for sprt in GameObjects.obstacles:    sprt.kill()
+        for sprt in GameObjects.collectibles:
+            sprt.kill()
+
+        for sprt in GameObjects.obstacles:
+            sprt.kill()
 
         GameObjects().player.sprite.kill()
 
@@ -95,11 +98,14 @@ class GameObjects():
             The collided sprite
         '''
 
-        sprt = sprite.spritecollideany(GameObjects.player.sprite,
-                                       GameObjects.obstacles,
-                                       sprite.collide_mask)
+        sprt = sprite.spritecollideany(
+            GameObjects.player.sprite,
+            GameObjects.obstacles,
+            sprite.collide_mask
+        )
 
-        if sprt: sprt.play_sound()
+        if sprt:
+            sprt.play_sound()
 
         return sprt
 
@@ -240,19 +246,25 @@ class PlayerVertical(GameObject):
         bd_min = boundary[0]
         bd_max = boundary[1]
 
-        if self.kills[0] and self.rect.left  <= bd_min: return True
-        if self.kills[1] and self.rect.right >= bd_max: return True
+        if self.kills[0] and self.rect.left  <= bd_min:
+            return True
+        
+        if self.kills[1] and self.rect.right >= bd_max:
+            return True
 
         pressed_keys = pygame.key.get_pressed()
 
-        if pressed_keys[K_LEFT] or pressed_keys[K_a]:
+        if pressed_keys[loc.K_LEFT] or pressed_keys[loc.K_a]:
             self.rect.move_ip(-self.speed, 0)
 
-        elif pressed_keys[K_RIGHT] or pressed_keys[K_d]:
+        elif pressed_keys[loc.K_RIGHT] or pressed_keys[loc.K_d]:
             self.rect.move_ip(self.speed, 0)
 
-        if self.rect.left  < bd_min: self.rect.left  = bd_min
-        if self.rect.right > bd_max: self.rect.right = bd_max
+        if self.rect.left  < bd_min:
+            self.rect.left  = bd_min
+
+        if self.rect.right > bd_max:
+            self.rect.right = bd_max
 
         return False
 
@@ -294,19 +306,25 @@ class PlayerHorizontal(GameObject):
         bd_min = boundary[0]
         bd_max = boundary[1]
 
-        if self.kills[0] and self.rect.top    <= bd_min: return True
-        if self.kills[1] and self.rect.bottom >= bd_max: return True
+        if self.kills[0] and self.rect.top <= bd_min:
+            return True
+
+        if self.kills[1] and self.rect.bottom >= bd_max:
+            return True
 
         pressed_keys = pygame.key.get_pressed()
 
-        if pressed_keys[K_UP] or pressed_keys[K_w]:
+        if pressed_keys[loc.K_UP] or pressed_keys[loc.K_w]:
             self.rect.move_ip(0, -self.speed)
 
-        elif pressed_keys[K_DOWN] or pressed_keys[K_s]:
+        elif pressed_keys[loc.K_DOWN] or pressed_keys[loc.K_s]:
             self.rect.move_ip(0, self.speed)
 
-        if self.rect.top    < bd_min: self.rect.top    = bd_min
-        if self.rect.bottom > bd_max: self.rect.bottom = bd_max
+        if self.rect.top < bd_min:
+            self.rect.top = bd_min
+
+        if self.rect.bottom > bd_max:
+            self.rect.bottom = bd_max
 
         return False
 
@@ -319,8 +337,10 @@ def eval_position(ob_lenght, boundary):
 
     aa = ob_lenght // 2
 
-    if aa >= bd_max-bd_min: return (bd_max + bd_min) // 2
-    else:                   return random.randint(bd_min+aa, bd_max-aa)
+    if aa >= bd_max-bd_min:
+        return (bd_max + bd_min) // 2
+    else:
+        return random.randint(bd_min+aa, bd_max-aa)
 
 #------------------------------------------------------------------------------#
 #------------------------------------------------------------------------------#

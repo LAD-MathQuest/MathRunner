@@ -2,7 +2,7 @@
 
 import pygame
 
-from game.onscreentext import OnScreenText
+from .onscreentext import OnScreenText
 
 #------------------------------------------------------------------------------#
 class Scoreboard:

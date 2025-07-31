@@ -16,9 +16,9 @@ Targets:
 #------------------------------------------------------------------------------#
 
 import sys
-import os
 import argparse
 import shutil
+import subprocess
 
 from pathlib import Path
 
@@ -29,7 +29,7 @@ from pathlib import Path
 here = Path(__file__).parent
 
 #------------------------------------------------------------------------------#
-def remove_dir(path):
+def remove_dir(path: Path) -> None:
     '''Recurcively removes a directory'''
 
     if path.is_dir():
@@ -39,7 +39,7 @@ def remove_dir(path):
         print(f'{path} não existe')
 
 #------------------------------------------------------------------------------#
-def remove_files( path, glob ):
+def remove_files(path: Path, glob: str) -> None:
     '''Removes a list of files'''
 
     for file in Path(path).glob(glob):
@@ -47,23 +47,14 @@ def remove_files( path, glob ):
         file.unlink()
 
 #------------------------------------------------------------------------------#
-def run(cmd):
-    '''Runs a system command'''
-
-    print(cmd)
-    os.system(cmd)
-
-#------------------------------------------------------------------------------#
-def run_python(cmd):
+def run_python(cmd: str) -> None:
     '''Runs python script by system call'''
 
-    run( f'{sys.executable} {cmd}' )
+    subprocess.run([sys.executable, cmd])
 
 #------------------------------------------------------------------------------#
 # Targets
 #------------------------------------------------------------------------------#
-
-import world.make as world_make
 
 path_spec = here.parent / 'packaging'
 path_work = path_spec   / 'work'
@@ -74,7 +65,6 @@ def make_clean():
     '''Remove temporary files'''
 
     print(f'{here.name}: Cleaning...')
-    world_make.make_clean()
 
 #------------------------------------------------------------------------------#
 def make_distclean():
@@ -83,11 +73,9 @@ def make_distclean():
     make_clean()
 
     print(f'{here.name}: Hard cleaning...')
-    remove_files( path_spec, '*.spec' )
-    remove_dir( path_work )
-    remove_dir( path_dist )
-
-    world_make.make_distclean()
+    remove_files(path_spec, '*.spec')
+    remove_dir(path_work)
+    remove_dir(path_dist)
 
 #------------------------------------------------------------------------------#
 def make_default():
@@ -97,11 +85,11 @@ def make_default():
 
     for ui_file in (here/'ui').glob('*.ui'):
         py_file = ui_file.with_suffix('.py')
-        run( f'pyside6-uic -g python {ui_file} -o {py_file}' )
+        subprocess.run(['pyside6-uic', f'-g python {ui_file} -o {py_file}'])
 
-    run( 'pyside6-rcc resources.qrc -o resources_rc.py' )
+    subprocess.run(['pyside6-rcc', 'resources.qrc -o resources_rc.py'])
 
-    world_make.make_default()
+    run_python('./examples/make.py')
 
 #------------------------------------------------------------------------------#
 def make_dist():

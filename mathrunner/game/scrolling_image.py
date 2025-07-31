@@ -1,9 +1,9 @@
 #------------------------------------------------------------------------------#
 
 import pygame
-import game.game_params as gp
 
-from game.tools import surface_tile_to_size
+from .      import game_params as gp
+from .tools import surface_tile_to_size
 
 #------------------------------------------------------------------------------#
 class ScrollingImage:
@@ -32,7 +32,8 @@ class ScrollingImage:
     #--------------------------------------------------------------------------#
     def update(self, displacement):
 
-        if self.not_scrolls: return
+        if self.not_scrolls:
+            return
 
         if self.vertical:
             self.show_rect.top -= displacement

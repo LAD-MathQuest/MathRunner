@@ -5,13 +5,12 @@ import pygame
 import random
 import math
 
-import game.game_params as gp
-
-from game.objects     import GameObjects
-from game.sound_mixer import SoundMixer
-from game.scoreboard  import Scoreboard
-from game.draw_help   import draw_help
-from game.background  import Background
+from .            import game_params as gp
+from .objects     import GameObjects
+from .sound_mixer import SoundMixer
+from .scoreboard  import Scoreboard
+from .draw_help   import draw_help
+from .background  import Background
 
 #------------------------------------------------------------------------------#
 
@@ -22,7 +21,8 @@ STATUS_PLAYING  = 2
 STATUS_GAMEOVER = 3
 
 # Exception used to quit the game
-class QuitGame(Exception): pass
+class QuitGame(Exception):
+    pass
 
 TIME_STEP = 1 / gp.FPS
 
@@ -160,8 +160,10 @@ class Engine:
 
             event = pygame.event.wait()
 
-            if   event.type == pygame.QUIT:              raise QuitGame
-            elif event.type == pygame.WINDOWFOCUSGAINED: break
+            if event.type == pygame.QUIT:
+                raise QuitGame
+            elif event.type == pygame.WINDOWFOCUSGAINED:
+                break
 
         self.draw()
         self.show_help()
@@ -184,13 +186,19 @@ class Engine:
 
             event = pygame.event.wait()
 
-            if   event.type == pygame.QUIT:            raise QuitGame
-            elif event.type == pygame.WINDOWFOCUSLOST: self.wait_for_focus()
+            if event.type == pygame.QUIT:
+                raise QuitGame
+            
+            elif event.type == pygame.WINDOWFOCUSLOST:
+                self.wait_for_focus()
+            
             elif event.type == pygame.KEYDOWN:
 
                 SoundMixer.parse_key(event.key)
 
-                if   event.key in [pygame.K_q, pygame.K_ESCAPE]: raise QuitGame
+                if event.key in [pygame.K_q, pygame.K_ESCAPE]:
+                    raise QuitGame
+                
                 elif event.key in [pygame.K_h, pygame.K_F1, pygame.K_SPACE]:
 
                     if showing_help: # exit help
@@ -216,17 +224,30 @@ class Engine:
         while True:
             for event in pygame.event.get():
 
-                if   event.type == pygame.QUIT:                raise QuitGame
-                elif event.type == pygame.WINDOWFOCUSLOST:     self.wait_for_focus()
-                elif event.type == self.event_restart:         return
-                elif event.type == self.event_new_obstacle:    self.new_obstacle()
-                elif event.type == self.event_new_collectible: self.new_collectible()
+                if event.type == pygame.QUIT:
+                    raise QuitGame
+
+                elif event.type == pygame.WINDOWFOCUSLOST:
+                    self.wait_for_focus()
+
+                elif event.type == self.event_restart:
+                    return
+
+                elif event.type == self.event_new_obstacle:
+                    self.new_obstacle()
+
+                elif event.type == self.event_new_collectible:
+                    self.new_collectible()
+
                 elif event.type == pygame.KEYDOWN:
 
                     SoundMixer.parse_key(event.key)
 
-                    if   event.key in [pygame.K_q, pygame.K_ESCAPE]:             raise QuitGame
-                    elif event.key in [pygame.K_h, pygame.K_F1, pygame.K_SPACE]: self.show_help()
+                    if event.key in [pygame.K_q, pygame.K_ESCAPE]:
+                        raise QuitGame
+
+                    elif event.key in [pygame.K_h, pygame.K_F1, pygame.K_SPACE]:
+                        self.show_help()
 
             self.update()
             self.draw  ()
@@ -244,9 +265,14 @@ class Engine:
         self.scoreboard.draw(self.display, score, self.velocity, self.elapsed_time)
         GameObjects    .draw(self.display)
 
-        if   self.status == STATUS_WELCOME:  self.draw_welcome  ()
-        elif self.status == STATUS_STARTING: self.draw_starting ()
-        elif self.status == STATUS_GAMEOVER: self.draw_game_over()
+        if self.status == STATUS_WELCOME:
+            self.draw_welcome()
+
+        elif self.status == STATUS_STARTING:
+            self.draw_starting()
+
+        elif self.status == STATUS_GAMEOVER:
+            self.draw_game_over()
 
         self.flip()
 

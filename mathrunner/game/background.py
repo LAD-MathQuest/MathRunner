@@ -1,7 +1,7 @@
 #------------------------------------------------------------------------------#
 
-from scrolling_image import ScrollingImage
-from boundaries      import Boundaries
+from .scrolling_image import ScrollingImage
+from .boundaries      import Boundaries
 
 #------------------------------------------------------------------------------#
 class Background:

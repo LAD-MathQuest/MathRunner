@@ -10,7 +10,8 @@ def draw_meta_image(label, meta):
     label.clear()
 
     # If there is no meta image leave the label empty
-    if not meta: return
+    if not meta:
+        return
 
     if meta.path:
         pixmap = QPixmap(meta.path)

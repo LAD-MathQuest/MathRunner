@@ -1,13 +1,12 @@
 #------------------------------------------------------------------------------#
+'''Test game 01
 
-'''Build game 
-
-Author: 
-Name: 
-
-Description
-
+Tilling background and track
+Vertical scrollling
+Background doesn't scroll
+Track doesn't scroll
 '''
+
 
 #------------------------------------------------------------------------------#
 
@@ -16,21 +15,23 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).parents[1]))
 
-from world.functions  import VelocityFunction, BoundaryFunctions
+from world.velocity_function import VelocityFunction 
+from world.boundary_function import BoundaryFunctions
 from world.meta_world import MetaImage, MetaObject, MetaScoreboard, MetaWorld
 
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
 
-    print('Building: Healthy Run')
+    print('Building test game 01')
 
-    path_resources   = Path(__file__).parents[1]/'resources'
+    path_resources   = Path(__file__).parent/'resources'
     path_backgrounds = path_resources/'backgrounds'
     path_scoreboards = path_resources/'scoreboards'
     path_objects     = path_resources/'objects'
     path_sounds      = path_resources/'sounds'
     path_fonts       = path_resources/'fonts'
-    path_games       = path_resources/'games'
+
+    path_games = Path(__file__).parents[1]/'games'
 
     #--------------------------------------------------------------------------#
 
@@ -39,10 +40,10 @@ if __name__ == '__main__':
     # Software
     #--------------------------------------------------------------------------#
 
-    game_file_name        = 'healthy_run.game'
-    meta.soft_name        = 'Healthy Run'
-    meta.soft_author      = "Lígia Aguiar"
-    meta.soft_description = "A game that encourages healthy eating"
+    game_file_name        = 'test-01.game'
+    meta.soft_name        = 'Test 01'
+    meta.soft_author      = "Luis D'Afonseca"
+    meta.soft_description = meta.soft_name
     meta.soft_icon        = None
 
     # Game
@@ -50,83 +51,66 @@ if __name__ == '__main__':
 
     meta.game_vertical   = True
     meta.game_time_bonus = 10
-    meta.game_ambience   = path_sounds/'music_healthy.mp3'
+    meta.game_ambience   = None
     meta.game_ambience_volume = 0.4 
 
     # Appearance
     #--------------------------------------------------------------------------#
 
-    path_background = path_backgrounds/'healthy_background.png'
-    imag_background = MetaImage((1920,1800), path=path_background)
+    meta.background_image   = MetaImage(path=path_backgrounds/'tile-blue.png',size=(400,400))
+    meta.background_scrolls = False
 
-    meta.background_image   = imag_background
-    meta.background_scrolls = True
-
-    meta.track_image   = None
+    meta.track_image   = MetaImage(path=path_backgrounds/'tile-green.png')
     meta.track_scrolls = False
-    meta.track_kills   = (False, False)
+    meta.track_kills   = (True, True)
 
-    path_font = path_fonts/'Party_Confetti.ttf'
-    meta.scoreboard = MetaScoreboard(text_font      = path_font,
-                                     text_font_size = 25,
+    meta.min_color = (255, 0, 0)
+    meta.max_color = (255, 0, 0)
+    meta.min_width = 3
+    meta.max_width = 3
+
+    meta.scoreboard = MetaScoreboard(text_font_size = 28,
                                      text_spacing   = 1,
                                      text_position  = (160,20),
-                                     text_bgcolor   = (34,139,34))
+                                     text_bgcolor   = (55,55,55))
 
     # Player
     #--------------------------------------------------------------------------#
 
-    imag_player = MetaImage(size=(75, 167), path=path_objects/'girl.png')
-    meta.player = MetaObject(imag_player)
+    imag_player       = MetaImage((90,40), color=(80, 86, 93))
+    meta.player       = MetaObject(imag_player)
     meta.player_speed = 800
 
     # Obstacles
     #--------------------------------------------------------------------------#
 
-    path_crash = path_sounds/'music_healthy2.mp3'
-    points = -10
-    volume = 0.7
+    points = 10
 
     meta.obstacles_frequency = 3
     meta.obstacles = []
 
-    # Image sizes
-    # file = [ (120,120), (150,150), (150,150)]
-    # 
-    sizes = [ (80,104),  (100,77), (80,108)]
-
-    for ii in range(3):
-
-        path_obstacle = path_objects / f'food-{ii+1}.png'
-        imag_obstacle = MetaImage(sizes[ii], path=path_obstacle)
-
-        meta.obstacles.append(MetaObject(imag_obstacle, points, path_crash, volume))
-   
+    imag_obstacle = MetaImage((80,30), color=(200,50,50))
+    meta.obstacles.append(MetaObject(imag_obstacle, points))
 
     # Collectibles
     #--------------------------------------------------------------------------#
 
-    path_collect = path_sounds/'music_healthy1.mp3'
     points = 100
-    volume = 0.5
 
     meta.collectibles_frequency = 1
     meta.collectibles = []
 
-    # Image sizes
-    # file = [ (150, 128), (130, 138), (150, 150)]
-    sizes = [ (100,68), (100,99), (100,96)]
-
-    for ii in range(3):
-        path_collectible = path_objects / f'healthy_food-{ii+1}.png'
-        imag_collectible = MetaImage(sizes[ii], path=path_collectible)
-        meta.collectibles.append(MetaObject(imag_collectible, points, path_collect, volume))
+    imag_collectible = MetaImage((50,50), color=(242, 182, 0))
+    meta.collectibles.append(MetaObject(imag_collectible, points))
 
     # Functions
     #--------------------------------------------------------------------------#
 
-    meta.velocity = VelocityFunction ('25 + t')
-    meta.boundary = BoundaryFunctions('30', '70')
+    meta.velocity = VelocityFunction('40 + t')
+    meta.boundary = BoundaryFunctions(
+        '20 + 15*sin(x/10) + 2*cos(0.8*x)', 
+        '80 + 15*sin(x/20) + 2*cos(1.2*x)'
+    )
 
     # Saving
     #--------------------------------------------------------------------------#
@@ -135,3 +119,4 @@ if __name__ == '__main__':
     meta.save(path)
 
 #------------------------------------------------------------------------------#
+

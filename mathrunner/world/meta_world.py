@@ -11,9 +11,8 @@ must be saved in a binary file and used to create a GameWorld.
 
 import pickle
 
-#------------------------------------------------------------------------------#
-
-from world.functions import VelocityFunction, BoundaryFunctions
+from .velocity_function import VelocityFunction 
+from .boundary_function import BoundaryFunctions
 
 #------------------------------------------------------------------------------#
 class MetaImage:

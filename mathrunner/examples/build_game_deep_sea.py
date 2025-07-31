@@ -1,10 +1,11 @@
 #------------------------------------------------------------------------------#
-'''Test game 06
+'''Build game Deep Sea
 
-Tilling background and track
-Horizontal scrollling
-Background scrolls
-Track scrolls
+Author: Luis D'Afonseca
+Name:   Deep Sea
+
+Description
+An underwater adventure
 '''
 
 #------------------------------------------------------------------------------#
@@ -14,22 +15,23 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).parents[1]))
 
-from world.functions  import VelocityFunction, BoundaryFunctions
+from world.velocity_function import VelocityFunction 
+from world.boundary_function import BoundaryFunctions
 from world.meta_world import MetaImage, MetaObject, MetaScoreboard, MetaWorld
 
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
 
-    print('Building test game 06')
+    print('Building: Deep Seas')
 
-    path_resources = Path(__file__).parents[1]/'resources'
+    path_resources   = Path(__file__).parent/'resources'
     path_backgrounds = path_resources/'backgrounds'
     path_scoreboards = path_resources/'scoreboards'
     path_objects     = path_resources/'objects'
     path_sounds      = path_resources/'sounds'
     path_fonts       = path_resources/'fonts'
-    path_games       = path_resources/'games'
-    path_tests       = path_resources/'tests'
+
+    path_games = Path(__file__).parents[1]/'games'
 
     #--------------------------------------------------------------------------#
 
@@ -38,10 +40,10 @@ if __name__ == '__main__':
     # Software
     #--------------------------------------------------------------------------#
 
-    game_file_name        = 'test-06.game'
-    meta.soft_name        = 'Test 06'
+    game_file_name        = 'deep_sea.game'
+    meta.soft_name        = 'Deep Sea'
     meta.soft_author      = "Luis D'Afonseca"
-    meta.soft_description = meta.soft_name
+    meta.soft_description = "Uma aventura em baixo d'água"
     meta.soft_icon        = None
 
     # Game
@@ -50,23 +52,31 @@ if __name__ == '__main__':
     meta.game_vertical   = False
     meta.game_time_bonus = 10
     meta.game_ambience   = None
+    meta.game_ambience_volume = 0.4 
 
     # Appearance
     #--------------------------------------------------------------------------#
 
-    meta.background_image   = MetaImage(path=path_tests/'tile-blue.png')
+    path_background = path_backgrounds/'deep_sea_background.png'
+    imag_background = MetaImage(path=path_background)
+
+    meta.background_image   = imag_background
     meta.background_scrolls = True
 
-    meta.track_image   = MetaImage(path=path_tests/'tile-green.png',size=(400,400))
-    meta.track_scrolls = True
-    meta.track_kills   = (False, False)
+    meta.track_image   = MetaImage(color=(0, 140, 255))
+    meta.track_scrolls = False
+    meta.track_kills   = (False, True)
 
-    meta.min_color = (255, 0, 0)
-    meta.max_color = (255, 0, 0)
+    meta.min_color = (19, 43, 63)
+    meta.max_color = None
     meta.min_width = 3
-    meta.max_width = 3
+    meta.max_width = 1
 
-    meta.scoreboard = MetaScoreboard(text_font_size = 28,
+    path_font = path_fonts/'Party_Confetti.ttf'
+    meta.scoreboard = MetaScoreboard(image=MetaImage(color=(55,55,55),size=(230,100)),
+                                     image_position = (153,13),
+                                     text_font      = path_font,
+                                     text_font_size = 28,
                                      text_spacing   = 1,
                                      text_position  = (160,20),
                                      text_bgcolor   = (55,55,55))
@@ -74,8 +84,8 @@ if __name__ == '__main__':
     # Player
     #--------------------------------------------------------------------------#
 
-    imag_player       = MetaImage((90,40), color=(80, 86, 93))
-    meta.player       = MetaObject(imag_player)
+    imag_player = MetaImage(size=(120, 75), path=path_objects/'submarine.png')
+    meta.player = MetaObject(imag_player)
     meta.player_speed = 800
 
     # Obstacles
@@ -83,10 +93,10 @@ if __name__ == '__main__':
 
     points = 10
 
-    meta.obstacles_frequency = 0.01
+    meta.obstacles_frequency = 3
     meta.obstacles = []
 
-    imag_obstacle = MetaImage((80,30), color=(200,50,50))
+    imag_obstacle = MetaImage(size=(50, 54), path=path_objects/'mine.png')
     meta.obstacles.append(MetaObject(imag_obstacle, points))
 
     # Collectibles
@@ -94,19 +104,22 @@ if __name__ == '__main__':
 
     points = 100
 
-    meta.collectibles_frequency = 25
+    meta.collectibles_frequency = 1
     meta.collectibles = []
 
-    imag_collectible = MetaImage((50,50), color=(242, 182, 0))
+    imag_collectible = MetaImage(size=(90, 69), path=path_objects/'diver-01.png')
+    meta.collectibles.append(MetaObject(imag_collectible, points))
+
+    imag_collectible = MetaImage(size=(110, 41), path=path_objects/'diver-02.png')
     meta.collectibles.append(MetaObject(imag_collectible, points))
 
     # Functions
     #--------------------------------------------------------------------------#
 
-    meta.velocity = VelocityFunction('40 + t')
+    meta.velocity = VelocityFunction ('25 + 2*t')
     meta.boundary = BoundaryFunctions(
-        '20 + 15*sin(x/10) + 2*cos(0.8*x)', 
-        '80 + 15*sin(x/20) + 2*cos(1.2*x)'
+        '15.2 + 10*sen(x/80) + 5*sen(x/20)',
+        '86.8'
     )
 
     # Saving

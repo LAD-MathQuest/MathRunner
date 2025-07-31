@@ -11,21 +11,20 @@ Here the lengths are measured in pixels.
 #------------------------------------------------------------------------------#
 
 import pygame
-
-import game.game_params as gp
-from world.meta_world import MetaWorld
+from . import game_params as gp
 
 #------------------------------------------------------------------------------#
 def surface_from_meta_image(meta):
     '''Create a pygame surface from a MetaImage object'''
 
-    if not meta: return None
+    if not meta:
+        return None
 
     if meta.path:
         surf = pygame.image.load(meta.path).convert_alpha()
 
         if meta.size:
-            surf = pygame.transform.scale(surf, meta.size )
+            surf = pygame.transform.scale(surf, meta.size)
 
     else:
         size = meta.size if meta.size else gp.SCREEN_SIZE

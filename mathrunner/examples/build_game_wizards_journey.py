@@ -1,10 +1,11 @@
 #------------------------------------------------------------------------------#
-'''Test game 05
+'''Build game Wizard's Journey
 
-Tilling background and track
-Horizontal scrollling
-Background doesn't scroll
-Track doesn't scroll
+Author: Samuel Lopes
+Name: Wizard's Journey
+
+Description
+A magical adventure with Wizard
 '''
 
 #------------------------------------------------------------------------------#
@@ -14,22 +15,23 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).parents[1]))
 
-from world.functions  import VelocityFunction, BoundaryFunctions
+from world.velocity_function import VelocityFunction 
+from world.boundary_function import BoundaryFunctions
 from world.meta_world import MetaImage, MetaObject, MetaScoreboard, MetaWorld
 
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
 
-    print('Building test game 05')
+    print("Building: Wizard's Journey")
 
-    path_resources = Path(__file__).parents[1]/'resources'
+    path_resources   = Path(__file__).parent/'resources'
     path_backgrounds = path_resources/'backgrounds'
     path_scoreboards = path_resources/'scoreboards'
     path_objects     = path_resources/'objects'
     path_sounds      = path_resources/'sounds'
     path_fonts       = path_resources/'fonts'
-    path_games       = path_resources/'games'
-    path_tests       = path_resources/'tests'
+
+    path_games = Path(__file__).parents[1]/'games'
 
     #--------------------------------------------------------------------------#
 
@@ -38,35 +40,35 @@ if __name__ == '__main__':
     # Software
     #--------------------------------------------------------------------------#
 
-    game_file_name        = 'test-05.game'
-    meta.soft_name        = 'Test 05'
-    meta.soft_author      = "Luis D'Afonseca"
-    meta.soft_description = meta.soft_name
+    game_file_name        = "wizards_jorney.game"
+    meta.soft_name        = "Wizard's Journey"
+    meta.soft_author      = "Samuel Lopes"
+    meta.soft_description = "Fuja das criaturas malignas enquanto avança em uma floresta mágica"
     meta.soft_icon        = None
 
     # Game
     #--------------------------------------------------------------------------#
 
-    meta.game_vertical   = False
+    meta.game_vertical   = True
     meta.game_time_bonus = 10
-    meta.game_ambience   = None
+    meta.game_ambience   = path_sounds/'music_theme_wizard.wav'
+    meta.game_ambience_volume = 0.1
 
     # Appearance
     #--------------------------------------------------------------------------#
+   
+    meta.background_image   = MetaImage((1920,1080), path=path_backgrounds/'magical_woods.png')
+    meta.background_scrolls = True
 
-    meta.background_image   = MetaImage(path=path_tests/'tile-blue.png',size=(400,400))
-    meta.background_scrolls = False
-
-    meta.track_image   = MetaImage(path=path_tests/'tile-green.png')
+    meta.track_image   = False
     meta.track_scrolls = False
-    meta.track_kills   = (True, True)
+    meta.track_kills   = (False, False)
 
-    meta.min_color = (255, 0, 0)
-    meta.max_color = (255, 0, 0)
-    meta.min_width = 3
-    meta.max_width = 3
-
-    meta.scoreboard = MetaScoreboard(text_font_size = 28,
+    path_font = path_fonts/'Party_Confetti.ttf'
+    meta.scoreboard = MetaScoreboard(image=MetaImage(color=(55,55,55),size=(230,100)),
+                                     image_position=(153,13),
+                                     text_font      = path_font,
+                                     text_font_size = 28,
                                      text_spacing   = 1,
                                      text_position  = (160,20),
                                      text_bgcolor   = (55,55,55))
@@ -74,8 +76,8 @@ if __name__ == '__main__':
     # Player
     #--------------------------------------------------------------------------#
 
-    imag_player       = MetaImage((90,40), color=(80, 86, 93))
-    meta.player       = MetaObject(imag_player)
+    imag_player = MetaImage(path=path_objects/'wizard.png', size=(140,140))
+    meta.player = MetaObject(imag_player)
     meta.player_speed = 800
 
     # Obstacles
@@ -86,7 +88,11 @@ if __name__ == '__main__':
     meta.obstacles_frequency = 3
     meta.obstacles = []
 
-    imag_obstacle = MetaImage((80,30), color=(200,50,50))
+    imag_obstacle = MetaImage(path=path_objects/'dragon.png', size=(120,140))
+    meta.obstacles.append(MetaObject(imag_obstacle, points))
+    imag_obstacle = MetaImage(path=path_objects/'wood_spirit.png', size=(120,140))
+    meta.obstacles.append(MetaObject(imag_obstacle, points))
+    imag_obstacle = MetaImage(path=path_objects/'evil_spirit.png', size=(120,140))
     meta.obstacles.append(MetaObject(imag_obstacle, points))
 
     # Collectibles
@@ -97,17 +103,14 @@ if __name__ == '__main__':
     meta.collectibles_frequency = 1
     meta.collectibles = []
 
-    imag_collectible = MetaImage((50,50), color=(242, 182, 0))
-    meta.collectibles.append(MetaObject(imag_collectible, points))
+    imag_collectible = MetaImage(path=path_objects/'grimorio.png', size=(80,100))
+    meta.collectibles.append(MetaObject(imag_collectible, points, sound=path_sounds/'magic.mp3', volume=0.2))
 
     # Functions
     #--------------------------------------------------------------------------#
 
-    meta.velocity = VelocityFunction('40 + t')
-    meta.boundary = BoundaryFunctions(
-        '20 + 15*sin(x/10) + 2*cos(0.8*x)', 
-        '80 + 15*sin(x/20) + 2*cos(1.2*x)'
-    )
+    meta.velocity = VelocityFunction('25 + 2*t')
+    meta.boundary = BoundaryFunctions('30','70')
 
     # Saving
     #--------------------------------------------------------------------------#
