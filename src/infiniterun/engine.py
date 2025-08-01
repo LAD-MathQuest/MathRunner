@@ -262,8 +262,8 @@ class Engine:
         score = GameObjects.score + int(self.world.game_time_bonus * self.elapsed_time)
 
         self.background.draw(self.display)
-        self.scoreboard.draw(self.display, score, self.velocity, self.elapsed_time)
         GameObjects    .draw(self.display)
+        self.scoreboard.draw(self.display, score, self.velocity, self.elapsed_time)
 
         if self.status == STATUS_WELCOME:
             self.draw_welcome()
