@@ -27,7 +27,7 @@ from meta import (
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
 
-    print('Building test game 04')
+    print('Building test 04')
 
     path_resources   = Path(__file__).parent/'resources'
     path_backgrounds = path_resources/'backgrounds'
