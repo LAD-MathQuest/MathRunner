@@ -6,10 +6,7 @@ Author: Lígia Aguiar
 
 #------------------------------------------------------------------------------#
 
-import sys
 from pathlib import Path
-
-sys.path.append(str(Path(__file__).parents[1]))
 
 from meta import (
         VelocityFunction,

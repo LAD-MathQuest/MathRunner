@@ -14,7 +14,6 @@ from .object_widget import ObjectWidget
 from .plot_velocity import PlotVelocity
 from .plot_track    import PlotTrack
 
-
 #------------------------------------------------------------------------------#
 class MainController:
 
