@@ -46,7 +46,7 @@ class MainModel:
         save_meta(self.meta, temp)
         temp.close()
 
-        subprocess.run(["python", '-m', 'infiniterun', temp.name])
+        subprocess.run(["python", '-m', 'infinite_run', temp.name])
 
         os.remove(temp.name)
 

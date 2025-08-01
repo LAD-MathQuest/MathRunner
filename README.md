@@ -58,11 +58,11 @@ To install python and run MathRunner follow the steps:
 
 6. Now you can execute the program using the command
     ```
-    uv run -m mathrunner
+    uv run -m math_runner
     ```
 7. It is possible to play a saved game without using the interface
     ```
-    uv tun -m infiniterun path_to_game_file
+    uv tun -m infinite_run path_to_game_file
     ```
 
 ## Technologies
