@@ -102,37 +102,27 @@ class MetaWorld:
         self.velocity = VelocityFunction ('25 + 2*t')
         self.boundary = BoundaryFunctions('35', '65')
 
-    #--------------------------------------------------------------------------#
-    def save(self, path):
-        '''Save itself using pickle'''
+#------------------------------------------------------------------------------#
+def save_meta(meta: MetaWorld, path) -> None:
 
+    try:
+        pickle.dump(meta, path)
+
+    except TypeError:
         with open(path, 'wb') as file:
-            self.write(file)
+            pickle.dump(meta, file)
 
-    #--------------------------------------------------------------------------#
-    def write(self, file):
-        '''Write itself to file using pickle'''
+#------------------------------------------------------------------------------#
+def load_meta(path) -> MetaWorld:
 
-        pickle.dump(self, file)
+    try:
+        meta = pickle.load(path)
 
-    #--------------------------------------------------------------------------#
-    def load(path):
-        '''Load a pickled file and return a MetaWorld object'''
-
+    except TypeError:
         with open(path, 'rb') as file:
-            meta = MetaWorld.read(file)
+            meta = pickle.load(file)
 
-        return meta
-
-    #--------------------------------------------------------------------------#
-    def read(file):
-        '''Read a pickled file and return a MetaWorld object'''
-
-        meta = pickle.load(file)
-
-        # TODO File data validation
-
-        return meta
+    return meta
 
 #------------------------------------------------------------------------------#
 

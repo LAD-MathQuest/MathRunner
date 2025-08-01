@@ -12,7 +12,7 @@ sys.path.append(str(Path(__file__).parents[1]))
 import pygame
 import pygame.freetype
 
-from meta import MetaWorld
+from meta import MetaWorld, load_meta
 
 from .world  import GameWorld
 from .engine import Engine
@@ -30,7 +30,7 @@ def main():
 
     else:
         try:
-            meta = MetaWorld.load(args.world)
+            meta = load_meta(args.world)
 
         except FileNotFoundError:
             print(f"Error: The file {args.world} was not found.")

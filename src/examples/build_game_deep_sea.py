@@ -18,10 +18,11 @@ sys.path.append(str(Path(__file__).parents[1]))
 from meta import (
         VelocityFunction,
         BoundaryFunctions,
-        MetaImage, 
-        MetaObject, 
-        MetaScoreboard, 
-        MetaWorld
+        MetaImage,
+        MetaObject,
+        MetaScoreboard,
+        MetaWorld,
+        save_meta
     )
 
 #------------------------------------------------------------------------------#
@@ -57,7 +58,7 @@ if __name__ == '__main__':
     meta.game_vertical   = False
     meta.game_time_bonus = 10
     meta.game_ambience   = None
-    meta.game_ambience_volume = 0.4 
+    meta.game_ambience_volume = 0.4
 
     # Appearance
     #--------------------------------------------------------------------------#
@@ -130,8 +131,7 @@ if __name__ == '__main__':
     # Saving
     #--------------------------------------------------------------------------#
 
-    path = path_games/game_file_name
-    meta.save(path)
+    save_meta(meta, path_games/game_file_name)
 
 #------------------------------------------------------------------------------#
 

@@ -21,7 +21,8 @@ from meta import (
         MetaImage, 
         MetaObject, 
         MetaScoreboard, 
-        MetaWorld
+        MetaWorld,
+        save_meta
     )
 
 #------------------------------------------------------------------------------#
@@ -137,7 +138,6 @@ if __name__ == '__main__':
     # Saving
     #--------------------------------------------------------------------------#
 
-    path = path_games/game_file_name
-    meta.save(path)
+    save_meta(meta, path_games/game_file_name)
 
 #------------------------------------------------------------------------------#

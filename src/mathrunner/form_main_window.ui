@@ -156,7 +156,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QRadioButton" name="radioButton_VertialScrolling">
+              <widget class="QRadioButton" name="radioButton_VerticalScrolling">
                <property name="text">
                 <string>Vertical</string>
                </property>

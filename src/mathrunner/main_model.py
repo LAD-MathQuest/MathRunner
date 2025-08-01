@@ -6,7 +6,7 @@ import subprocess
 
 from PySide6.QtGui import QFont
 
-from meta import MetaWorld
+from meta import MetaWorld, save_meta, load_meta
 from .    import tools
 
 #------------------------------------------------------------------------------#
@@ -27,11 +27,11 @@ class MainModel:
 
     #--------------------------------------------------------------------------#
     def open(self, filename):
-        self.meta = MetaWorld.load(filename)
+        self.meta = load_meta(filename)
 
     #--------------------------------------------------------------------------#
     def save(self, filename):
-        self.meta.save(filename)
+        save_meta(self.meta, filename)
 
     #--------------------------------------------------------------------------#
     def run(self):
@@ -43,7 +43,7 @@ class MainModel:
             delete = False
         )
 
-        self.meta.write(temp)
+        save_meta(self.meta, temp)
         temp.close()
 
         subprocess.run(["python", '-m', 'infiniterun', temp.name])
@@ -75,7 +75,7 @@ class MainModel:
         ui.plainTextEdit_GameDescription.setPlainText(meta.soft_description)
 
         if meta.game_vertical:
-            ui.radioButton_VertialScrolling.setChecked(True)
+            ui.radioButton_VerticalScrolling.setChecked(True)
         else:
             ui.radioButton_HorizontalScrolling.setChecked(True)
 
@@ -215,7 +215,7 @@ class MainModel:
 
 
     #--------------------------------------------------------------------------#
-    # Atualiza o metaword com os dados da interface
+    # Update MetaWord from view
     #--------------------------------------------------------------------------#
 
     #--------------------------------------------------------------------------#
@@ -236,7 +236,7 @@ class MainModel:
 
         meta.soft_description = ui.plainTextEdit_GameDescription.toPlainText()
 
-        meta.game_vertical = ui.radioButton_VertialScrolling.isChecked()
+        meta.game_vertical = ui.radioButton_VerticalScrolling.isChecked()
 
         meta.track_kills = [
             ui.checkBox_TrackMinimumKills.isChecked(),

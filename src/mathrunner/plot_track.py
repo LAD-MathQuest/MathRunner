@@ -3,6 +3,8 @@
 import numpy      as np
 import pyqtgraph  as pg
 
+from meta import BoundaryFunctions
+
 PLOT_MAX_X = 100
 PLOT_MAX_F = 100
 
@@ -10,14 +12,14 @@ PLOT_MAX_F = 100
 class PlotTrack:
 
     #--------------------------------------------------------------------------#
-    def __init__(self, plot, color, boundary):
-        
+    def __init__(self, plot, color, boundary: BoundaryFunctions) -> None:
+
         self.boundary = boundary
 
         plot.setBackground(color)
-        plot.setTitle('Boundary' )
-        plot.setLabel('left',   'Boundary (screen fraction)')
-        plot.setLabel('bottom', 'Time (seconds)'            )
+        plot.setTitle('Fronteiras' )
+        plot.setLabel('left',   'Fronteiras (porcentagem da tela)')
+        plot.setLabel('bottom', 'Porcentagem da tela')
         plot.showGrid(x=True, y=True)
 
         plot.setXRange(0, PLOT_MAX_X, padding=0)
@@ -52,29 +54,29 @@ class PlotTrack:
         plot.sigRangeChanged.connect(self.on_range_changed)
 
     #--------------------------------------------------------------------------#
-    def on_range_changed(self, plot, view_range):
+    def on_range_changed(self, plot, view_range) -> None:
 
         x_min, x_max = view_range[0]
 
         if x_min < 0:
             x_min = 0
             x_max = max(x_max, 1)
-            
+
             plot.sigRangeChanged.disconnect(self.on_range_changed)
             plot.setXRange(x_min, x_max, padding=0)
             plot.sigRangeChanged.connect(self.on_range_changed)
-        
+
         self.update_data(x_min, x_max)
 
     #--------------------------------------------------------------------------#
-    def update_boundary(self, boundary) -> None:
+    def update_boundary(self, boundary: BoundaryFunctions) -> None:
 
         self.boundary = boundary
         self.update_data(0, PLOT_MAX_X)
 
     #--------------------------------------------------------------------------#
-    def update_data(self, x_min, x_max) -> None:
-        
+    def update_data(self, x_min: float, x_max: float) -> None:
+
         xx = np.linspace(x_min, x_max, 1000)
 
         fmin_raw = self.boundary.eval_min_raw(xx)

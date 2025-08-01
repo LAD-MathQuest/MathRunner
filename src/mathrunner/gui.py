@@ -2,8 +2,8 @@
 
 from PySide6.QtWidgets import QApplication
 
-from .main_window      import MainWindow
-from .main_controler   import MainControler
+from .main_window     import MainWindow
+from .main_controller import MainController
 
 #------------------------------------------------------------------------------#
 def main( argv ):
@@ -12,7 +12,7 @@ def main( argv ):
 
     window = MainWindow()
 
-    _ = MainControler(window)
+    _ = MainController(window)
 
     window.resize(900, 1)
     window.show()

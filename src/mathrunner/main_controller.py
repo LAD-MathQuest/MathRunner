@@ -16,7 +16,7 @@ from .plot_track    import PlotTrack
 
 
 #------------------------------------------------------------------------------#
-class MainControler:
+class MainController:
 
     #--------------------------------------------------------------------------#
     def __init__(self, window):
@@ -88,7 +88,7 @@ class MainControler:
         # ui.pushButton_IconSelect
         # ui.plainTextEdit_GameDescription
         # ui.radioButton_HorizontalScrolling
-        # ui.radioButton_VertialScrolling
+        # ui.radioButton_VerticalScrolling
         # ui.checkBox_TrackKills
         # ui.doubleSpinBox_ScoreTimeBonus
         # ui.pushButton_AmbienceSoundSelect
@@ -132,7 +132,7 @@ class MainControler:
         ui.lineEdit_FunctionTrackMaximum.editingFinished.connect(self.function_track_maximum_changed)
 
     #--------------------------------------------------------------------------#
-    # Action callsrc_py.stat().st_mtime < rc_qt.stat().st_mtime:
+    # Actions
     #--------------------------------------------------------------------------#
 
     #--------------------------------------------------------------------------#
