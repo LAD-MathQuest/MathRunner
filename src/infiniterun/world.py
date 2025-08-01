@@ -11,17 +11,18 @@ Here the lengths are measured in pixels.
 #------------------------------------------------------------------------------#
 
 import pygame
-from . import game_params as gp
+from . import parameters as gp
+from meta import MetaImage, MetaObject, MetaScoreboard, MetaWorld
 
 #------------------------------------------------------------------------------#
-def surface_from_meta_image(meta):
+def surface_from_meta_image(meta: MetaImage) -> None:
     '''Create a pygame surface from a MetaImage object'''
 
     if not meta:
         return None
 
-    if meta.path:
-        surf = pygame.image.load(meta.path).convert_alpha()
+    if meta.data:
+        surf = pygame.image.load(meta.data).convert_alpha()
 
         if meta.size:
             surf = pygame.transform.scale(surf, meta.size)
@@ -38,7 +39,7 @@ class GameObjectParam:
     '''Stores all parameters needed to create game objects (sprite).'''
 
     #--------------------------------------------------------------------------#
-    def __init__(self, meta):
+    def __init__(self, meta: MetaObject) -> None:
         '''Create game object parameters from a meta object.'''
 
         self.image  = surface_from_meta_image(meta.image)
@@ -51,7 +52,7 @@ class ScoreboardParam:
     '''Describes the game scoreboard.'''
 
     #--------------------------------------------------------------------------#
-    def __init__(self, meta):
+    def __init__(self, meta: MetaScoreboard) -> None:
 
         self.title = meta.title
 
@@ -80,7 +81,7 @@ class GameWorld:
     '''Manages all parameters needed by the game Engine.'''
 
     #--------------------------------------------------------------------------#
-    def __init__(self, meta):
+    def __init__(self, meta: MetaWorld) -> None:
         '''Create a GameWorld from MetaWorld.'''
 
         # Software
@@ -123,7 +124,7 @@ class GameWorld:
         #----------------------------------------------------------------------#
 
         self.player_speed = round(meta.player_speed / gp.FPS)
-        self.param_player = GameObjectParam( meta.player )
+        self.param_player = GameObjectParam(meta.player)
 
         # Obstacles
         #----------------------------------------------------------------------#

@@ -1,11 +1,7 @@
-#------------------------------------------------------------------------------#
+#---------------------------------------------------------------------------read_bytes_io()
 '''Build game Wizard's Journey
 
 Author: Samuel Lopes
-Name: Wizard's Journey
-
-Description
-A magical adventure with Wizard
 '''
 
 #------------------------------------------------------------------------------#
@@ -18,11 +14,12 @@ sys.path.append(str(Path(__file__).parents[1]))
 from meta import (
         VelocityFunction,
         BoundaryFunctions,
-        MetaImage, 
-        MetaObject, 
-        MetaScoreboard, 
+        MetaImage,
+        MetaObject,
+        MetaScoreboard,
         MetaWorld,
-        save_meta
+        save_meta,
+        read_bytes_io
     )
 
 #------------------------------------------------------------------------------#
@@ -36,6 +33,7 @@ if __name__ == '__main__':
     path_objects     = path_resources/'objects'
     path_sounds      = path_resources/'sounds'
     path_fonts       = path_resources/'fonts'
+    path_icons       = path_resources/'icons'
 
     path_games = Path(__file__).parents[1]/'games'
 
@@ -46,71 +44,98 @@ if __name__ == '__main__':
     # Software
     #--------------------------------------------------------------------------#
 
-    game_file_name        = "wizards_jorney.game"
+    game_file_name        = "wizards_journey.game"
     meta.soft_name        = "Wizard's Journey"
     meta.soft_author      = "Samuel Lopes"
     meta.soft_description = "Fuja das criaturas malignas enquanto avança em uma floresta mágica"
-    meta.soft_icon        = None
+    meta.soft_icon        = read_bytes_io(path_icons/'wizards_journey.png')
 
     # Game
     #--------------------------------------------------------------------------#
 
     meta.game_vertical   = True
     meta.game_time_bonus = 10
-    meta.game_ambience   = path_sounds/'music_theme_wizard.wav'
-    meta.game_ambience_volume = 0.1
+    meta.game_ambience   = read_bytes_io(path_sounds/'music_theme_wizard.wav')
+    meta.game_ambience_volume = 0.4
 
     # Appearance
     #--------------------------------------------------------------------------#
-   
-    meta.background_image   = MetaImage((1920,1080), path=path_backgrounds/'magical_woods.png')
+
+    # Background
+    meta.background_image = MetaImage.from_file(size=(1920,1080),
+        path=path_backgrounds/'magical_woods.png'
+    )
     meta.background_scrolls = True
 
+    # Track
     meta.track_image   = False
     meta.track_scrolls = False
     meta.track_kills   = (False, False)
 
-    path_font = path_fonts/'Party_Confetti.ttf'
-    meta.scoreboard = MetaScoreboard(image=MetaImage(color=(55,55,55),size=(230,100)),
-                                     image_position=(153,13),
-                                     text_font      = path_font,
-                                     text_font_size = 28,
-                                     text_spacing   = 1,
-                                     text_position  = (160,20),
-                                     text_bgcolor   = (55,55,55))
+    # Scoreboard
+    imag_score = MetaImage(size=(230,100),
+        color=(55,55,55)
+    )
+    meta.scoreboard = MetaScoreboard(
+        image          = imag_score,
+        image_position = (153,13),
+        text_font      = read_bytes_io(path_fonts/'Party_Confetti.ttf'),
+        text_font_size = 28,
+        text_spacing   = 1,
+        text_position  = (160,20),
+        text_bgcolor   = (55,55,55)
+    )
 
     # Player
     #--------------------------------------------------------------------------#
 
-    imag_player = MetaImage(path=path_objects/'wizard.png', size=(140,140))
-    meta.player = MetaObject(imag_player)
+    meta.player = MetaObject(
+        MetaImage.from_file(size=(140,140),
+            path=path_objects/'wizard.png'
+        )
+    )
     meta.player_speed = 800
 
     # Obstacles
     #--------------------------------------------------------------------------#
 
-    points = 10
+    crash_sound = read_bytes_io(path_sounds/'car_crash.mp3')
 
     meta.obstacles_frequency = 3
     meta.obstacles = []
 
-    imag_obstacle = MetaImage(path=path_objects/'dragon.png', size=(120,140))
-    meta.obstacles.append(MetaObject(imag_obstacle, points))
-    imag_obstacle = MetaImage(path=path_objects/'wood_spirit.png', size=(120,140))
-    meta.obstacles.append(MetaObject(imag_obstacle, points))
-    imag_obstacle = MetaImage(path=path_objects/'evil_spirit.png', size=(120,140))
-    meta.obstacles.append(MetaObject(imag_obstacle, points))
+    obstacles = ['dragon', 'wood_spirit', 'evil_spirit']
+
+    for ii in range(3):
+
+        imag_obstacle = MetaImage.from_file(size=(120,140),
+            path=path_objects/f'{obstacles[ii]}.png',
+        )
+        obstacle = MetaObject(
+            image  = imag_obstacle,
+            sound  = crash_sound,
+            volume = 0.9
+        )
+        meta.obstacles.append(obstacle)
 
     # Collectibles
     #--------------------------------------------------------------------------#
 
-    points = 100
+    collect_sound = read_bytes_io(path_sounds/'collect-ring.mp3')
 
     meta.collectibles_frequency = 1
     meta.collectibles = []
 
-    imag_collectible = MetaImage(path=path_objects/'grimorio.png', size=(80,100))
-    meta.collectibles.append(MetaObject(imag_collectible, points, sound=path_sounds/'magic.mp3', volume=0.2))
+    imag_collectible = MetaImage.from_file(size=(80,100),
+        path=path_objects/'grimorio.png'
+    )
+    collectible = MetaObject(
+        image  = imag_collectible,
+        score  = 100,
+        sound  = collect_sound,
+        volume = 0.2
+    )
+    meta.collectibles.append(collectible)
 
     # Functions
     #--------------------------------------------------------------------------#

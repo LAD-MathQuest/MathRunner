@@ -1,6 +1,7 @@
 #------------------------------------------------------------------------------#
 
 from pygame import mixer
+from io     import BytesIO
 
 import pygame.locals as loc
 
@@ -33,7 +34,7 @@ class SoundMixer:
     #--------------------------------------------------------------------------#
     def play_music():
 
-        if SoundMixer.has_music  and not SoundMixer.muted:
+        if SoundMixer.has_music and not SoundMixer.muted:
 
             mixer.music.play(-1)
             SoundMixer.playing = True
@@ -57,9 +58,11 @@ class SoundMixer:
             SoundMixer.stop_music()
 
     #--------------------------------------------------------------------------#
-    def load_sound(sound_path):
+    def load_sound(sound_buffer):
 
-        return mixer.Sound(sound_path)
+        copy_buffer = BytesIO(sound_buffer.getvalue())
+
+        return mixer.Sound(copy_buffer)
 
     #--------------------------------------------------------------------------#
     def play_sound(sound, vol=volume):

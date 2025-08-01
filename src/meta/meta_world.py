@@ -14,7 +14,7 @@ from .velocity_function import VelocityFunction
 from .boundary_function import BoundaryFunctions
 from .meta_image        import MetaImage
 from .meta_object       import MetaObject
-from .meta_score_board  import MetaScoreboard
+from .meta_scoreboard   import MetaScoreboard
 
 #------------------------------------------------------------------------------#
 class MetaWorld:
@@ -35,7 +35,7 @@ class MetaWorld:
         #----------------------------------------------------------------------#
 
         self.game_vertical        = True
-        self.game_time_bonus      = 1     # Score points bonnus per second
+        self.game_time_bonus      = 1     # Score points bonus per second
         self.game_ambience        = None  # Ambience sound
         self.game_ambience_volume = 1.0   # Sound volume
 

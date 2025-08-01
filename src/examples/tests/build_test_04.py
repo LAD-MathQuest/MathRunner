@@ -1,10 +1,10 @@
 #------------------------------------------------------------------------------#
-'''Test game 07
+'''Test game 04
 
 Tilling background and track
-Horizontal scrollling
-Background scrolls
-Track doesn't scrolls
+Vertical scrolling
+Background doesn't scrolls
+Track scrolls
 '''
 
 
@@ -22,22 +22,23 @@ from meta import (
         MetaObject, 
         MetaScoreboard, 
         MetaWorld,
-        save_meta
+        save_meta,
+        read_bytes_io
     )
 
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
 
-    print('Building test 07')
+    print('Building test 04')
 
-    path_resources   = Path(__file__).parent/'resources'
+    path_resources   = Path(__file__).parents[1]/'resources'
     path_backgrounds = path_resources/'backgrounds'
     path_scoreboards = path_resources/'scoreboards'
     path_objects     = path_resources/'objects'
     path_sounds      = path_resources/'sounds'
     path_fonts       = path_resources/'fonts'
 
-    path_games = Path(__file__).parents[1]/'games'
+    path_games = Path(__file__).parents[2]/'games'
 
     #--------------------------------------------------------------------------#
 
@@ -46,8 +47,8 @@ if __name__ == '__main__':
     # Software
     #--------------------------------------------------------------------------#
 
-    game_file_name        = 'test-07.game'
-    meta.soft_name        = 'Test 07'
+    game_file_name        = 'test-04.game'
+    meta.soft_name        = 'Test 04'
     meta.soft_author      = "Luis D'Afonseca"
     meta.soft_description = meta.soft_name
     meta.soft_icon        = None
@@ -55,7 +56,7 @@ if __name__ == '__main__':
     # Game
     #--------------------------------------------------------------------------#
 
-    meta.game_vertical   = False
+    meta.game_vertical   = True
     meta.game_time_bonus = 10
     meta.game_ambience   = None
     meta.game_ambience_volume = 0.4 
@@ -63,11 +64,13 @@ if __name__ == '__main__':
     # Appearance
     #--------------------------------------------------------------------------#
 
-    meta.background_image   = MetaImage(path=path_backgrounds/'tile-blue.png')
-    meta.background_scrolls = True
+    # Background
+    meta.background_image   = MetaImage.from_file(path=path_backgrounds/'tile-blue.png')
+    meta.background_scrolls = False
 
-    meta.track_image   = MetaImage(path=path_backgrounds/'tile-green.png',size=(400,400))
-    meta.track_scrolls = False
+    # Track
+    meta.track_image   = MetaImage.from_file(path=path_backgrounds/'tile-green.png',size=(400,400))
+    meta.track_scrolls = True
     meta.track_kills   = (True, True)
 
     meta.min_color = (255, 0, 0)
@@ -75,6 +78,7 @@ if __name__ == '__main__':
     meta.min_width = 3
     meta.max_width = 3
 
+    # Scoreboard
     meta.scoreboard = MetaScoreboard(text_font_size = 28,
                                      text_spacing   = 1,
                                      text_position  = (160,20),

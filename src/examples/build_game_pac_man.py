@@ -2,10 +2,6 @@
 '''Build game Pac Man
 
 Author: Emanuelle Lima
-Name: Pac Man
-
-Description
-A magical adventure with Wizard
 '''
 
 #------------------------------------------------------------------------------#
@@ -18,11 +14,12 @@ sys.path.append(str(Path(__file__).parents[1]))
 from meta import (
         VelocityFunction,
         BoundaryFunctions,
-        MetaImage, 
-        MetaObject, 
-        MetaScoreboard, 
+        MetaImage,
+        MetaObject,
+        MetaScoreboard,
         MetaWorld,
-        save_meta
+        save_meta,
+        read_bytes_io
     )
 
 #------------------------------------------------------------------------------#
@@ -36,6 +33,7 @@ if __name__ == '__main__':
     path_objects     = path_resources/'objects'
     path_sounds      = path_resources/'sounds'
     path_fonts       = path_resources/'fonts'
+    path_icons       = path_resources/'icons'
 
     path_games = Path(__file__).parents[1]/'games'
 
@@ -46,89 +44,107 @@ if __name__ == '__main__':
     # Software
     #--------------------------------------------------------------------------#
 
-    game_file_name        = "pacman.game"
+    game_file_name        = "pac_man.game"
     meta.soft_name        = "Pac Man"
     meta.soft_author      = "Emanuelle Lima"
     meta.soft_description = "Ajude o Pac Man a fugir dos fantasmas e a comer cerejas"
-    meta.soft_icon        = None
+    meta.soft_icon        = read_bytes_io(path_icons/'pac_man.png')
 
     # Game
     #--------------------------------------------------------------------------#
 
     meta.game_vertical   = False
     meta.game_time_bonus = 10
-    meta.game_ambience   = path_sounds/'pacman.mp3'
+    meta.game_ambience   = read_bytes_io(path_sounds/'pacman.mp3')
     meta.game_ambience_volume = 0.7
 
     # Appearance
     #--------------------------------------------------------------------------#
 
-    path_background = path_backgrounds/'pistapacman.png'
-    imag_background = MetaImage((1920,1080), path=path_background)
-    
-    meta.background_image = imag_background
+    # Background
+    meta.background_image = MetaImage.from_file(size=(1920,1080),
+        path=path_backgrounds/'pistapacman.png'
+    )
     meta.background_scrolls = True
 
+    # Track
     meta.track_image   = False
     meta.track_scrolls = False
     meta.track_kills   = (False, False)
 
-    path_font = path_fonts/'Arcade.ttf'
-    meta.scoreboard = MetaScoreboard(image=MetaImage(color=(59,29,139),size=(280,100)),
-                                     image_position=(153,13),
-                                     text_font      = path_font,
-                                     text_font_size = 15,
-                                     text_spacing   = 1.3,
-                                     text_position  = (160,20),
-                                     text_bgcolor   = (59,29,139))
+    # Scoreboard
+    imag_score = MetaImage(size=(280,100),
+        color=(59,29,139)
+    )
+    meta.scoreboard = MetaScoreboard(
+        image          = imag_score,
+        image_position = (153,13),
+        text_font      = read_bytes_io(path_fonts/'Arcade.ttf'),
+        text_font_size = 15,
+        text_spacing   = 1.3,
+        text_position  = (160,20),
+        text_bgcolor   = (59,29,139)
+    )
 
     # Player
     #--------------------------------------------------------------------------#
 
-    imag_player = MetaImage(path=path_objects/'pacman.png', size=(130,130))
-    meta.player = MetaObject(imag_player)
+    meta.player = MetaObject(
+        MetaImage.from_file(size=(130,130),
+            path=path_objects/'pacman.png'
+        )
+    )
     meta.player_speed = 800
 
     # Obstacles
     #--------------------------------------------------------------------------#
 
-    points = 10
+    crash_sound = read_bytes_io(path_sounds/'car_crash.mp3')
 
     meta.obstacles_frequency = 2
     meta.obstacles = []
 
-    imag_obstacle = MetaImage(path=path_objects/'fantasmavermelho.png', size=(130,130))
-    meta.obstacles.append(MetaObject(imag_obstacle, points))
+    ghosts = ['vermelho', 'verde', 'azul']
 
-    imag_obstacle = MetaImage(path=path_objects/'fantasmaverde.png', size=(130,130))
-    meta.obstacles.append(MetaObject(imag_obstacle, points))
+    for ii in range(3):
 
-    imag_obstacle = MetaImage(path=path_objects/'fantasmaazul.png', size=(130,130))
-    meta.obstacles.append(MetaObject(imag_obstacle, points))
+        imag_obstacle = MetaImage.from_file(size=(130,130),
+            path=path_objects/f'fantasma{ghosts[ii]}.png',
+        )
+        obstacle = MetaObject(
+            image  = imag_obstacle,
+            sound  = crash_sound,
+            volume = 0.9
+        )
+        meta.obstacles.append(obstacle)
 
     # Collectibles
     #--------------------------------------------------------------------------#
 
-    points = 100
-    volume = 1.5
-
     meta.collectibles_frequency = 1
     meta.collectibles = []
 
-    imag_collectible = MetaImage(path=path_objects/'cereja.png', size=(120,120))
-    meta.collectibles.append(MetaObject(imag_collectible, points, sound=path_sounds/'pacmaneat.mp3', volume=1.0))
-
-    
-    # Oil spill
-    path_collect = path_sounds/'pacmanpain.mp3'
-
-    # File image size [312, 344]
-    path_collectible = path_objects/'cerejaveneno.png'
-    imag_collectible = MetaImage((100,110), path=path_collectible)
-
-    collectible = MetaObject(imag_collectible, points, path_collect, volume)
+    imag_collectible = MetaImage.from_file(size=(120,120),
+        path=path_objects/'cereja.png'
+    )
+    collectible = MetaObject(
+        image  = imag_collectible,
+        score  = 100,
+        sound  = read_bytes_io(path_sounds/'pacmaneat.mp3'),
+        volume = 0.5
+    )
     meta.collectibles.append(collectible)
 
+    imag_collectible = MetaImage.from_file(size=(110,110),
+        path=path_objects/'cerejaveneno.png'
+    )
+    collectible = MetaObject(
+        image  = imag_collectible,
+        score  = 100,
+        sound  = read_bytes_io(path_sounds/'pacmanpain.mp3'),
+        volume = 0.5
+    )
+    meta.collectibles.append(collectible)
 
     # Functions
     #--------------------------------------------------------------------------#

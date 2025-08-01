@@ -11,7 +11,7 @@ import pygame
 import pygame.locals as loc
 from   pygame import sprite
 
-from .            import game_params as gp
+from .            import parameters as gp
 from .sound_mixer import SoundMixer
 
 #------------------------------------------------------------------------------#
@@ -248,7 +248,7 @@ class PlayerVertical(GameObject):
 
         if self.kills[0] and self.rect.left  <= bd_min:
             return True
-        
+
         if self.kills[1] and self.rect.right >= bd_max:
             return True
 

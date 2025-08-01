@@ -5,7 +5,7 @@ import pygame
 import random
 import math
 
-from .            import game_params as gp
+from .            import parameters as gp
 from .objects     import GameObjects
 from .sound_mixer import SoundMixer
 from .scoreboard  import Scoreboard
@@ -188,17 +188,17 @@ class Engine:
 
             if event.type == pygame.QUIT:
                 raise QuitGame
-            
+
             elif event.type == pygame.WINDOWFOCUSLOST:
                 self.wait_for_focus()
-            
+
             elif event.type == pygame.KEYDOWN:
 
                 SoundMixer.parse_key(event.key)
 
                 if event.key in [pygame.K_q, pygame.K_ESCAPE]:
                     raise QuitGame
-                
+
                 elif event.key in [pygame.K_h, pygame.K_F1, pygame.K_SPACE]:
 
                     if showing_help: # exit help

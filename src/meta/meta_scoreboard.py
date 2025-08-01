@@ -1,23 +1,27 @@
 #------------------------------------------------------------------------------#
 '''Describes the game scoreboard'''
 
+from .meta_image import MetaImage
+
 #------------------------------------------------------------------------------#
 class MetaScoreboard:
 
     #--------------------------------------------------------------------------#
-    def __init__(self,
-                 title          = None,
-                 text_font      = None,
-                 text_font_size = 32,
-                 text_spacing   = 1.5,
-                 text_position  = (100,100),
-                 text_bgcolor   = None,
-                 text_fgcolor   = (255,255,255),
-                 show_points    = True,
-                 show_velocity  = True,
-                 show_time      = True,
-                 image          = None,
-                 image_position = None):
+    def __init__(
+            self,
+            title: str | None   = None,
+            text_font           = None,
+            text_font_size: int = 32,
+            text_spacing: float = 1.5,
+            text_position       = (100,100),
+            text_bgcolor        = None,
+            text_fgcolor        = (255,255,255),
+            show_points         = True,
+            show_velocity       = True,
+            show_time           = True,
+            image: MetaImage    = None,
+            image_position      = None
+        ) -> None:
 
         self.title  = title
 

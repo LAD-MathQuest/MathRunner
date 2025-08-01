@@ -2,7 +2,7 @@
 '''Test game 08
 
 Tilling background and track
-Horizontal scrollling
+Horizontal scrolling
 Background doesn't scrolls
 Track scrolls
 '''
@@ -18,11 +18,12 @@ sys.path.append(str(Path(__file__).parents[1]))
 from meta import (
         VelocityFunction,
         BoundaryFunctions,
-        MetaImage, 
-        MetaObject, 
-        MetaScoreboard, 
+        MetaImage,
+        MetaObject,
+        MetaScoreboard,
         MetaWorld,
-        save_meta
+        save_meta,
+        read_bytes_io
     )
 
 #------------------------------------------------------------------------------#
@@ -30,14 +31,14 @@ if __name__ == '__main__':
 
     print('Building test 08')
 
-    path_resources   = Path(__file__).parent/'resources'
+    path_resources   = Path(__file__).parents[1]/'resources'
     path_backgrounds = path_resources/'backgrounds'
     path_scoreboards = path_resources/'scoreboards'
     path_objects     = path_resources/'objects'
     path_sounds      = path_resources/'sounds'
     path_fonts       = path_resources/'fonts'
 
-    path_games = Path(__file__).parents[1]/'games'
+    path_games = Path(__file__).parents[2]/'games'
 
     #--------------------------------------------------------------------------#
 
@@ -58,15 +59,17 @@ if __name__ == '__main__':
     meta.game_vertical   = False
     meta.game_time_bonus = 10
     meta.game_ambience   = None
-    meta.game_ambience_volume = 0.4 
+    meta.game_ambience_volume = 0.4
 
     # Appearance
     #--------------------------------------------------------------------------#
 
-    meta.background_image   = MetaImage(path=path_backgrounds/'tile-blue.png')
+    # Background
+    meta.background_image   = MetaImage.from_file(path=path_backgrounds/'tile-blue.png')
     meta.background_scrolls = False
 
-    meta.track_image   = MetaImage(path=path_backgrounds/'tile-green.png',size=(400,400))
+    # Track
+    meta.track_image   = MetaImage.from_file(path=path_backgrounds/'tile-green.png',size=(400,400))
     meta.track_scrolls = True
     meta.track_kills   = (True, True)
 
@@ -75,6 +78,7 @@ if __name__ == '__main__':
     meta.min_width = 3
     meta.max_width = 3
 
+    # Scoreboard
     meta.scoreboard = MetaScoreboard(text_font_size = 28,
                                      text_spacing   = 1,
                                      text_position  = (160,20),
@@ -114,7 +118,7 @@ if __name__ == '__main__':
 
     meta.velocity = VelocityFunction('40 + t')
     meta.boundary = BoundaryFunctions(
-        '20 + 15*sin(x/10) + 2*cos(0.8*x)', 
+        '20 + 15*sin(x/10) + 2*cos(0.8*x)',
         '80 + 15*sin(x/20) + 2*cos(1.2*x)'
     )
 

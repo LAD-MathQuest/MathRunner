@@ -2,7 +2,7 @@
 
 import pygame
 
-from . import game_params as gp
+from . import parameters as gp
 from .onscreentext import OnScreenText
 
 #------------------------------------------------------------------------------#

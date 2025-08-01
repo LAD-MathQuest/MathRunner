@@ -2,10 +2,6 @@
 '''Build game Racing
 
 Author: Luis D'Afonseca
-Name:   Racing
-
-Description
-Simple racing game with treasures and obstacles
 '''
 
 #------------------------------------------------------------------------------#
@@ -18,11 +14,12 @@ sys.path.append(str(Path(__file__).parents[1]))
 from meta import (
         VelocityFunction,
         BoundaryFunctions,
-        MetaImage, 
-        MetaObject, 
-        MetaScoreboard, 
+        MetaImage,
+        MetaObject,
+        MetaScoreboard,
         MetaWorld,
-        save_meta
+        save_meta,
+        read_bytes_io
     )
 
 #------------------------------------------------------------------------------#
@@ -36,6 +33,7 @@ if __name__ == '__main__':
     path_objects     = path_resources/'objects'
     path_sounds      = path_resources/'sounds'
     path_fonts       = path_resources/'fonts'
+    path_icons       = path_resources/'icons'
 
     path_games = Path(__file__).parents[1]/'games'
 
@@ -50,29 +48,29 @@ if __name__ == '__main__':
     meta.soft_name        = 'Racing'
     meta.soft_author      = "Luis D'Afonseca"
     meta.soft_description = 'Um jogo de corrida onde o jogador deve evitar os obstáculos e coletar as joias'
-    meta.soft_icon        = None
+    meta.soft_icon        = read_bytes_io(path_icons/'racing.png')
 
     # Game
     #--------------------------------------------------------------------------#
 
     meta.game_vertical   = True
     meta.game_time_bonus = 1
-    meta.game_ambience   = path_sounds/'music-1.mp3'
-    meta.game_ambience_volume = 0.4 
+    meta.game_ambience   = read_bytes_io(path_sounds/'music-1.mp3')
+    meta.game_ambience_volume = 0.4
 
     # Appearance
     #--------------------------------------------------------------------------#
 
-    path_background = path_backgrounds/'racing_background.png'
-    imag_background = MetaImage((1920,6000), path=path_background)
-
-    meta.background_image   = imag_background
+    # Background
+    meta.background_image = MetaImage.from_file(size=(1920,6000),
+        path=path_backgrounds/'racing_background.png'
+    )
     meta.background_scrolls = True
 
-    path_track = path_backgrounds/'racing_track.png'
-    imag_track = MetaImage((100,100), path=path_track)
-
-    meta.track_image   = imag_track
+    # Track
+    meta.track_image = MetaImage.from_file(size=(100,100),
+        path=path_backgrounds/'racing_track.png',
+    )
     meta.track_scrolls = True
     meta.track_kills   = (False, False)
 
@@ -81,75 +79,85 @@ if __name__ == '__main__':
     meta.min_width = 3
     meta.max_width = 3
 
-    path_score = path_scoreboards/'frame_neon.png'
-    imag_score = MetaImage((390,160), path=path_score)
-
-    path_font = path_fonts/'Electronic_Highway_Sign.ttf'
-
-    meta.scoreboard = MetaScoreboard(image          = imag_score,
-                                     image_position = (54,67),
-                                     text_font      = path_font,
-                                     text_font_size = 28,
-                                     text_spacing   = 1.2,
-                                     text_position  = (103,100),
-                                     text_bgcolor   = (90,93,102),
-                                     text_fgcolor   = (0,204,255))
+    # Scoreboard
+    imag_score = MetaImage.from_file(size=(390,160),
+        path=path_scoreboards/'frame_neon.png'
+    )
+    meta.scoreboard = MetaScoreboard(
+        image          = imag_score,
+        image_position = (54,67),
+        text_font      = read_bytes_io(path_fonts/'Electronic_Highway_Sign.ttf'),
+        text_font_size = 28,
+        text_spacing   = 1.2,
+        text_position  = (103,100),
+        text_bgcolor   = (90,93,102),
+        text_fgcolor   = (0,204,255)
+    )
 
     # Player
     #--------------------------------------------------------------------------#
 
-    path_player = path_objects/'sport_car-1.png'
-    imag_player = MetaImage((48,108), path=path_player)
-
-    meta.player       = MetaObject(imag_player)
+    meta.player = MetaObject(
+        MetaImage.from_file(size=(48,108),
+            path=path_objects/'sport_car-1.png',
+        )
+    )
     meta.player_speed = 400
 
     # Obstacles
     #--------------------------------------------------------------------------#
 
-    path_crash = path_sounds/'car_crash.mp3'
-    points = 10
-    volume = 0.9
+    crash_sound = read_bytes_io(path_sounds/'car_crash.mp3')
 
     meta.obstacles_frequency = 3
     meta.obstacles = []
 
-    for ii in range(2,10):
+    for ii in range(2, 10):
 
-        path_obstacle = path_objects/f'sport_car-{ii}.png'
-        imag_obstacle = MetaImage((40,90), path=path_obstacle)
-
-        obstacle = MetaObject(imag_obstacle, points, path_crash, volume)
+        imag_obstacle = MetaImage.from_file(size=(40,90),
+            path=path_objects/f'sport_car-{ii}.png',
+        )
+        obstacle = MetaObject(
+            image  = imag_obstacle,
+            sound  = crash_sound,
+            volume = 0.9
+        )
         meta.obstacles.append(obstacle)
 
     # Collectibles
     #--------------------------------------------------------------------------#
 
-    path_collect = path_sounds/'collect-ring.mp3'
-    points = 100
-    volume = 0.2
+    collect_sound = read_bytes_io(path_sounds/'collect-ring.mp3')
 
     meta.collectibles_frequency = 1
     meta.collectibles = []
 
     for ii in range(1,5):
 
-        path_collectible = path_objects/f'precious_stone-{ii}.png'
-        imag_collectible = MetaImage((46,38), path=path_collectible)
-
-        collectible = MetaObject(imag_collectible, points, path_collect, volume)
+        imag_collectible = MetaImage.from_file(size=(46,38),
+            path=path_objects/f'precious_stone-{ii}.png'
+        )
+        collectible = MetaObject(
+            image  = imag_collectible,
+            score  = 100,
+            sound  = collect_sound,
+            volume = 0.2
+        )
         meta.collectibles.append(collectible)
 
     # Oil spill
-    path_collect = path_sounds/'car_drift.mp3'
-    points = -200
-    volume = 1.0
+    collect_sound = read_bytes_io(path_sounds/'car_drift.mp3')
 
     # File image size [312, 344]
-    path_collectible = path_objects/'oil_spill.png'
-    imag_collectible = MetaImage((100,110), path=path_collectible)
-
-    collectible = MetaObject(imag_collectible, points, path_collect, volume)
+    imag_collectible = MetaImage.from_file(size=(100,110),
+        path=path_objects/'oil_spill.png',
+    )
+    collectible = MetaObject(
+        image  = imag_collectible,
+        score  = -200,
+        sound  = collect_sound,
+        volume = 0.8
+    )
     meta.collectibles.append(collectible)
 
     # Functions

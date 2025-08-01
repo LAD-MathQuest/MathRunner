@@ -1,11 +1,7 @@
 #------------------------------------------------------------------------------#
-'''Build game 
+'''Build game Healthy Run
 
-Author: 
-Name: 
-
-Description
-
+Author: Lígia Aguiar
 '''
 
 #------------------------------------------------------------------------------#
@@ -18,11 +14,12 @@ sys.path.append(str(Path(__file__).parents[1]))
 from meta import (
         VelocityFunction,
         BoundaryFunctions,
-        MetaImage, 
-        MetaObject, 
-        MetaScoreboard, 
+        MetaImage,
+        MetaObject,
+        MetaScoreboard,
         MetaWorld,
-        save_meta
+        save_meta,
+        read_bytes_io
     )
 
 #------------------------------------------------------------------------------#
@@ -36,6 +33,7 @@ if __name__ == '__main__':
     path_objects     = path_resources/'objects'
     path_sounds      = path_resources/'sounds'
     path_fonts       = path_resources/'fonts'
+    path_icons       = path_resources/'icons'
 
     path_games = Path(__file__).parents[1]/'games'
 
@@ -50,84 +48,95 @@ if __name__ == '__main__':
     meta.soft_name        = 'Healthy Run'
     meta.soft_author      = "Lígia Aguiar"
     meta.soft_description = "A game that encourages healthy eating"
-    meta.soft_icon        = None
+    meta.soft_icon        = read_bytes_io(path_icons/'healthy_run.png')
 
     # Game
     #--------------------------------------------------------------------------#
 
     meta.game_vertical   = True
     meta.game_time_bonus = 10
-    meta.game_ambience   = path_sounds/'music_healthy.mp3'
-    meta.game_ambience_volume = 0.4 
+    meta.game_ambience   = read_bytes_io(path_sounds/'music_healthy.mp3')
+    meta.game_ambience_volume = 0.4
 
     # Appearance
     #--------------------------------------------------------------------------#
 
-    path_background = path_backgrounds/'healthy_background.png'
-    imag_background = MetaImage((1920,1800), path=path_background)
-
-    meta.background_image   = imag_background
+    # Background
+    meta.background_image = MetaImage.from_file(size=(1920,1800),
+        path=path_backgrounds/'healthy_background.png'
+    )
     meta.background_scrolls = True
 
+    # Track
     meta.track_image   = None
     meta.track_scrolls = False
     meta.track_kills   = (False, False)
 
-    path_font = path_fonts/'Party_Confetti.ttf'
-    meta.scoreboard = MetaScoreboard(text_font      = path_font,
-                                     text_font_size = 25,
-                                     text_spacing   = 1,
-                                     text_position  = (160,20),
-                                     text_bgcolor   = (34,139,34))
+    # Scoreboard
+    meta.scoreboard = MetaScoreboard(
+        text_font      = read_bytes_io(path_fonts/'Party_Confetti.ttf'),
+        text_font_size = 25,
+        text_spacing   = 1,
+        text_position  = (160,20),
+        text_bgcolor   = (34,139,34)
+    )
 
     # Player
     #--------------------------------------------------------------------------#
 
-    imag_player = MetaImage(size=(75, 167), path=path_objects/'girl.png')
-    meta.player = MetaObject(imag_player)
+    meta.player = MetaObject(
+        MetaImage.from_file(size=(75, 167),
+            path=path_objects/'girl.png'
+        )
+    )
     meta.player_speed = 800
 
     # Obstacles
     #--------------------------------------------------------------------------#
 
-    path_crash = path_sounds/'music_healthy2.mp3'
+    crash_sound = read_bytes_io(path_sounds/'music_healthy2.mp3')
     points = -10
     volume = 0.7
 
     meta.obstacles_frequency = 3
     meta.obstacles = []
 
-    # Image sizes
-    # file = [ (120,120), (150,150), (150,150)]
-    # 
-    sizes = [ (80,104),  (100,77), (80,108)]
+    sizes = [(80,104), (100,77), (80,108)]
 
     for ii in range(3):
 
-        path_obstacle = path_objects / f'food-{ii+1}.png'
-        imag_obstacle = MetaImage(sizes[ii], path=path_obstacle)
-
-        meta.obstacles.append(MetaObject(imag_obstacle, points, path_crash, volume))
-   
+        imag_obstacle = MetaImage.from_file(size=sizes[ii],
+            path=path_objects / f'food-{ii+1}.png'
+        )
+        obstacle = MetaObject(
+            image  = imag_obstacle,
+            sound  = crash_sound,
+            volume = 0.9
+        )
+        meta.obstacles.append(obstacle)
 
     # Collectibles
     #--------------------------------------------------------------------------#
 
-    path_collect = path_sounds/'music_healthy1.mp3'
-    points = 100
-    volume = 0.5
+    collect_sound = read_bytes_io(path_sounds/'music_healthy1.mp3')
 
     meta.collectibles_frequency = 1
     meta.collectibles = []
 
-    # Image sizes
-    # file = [ (150, 128), (130, 138), (150, 150)]
-    sizes = [ (100,68), (100,99), (100,96)]
+    sizes = [(100,68), (100,99), (100,96)]
 
     for ii in range(3):
-        path_collectible = path_objects / f'healthy_food-{ii+1}.png'
-        imag_collectible = MetaImage(sizes[ii], path=path_collectible)
-        meta.collectibles.append(MetaObject(imag_collectible, points, path_collect, volume))
+
+        imag_collectible = MetaImage.from_file(size=sizes[ii],
+            path=path_objects / f'healthy_food-{ii+1}.png'
+        )
+        collectible = MetaObject(
+            image  = imag_collectible,
+            score  = 100,
+            sound  = collect_sound,
+            volume = 0.5
+        )
+        meta.collectibles.append(collectible)
 
     # Functions
     #--------------------------------------------------------------------------#

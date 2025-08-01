@@ -2,10 +2,6 @@
 '''Build game Deep Sea
 
 Author: Luis D'Afonseca
-Name:   Deep Sea
-
-Description
-An underwater adventure
 '''
 
 #------------------------------------------------------------------------------#
@@ -22,7 +18,8 @@ from meta import (
         MetaObject,
         MetaScoreboard,
         MetaWorld,
-        save_meta
+        save_meta,
+        read_bytes_io
     )
 
 #------------------------------------------------------------------------------#
@@ -36,6 +33,7 @@ if __name__ == '__main__':
     path_objects     = path_resources/'objects'
     path_sounds      = path_resources/'sounds'
     path_fonts       = path_resources/'fonts'
+    path_icons       = path_resources/'icons'
 
     path_games = Path(__file__).parents[1]/'games'
 
@@ -50,26 +48,29 @@ if __name__ == '__main__':
     meta.soft_name        = 'Deep Sea'
     meta.soft_author      = "Luis D'Afonseca"
     meta.soft_description = "Uma aventura em baixo d'água"
-    meta.soft_icon        = None
+    meta.soft_icon        = read_bytes_io(path_icons/'deep_sea.png')
 
     # Game
     #--------------------------------------------------------------------------#
 
     meta.game_vertical   = False
     meta.game_time_bonus = 10
-    meta.game_ambience   = None
+    meta.game_ambience   = read_bytes_io(path_sounds/'music-1.mp3')
     meta.game_ambience_volume = 0.4
 
     # Appearance
     #--------------------------------------------------------------------------#
 
-    path_background = path_backgrounds/'deep_sea_background.png'
-    imag_background = MetaImage(path=path_background)
-
-    meta.background_image   = imag_background
+    # Background
+    meta.background_image = MetaImage.from_file(
+        path_backgrounds/'deep_sea_background.png'
+    )
     meta.background_scrolls = True
 
-    meta.track_image   = MetaImage(color=(0, 140, 255))
+    # Track
+    meta.track_image   = MetaImage(
+        color=(0, 140, 255)
+    )
     meta.track_scrolls = False
     meta.track_kills   = (False, True)
 
@@ -78,46 +79,68 @@ if __name__ == '__main__':
     meta.min_width = 3
     meta.max_width = 1
 
-    path_font = path_fonts/'Party_Confetti.ttf'
-    meta.scoreboard = MetaScoreboard(image=MetaImage(color=(55,55,55),size=(230,100)),
-                                     image_position = (153,13),
-                                     text_font      = path_font,
-                                     text_font_size = 28,
-                                     text_spacing   = 1,
-                                     text_position  = (160,20),
-                                     text_bgcolor   = (55,55,55))
+    # Scoreboard
+    imag_score = MetaImage(size=(230,100),
+        color=(55,55,55)
+    )
+    meta.scoreboard = MetaScoreboard(
+        image          = imag_score,
+        image_position = (153,13),
+        text_font      = read_bytes_io(path_fonts/'Party_Confetti.ttf'),
+        text_font_size = 28,
+        text_spacing   = 1,
+        text_position  = (160,20),
+        text_bgcolor   = (55,55,55),
+        text_fgcolor   = (255,255,255)
+    )
 
     # Player
     #--------------------------------------------------------------------------#
 
-    imag_player = MetaImage(size=(120, 75), path=path_objects/'submarine.png')
-    meta.player = MetaObject(imag_player)
+    meta.player = MetaObject(
+        MetaImage.from_file(size=(120, 75),
+            path=path_objects/'submarine.png'
+        )
+    )
     meta.player_speed = 800
 
     # Obstacles
     #--------------------------------------------------------------------------#
 
-    points = 10
+    crash_sound = read_bytes_io(path_sounds/'car_crash.mp3')
 
     meta.obstacles_frequency = 3
     meta.obstacles = []
 
-    imag_obstacle = MetaImage(size=(50, 54), path=path_objects/'mine.png')
-    meta.obstacles.append(MetaObject(imag_obstacle, points))
+    imag_obstacle = MetaImage.from_file(size=(50,54),
+        path = path_objects/'mine.png',
+    )
+    obstacle = MetaObject(
+        image  = imag_obstacle,
+        sound  = crash_sound,
+        volume = 0.9
+    )
+    meta.obstacles.append(obstacle)
 
     # Collectibles
     #--------------------------------------------------------------------------#
 
-    points = 100
+    collect_sound = read_bytes_io(path_sounds/'collect-ring.mp3')
 
     meta.collectibles_frequency = 1
     meta.collectibles = []
 
-    imag_collectible = MetaImage(size=(90, 69), path=path_objects/'diver-01.png')
-    meta.collectibles.append(MetaObject(imag_collectible, points))
-
-    imag_collectible = MetaImage(size=(110, 41), path=path_objects/'diver-02.png')
-    meta.collectibles.append(MetaObject(imag_collectible, points))
+    for ii in range(1,3):
+        imag_collectible = MetaImage.from_file(size=(90,69),
+            path=path_objects/f'diver-0{ii}.png'
+        )
+        collectible = MetaObject(
+            image  = imag_collectible,
+            score  = 100,
+            sound  = collect_sound,
+            volume = 0.2
+            )
+        meta.collectibles.append(collectible)
 
     # Functions
     #--------------------------------------------------------------------------#

@@ -3,7 +3,7 @@
 import pygame
 import pygame.freetype
 
-from . import game_params as gp
+from . import parameters as gp
 
 #------------------------------------------------------------------------------#
 class OnScreenText:

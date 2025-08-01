@@ -3,7 +3,7 @@
 import pygame
 import numpy as np
 
-from . import game_params as gp
+from . import parameters as gp
 
 N_POINTS = 800
 
@@ -60,19 +60,19 @@ class Boundaries:
         self.x = np.linspace(0.0, 100.0, N_POINTS)
 
         self.polygon = np.zeros((2*N_POINTS, 2))
-        self.ravpoly = self.polygon.ravel() 
+        self.ravpoly = self.polygon.ravel()
 
         p = np.linspace(0, gp.SCREEN_SIZE[self.x_index], N_POINTS)
         self.ravpoly[self.i_min_index] = p
         self.ravpoly[self.i_max_index] = p[::-1]
 
         self.eval_polygon()
-        
+
     #--------------------------------------------------------------------------#
     def eval_polygon(self):
 
         y_min, y_max = self.function.eval(self.x)
-        
+
         if not self.vertical:
             aux = y_min
             y_min = 100.0 - y_max
@@ -80,7 +80,7 @@ class Boundaries:
 
         u_min = y_min * self.y_scale
         u_max = y_max * self.y_scale
-        
+
         self.ravpoly[self.j_min_index] = u_min
         self.ravpoly[self.j_max_index] = u_max[::-1]
 
@@ -103,20 +103,20 @@ class Boundaries:
     #--------------------------------------------------------------------------#
     def draw_min_line(self, surf, color, width):
         pygame.draw.lines(
-            surf, 
-            color, 
-            False, 
-            self.polygon[N_POINTS:, :], 
+            surf,
+            color,
+            False,
+            self.polygon[N_POINTS:, :],
             width
         )
 
     #--------------------------------------------------------------------------#
     def draw_max_line(self, surf, color, width):
         pygame.draw.lines(
-            surf, 
-            color, 
-            False, 
-            self.polygon[0:N_POINTS, :], 
+            surf,
+            color,
+            False,
+            self.polygon[0:N_POINTS, :],
             width
         )
 
