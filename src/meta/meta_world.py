@@ -1,9 +1,8 @@
 #------------------------------------------------------------------------------#
-
 '''This module defines the MetaWorld class.
 
 It stores all information about the GameWorld in an intermediate state
-between Pyside and PyGame being independent of both libraries. This class
+between PySide and PyGame being independent of both libraries. This class
 must be saved in a binary file and used to create a GameWorld.
 '''
 
@@ -11,67 +10,11 @@ must be saved in a binary file and used to create a GameWorld.
 
 import pickle
 
-from .velocity_function import VelocityFunction 
+from .velocity_function import VelocityFunction
 from .boundary_function import BoundaryFunctions
-
-#------------------------------------------------------------------------------#
-class MetaImage:
-    '''Describes an image to be used on game.'''
-
-    #--------------------------------------------------------------------------#
-    def __init__(self, size=None, color=(0,0,0), path=None ):
-        '''Create a MetaImage'''
-
-        self.size  = size  # (width, height)
-        self.color = color # (R,G,B)
-        self.path  = path
-
-#------------------------------------------------------------------------------#
-class MetaObject:
-    '''Describes game objects'''
-
-    #--------------------------------------------------------------------------#
-    def __init__(self, image, score=0, sound=None, volume=1.0 ):
-
-        self.image  = image   # MetaImage
-        self.score  = score
-        self.sound  = sound   # Sound path
-        self.volume = volume  # Sound volume
-
-#------------------------------------------------------------------------------#
-class MetaScoreboard:
-    '''Describes the game scoreboard'''
-
-    #--------------------------------------------------------------------------#
-    def __init__(self,
-                 title          = None,
-                 text_font      = None,
-                 text_font_size = 32,
-                 text_spacing   = 1.5,
-                 text_position  = (100,100),
-                 text_bgcolor   = None,
-                 text_fgcolor   = (255,255,255),
-                 show_points    = True,
-                 show_velocity  = True,
-                 show_time      = True,
-                 image          = None,
-                 image_position = None):
-
-        self.title  = title
-
-        self.text_font      = text_font
-        self.text_font_size = text_font_size
-        self.text_spacing   = text_spacing
-        self.text_position  = text_position
-        self.text_bgcolor   = text_bgcolor
-        self.text_fgcolor   = text_fgcolor
-
-        self.show_points   = show_points
-        self.show_velocity = show_velocity
-        self.show_time     = show_time
-
-        self.image          = image
-        self.image_position = text_position if not image_position else image_position
+from .meta_image        import MetaImage
+from .meta_object       import MetaObject
+from .meta_score_board  import MetaScoreboard
 
 #------------------------------------------------------------------------------#
 class MetaWorld:

@@ -1,5 +1,4 @@
 #------------------------------------------------------------------------------#
-
 '''This module defines the function objects.
 
     The VelocityFunction  is used to compute scrolling velocity
@@ -10,8 +9,9 @@
     computed as proportion of screen.
 '''
 
-import numpy   as np
-import numexpr as ne
+import numpy        as np
+import numpy.typing as npt
+import numexpr      as ne
 
 #------------------------------------------------------------------------------#
 def parse_function(func: str) -> str:
@@ -23,7 +23,7 @@ def parse_function(func: str) -> str:
     return func
 
 #------------------------------------------------------------------------------#
-def eval_function(values, func: str, var_name: str):
+def eval_function(values: npt.NDArray, func: str, var_name: str) -> npt.NDArray:
 
     ff = ne.evaluate(func, local_dict={var_name:values, 'e':np.e, 'pi':np.pi})
 
@@ -50,7 +50,7 @@ translation = [['^',       '**'     ],
                ['módulo',  'abs'    ]]
 
 #------------------------------------------------------------------------------#
-def pt_to_numexpr(func):
+def pt_to_numexpr(func: str) -> str:
 
     for ex in translation:
         func = func.replace(ex[0], ex[1])
@@ -58,7 +58,7 @@ def pt_to_numexpr(func):
     return func
 
 #------------------------------------------------------------------------------#
-def numexpr_to_pt(func):
+def numexpr_to_pt(func: str) -> str:
 
     for ex in translation:
         func = func.replace(ex[1], ex[0])
@@ -66,7 +66,7 @@ def numexpr_to_pt(func):
     return func
 
 #------------------------------------------------------------------------------#
-def replace_min_with_where(s):
+def replace_min_with_where(s: str) -> str:
 
     result = ''
     i = 0
@@ -106,7 +106,7 @@ def replace_min_with_where(s):
     return result
 
 #------------------------------------------------------------------------------#
-def replace_max_with_where(s):
+def replace_max_with_where(s: str) -> str:
 
     result = ''
     i = 0

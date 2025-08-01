@@ -9,13 +9,14 @@
     computed as proportion of screen.
 '''
 
+import numpy.typing as npt
 from .math_function import parse_function, eval_function
 
 #------------------------------------------------------------------------------#
 class BoundaryFunctions:
-    '''Define minimal and maximal (left and rigth) track boundaries
+    '''Define minimal and maximal (left and right) track boundaries
 
-    Boundaries are funcion of the displacement in screen units
+    Boundaries are function of the displacement in screen units
 
     The values are in fractions of the screen length
     '''
@@ -81,19 +82,19 @@ class BoundaryFunctions:
         )
 
     #--------------------------------------------------------------------------#
-    def eval_min_raw(self, xx):
+    def eval_min_raw(self, xx: npt.NDArray) -> npt.NDArray:
         return eval_function(xx, self.fmin_raw, 'x')
 
     #--------------------------------------------------------------------------#
-    def eval_min(self, xx):
+    def eval_min(self, xx: npt.NDArray) -> npt.NDArray:
         return eval_function(xx, self.fmin, 'x')
 
     #--------------------------------------------------------------------------#
-    def eval_max_raw(self, xx):
+    def eval_max_raw(self, xx: npt.NDArray) -> npt.NDArray:
         return eval_function(xx, self.fmax_raw, 'x')
 
     #--------------------------------------------------------------------------#
-    def eval_max(self, xx):
+    def eval_max(self, xx: npt.NDArray) -> npt.NDArray:
         return eval_function(xx, self.fmax, 'x')
 
 #------------------------------------------------------------------------------#

@@ -9,6 +9,7 @@
     computed as proportion of screen.
 '''
 
+import numpy.typing as npt
 from .math_function import parse_function, eval_function
 
 #------------------------------------------------------------------------------#
@@ -17,7 +18,7 @@ class VelocityFunction:
 
     The velocity is a function of time in seconds
 
-    Velocity = 1 means the length of the screen scrolls completelly
+    Velocity = 1 means the length of the screen scrolls completely
     in one second.
     '''
 
@@ -44,11 +45,11 @@ class VelocityFunction:
         return self.fvel
 
     #--------------------------------------------------------------------------#
-    def eval_raw(self, time):
+    def eval_raw(self, time: npt.NDArray) -> npt.NDArray:
         return eval_function(time, self.fvel_raw, 't')
 
     #--------------------------------------------------------------------------#
-    def eval(self, time):
+    def eval(self, time: npt.NDArray) -> npt.NDArray:
         return eval_function(time, self.fvel, 't')
 
 #------------------------------------------------------------------------------#

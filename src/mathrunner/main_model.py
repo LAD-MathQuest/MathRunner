@@ -13,13 +13,13 @@ from .    import tools
 class MainModel:
 
     #--------------------------------------------------------------------------#
-    def __init__(self, controler):
+    def __init__(self, controller):
 
         self.meta = MetaWorld()
 
-        self.con = controler
-        self.win = controler.win
-        self.ui  = controler.win.ui
+        self.con = controller
+        self.win = controller.win
+        self.ui  = controller.win.ui
 
     #--------------------------------------------------------------------------#
     def new(self):
@@ -51,13 +51,13 @@ class MainModel:
         os.remove(temp.name)
 
     #--------------------------------------------------------------------------#
-    # Funções para atualizar a interface a partir de informações do modelo
+    # Functions to update view from model
     #--------------------------------------------------------------------------#
 
     #--------------------------------------------------------------------------#
     def update_view(self):
         self.update_view_tab_game      ()
-        self.update_view_tab_appearence()
+        self.update_view_tab_appearance()
         self.update_view_tab_objects   ()
         self.update_view_tab_velocity  ()
         self.update_view_tab_boundary  ()
@@ -92,7 +92,7 @@ class MainModel:
             ui.pushButton_AmbienceSoundPlay  .setEnabled(False)
 
     #--------------------------------------------------------------------------#
-    def update_view_tab_appearence(self):
+    def update_view_tab_appearance(self):
 
         ui   = self.ui
         meta = self.meta
@@ -198,7 +198,7 @@ class MainModel:
         ui.lineEdit_FunctionTrackMaximum.setText(boundary.get_function_max_orig())
 
     #--------------------------------------------------------------------------#
-    # Atualiza as funções em resposta amudanças na interface
+    # Functions to update model from view
     #--------------------------------------------------------------------------#
 
     #--------------------------------------------------------------------------#
@@ -222,7 +222,7 @@ class MainModel:
     def update_from_view(self):
 
         self.update_from_view_tab_game      ()
-        self.update_from_view_tab_appearence()
+        self.update_from_view_tab_appearance()
         self.update_from_view_tab_objects   ()
 
     #--------------------------------------------------------------------------#
@@ -248,7 +248,7 @@ class MainModel:
         # TODO: Ler o arquivo de som e o volume
 
     #--------------------------------------------------------------------------#
-    def update_from_view_tab_appearence(self):
+    def update_from_view_tab_appearance(self):
 
         ui   = self.ui
         meta = self.meta
