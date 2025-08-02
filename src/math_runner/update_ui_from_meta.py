@@ -3,9 +3,9 @@
 from PySide6.QtGui import QFont
 
 from meta   import MetaWorld
-from .tools import draw_meta_image
+from .tools import meta_image_to_label
 
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 def update_ui_from_meta(meta: MetaWorld, ui, con) -> None:
     update_view_tab_game      (meta, ui, con)
     update_view_tab_appearance(meta, ui, con)
@@ -13,15 +13,15 @@ def update_ui_from_meta(meta: MetaWorld, ui, con) -> None:
     update_view_tab_velocity  (meta, ui, con)
     update_view_tab_boundary  (meta, ui, con)
 
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 def update_view_tab_game(meta: MetaWorld, ui, con) -> None:
 
     ui.lineEdit_GameName.setText(meta.soft_name)
     ui.lineEdit_Author  .setText(meta.soft_author)
 
-    draw_meta_image(ui.label_GameIcon, meta.soft_icon)
-
     ui.plainTextEdit_GameDescription.setPlainText(meta.soft_description)
+
+    meta_image_to_label(ui.label_GameIcon, meta.soft_icon)
 
     if meta.game_vertical:
         ui.radioButton_VerticalScrolling.setChecked(True)
@@ -33,6 +33,9 @@ def update_view_tab_game(meta: MetaWorld, ui, con) -> None:
 
     ui.doubleSpinBox_ScoreTimeBonus.setValue(meta.game_time_bonus)
 
+    # TODO: store audio on ui
+    # TODO: store volume on ui
+
     if meta.game_ambience:
         ui.pushButton_AmbienceSoundRemove.setEnabled(True)
         ui.pushButton_AmbienceSoundPlay  .setEnabled(True)
@@ -40,18 +43,18 @@ def update_view_tab_game(meta: MetaWorld, ui, con) -> None:
         ui.pushButton_AmbienceSoundRemove.setEnabled(False)
         ui.pushButton_AmbienceSoundPlay  .setEnabled(False)
 
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 def update_view_tab_appearance(meta: MetaWorld, ui, con) -> None:
 
-    #--- Background -------------------------------------------------------#
+    # Background
 
-    draw_meta_image(ui.label_BackgroundImage, meta.background_image)
+    meta_image_to_label(ui.label_BackgroundImage, meta.background_image)
 
     ui.checkBox_BackgroundImageScrolls.setChecked(meta.background_scrolls)
 
-    #--- Track ------------------------------------------------------------#
+    # Track
 
-    draw_meta_image(ui.label_TrackImage, meta.track_image)
+    meta_image_to_label(ui.label_TrackImage, meta.track_image)
 
     if meta.track_image:
         ui.checkBox_DrawTrack         .setChecked(True)
@@ -61,11 +64,17 @@ def update_view_tab_appearance(meta: MetaWorld, ui, con) -> None:
         ui.checkBox_DrawTrack         .setChecked(False)
         ui.pushButton_SelectTrackImage.setEnabled(False)
 
-    #--- Scoreboard -------------------------------------------------------#
+    # TODO: store track boundary lines
+    # meta.min_color
+    # meta.max_color
+    # meta.min_width
+    # meta.max_width
+
+    # Scoreboard
 
     score = meta.scoreboard
 
-    draw_meta_image(ui.label_ScoreboardImage, score.image)
+    meta_image_to_label(ui.label_ScoreboardImage, score.image)
 
     pos = score.text_position
     ui.spinBox_ScoreboardTextPositionX.setValue(pos[0])
@@ -89,14 +98,17 @@ def update_view_tab_appearance(meta: MetaWorld, ui, con) -> None:
     ui.label_ScoreboardExample.setStyleSheet(f'QLabel{{ {css} }}')
     ui.label_ScoreboardExample.setFont(QFont('Times', score.text_font_size))
 
-#--------------------------------------------------------------------------#
+    # TODO: use font from meta on Scoreboard Example
+    # TODO: store font on ui
+
+#------------------------------------------------------------------------------#
 def update_view_tab_objects(meta: MetaWorld, ui, con) -> None:
 
     #--- Player -----------------------------------------------------------#
 
     player = meta.player
 
-    draw_meta_image(ui.label_PlayerImage, player.image)
+    meta_image_to_label(ui.label_PlayerImage, player.image)
 
     ui.spinBox_PlayerWidth. setValue(player.image.size[0])
     ui.spinBox_PlayerHeight.setValue(player.image.size[1])
@@ -122,12 +134,12 @@ def update_view_tab_objects(meta: MetaWorld, ui, con) -> None:
     for meta_op in meta.collectibles:
         con.new_collectible_widget().meta_to_object(meta_op)
 
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 def update_view_tab_velocity(meta: MetaWorld, ui, con) -> None:
 
     ui.lineEdit_FunctionVelocity.setText(meta.velocity.get_function_orig())
 
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 def update_view_tab_boundary(meta: MetaWorld, ui, con) -> None:
 
     boundary = meta.boundary

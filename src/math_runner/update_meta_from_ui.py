@@ -1,21 +1,24 @@
 #------------------------------------------------------------------------------#
 
-# from meta import MetaWorld, save_meta, load_meta
+from meta import MetaWorld
 
-#--------------------------------------------------------------------------#
-def update_meta_from_ui(meta, ui, con):
-    pass
-    # update_from_view_tab_game      (meta, ui, con)
-    # update_from_view_tab_appearance(meta, ui, con)
-    # update_from_view_tab_objects   (meta, ui, con)
+from .tools import label_to_meta_image
 
-#--------------------------------------------------------------------------#
-def update_from_view_tab_game(meta, ui, con):
+#------------------------------------------------------------------------------#
+def update_meta_from_ui(meta: MetaWorld, ui, con) -> None:
+    update_from_view_tab_game      (meta, ui, con)
+    update_from_view_tab_appearance(meta, ui, con)
+    update_from_view_tab_objects   (meta, ui, con)
+
+#------------------------------------------------------------------------------#
+def update_from_view_tab_game(meta: MetaWorld, ui, con) -> None:
 
     meta.soft_name   = ui.lineEdit_GameName.text()
     meta.soft_author = ui.lineEdit_Author  .text()
 
     meta.soft_description = ui.plainTextEdit_GameDescription.toPlainText()
+
+    label_to_meta_image(ui.label_GameIcon, meta.soft_icon)
 
     meta.game_vertical = ui.radioButton_VerticalScrolling.isChecked()
 
@@ -26,34 +29,33 @@ def update_from_view_tab_game(meta, ui, con):
 
     meta.game_time_bonus = ui.doubleSpinBox_ScoreTimeBonus.value()
 
-    # TODO: Ler o arquivo de som e o volume
+    # TODO: read sound and volume
 
-#--------------------------------------------------------------------------#
-def update_from_view_tab_appearance(meta, ui, con):
+#------------------------------------------------------------------------------#
+def update_from_view_tab_appearance(meta: MetaWorld, ui, con) -> None:
 
-    #--- Background -------------------------------------------------------#
+    # Background
 
-    # TODO: Ler a imagem de fundo
-    # meta.background_image =
+    label_to_meta_image(ui.label_BackgroundImage, meta.background_image)
 
     meta.background_scrolls = ui.checkBox_BackgroundImageScrolls.isChecked()
 
-    #--- Track ------------------------------------------------------------#
+    # Track
 
     if ui.checkBox_DrawTrack.isChecked():
-
-        # TODO: Ler a imagem da pista
-        # meta.track_image =
-        pass
-
+        label_to_meta_image(ui.label_TrackImage, meta.track_image)
     else:
         meta.track_image = None
 
-    #--- Scoreboard -------------------------------------------------------#
+    # TODO: read track boundary lines
+    # meta.min_color =
+    # meta.max_color =
+    # meta.min_width =
+    # meta.max_width =
 
-    # TODO: Ler a imagem do placar
-    # meta.scoreboard.image =
+    # Scoreboard
 
+    # TODO: read scoreboard information
 
     meta.scoreboard.text_position = [
         ui.spinBox_ScoreboardTextPositionX.value(),
@@ -65,18 +67,12 @@ def update_from_view_tab_appearance(meta, ui, con):
         ui.spinBox_ScoreboardImagePositionY.value()
     ]
 
-    # TODO: Ler aspectratio
-    # ui.checkBox_ScoreboardImageKeepAspectRatio.isChecked()
+#------------------------------------------------------------------------------#
+def update_from_view_tab_objects(meta: MetaWorld, ui, con) -> None:
 
-    # TODO: Ler cor e fonte
+    # Player
 
-#--------------------------------------------------------------------------#
-def update_from_view_tab_objects(meta, ui, con):
-
-    #--- Player -----------------------------------------------------------#
-
-    # TODO: Ler imagem do jogador
-    # meta.player =
+    label_to_meta_image(ui.label_PlayerImage, meta.player.image)
 
     meta.player.image.size = [
         ui.spinBox_PlayerWidth. value(),
@@ -85,12 +81,16 @@ def update_from_view_tab_objects(meta, ui, con):
 
     meta.player_speed = ui.spinBox_PlayerSpeed.value()
 
-    #--- Obstacles---------------------------------------------------------#
+    # Obstacles
 
-    # TODO: Ler obstaculos
+    meta.obstacles_frequency = ui.doubleSpinBox_ObstaclesFrequency.value()
 
-    #--- Collectibles -----------------------------------------------------#
+    # TODO: get number od obstacles and read obstacles
 
-    # TODO: Ler colecionaveis
+    # Collectibles
+
+    meta.collectibles_frequency = ui.doubleSpinBox_CollectiblesFrequency.value()
+
+    # TODO: get number od collectibles and read collectibles
 
 #------------------------------------------------------------------------------#

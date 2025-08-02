@@ -1,18 +1,19 @@
 #------------------------------------------------------------------------------#
-# cSpell:disable
+import io
 
-from PySide6.QtCore       import Qt, QSize, QUrl, QByteArray
+from PySide6.QtCore       import Qt, QSize, QUrl, QByteArray, QBuffer, QIODevice
 from PySide6.QtGui        import QPixmap, QColor
 from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
 
 from meta import MetaImage
 
 #------------------------------------------------------------------------------#
-def draw_meta_image(label, meta: MetaImage) -> None:
+def meta_image_to_label(label, meta: MetaImage) -> None:
 
     label.clear()
 
     if not meta:
+        label.setProperty('original_pixmap', None)
         return
 
     if meta.data:
@@ -28,7 +29,29 @@ def draw_meta_image(label, meta: MetaImage) -> None:
     size = label.size().boundedTo(size)
 
     label.setPixmap(pixmap.scaled(size, aspectMode=Qt.KeepAspectRatio))
-    label.original_pixmap = pixmap
+    label.setProperty('original_pixmap', pixmap)
+
+#------------------------------------------------------------------------------#
+def label_to_meta_image(label, meta: MetaImage) -> None:
+
+    pixmap = label.property('original_pixmap')
+
+    if not pixmap:
+        meta = None
+        return
+
+    buffer = QBuffer()
+    buffer.open(QIODevice.ReadWrite)
+
+    image = pixmap.toImage()
+    image.save(buffer, 'PNG')
+
+    meta.data = io.BytesIO(buffer.data().data())
+
+    buffer.close()
+
+    size = pixmap.size()
+    meta.size = (size.width(), size.height())
 
 #------------------------------------------------------------------------------#
 def play_sound(parent, path, vol):

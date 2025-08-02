@@ -45,7 +45,7 @@ def draw_help(surf, name,author, description, vertical):
     ost.draw(surf, '')
     ost.draw(surf, description)
     ost.draw(surf, '')
-    ost.draw(surf, 'Criador da fase: '+  author)
+    ost.draw(surf, 'Autor: '+  author)
     ost.draw(surf, '')
     #--- Commands -------------------------------------------------------------#
 

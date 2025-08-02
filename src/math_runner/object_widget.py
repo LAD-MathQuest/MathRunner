@@ -24,7 +24,7 @@ class ObjectWidget(QWidget):
         ui = self.ui
 
         # Image
-        tools.draw_meta_image(ui.label_Image, meta.image)
+        tools.meta_image_to_label(ui.label_Image, meta.image)
 
         ui.spinBox_Width .setValue(meta.image.size[0])
         ui.spinBox_Height.setValue(meta.image.size[1])
