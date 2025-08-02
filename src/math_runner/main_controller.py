@@ -7,7 +7,7 @@ from PySide6.QtWidgets import (QApplication,
                                QVBoxLayout)
 
 from . import parameters as par
-from . import tools
+# from . import tools
 
 from .main_model    import MainModel
 from .object_widget import ObjectWidget
@@ -27,8 +27,16 @@ class MainController:
 
         color = self.win.palette().color(QPalette.Window)
 
-        self.plot_velocity = PlotVelocity(self.ui.plotVelocity, color, self.model.meta.velocity)
-        self.plot_track    = PlotTrack   (self.ui.plotBoundary, color, self.model.meta.boundary)
+        self.plot_velocity = PlotVelocity(
+            self.ui.plotVelocity,
+            color,
+            self.model.get_velocity_function()
+        )
+        self.plot_track= PlotTrack(
+            self.ui.plotBoundary,
+            color,
+            self.model.get_boundary_functions()
+        )
 
         self.init_objects()
 
@@ -185,7 +193,7 @@ class MainController:
     #--------------------------------------------------------------------------#
     def run(self):
         self.block_ui()
-        self.model.update_from_view()
+        self.model.update_meta()
         self.model.run()
 
     #--------------------------------------------------------------------------#
@@ -209,9 +217,10 @@ class MainController:
 
     #--------------------------------------------------------------------------#
     def ambience_play(self):
-        tools.play_sound(self.win,
-                         self.model.meta.game_ambience,
-                         self.model.meta.game_ambience_volume)
+        pass
+        # tools.play_sound(self.win,
+        #                  self.model.meta.game_ambience,
+        #                  self.model.meta.game_ambience_volume)
 
     #--------------------------------------------------------------------------#
     def obstacles_frequency_changed(self):
@@ -274,21 +283,27 @@ class MainController:
 
         func = self.ui.lineEdit_FunctionVelocity.text()
         self.model.change_velocity_function(func)
-        self.plot_velocity.update_velocity(self.model.meta.velocity)
+        self.plot_velocity.update_velocity(
+            self.model.get_velocity_function()
+        )
 
     #--------------------------------------------------------------------------#
     def function_track_minimum_changed(self):
 
         func = self.ui.lineEdit_FunctionTrackMinimum.text()
         self.model.change_track_minimum_function(func)
-        self.plot_track.update_boundary(self.model.meta.boundary)
+        self.plot_track.update_boundary(
+            self.model.get_boundary_functions()
+        )
 
     #--------------------------------------------------------------------------#
     def function_track_maximum_changed(self):
 
         func = self.ui.lineEdit_FunctionTrackMaximum.text()
         self.model.change_track_maximum_function(func)
-        self.plot_track.update_boundary(self.model.meta.boundary)
+        self.plot_track.update_boundary(
+            self.model.get_boundary_functions()
+        )
 
     #--------------------------------------------------------------------------#
     # Internal tasks
@@ -305,9 +320,14 @@ class MainController:
         self.ui.tabWidget_Game   .setCurrentIndex(0)
         self.ui.tabWidget_Objects.setCurrentIndex(0)
 
-        self.model.update_view()
-        self.plot_velocity.update_velocity(self.model.meta.velocity)
-        self.plot_track   .update_boundary(self.model.meta.boundary)
+        self.model.update_ui()
+
+        self.plot_velocity.update_velocity(
+            self.model.get_velocity_function()
+        )
+        self.plot_track.update_boundary(
+            self.model.get_boundary_functions()
+        )
 
         self.changed = False
 

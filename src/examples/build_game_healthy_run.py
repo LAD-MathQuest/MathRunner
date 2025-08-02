@@ -45,7 +45,7 @@ if __name__ == '__main__':
     meta.soft_name        = 'Healthy Run'
     meta.soft_author      = "Lígia Aguiar"
     meta.soft_description = "A game that encourages healthy eating"
-    meta.soft_icon        = read_bytes_io(path_icons/'healthy_run.png')
+    meta.soft_icon        = MetaImage.from_file(path_icons/'healthy_run.png')
 
     # Game
     #--------------------------------------------------------------------------#

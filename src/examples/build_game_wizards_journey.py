@@ -45,7 +45,7 @@ if __name__ == '__main__':
     meta.soft_name        = "Wizard's Journey"
     meta.soft_author      = "Samuel Lopes"
     meta.soft_description = "Fuja das criaturas malignas enquanto avança em uma floresta mágica"
-    meta.soft_icon        = read_bytes_io(path_icons/'wizards_journey.png')
+    meta.soft_icon        = MetaImage.from_file(path_icons/'wizards_journey.png')
 
     # Game
     #--------------------------------------------------------------------------#

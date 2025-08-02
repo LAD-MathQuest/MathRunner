@@ -17,4 +17,11 @@ for ui_file in here.glob('*.ui'):
     if not py_file.exists() or py_file.stat().st_mtime < ui_file.stat().st_mtime:
         subprocess.run(['pyside6-uic', '-g', 'python', ui_file, '-o', py_file])
 
+file = here / 'form_main_window.py'
+
+content = file.read_text()
+content = content.replace('import resources_rc', 'from . import resources_rc')
+
+file.write_text(content)
+
 #------------------------------------------------------------------------------#

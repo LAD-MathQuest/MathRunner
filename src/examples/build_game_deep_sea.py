@@ -45,7 +45,7 @@ if __name__ == '__main__':
     meta.soft_name        = 'Deep Sea'
     meta.soft_author      = "Luis D'Afonseca"
     meta.soft_description = "Uma aventura em baixo d'água"
-    meta.soft_icon        = read_bytes_io(path_icons/'deep_sea.png')
+    meta.soft_icon        = MetaImage.from_file(path_icons/'deep_sea.png')
 
     # Game
     #--------------------------------------------------------------------------#

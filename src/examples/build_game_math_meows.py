@@ -45,7 +45,7 @@ if __name__ == '__main__':
     meta.soft_name        = 'Maths & Meows'
     meta.soft_author      = "Nandnn"
     meta.soft_description = "Help the math teacher save the kittens, watch out for the cars!"
-    meta.soft_icon        = read_bytes_io(path_icons/'math_meows.png')
+    meta.soft_icon        = MetaImage.from_file(path_icons/'math_meows.png')
 
     # Game
     #--------------------------------------------------------------------------#

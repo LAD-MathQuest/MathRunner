@@ -45,7 +45,7 @@ if __name__ == '__main__':
     meta.soft_name        = 'Monkey in Danger'
     meta.soft_author      = "Merc"
     meta.soft_description = 'Um jogo de corrida onde o macaco deve evitar as cobras e coletar as bananas'
-    meta.soft_icon        = read_bytes_io(path_icons/'monkey.png')
+    meta.soft_icon        = MetaImage.from_file(path_icons/'monkey.png')
 
     # Game
     #--------------------------------------------------------------------------#

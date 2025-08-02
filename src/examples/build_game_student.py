@@ -45,7 +45,7 @@ if __name__ == '__main__':
     meta.soft_name        = 'Student'
     meta.soft_author      = "Luis D'Afonseca"
     meta.soft_description = '''Um estudante confiante só quer saber de jogar videogames\nPerca o máximo de pontos fugindo dos livros e jogando videogames'''
-    meta.soft_icon        = read_bytes_io(path_icons/'student.png')
+    meta.soft_icon        = MetaImage.from_file(path_icons/'student.png')
 
     # Game
     #--------------------------------------------------------------------------#

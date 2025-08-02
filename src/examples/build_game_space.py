@@ -45,7 +45,7 @@ if __name__ == '__main__':
     meta.soft_name        = 'Space'
     meta.soft_author      = "Daniel Cristo"
     meta.soft_description = 'Desvie dos Asteroides e resgate os Astronautas'
-    meta.soft_icon        = read_bytes_io(path_icons/'space.png')
+    meta.soft_icon        = MetaImage.from_file(path_icons/'space.png')
 
     # Game
     #--------------------------------------------------------------------------#

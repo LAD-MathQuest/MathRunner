@@ -45,7 +45,7 @@ if __name__ == '__main__':
     meta.soft_name        = "Pac Man"
     meta.soft_author      = "Emanuelle Lima"
     meta.soft_description = "Ajude o Pac Man a fugir dos fantasmas e a comer cerejas"
-    meta.soft_icon        = read_bytes_io(path_icons/'pac_man.png')
+    meta.soft_icon        = MetaImage.from_file(path_icons/'pac_man.png')
 
     # Game
     #--------------------------------------------------------------------------#

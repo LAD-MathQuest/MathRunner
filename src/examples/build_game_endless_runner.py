@@ -45,7 +45,7 @@ if __name__ == '__main__':
     meta.soft_name        = 'Endless Runner'
     meta.soft_author      = 'Mariana Matias do Nascimento'
     meta.soft_description = 'A racing game where the character runs an infinite amount of time dodging obstacles'
-    meta.soft_icon        = read_bytes_io(path_icons/'endless_runner.png')
+    meta.soft_icon        = MetaImage.from_file(path_icons/'endless_runner.png')
 
     # Game
     #--------------------------------------------------------------------------#
