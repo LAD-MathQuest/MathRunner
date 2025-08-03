@@ -1,6 +1,7 @@
 #------------------------------------------------------------------------------#
 
 import os
+import sys
 import tempfile
 import subprocess
 
@@ -54,7 +55,7 @@ class MainModel:
         save_meta(self.meta, temp)
         temp.close()
 
-        subprocess.run(["python", '-m', 'infinite_run', temp.name])
+        subprocess.run([sys.executable, '-m', 'infinite_run', temp.name])
 
         os.remove(temp.name)
 
