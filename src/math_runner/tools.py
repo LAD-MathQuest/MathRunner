@@ -8,6 +8,19 @@ from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
 from meta import MetaImage
 
 #------------------------------------------------------------------------------#
+def path_image_to_label(label, path) -> None:
+
+    label.clear()
+
+    pixmap = QPixmap()
+    pixmap.load(path)
+
+    size = label.size().boundedTo(pixmap.size())
+
+    label.setPixmap(pixmap.scaled(size, aspectMode=Qt.KeepAspectRatio))
+    label.setProperty('original_pixmap', pixmap)
+
+#------------------------------------------------------------------------------#
 def meta_image_to_label(label, meta: MetaImage) -> None:
 
     label.clear()
