@@ -1,7 +1,7 @@
 [project]
 name = "MathRunner"
 version = "0.1.0"
-requires-python = "==3.13.*"
+requires-python = "==3.12.*"
 
 dependencies = [
     "numexpr==2.10.0",
@@ -9,11 +9,6 @@ dependencies = [
     "pygame==2.6.1",
     "pyqtgraph==0.13.7",
     "pyside6==6.8.2.1",
-]
-
-[dependency-groups]
-dev = [
-    "sphinx==8.2.3",
 ]
 
 [tool.uv]
