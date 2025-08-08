@@ -1,38 +1,32 @@
 #------------------------------------------------------------------------------#
 
+import os
 import sys
 
 from pathlib import Path
 
-# Working parameters
-#------------------------------------------------------------------------------#
+production = getattr(sys, 'frozen', False)
 
-# User home directory
-if sys.platform.startswith('win32'):
-    HOME = Path.home() / 'Documents'
-    if not HOME.is_dir():
-        HOME = Path.home()
+if not production:
+    games_path = Path(__file__).parents[1] / 'games'
+
 else:
-    HOME = Path.home()
-
-# Resources  parameters
-#------------------------------------------------------------------------------#
-
-# Default games path
-# TODO Definir qual vai ser o path default na versão final
-games_path = Path(__file__).parents[1] / 'games'
+    dist_path  = Path(os.path.dirname(sys.executable)).parent
+    games_path = dist_path / 'games'
+    exe_name   = 'InfiniteRun.exe' if sys.platform == "win32" else 'InfiniteRun'
+    infinite_run_exe = dist_path / 'InfiniteRun' / exe_name
 
 # Application  parameters
 #------------------------------------------------------------------------------#
 
-AUTHOR  = "Luis A. D'Afonseca"
-VERSION = '0.0.1 - alpha'
-TITLE   = 'MathRunner'
-MYAPPID = 'Prof_Luis_A_DAfonseca.MathRunner.designer'
+author  = "Luis A. D'Afonseca"
+version = '0.1.0 - alpha'
+title   = 'MathRunner'
+myappid = 'Prof_Luis_A_DAfonseca.MathRunner.designer'
 
-ABOUT = f"""
-Desenvolvedor: {AUTHOR}
-Versão: {VERSION}
+about = f"""
+Desenvolvedor: {author}
+Versão: {version}
 Licença: GNU General Public License - Version 3"""
 
 #------------------------------------------------------------------------------#

@@ -7,7 +7,7 @@ import subprocess
 from pathlib import Path
 
 #------------------------------------------------------------------------------#
-if __name__ == '__main__':
+def build_all() -> None:
 
     here = Path(__file__).parent
 
@@ -16,5 +16,9 @@ if __name__ == '__main__':
 
     for build in here.glob('build*.py'):
         subprocess.run([sys.executable, build])
+
+#------------------------------------------------------------------------------#
+if __name__ == '__main__':
+    build_all()
 
 #------------------------------------------------------------------------------#

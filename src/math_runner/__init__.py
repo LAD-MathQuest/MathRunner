@@ -1,36 +1,40 @@
 #------------------------------------------------------------------------------#
 
-import subprocess
-from pathlib import Path
+from .parameters import production
 
-here = Path(__file__).parent
+if not production:
 
-rc_qt = here / 'resources.qrc'
-rc_py = here / 'resources_rc.py'
+    import subprocess
+    from pathlib import Path
 
-if not rc_py.exists() or rc_py.stat().st_mtime < rc_qt.stat().st_mtime:
-    subprocess.run(['pyside6-rcc', rc_qt, '-o', rc_py])
+    here = Path(__file__).parent
 
-ui_file = here / 'form_main_window.ui'
-py_file = here / 'form_main_window.py'
+    rc_qt = here / 'resources.qrc'
+    rc_py = here / 'resources_rc.py'
 
-if not py_file.exists() or py_file.stat().st_mtime < ui_file.stat().st_mtime:
+    if not rc_py.exists() or rc_py.stat().st_mtime < rc_qt.stat().st_mtime:
+        subprocess.run(['pyside6-rcc', rc_qt, '-o', rc_py])
 
-    subprocess.run(['pyside6-uic', '-g', 'python', ui_file, '-o', py_file])
-
-    content = py_file.read_text()
-    content = content.replace(
-        'import resources_rc',
-        'from . import resources_rc'
-    )
-    py_file.write_text(content)
-
-
-for ui_file in here.glob('*.ui'):
-
-    py_file = ui_file.with_suffix('.py')
+    ui_file = here / 'form_main_window.ui'
+    py_file = here / 'form_main_window.py'
 
     if not py_file.exists() or py_file.stat().st_mtime < ui_file.stat().st_mtime:
+
         subprocess.run(['pyside6-uic', '-g', 'python', ui_file, '-o', py_file])
+
+        content = py_file.read_text()
+        content = content.replace(
+            'import resources_rc',
+            'from . import resources_rc'
+        )
+        py_file.write_text(content)
+
+
+    for ui_file in here.glob('*.ui'):
+
+        py_file = ui_file.with_suffix('.py')
+
+        if not py_file.exists() or py_file.stat().st_mtime < ui_file.stat().st_mtime:
+            subprocess.run(['pyside6-uic', '-g', 'python', ui_file, '-o', py_file])
 
 #------------------------------------------------------------------------------#
