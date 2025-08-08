@@ -46,7 +46,7 @@ To install python and run MathRunner follow the steps:
 
 4. Install `uv`, following this [instructions](https://docs.astral.sh/uv/getting-started/installation)
 
-5. Go to the folder where you unzipped the code. On linux terminal execute
+5. Go to the folder where you unzipped the code. On Linux terminal execute
     ```
     cd path_to_code
     ```
@@ -65,11 +65,21 @@ To install python and run MathRunner follow the steps:
     uv tun -m infinite_run path_to_game_file
     ```
 
+## Documentation
+
+The project uses MkDocs to create the documentation.
+For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+
+### Commands
+
+* `uv run -m mkdocs serve` - Start the live-reloading docs server.
+* `uv run -m mkdocs build` - Build the documentation site.
+
 ## Technologies
 
 This program is implemented in Python and uses the libraries
 
-- [pygame](https://www.pygame.org)
+- [Pygame](https://www.pygame.org)
 - [Numpy](https://numpy.org)
 - [NumExpr](https://pypi.org/project/numexpr/2.6.1)
 - [PySide6](https://wiki.qt.io/Qt_for_Python)
