@@ -62,6 +62,7 @@ def compile_examples() -> None:
 
 #------------------------------------------------------------------------------#
 def zip_distribution() -> None:
+    print(f'Creating {dist_name}.zip...')
     shutil.make_archive(dist_name, 'zip', dist_name)
 
 #------------------------------------------------------------------------------#

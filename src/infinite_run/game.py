@@ -5,15 +5,14 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
 import argparse
 import sys
-sys.path.append('../src')
 
 import pygame
 import pygame.freetype
 
 from meta import MetaWorld, load_meta
 
-from infinite_run.world  import GameWorld
-from infinite_run.engine import Engine
+from .world  import GameWorld
+from .engine import Engine
 
 #------------------------------------------------------------------------------#
 def main():
@@ -56,9 +55,5 @@ def main():
 
     engine.run()
     sys.exit()
-
-#------------------------------------------------------------------------------#
-if __name__ == '__main__':
-    main()
 
 #------------------------------------------------------------------------------#

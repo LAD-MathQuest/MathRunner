@@ -1,12 +1,13 @@
 #------------------------------------------------------------------------------#
 
 import sys
-sys.path.append('../src')
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent / 'src'))
 
-from math_runner import gui
+from infinite_run import game
 
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
-    sys.exit(gui.main(sys.argv))
+    sys.exit(game.main())
 
 #------------------------------------------------------------------------------#

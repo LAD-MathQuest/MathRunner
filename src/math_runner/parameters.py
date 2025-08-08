@@ -9,6 +9,7 @@ production = getattr(sys, 'frozen', False)
 
 if not production:
     games_path = Path(__file__).parents[1] / 'games'
+    infinite_run_exe = None
 
 else:
     dist_path  = Path(os.path.dirname(sys.executable)).parent
