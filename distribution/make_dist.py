@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------#
-'''Execute PyInstaller to build the distribution'''
+'''Uses PyInstaller to build the distribution'''
 
 import sys
 import shutil
@@ -12,13 +12,11 @@ from examples.__main__ import build_all as build_examples
 
 #------------------------------------------------------------------------------#
 
-dist_name = 'math-runner-0-1-0'
-
-here = Path(__file__).parent
-src  = here.parent / 'src'
+dist_name = 'math-runner'
+version   = '0-1-0'
 
 #------------------------------------------------------------------------------#
-def compile_math_runner(sep: str) -> None:
+def compile_math_runner(src: Path, dist: str, sep: str) -> None:
 
     print('Compiling MathRunner...')
 
@@ -27,14 +25,14 @@ def compile_math_runner(sep: str) -> None:
     installer.run([
         'exec_math_runner.py',
         '--name=MathRunner',
-        f'--dist={dist_name}',
+        f'--dist={dist}',
         f'--add-data={data}{sep}resources',
         '--noconfirm',
         '--windowed'
     ])
 
 #------------------------------------------------------------------------------#
-def compile_infinite_run(sep: str) -> None:
+def compile_infinite_run(src: Path, dist: str, sep: str) -> None:
 
     print('Compiling InfiniteRun...')
 
@@ -43,52 +41,59 @@ def compile_infinite_run(sep: str) -> None:
     installer.run([
         'exec_infinite_run.py',
         '--name=InfiniteRun',
-        f'--dist={dist_name}',
+        f'--dist={dist}',
         f'--add-data={data}{sep}infinite_run/resources',
         '--noconfirm',
         '--windowed'
     ])
 
 #------------------------------------------------------------------------------#
-def compile_examples() -> None:
+def compile_examples(here: Path, src: Path, dist: str) -> None:
+
     print('Compiling Examples...')
 
     build_examples()
 
     source = src / 'games'
-    dest   = here / dist_name / 'games'
+    dest   = here / dist / 'games'
 
     shutil.copytree(source, dest, dirs_exist_ok=True)
 
 #------------------------------------------------------------------------------#
-def zip_distribution() -> None:
-    print(f'Creating {dist_name}.zip...')
-    shutil.make_archive(dist_name, 'zip', dist_name)
+def zip_distribution(dist: str) -> None:
+
+    print(f'Creating {dist}.zip...')
+
+    shutil.make_archive(dist, 'zip', dist)
 
 #------------------------------------------------------------------------------#
-def deploy() -> None:
+def main() -> None:
 
     if sys.platform == 'linux':
-        os_name = 'Linux'
         sep = ':'
 
     elif sys.platform == 'win32':
-        os_name = 'Windows'
         sep = ';'
 
     else:
         print(f'Unknown platform {sys.platform}!')
         return
 
-    print(f'Creating a distribution package for {os_name}...')
+    here = Path(__file__).parent
+    src  = here.parent / 'src'
+    dist = f'{dist_name}-{sys.platform}-{version}'
 
-    compile_math_runner (sep)
-    compile_infinite_run(sep)
-    compile_examples()
-    zip_distribution()
+    print(f'Creating a distribution {dist}...')
+
+    compile_math_runner (src, dist, sep)
+    compile_infinite_run(src, dist, sep)
+    compile_examples    (here, src, dist)
+    zip_distribution    (dist)
+
+    print('Done')
 
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':
-    deploy()
+    main()
 
 #------------------------------------------------------------------------------#

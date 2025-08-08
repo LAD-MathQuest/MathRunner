@@ -1,11 +1,13 @@
 #------------------------------------------------------------------------------#
 '''Clean the dist folder'''
 
+import sys
 import shutil
 
 from pathlib import Path
 
-dist_name = 'math-runner-0-1-0'
+dist_name = 'math-runner'
+version   = '0-1-0'
 
 #------------------------------------------------------------------------------#
 def remove_dir(path: Path) -> None:
@@ -30,9 +32,10 @@ if __name__ == '__main__':
     '''Remove temporary files'''
 
     here = Path(__file__).parent
+    dist = f'{dist_name}-{sys.platform}-{version}'
 
     remove_dir(here / 'build')
-    remove_dir(here / dist_name)
+    remove_dir(here / dist)
     remove_files(here, '*.spec')
 
     print('Done')
