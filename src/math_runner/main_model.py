@@ -7,6 +7,7 @@ import subprocess
 
 from meta import MetaWorld, save_meta, load_meta
 
+from .parameters          import production, infinite_run_exe
 from .update_meta_from_ui import update_meta_from_ui
 from .update_ui_from_meta import update_ui_from_meta
 
@@ -55,7 +56,10 @@ class MainModel:
         save_meta(self.meta, temp)
         temp.close()
 
-        subprocess.run([sys.executable, '-m', 'infinite_run', temp.name])
+        if production:
+            subprocess.run([str(infinite_run_exe), temp.name])
+        else:
+            subprocess.run([sys.executable, '-m', 'infinite_run', temp.name])
 
         os.remove(temp.name)
 

@@ -76,7 +76,7 @@ class MainController:
 
         self.init_objects()
 
-        self.last_dir  = str(par.HOME)
+        self.last_dir  = str(parameters.games_path)
         self.file_name = ''
 
         self.start_new()
@@ -84,7 +84,6 @@ class MainController:
    
         self.connect_signals_and_slots()
 
-       
     #--------------------------------------------------------------------------#
     def init_objects(self):
 
@@ -219,7 +218,7 @@ class MainController:
 
         fname = self.get_open_fname(
             'Choose a game description',
-            par.games_path,
+            self.last_dir,
             'game'
         )
 
@@ -265,11 +264,19 @@ class MainController:
 
     #--------------------------------------------------------------------------#
     def about(self):
-        QMessageBox.about(self.win, par.TITLE+' - About', par.ABOUT )
+        QMessageBox.about(
+            self.win,
+            parameters.title + ' - About',
+            parameters.about
+        )
 
     #--------------------------------------------------------------------------#
     def help(self):
-        QMessageBox.about(self.win, par.TITLE+' - Help', par.ABOUT )
+        QMessageBox.about(
+            self.win,
+            parameters.title + ' - Help',
+            parameters.about
+        )
 
     #--------------------------------------------------------------------------#
     # Slots
