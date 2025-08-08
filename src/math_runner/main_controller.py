@@ -7,7 +7,7 @@ from PySide6.QtWidgets import (QApplication,
                                QVBoxLayout)
 from PySide6.QtCore import Qt
 
-from . import parameters as par
+from . import parameters
 from pathlib import Path
 
 from .main_model    import MainModel
@@ -212,10 +212,6 @@ class MainController:
 
     #--------------------------------------------------------------------------#
     def open(self):
-
-        if not self.confirm_deletion():
-            return
-
         fname = self.get_open_fname(
             'Choose a game description',
             self.last_dir,
