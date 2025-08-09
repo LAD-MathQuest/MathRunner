@@ -4,10 +4,13 @@ from PySide6.QtGui     import QPalette, QPixmap, QUndoCommand, QUndoGroup, QUndo
 from PySide6.QtWidgets import (QApplication,
                                QFileDialog,
                                QMessageBox,
-                               QVBoxLayout)
+                               QVBoxLayout,
+                               QTabWidget)
 from PySide6.QtCore import Qt
 
 from . import parameters
+from . import tools
+
 from pathlib import Path
 
 from .main_model    import MainModel
@@ -25,20 +28,20 @@ sys.path.append(str(Path(__file__).parents[1]))
 
 #--------------------------------------------------------------------------------#
 class ChangeImageCommand(QUndoCommand):
-    def __init__(self, label, old_path, new_path, description="Alterar imagem"):
+    def __init__(self, label, old_image, new_image, description="Alterar imagem"):
         super().__init__(description)
         self.label = label
-        self.old_path = old_path
-        self.new_path = new_path
+        self.old_image = old_image
+        self.new_image = new_image
 
     def undo(self):
-        self._set_image(self.old_path)
+        self._set_image(self.old_image)
     def redo(self):
-        self._set_image(self.new_path)
+        self._set_image(self.new_image)
 
-    def _set_image(self, path):
-        if path and Path(path).exists():
-            pixmap = QPixmap(path).scaled(228, 128, Qt.KeepAspectRatio)
+    def _set_image(self, image):
+        if image:
+            pixmap = QPixmap.fromImage(image)
             self.label.setPixmap(pixmap)
         else:
             self.label.clear()
@@ -55,11 +58,6 @@ class MainController:
         self.ui  = window.ui
 
         self.model = MainModel(self)
-
-        # Undo Group e as pilhas
-        self.undo_group = QUndoGroup(self.win)
-        self.undo_stack_aparencia = QUndoStack(self.win)
-        self.undo_group.addStack(self.undo_stack_aparencia)
         
         color = self.win.palette().color(QPalette.Window)
 
@@ -81,8 +79,20 @@ class MainController:
 
         self.start_new()
 
-   
+        # Iniciando as variáveis de imagem com a imagem padrao 
+        self.background_image = self.ui.label_BackgroundImage.pixmap().toImage()
+        self.track_image = self.ui.label_TrackImage.pixmap().toImage()
+        
+        #Criação do Undo Group
+        self.undo_group = QUndoGroup(self.win)
+
         self.connect_signals_and_slots()
+
+        # Criação das pilhas de Undo
+        self.undo_stacks = []
+        for i in range(self.ui.tabWidget_Game.count()):
+            self.undo_stacks.append(QUndoStack(self.win))
+            self.undo_group.addStack(self.undo_stacks[i])
 
     #--------------------------------------------------------------------------#
     def init_objects(self):
@@ -193,14 +203,8 @@ class MainController:
     #--------------------------------------------------------------------------#
 
     def update_undo_stack(self, index):
-        tab_name = self.ui.tabWidget_Game.tabText(index)
-        
-        if tab_name == "Aparência":
-            self.undo_group.setActiveStack(self.undo_stack_aparencia)
-        
-        # if tab_name == "Jogo":
-        #     self.undo_group.setActiveStack(self.undo_stack_jogo)
-        # etc...
+        self.undo_group.setActiveStack(self.undo_stacks[index])
+
     #--------------------------------------------------------------------------#
     def new(self):
 
@@ -282,14 +286,18 @@ class MainController:
         fname = self.get_open_fname('Escolha uma Imagem', path_backgrounds, 'png')
         
         if fname:
-            label = self.ui.label_BackgroundImage 
-            old_path = getattr(self, 'background_image_file', '')
-            old_path = str(old_path) if old_path else ''
+            label = self.ui.label_BackgroundImage
 
-            command = ChangeImageCommand(label, old_path, fname, "Alterar imagem de fundo")
-            self.undo_stack_aparencia.push(command)
+            old_image = getattr(self, 'background_image', '')
+            
+            tools.path_image_to_label(label, fname)
 
-            self.background_image_file = Path(fname)
+            new_image = label.pixmap().toImage()
+            command = ChangeImageCommand(label, old_image, new_image, "Alterar imagem de fundo")
+            stack = self.undo_group.activeStack()
+            stack.push(command)
+
+            self.background_image = new_image
             self.changed = True
 
     def select_track_image(self):
@@ -297,23 +305,26 @@ class MainController:
         fname = self.get_open_fname('Escolha uma Imagem', path_backgrounds, 'png')
 
         if fname:
-            label = self.ui.label_TrackImage  
-            old_path = getattr(self, 'track_image_file', '')
-            old_path = str(old_path) if old_path else ''
+            label = self.ui.label_TrackImage
 
-            command = ChangeImageCommand(label, old_path, fname, "Alterar imagem do caminho de fundo")
-            self.undo_stack_aparencia.push(command)
+            old_image = getattr(self, 'track_image', '')
+            tools.path_image_to_label(label, fname)
+            new_image = label.pixmap().toImage()
 
-            self.track_image_file = Path(fname)
+            command = ChangeImageCommand(label, old_image, new_image, "Alterar imagem do caminho de fundo")
+            stack = self.undo_group.activeStack()
+            stack.push(command)
+
+            self.track_image = new_image
             self.changed = True
 
     def select_scoreboard_image(self):
         path_backgrounds = self.path_resources/'scoreboards'
         fname = self.get_open_fname('Escolha uma Imagem', path_backgrounds, 'png')
         if fname:
-            self.background_image_file = Path(fname)
+            self.background_image = Path(fname)
 
-            pixmap = QPixmap(str(self.background_image_file))
+            pixmap = QPixmap(str(self.background_image))
             pixmap = pixmap.scaled(228, 128, Qt.KeepAspectRatio)
             
             self.ui.label_BackgroundImage.setPixmap(pixmap)
