@@ -93,6 +93,7 @@ class MainController:
         for i in range(self.ui.tabWidget_Game.count()):
             self.undo_stacks.append(QUndoStack(self.win))
             self.undo_group.addStack(self.undo_stacks[i])
+        self.undo_group.setActiveStack(self.undo_stacks[0])
 
     #--------------------------------------------------------------------------#
     def init_objects(self):
@@ -224,9 +225,21 @@ class MainController:
 
         if fname:
             # TODO try:
+            labelBackground = self.ui.label_BackgroundImage
+            labelTrack = self.ui.label_TrackImage
+            old_backgroundoImage = getattr(self, 'background_image', '')
+            old_trackImage = getattr(self, 'track_image', '')
+
             self.file_name = fname
             self.model.open(self.file_name)
+            
             self.start_view_from_model()
+
+            self.add_image_undo(labelBackground, old_backgroundoImage, labelBackground.pixmap().toImage(), 'Alterar imagem de fundo')
+            self.add_image_undo(labelTrack, old_trackImage, labelTrack.pixmap().toImage(), 'Alterar imagem do caminho de fundo')
+            self.background_image = labelBackground.pixmap().toImage()
+            self.track_image = labelTrack.pixmap().toImage()
+
 
     #--------------------------------------------------------------------------#
     def save(self):
@@ -293,10 +306,8 @@ class MainController:
             tools.path_image_to_label(label, fname)
 
             new_image = label.pixmap().toImage()
-            command = ChangeImageCommand(label, old_image, new_image, "Alterar imagem de fundo")
-            stack = self.undo_group.activeStack()
-            stack.push(command)
-
+            
+            self.add_image_undo(label, old_image, new_image, "Alterar imagem do fundo")
             self.background_image = new_image
             self.changed = True
 
@@ -311,9 +322,7 @@ class MainController:
             tools.path_image_to_label(label, fname)
             new_image = label.pixmap().toImage()
 
-            command = ChangeImageCommand(label, old_image, new_image, "Alterar imagem do caminho de fundo")
-            stack = self.undo_group.activeStack()
-            stack.push(command)
+            self.add_image_undo(label, old_image, new_image, "Alterar imagem do caminho de fundo")
 
             self.track_image = new_image
             self.changed = True
@@ -427,13 +436,15 @@ class MainController:
     #--------------------------------------------------------------------------#
     def start_new(self):
         self.model.new()
+        self.ui.tabWidget_Game   .setCurrentIndex(0)
+        self.ui.tabWidget_Objects.setCurrentIndex(0)
         self.start_view_from_model()
 
     #--------------------------------------------------------------------------#
     def start_view_from_model(self):
 
-        self.ui.tabWidget_Game   .setCurrentIndex(0)
-        self.ui.tabWidget_Objects.setCurrentIndex(0)
+        #self.ui.tabWidget_Game   .setCurrentIndex(0)
+        #self.ui.tabWidget_Objects.setCurrentIndex(0)
 
         self.model.update_ui()
 
@@ -502,5 +513,11 @@ class MainController:
                 fname += ee
 
         return fname
+    #--------------------------------------------------------------------------#
+    def add_image_undo(self, label, old_image, new_image, description):
+        command = ChangeImageCommand(label, old_image, new_image, description)
+        stack = self.undo_group.activeStack()
+        stack.push(command)
+        
 
 #------------------------------------------------------------------------------#
