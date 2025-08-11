@@ -13,6 +13,9 @@ from . import tools
 
 from pathlib import Path
 
+from meta import MetaWorld, save_meta, load_meta
+from meta.meta_world import MetaWorld, MetaImage, MetaObject, MetaScoreboard
+
 from .main_model    import MainModel
 from .object_widget import ObjectWidget
 from .plot_velocity import PlotVelocity
@@ -50,6 +53,7 @@ class ChangeImageCommand(QUndoCommand):
 class MainController:
 
     path_resources = Path(__file__).parents[1]/'examples/resources'
+    path_games = Path(__file__).parents[1]/'games'
 
     #--------------------------------------------------------------------------#
     def __init__(self, window):
@@ -125,7 +129,8 @@ class MainController:
 
         ui.action_New     .triggered.connect( self.new     )
         ui.action_Open    .triggered.connect( self.open    )
-        ui.action_Save.triggered.connect(self.save)
+        self.ui.action_Save.triggered.connect(self.save)
+        self.ui.action_Save.setEnabled(True)
         ui.action_Save_as .triggered.connect( self.save_as )
         ui.action_Exit    .triggered.connect( self.exit    )
         # ui.action_Undo    .triggered.connect( self.undo    )
@@ -243,13 +248,45 @@ class MainController:
 
     #--------------------------------------------------------------------------#
     def save(self):
+        meta = MetaWorld()
 
-        if not self.file_name:
-            self.save_as()
+        #dados de texto
+        meta.soft_name = self.ui.lineEdit_GameName.text()
+        meta.soft_author = self.ui.lineEdit_Author.text()
+        meta.soft_description = self.ui.plainTextEdit_GameDescription.toPlainText()
 
-        elif self.changed:
-            self.model.save( self.file_name )
+        #Som ambiente
+        if hasattr(self, 'ambience_sound_file'):
+            try:
+                with open(self.ambience_sound_file, "rb") as f:
+                    meta.game_ambience = f.read()
+                meta.game_ambience_volume = 0.7
+            except Exception as e:
+                self.error_box("Erro", f"Falha ao carregar som de ambiente:\n{e}")
+
+        #Imagem de fundo em bytes
+        meta.background_image = MetaImage()
+        tools.label_to_meta_image(self.ui.label_BackgroundImage, meta.background_image)
+
+        #Imagem da pista em bytes
+        meta.track_image = MetaImage()
+        tools.label_to_meta_image(self.ui.label_TrackImage, meta.track_image)
+
+        # TODO: coletar outros dados da interface, ex:
+        # - scoreboard_image
+        # - obstáculos
+        # - colecionáveis
+        # - funções de velocidade e limites
+
+        save_path = self.get_save_fname("Salvar jogo", "game", suggestion=str(self.path_games))
+
+        if save_path:
+            save_meta(meta, save_path)
+            QMessageBox.information(self.win, "Sucesso", f"Jogo salvo em:\n{save_path}")
             self.changed = False
+            self.ui.action_Save.setEnabled(True)
+
+        self.ui.action_Save.setEnabled(True)
 
     #--------------------------------------------------------------------------#
     def save_as(self):
