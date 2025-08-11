@@ -288,7 +288,7 @@ class Ui_MainWindow(object):
 
         self.doubleSpinBox_AmbienceSoundVolume = QDoubleSpinBox(self.groupBox_Game)
         self.doubleSpinBox_AmbienceSoundVolume.setObjectName(u"doubleSpinBox_AmbienceSoundVolume")
-        self.doubleSpinBox_AmbienceSoundVolume.setEnabled(False)
+        self.doubleSpinBox_AmbienceSoundVolume.setEnabled(True)
         self.doubleSpinBox_AmbienceSoundVolume.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.doubleSpinBox_AmbienceSoundVolume.setMaximum(1.000000000000000)
         self.doubleSpinBox_AmbienceSoundVolume.setSingleStep(0.100000000000000)

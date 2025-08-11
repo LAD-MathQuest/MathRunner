@@ -23,7 +23,7 @@ import sys
 from PySide6.QtGui import QUndoCommand, QPixmap
 from PySide6.QtCore import Qt
 from pathlib import Path
-
+import pygame
 sys.path.append(str(Path(__file__).parents[1]))
 
 #--------------------------------------------------------------------------------#
@@ -156,10 +156,10 @@ class MainController:
         # ui.radioButton_VerticalScrolling
         # ui.checkBox_TrackKills
         # ui.doubleSpinBox_ScoreTimeBonus
-        # ui.pushButton_AmbienceSoundSelect
+        ui.pushButton_AmbienceSoundSelect.clicked.connect(self.select_ambience_sound)
         # ui.pushButton_AmbienceSoundRemove
         ui.pushButton_AmbienceSoundPlay.clicked.connect( self.ambience_play )
-        # ui.doubleSpinBox_AmbienceSoundVolume
+        ui.doubleSpinBox_AmbienceSoundVolume.valueChanged.connect(self.ambience_volume)
 
         #--- Appearance Tab signals -------------------------------------------#
 
@@ -338,13 +338,49 @@ class MainController:
             
             self.ui.label_BackgroundImage.setPixmap(pixmap)
             self.changed = True
-    
+    #--------------------------------------------------------------------------#
+    def select_ambience_sound(self):
+        path_sounds = self.path_resources/'sounds'
+        fname = self.get_open_fname('Escolha um som ambiente', path_sounds, 'mp3')
+
+        if fname:
+            fname_path = fname
+            print(fname_path)
+            self.ambience_sound_file = fname_path  
+        
+            self.ui.pushButton_AmbienceSoundPlay.setEnabled(True)
+            self.ui.pushButton_AmbienceSoundRemove.setEnabled(True)
+
+            self.changed = True
+
     #--------------------------------------------------------------------------#
     def ambience_play(self):
-        pass
-        # tools.play_sound(self.win,
-        #                  self.model.meta.game_ambience,
-        #                  self.model.meta.game_ambience_volume)
+        if hasattr(self, 'ambience_sound_file'):
+            pygame.mixer.init()
+            if pygame.mixer.music.get_busy():
+                pygame.mixer.music.stop()
+            pygame.mixer.music.load(str(self.path_resources/self.ambience_sound_file))
+            
+            volume = self.ui.doubleSpinBox_AmbienceSoundVolume.value()  # valor de 0.0 a 1.0
+            pygame.mixer.music.set_volume(volume)
+
+            pygame.mixer.music.play(-1) #toca em loop infinito 
+        
+            self.changed = True
+    #--------------------------------------------------------------------------#
+    def ambience_stop(self):
+        if pygame.mixer.get_init():  # só tenta parar se estiver inicializado
+            pygame.mixer.music.stop()
+
+        self.ambience_sound_file = None
+        self.ui.pushButton_AmbienceSoundPlay.setEnabled(False)
+        self.ui.pushButton_AmbienceSoundRemove.setEnabled(False)
+        self.ui.doubleSpinBox_AmbienceSoundVolume.setEnabled(False)
+
+        self.changed = True
+    #--------------------------------------------------------------------------#
+    def ambience_volume(self, volume):
+         pygame.mixer.music.set_volume(volume)
 
     #--------------------------------------------------------------------------#
     def obstacles_frequency_changed(self):
