@@ -191,6 +191,10 @@ class MainController:
         ui.doubleSpinBox_ObstaclesFrequency.   valueChanged.connect(self.obstacles_frequency_changed   )
         ui.doubleSpinBox_CollectiblesFrequency.valueChanged.connect(self.collectibles_frequency_changed)
 
+        ui.pushButton_SelectPlayerImage.clicked.connect(self.select_player_image)
+        ui.spinBox_PlayerWidth.valueChanged.connect(self.update_image_size)
+        ui.spinBox_PlayerHeight.valueChanged.connect(self.update_image_size)
+        ui.checkBox_PlayerKeepAspectRatio.stateChanged.connect(self.update_image_size)
         #--- Velocity and Boundary Tabs signals -------------------------------#
 
         ui.lineEdit_FunctionVelocity    .editingFinished.connect(self.function_velocity_changed     )
@@ -294,6 +298,7 @@ class MainController:
     #--------------------------------------------------------------------------#
     # Slots
     #--------------------------------------------------------------------------#
+
     def select_image(self):
         path_backgrounds = self.path_resources / 'backgrounds'
         fname = self.get_open_fname('Escolha uma Imagem', path_backgrounds, 'png')
@@ -338,6 +343,38 @@ class MainController:
             
             self.ui.label_BackgroundImage.setPixmap(pixmap)
             self.changed = True
+
+    def select_player_image(self):
+        path_icon = self.path_resources / 'icons'
+        fname = self.get_open_fname('Escolha uma Imagem', path_icon, 'png')
+        
+        if fname:
+            label = self.ui.label_PlayerImage
+
+            old_image = getattr(self, 'player_image', '')
+            
+            tools.path_image_to_label(label, fname)
+
+            new_image = label.pixmap().toImage()
+            
+            self.add_image_undo(label, old_image, new_image, "Alterar imagem do fundo")
+            self.player_image = new_image
+            self.changed = True
+
+    def update_image_size(self):    
+        width = self.ui.spinBox_PlayerWidth.value()
+        height = self.ui.spinBox_PlayerHeight.value()
+        keep = self.ui.checkBox_PlayerKeepAspectRatio.isChecked()
+
+        if hasattr(self, "player_image") and not self.player_image.isNull():
+            pixmap = QPixmap.fromImage(self.player_image)
+
+            if keep:
+                pixmap = pixmap.scaledToWidth(width)
+            else:
+                pixmap = pixmap.scaled(width, height)
+
+            self.ui.label_PlayerImage.setPixmap(pixmap)
     
     #--------------------------------------------------------------------------#
     def ambience_play(self):
