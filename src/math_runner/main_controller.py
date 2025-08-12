@@ -13,6 +13,9 @@ from . import tools
 
 from pathlib import Path
 
+from meta import MetaWorld, save_meta, load_meta
+from meta.meta_world import MetaWorld, MetaImage, MetaObject, MetaScoreboard
+
 from .main_model    import MainModel
 from .object_widget import ObjectWidget
 from .plot_velocity import PlotVelocity
@@ -23,7 +26,7 @@ import sys
 from PySide6.QtGui import QUndoCommand, QPixmap
 from PySide6.QtCore import Qt
 from pathlib import Path
-
+import pygame
 sys.path.append(str(Path(__file__).parents[1]))
 
 #--------------------------------------------------------------------------------#
@@ -50,6 +53,7 @@ class ChangeImageCommand(QUndoCommand):
 class MainController:
 
     path_resources = Path(__file__).parents[1]/'examples/resources'
+    path_games = Path(__file__).parents[1]/'games'
 
     #--------------------------------------------------------------------------#
     def __init__(self, window):
@@ -125,7 +129,8 @@ class MainController:
 
         ui.action_New     .triggered.connect( self.new     )
         ui.action_Open    .triggered.connect( self.open    )
-        ui.action_Save.triggered.connect(self.save)
+        self.ui.action_Save.triggered.connect(self.save)
+        self.ui.action_Save.setEnabled(True)
         ui.action_Save_as .triggered.connect( self.save_as )
         ui.action_Exit    .triggered.connect( self.exit    )
         # ui.action_Undo    .triggered.connect( self.undo    )
@@ -156,10 +161,10 @@ class MainController:
         # ui.radioButton_VerticalScrolling
         # ui.checkBox_TrackKills
         # ui.doubleSpinBox_ScoreTimeBonus
-        # ui.pushButton_AmbienceSoundSelect
+        ui.pushButton_AmbienceSoundSelect.clicked.connect(self.select_ambience_sound)
         # ui.pushButton_AmbienceSoundRemove
         ui.pushButton_AmbienceSoundPlay.clicked.connect( self.ambience_play )
-        # ui.doubleSpinBox_AmbienceSoundVolume
+        ui.doubleSpinBox_AmbienceSoundVolume.valueChanged.connect(self.ambience_volume)
 
         #--- Appearance Tab signals -------------------------------------------#
 
@@ -247,13 +252,45 @@ class MainController:
 
     #--------------------------------------------------------------------------#
     def save(self):
+        meta = MetaWorld()
 
-        if not self.file_name:
-            self.save_as()
+        #dados de texto
+        meta.soft_name = self.ui.lineEdit_GameName.text()
+        meta.soft_author = self.ui.lineEdit_Author.text()
+        meta.soft_description = self.ui.plainTextEdit_GameDescription.toPlainText()
 
-        elif self.changed:
-            self.model.save( self.file_name )
+        #Som ambiente
+        if hasattr(self, 'ambience_sound_file'):
+            try:
+                with open(self.ambience_sound_file, "rb") as f:
+                    meta.game_ambience = f.read()
+                meta.game_ambience_volume = 0.7
+            except Exception as e:
+                self.error_box("Erro", f"Falha ao carregar som de ambiente:\n{e}")
+
+        #Imagem de fundo em bytes
+        meta.background_image = MetaImage()
+        tools.label_to_meta_image(self.ui.label_BackgroundImage, meta.background_image)
+
+        #Imagem da pista em bytes
+        meta.track_image = MetaImage()
+        tools.label_to_meta_image(self.ui.label_TrackImage, meta.track_image)
+
+        # TODO: coletar outros dados da interface, ex:
+        # - scoreboard_image
+        # - obstáculos
+        # - colecionáveis
+        # - funções de velocidade e limites
+
+        save_path = self.get_save_fname("Salvar jogo", "game", suggestion=str(self.path_games))
+
+        if save_path:
+            save_meta(meta, save_path)
+            QMessageBox.information(self.win, "Sucesso", f"Jogo salvo em:\n{save_path}")
             self.changed = False
+            self.ui.action_Save.setEnabled(True)
+
+        self.ui.action_Save.setEnabled(True)
 
     #--------------------------------------------------------------------------#
     def save_as(self):
@@ -342,7 +379,7 @@ class MainController:
             pixmap = pixmap.scaled(228, 128, Qt.KeepAspectRatio)
             
             self.ui.label_BackgroundImage.setPixmap(pixmap)
-            self.changed = True
+
 
     def select_player_image(self):
         path_icon = self.path_resources / 'icons'
@@ -376,12 +413,50 @@ class MainController:
 
             self.ui.label_PlayerImage.setPixmap(pixmap)
     
+
+    def select_ambience_sound(self):
+        path_sounds = self.path_resources/'sounds'
+        fname = self.get_open_fname('Escolha um som ambiente', path_sounds, 'mp3')
+
+        if fname:
+            fname_path = fname
+            print(fname_path)
+            self.ambience_sound_file = fname_path  
+        
+            self.ui.pushButton_AmbienceSoundPlay.setEnabled(True)
+            self.ui.pushButton_AmbienceSoundRemove.setEnabled(True)
+
+            self.changed = True
+
+
     #--------------------------------------------------------------------------#
     def ambience_play(self):
-        pass
-        # tools.play_sound(self.win,
-        #                  self.model.meta.game_ambience,
-        #                  self.model.meta.game_ambience_volume)
+        if hasattr(self, 'ambience_sound_file'):
+            pygame.mixer.init()
+            if pygame.mixer.music.get_busy():
+                pygame.mixer.music.stop()
+            pygame.mixer.music.load(str(self.path_resources/self.ambience_sound_file))
+            
+            volume = self.ui.doubleSpinBox_AmbienceSoundVolume.value()  # valor de 0.0 a 1.0
+            pygame.mixer.music.set_volume(volume)
+
+            pygame.mixer.music.play(-1) #toca em loop infinito 
+        
+            self.changed = True
+    #--------------------------------------------------------------------------#
+    def ambience_stop(self):
+        if pygame.mixer.get_init():  # só tenta parar se estiver inicializado
+            pygame.mixer.music.stop()
+
+        self.ambience_sound_file = None
+        self.ui.pushButton_AmbienceSoundPlay.setEnabled(False)
+        self.ui.pushButton_AmbienceSoundRemove.setEnabled(False)
+        self.ui.doubleSpinBox_AmbienceSoundVolume.setEnabled(False)
+
+        self.changed = True
+    #--------------------------------------------------------------------------#
+    def ambience_volume(self, volume):
+         pygame.mixer.music.set_volume(volume)
 
     #--------------------------------------------------------------------------#
     def obstacles_frequency_changed(self):
