@@ -5,7 +5,8 @@ from PySide6.QtWidgets import (QApplication,
                                QFileDialog,
                                QMessageBox,
                                QVBoxLayout,
-                               QTabWidget)
+                               QTabWidget,
+                               QSpinBox)
 from PySide6.QtCore import Qt
 
 from . import parameters
@@ -48,6 +49,23 @@ class ChangeImageCommand(QUndoCommand):
             self.label.setPixmap(pixmap)
         else:
             self.label.clear()
+
+class ChangeValueCommand(QUndoCommand):
+    def __init__(self, target, old_value, new_value, description="Alterar valor"):
+        super().__init__(description)
+        self.target = target
+        self.old_image = old_image
+        self.new_value = new_value
+
+    def undo(self):
+        self._set_value(self.old_value)
+    def redo(self):
+        self._set_value(self.new_value)
+
+    def _set_value(self, value):
+        self.target.blockSignals(True)
+        self.target.setValue(value)
+        self.target.blockSignals(False)
 
 #------------------------------------------------------------------------------#
 class MainController:
@@ -197,9 +215,12 @@ class MainController:
         ui.doubleSpinBox_CollectiblesFrequency.valueChanged.connect(self.collectibles_frequency_changed)
 
         ui.pushButton_SelectPlayerImage.clicked.connect(self.select_player_image)
-        ui.spinBox_PlayerWidth.valueChanged.connect(self.update_image_size)
-        ui.spinBox_PlayerHeight.valueChanged.connect(self.update_image_size)
+        ui.spinBox_PlayerWidth.valueChanged.connect(lambda value: self.update_image_size())
+        ui.spinBox_PlayerHeight.valueChanged.connect(lambda value: self.update_image_size())
         ui.checkBox_PlayerKeepAspectRatio.stateChanged.connect(self.update_image_size)
+        
+        ui.spinBox_PlayerSpeed.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_PlayerSpeed))
+
         #--- Velocity and Boundary Tabs signals -------------------------------#
 
         ui.lineEdit_FunctionVelocity    .editingFinished.connect(self.function_velocity_changed     )
@@ -412,6 +433,10 @@ class MainController:
                 pixmap = pixmap.scaled(width, height)
 
             self.ui.label_PlayerImage.setPixmap(pixmap)
+
+        #atualiza histórico de undo para ambos spinBoxes
+        self.select_value(self.ui.spinBox_PlayerWidth)
+        self.select_value(self.ui.spinBox_PlayerHeight)
     
 
     def select_ambience_sound(self):
@@ -428,6 +453,15 @@ class MainController:
 
             self.changed = True
 
+    def select_value(self, spinBox):
+        new_value = spinBox.value()
+
+        old_value = getattr(spinBox, "_last_value", new_value)  
+
+        if old_value != new_value:
+            self.add_value_undo(spinBox, old_value, new_value, "ALterar valor")
+            spinBox._last_value = new_value
+    
 
     #--------------------------------------------------------------------------#
     def ambience_play(self):
@@ -631,5 +665,8 @@ class MainController:
         stack = self.undo_group.activeStack()
         stack.push(command)
         
-
+    def add_value_undo(self, target, old_value, new_value, description):
+        command = ChangeValueCommand(target, old_value, new_value, description)
+        stack = self.undo_group.activeStack()
+        stack.push(command)
 #------------------------------------------------------------------------------#
