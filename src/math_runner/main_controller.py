@@ -51,11 +51,12 @@ class ChangeImageCommand(QUndoCommand):
             self.label.clear()
 
 class ChangeValueCommand(QUndoCommand):
-    def __init__(self, target, old_value, new_value, description="Alterar valor"):
+    def __init__(self, target, old_value, new_value, engine, description="Alterar valor"):
         super().__init__(description)
         self.target = target
-        self.old_image = old_image
+        self.old_value = old_value
         self.new_value = new_value
+        self.engine = engine  #referência para chamar update_image_size, para o tamanho mudar quando fizer undo tbm
 
     def undo(self):
         self._set_value(self.old_value)
@@ -66,6 +67,7 @@ class ChangeValueCommand(QUndoCommand):
         self.target.blockSignals(True)
         self.target.setValue(value)
         self.target.blockSignals(False)
+        self.engine.update_image_size()
 
 class ChangeTextCommand(QUndoCommand):
     def __init__(self, line_edit, old_text, new_text, controller, description="Alterar texto"):
@@ -86,6 +88,25 @@ class ChangeTextCommand(QUndoCommand):
         self.line_edit.setText(self.new_text)
         self.line_edit.blockSignals(False)
         self.controller.update_velocity_from_text(self.new_text)
+
+class ChangeCheckBoxCommand(QUndoCommand):
+    def __init__(self, checkBox, old_value, new_value, engine, description="Alterar valor checkbox"):
+        super().__init__(description)
+        self.checkBox = checkBox
+        self.old_value = old_value
+        self.new_value = new_value
+        self.engine = engine
+
+    def undo(self):
+        self.__set_checkBox(self.old_value)
+    def redo(self):
+        self.__set_checkBox(self.new_value)
+
+    def __set_checkBox(self, value):
+        self.checkBox.blockSignals(True)
+        self.checkBox.setChecked(value)
+        self.checkBox.blockSignals(False)
+        self.engine.update_image_size()
 #------------------------------------------------------------------------------#
 class MainController:
 
@@ -123,7 +144,19 @@ class MainController:
         # Iniciando as variáveis de imagem com a imagem padrao 
         self.background_image = self.ui.label_BackgroundImage.pixmap().toImage()
         self.track_image = self.ui.label_TrackImage.pixmap().toImage()
+        self.player_image = self.ui.label_PlayerImage.pixmap().toImage()
+        self.player_width = self.ui.spinBox_PlayerWidth.value()
+        self.player_height = self.ui.spinBox_PlayerHeight.value()
+        self.player_speed = self.ui.spinBox_PlayerSpeed.value()
+        self.player_keep_aspect = self.ui.checkBox_PlayerKeepAspectRatio.isChecked()
         
+
+        #define _last_value para undo funcionar na primeira alteração
+        self.ui.spinBox_PlayerWidth._last_value = self.player_width
+        self.ui.spinBox_PlayerHeight._last_value = self.player_height
+        self.ui.spinBox_PlayerSpeed._last_value = self.player_speed
+        self.ui.checkBox_PlayerKeepAspectRatio._last_value = self.player_keep_aspect
+
         #Criação do Undo Group
         self.undo_group = QUndoGroup(self.win)
 
@@ -234,9 +267,9 @@ class MainController:
         ui.doubleSpinBox_CollectiblesFrequency.valueChanged.connect(self.collectibles_frequency_changed)
 
         ui.pushButton_SelectPlayerImage.clicked.connect(self.select_player_image)
-        ui.spinBox_PlayerWidth.valueChanged.connect(lambda value: self.update_image_size())
-        ui.spinBox_PlayerHeight.valueChanged.connect(lambda value: self.update_image_size())
-        ui.checkBox_PlayerKeepAspectRatio.stateChanged.connect(self.update_image_size)
+        ui.spinBox_PlayerWidth.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_PlayerWidth))
+        ui.spinBox_PlayerHeight.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_PlayerHeight))
+        ui.checkBox_PlayerKeepAspectRatio.stateChanged.connect(lambda value: self.select_checkBox(self.ui.checkBox_PlayerKeepAspectRatio))
         
         ui.spinBox_PlayerSpeed.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_PlayerSpeed))
 
@@ -454,8 +487,8 @@ class MainController:
             self.ui.label_PlayerImage.setPixmap(pixmap)
 
         #atualiza histórico de undo para ambos spinBoxes
-        self.select_value(self.ui.spinBox_PlayerWidth)
-        self.select_value(self.ui.spinBox_PlayerHeight)
+        #self.select_value(self.ui.spinBox_PlayerWidth)
+        #self.select_value(self.ui.spinBox_PlayerHeight)
     
 
     def select_ambience_sound(self):
@@ -475,13 +508,19 @@ class MainController:
     def select_value(self, spinBox):
         new_value = spinBox.value()
 
-        old_value = getattr(spinBox, "_last_value", new_value)  
+        old_value = getattr(spinBox, "_last_value", spinBox.value())  
 
         if old_value != new_value:
             self.add_value_undo(spinBox, old_value, new_value, "ALterar valor")
-            spinBox._last_value = new_value
+        spinBox._last_value = new_value
     
+    def select_checkBox(self, checkBox):
+        new_value = checkBox.isChecked()
+        old_value = getattr(checkBox, "_last_value", new_value)
 
+        if old_value != new_value:
+            self.add_checkBox_undo(checkBox, old_value, new_value, "Alterar checkbox")
+        checkBox._last_value = new_value
     #--------------------------------------------------------------------------#
     def ambience_play(self):
         if hasattr(self, 'ambience_sound_file'):
@@ -718,7 +757,12 @@ class MainController:
         stack.push(command)
         
     def add_value_undo(self, target, old_value, new_value, description):
-        command = ChangeValueCommand(target, old_value, new_value, description)
+        command = ChangeValueCommand(target, old_value, new_value, self, description)
+        stack = self.undo_group.activeStack()
+        stack.push(command)
+
+    def add_checkBox_undo(self, checkBox, old_value, new_value, description):
+        command = ChangeCheckBoxCommand(checkBox, old_value, new_value, self, description)
         stack = self.undo_group.activeStack()
         stack.push(command)
 #------------------------------------------------------------------------------#
