@@ -5,6 +5,10 @@ from PySide6.QtWidgets import (QApplication,
                                QFileDialog,
                                QMessageBox,
                                QVBoxLayout,
+                               QLineEdit,
+                               QPlainTextEdit,
+                               QTextEdit,
+                               QLabel,
                                QTabWidget,
                                QSpinBox)
 from PySide6.QtCore import Qt
@@ -25,9 +29,10 @@ from .plot_track    import PlotTrack
 import sys
 
 from PySide6.QtGui import QUndoCommand, QPixmap
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QTimer
 from pathlib import Path
-import pygame
+from io import BytesIO
+import pygame, os, tempfile
 sys.path.append(str(Path(__file__).parents[1]))
 
 #--------------------------------------------------------------------------------#
@@ -54,7 +59,7 @@ class ChangeValueCommand(QUndoCommand):
     def __init__(self, target, old_value, new_value, description="Alterar valor"):
         super().__init__(description)
         self.target = target
-        self.old_image = old_image
+        self.old_image = old_value
         self.new_value = new_value
 
     def undo(self):
@@ -68,24 +73,104 @@ class ChangeValueCommand(QUndoCommand):
         self.target.blockSignals(False)
 
 class ChangeTextCommand(QUndoCommand):
-    def __init__(self, line_edit, old_text, new_text, controller, description="Alterar texto"):
+    def __init__(self, widget, old_text, new_text, description=""):
         super().__init__(description)
-        self.line_edit = line_edit
+        self.widget = widget
         self.old_text = old_text
         self.new_text = new_text
-        self.controller = controller 
-
+    
     def undo(self):
-        self.line_edit.blockSignals(True)
-        self.line_edit.setText(self.old_text)
-        self.line_edit.blockSignals(False)
-        self.controller.update_velocity_from_text(self.old_text)
-
+        self._set_text(self.old_text)
+    
     def redo(self):
-        self.line_edit.blockSignals(True)
-        self.line_edit.setText(self.new_text)
-        self.line_edit.blockSignals(False)
-        self.controller.update_velocity_from_text(self.new_text)
+        self._set_text(self.new_text)
+    
+    def _set_text(self, text):
+        self.widget.blockSignals(True)
+        if isinstance(self.widget, (QLineEdit, QLabel)):
+            self.widget.setText(text)
+        elif isinstance(self.widget, QPlainTextEdit):
+            self.widget.setPlainText(text)
+        elif isinstance(self.widget, QTextEdit):
+            self.widget.setHtml(text)
+        self.widget.blockSignals(False)
+
+class ChangeSoundCommand(QUndoCommand):
+    def __init__(self, controller, old_sound, new_sound, old_volume, new_volume, description):
+        super().__init__(description)
+        self.controller = controller
+        self.old_sound = old_sound
+        self.new_sound = new_sound
+        self.old_volume = old_volume
+        self.new_volume = new_volume
+    
+    def undo(self):
+        self._apply_change(self.old_sound, self.old_volume)
+        self.controller.audio_manager.stop()
+    
+    def redo(self):
+        self._apply_change(self.new_sound, self.new_volume)
+    
+    def _apply_change(self, sound, volume):
+        self.controller.model.meta.game_ambience = sound
+        self.controller.model.meta.game_ambience_volume = volume
+        
+        # Atualiza UI
+        if sound:
+            self.controller.ui.pushButton_AmbienceSoundPlay.setEnabled(True)
+            self.controller.ui.pushButton_AmbienceSoundRemove.setEnabled(True)
+            self.controller.ui.doubleSpinBox_AmbienceSoundVolume.setEnabled(True)
+            self.controller.ui.doubleSpinBox_AmbienceSoundVolume.setValue(volume)
+        else:
+            self.controller.ui.pushButton_AmbienceSoundPlay.setEnabled(False)
+            self.controller.ui.pushButton_AmbienceSoundRemove.setEnabled(False)
+            self.controller.ui.doubleSpinBox_AmbienceSoundVolume.setEnabled(False)
+        
+        # Para o som atual se necessário
+        if self.controller.audio_manager.current_sound != sound:
+            self.controller.audio_manager.stop()
+        
+        self.controller.changed = True
+
+class AudioManager:
+    def __init__(self):
+        pygame.mixer.init()
+        self.current_sound = None
+        self.temp_files = []
+        
+    def load_sound(self, sound_source):
+        self.stop()
+
+        if isinstance(sound_source, BytesIO):
+            temp_file = tempfile.NamedTemporaryFile(suffix=".mp3", delete=False)
+            temp_file.write(sound_source.getvalue())
+            temp_file.close()
+            self.temp_files.append(temp_file.name)
+            pygame.mixer.music.load(temp_file.name)
+        else:
+            sound_path = str(sound_source) if hasattr(sound_source, 'fspath') else sound_source
+            pygame.mixer.music.load(sound_path)
+    
+    def play(self, loop=False, volume=1.0):
+        if pygame.mixer.music.get_busy():
+            self.stop()
+        
+        pygame.mixer.music.set_volume(volume)
+        pygame.mixer.music.play(-1 if loop else 0)
+    
+    def stop(self):
+        if pygame.mixer.get_init():
+            pygame.mixer.music.stop()
+    
+    def set_volume(self, volume):
+        pygame.mixer.music.set_volume(max(0.0, min(1.0, volume)))
+    
+    def cleanup(self):
+        self.stop()
+        for temp_file in self.temp_files: 
+            os.unlink(temp_file)
+        self.temp_files = []
+
 #------------------------------------------------------------------------------#
 class MainController:
 
@@ -99,7 +184,8 @@ class MainController:
         self.ui  = window.ui
 
         self.model = MainModel(self)
-        
+        self.audio_manager = AudioManager()
+
         color = self.win.palette().color(QPalette.Window)
 
         self.plot_velocity = PlotVelocity(
@@ -123,6 +209,14 @@ class MainController:
         # Iniciando as variáveis de imagem com a imagem padrao 
         self.background_image = self.ui.label_BackgroundImage.pixmap().toImage()
         self.track_image = self.ui.label_TrackImage.pixmap().toImage()
+
+         # Inicializa os valores dos textos para undo/redo
+        widgets = [(self.ui.lineEdit_GameName, self.model.meta.soft_name), (self.ui.lineEdit_Author, self.model.meta.soft_author),(self.ui.plainTextEdit_GameDescription, self.model.meta.soft_description),]
+    
+        for widget, default in widgets:
+            if not hasattr(widget, '_last_text'):
+               widget._last_text = default
+
         
         #Criação do Undo Group
         self.undo_group = QUndoGroup(self.win)
@@ -190,18 +284,21 @@ class MainController:
 
         #--- Game Tab signals -------------------------------------------------#
 
-        # ui.lineEdit_GameName
-        # ui.lineEdit_Author
-        # ui.pushButton_IconSelect
-        # ui.plainTextEdit_GameDescription
+        ui.lineEdit_GameName.editingFinished.connect(lambda: self.change_text(ui.lineEdit_GameName))
+        ui.lineEdit_Author  .editingFinished.connect(lambda: self.change_text(ui.lineEdit_Author))
+        ui.plainTextEdit_GameDescription.textChanged.connect(lambda: self.change_text(ui.plainTextEdit_GameDescription))
+        
+        ui.pushButton_IconSelect.clicked.connect(self.select_icon)
+        
         # ui.radioButton_HorizontalScrolling
         # ui.radioButton_VerticalScrolling
         # ui.checkBox_TrackKills
         # ui.doubleSpinBox_ScoreTimeBonus
+
         ui.pushButton_AmbienceSoundSelect.clicked.connect(self.select_ambience_sound)
-        # ui.pushButton_AmbienceSoundRemove
+        ui.pushButton_AmbienceSoundRemove.clicked.connect(self.ambience_remove)
         ui.pushButton_AmbienceSoundPlay.clicked.connect( self.ambience_play )
-        ui.doubleSpinBox_AmbienceSoundVolume.valueChanged.connect(self.ambience_volume)
+        ui.doubleSpinBox_AmbienceSoundVolume.valueChanged.connect(self.ambience_set_volume)
 
         #--- Appearance Tab signals -------------------------------------------#
 
@@ -456,21 +553,6 @@ class MainController:
         #atualiza histórico de undo para ambos spinBoxes
         self.select_value(self.ui.spinBox_PlayerWidth)
         self.select_value(self.ui.spinBox_PlayerHeight)
-    
-
-    def select_ambience_sound(self):
-        path_sounds = self.path_resources/'sounds'
-        fname = self.get_open_fname('Escolha um som ambiente', path_sounds, 'mp3')
-
-        if fname:
-            fname_path = fname
-            print(fname_path)
-            self.ambience_sound_file = fname_path  
-        
-            self.ui.pushButton_AmbienceSoundPlay.setEnabled(True)
-            self.ui.pushButton_AmbienceSoundRemove.setEnabled(True)
-
-            self.changed = True
 
     def select_value(self, spinBox):
         new_value = spinBox.value()
@@ -483,33 +565,88 @@ class MainController:
     
 
     #--------------------------------------------------------------------------#
-    def ambience_play(self):
-        if hasattr(self, 'ambience_sound_file'):
-            pygame.mixer.init()
-            if pygame.mixer.music.get_busy():
-                pygame.mixer.music.stop()
-            pygame.mixer.music.load(str(self.path_resources/self.ambience_sound_file))
-            
-            volume = self.ui.doubleSpinBox_AmbienceSoundVolume.value()  # valor de 0.0 a 1.0
-            pygame.mixer.music.set_volume(volume)
-
-            pygame.mixer.music.play(-1) #toca em loop infinito 
+    def select_icon(self):
+        path_icons = self.path_resources / 'icons'
+        fname = self.get_open_fname('Escolha um Icone', path_icons, 'png')
         
+        if fname:
+            label = self.ui.label_GameIcon 
+
+            old_image = getattr(self, 'icon_image', '')
+            tools.path_image_to_label(label, fname)
+            new_image = label.pixmap().toImage()
+
+            self.add_image_undo(label, old_image, new_image, "Alterar imagem do icone")
+            self.icons_image = new_image
             self.changed = True
+
     #--------------------------------------------------------------------------#
-    def ambience_stop(self):
-        if pygame.mixer.get_init():  # só tenta parar se estiver inicializado
-            pygame.mixer.music.stop()
+    def select_ambience_sound(self):
+        path_sounds = self.path_resources/'sounds'
+        fname = self.get_open_fname('Escolha um som ambiente', path_sounds, 'mp3')
+    
+        if fname:
+            controller = self
+            old_sound=self.model.meta.game_ambience
+            new_sound=fname
+            old_volume=self.model.meta.game_ambience_volume
+            new_volume=self.ui.doubleSpinBox_AmbienceSoundVolume.value()
+            
+            self.add_sound_undo(controller, old_sound, new_sound, old_volume, new_volume, "Alterar som ambiente")
+            self.changed = True
+    
+    #--------------------------------------------------------------------------#
+    def ambience_remove(self):
+        controller = self
+        old_sound=self.model.meta.game_ambience
+        new_sound=None
+        old_volume=self.model.meta.game_ambience_volume
+        new_volume=0.5
 
-        self.ambience_sound_file = None
-        self.ui.pushButton_AmbienceSoundPlay.setEnabled(False)
-        self.ui.pushButton_AmbienceSoundRemove.setEnabled(False)
-        self.ui.doubleSpinBox_AmbienceSoundVolume.setEnabled(False)
-
+        self.add_sound_undo(controller, old_sound, new_sound, old_volume, new_volume, "Remover som ambiente")
+    
+        self.audio_manager.stop()
         self.changed = True
+
     #--------------------------------------------------------------------------#
-    def ambience_volume(self, volume):
-         pygame.mixer.music.set_volume(volume)
+    def ambience_play(self):
+        if hasattr(self.model.meta, 'game_ambience') and self.model.meta.game_ambience:
+            volume = self.ui.doubleSpinBox_AmbienceSoundVolume.value()
+        
+            # Verifica se é um BytesIO ou um caminho de arquivo
+            if isinstance(self.model.meta.game_ambience, BytesIO):
+                self.audio_manager.load_sound(self.model.meta.game_ambience)
+            else:
+                sound_path = self.path_resources / str(self.model.meta.game_ambience)
+                self.audio_manager.load_sound(sound_path)
+        
+            self.audio_manager.play(loop=True, volume=volume)
+            # Agenda para parar a música após 10 segundos (10.000 milissegundos)
+            timer = QTimer(self.win)
+            timer.setSingleShot(True)
+            timer.timeout.connect(self.audio_manager.stop)
+            timer.start(10000)
+            self.changed = False
+
+    #--------------------------------------------------------------------------#
+    def ambience_set_volume(self, volume):
+        self.audio_manager.set_volume(volume)
+        if hasattr(self.model.meta, 'game_ambience_volume'):
+            self.model.meta.game_ambience_volume = volume
+    
+    #--------------------------------------------------------------------------#
+    def cleanup(self):
+        self.audio_manager.cleanup()
+
+    #--------------------------------------------------------------------------#
+    def change_text(self, widget):
+        new_text = widget.text() if hasattr(widget, 'text') else widget.toPlainText()
+        old_text = getattr(widget, '_last_text', '')
+
+        if new_text != old_text:
+            self.add_text_undo(widget, old_text, new_text, "Alterar texto")
+            widget._last_text = new_text
+            self.changed = True
 
     #--------------------------------------------------------------------------#
     def obstacles_frequency_changed(self):
@@ -717,8 +854,23 @@ class MainController:
         stack = self.undo_group.activeStack()
         stack.push(command)
         
+    #--------------------------------------------------------------------------#
     def add_value_undo(self, target, old_value, new_value, description):
         command = ChangeValueCommand(target, old_value, new_value, description)
         stack = self.undo_group.activeStack()
         stack.push(command)
+    
+     #--------------------------------------------------------------------------#
+    def add_sound_undo(self, controller, old_sound, new_sound, old_volume, new_volume, description):
+        command = ChangeSoundCommand(controller, old_sound, new_sound, old_volume, new_volume, description)
+        stack = self.undo_group.activeStack()
+        stack.push(command)
+
+    #--------------------------------------------------------------------------#
+    def add_text_undo(self, widget, old_text, new_text, description): 
+        command = ChangeTextCommand(widget, old_text, new_text, description)
+        stack = self.undo_group.activeStack()
+        stack.push(command)
+        widget._last_text = new_text
+
 #------------------------------------------------------------------------------#
