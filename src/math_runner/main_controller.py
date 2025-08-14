@@ -67,6 +67,25 @@ class ChangeValueCommand(QUndoCommand):
         self.target.setValue(value)
         self.target.blockSignals(False)
 
+class ChangeTextCommand(QUndoCommand):
+    def __init__(self, line_edit, old_text, new_text, controller, description="Alterar texto"):
+        super().__init__(description)
+        self.line_edit = line_edit
+        self.old_text = old_text
+        self.new_text = new_text
+        self.controller = controller 
+
+    def undo(self):
+        self.line_edit.blockSignals(True)
+        self.line_edit.setText(self.old_text)
+        self.line_edit.blockSignals(False)
+        self.controller.update_velocity_from_text(self.old_text)
+
+    def redo(self):
+        self.line_edit.blockSignals(True)
+        self.line_edit.setText(self.new_text)
+        self.line_edit.blockSignals(False)
+        self.controller.update_velocity_from_text(self.new_text)
 #------------------------------------------------------------------------------#
 class MainController:
 
@@ -552,29 +571,62 @@ class MainController:
     def function_velocity_changed(self):
 
         func = self.ui.lineEdit_FunctionVelocity.text()
+        old_text = getattr(self.ui.lineEdit_FunctionVelocity, "_last_text", "")
+        letters = {c for c in func if c.isalpha()}
+        if letters - {'t'}: 
+            QMessageBox.warning(
+                self.win,
+                "Função inválida",
+                "A função de velocidade só pode conter a variável 't'."
+            )
+            self.ui.lineEdit_FunctionVelocity.setText(old_text)
+            return
+    
         self.model.change_velocity_function(func)
         self.plot_velocity.update_velocity(
             self.model.get_velocity_function()
         )
+        self.ui.lineEdit_FunctionVelocity._last_text = func
 
     #--------------------------------------------------------------------------#
     def function_track_minimum_changed(self):
 
         func = self.ui.lineEdit_FunctionTrackMinimum.text()
+        old_text = getattr(self.ui.lineEdit_FunctionTrackMinimum, "_last_text", "")
+        letters = {c for c in func if c.isalpha()}
+        if letters - {'x'}: 
+            QMessageBox.warning(
+                self.win,
+                "Função inválida",
+                "A função de velocidade só pode conter a variável 'x'."
+            )
+            self.ui.lineEdit_FunctionTrackMinimum.setText(old_text)
+            return
         self.model.change_track_minimum_function(func)
         self.plot_track.update_boundary(
             self.model.get_boundary_functions()
         )
+        self.ui.lineEdit_FunctionTrackMinimum._last_text = func
 
     #--------------------------------------------------------------------------#
     def function_track_maximum_changed(self):
 
         func = self.ui.lineEdit_FunctionTrackMaximum.text()
+        old_text = getattr(self.ui.lineEdit_FunctionTrackMaximum, "_last_text", "")
+        letters = {c for c in func if c.isalpha()}
+        if letters - {'x'}: 
+            QMessageBox.warning(
+                self.win,
+                "Função inválida",
+                "A função de velocidade só pode conter a variável 'x'."
+            )
+            self.ui.lineEdit_FunctionTrackMaximum.setText(old_text)
+            return
         self.model.change_track_maximum_function(func)
         self.plot_track.update_boundary(
             self.model.get_boundary_functions()
         )
-
+        self.ui.lineEdit_FunctionTrackMaximum._last_text = func
     #--------------------------------------------------------------------------#
     # Internal tasks
     #--------------------------------------------------------------------------#
