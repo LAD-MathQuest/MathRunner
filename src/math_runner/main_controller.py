@@ -576,19 +576,15 @@ class MainController:
         height = self.ui.spinBox_PlayerHeight.value()
         keep = self.ui.checkBox_PlayerKeepAspectRatio.isChecked()
 
-        if hasattr(self, "player_image") and not self.player_image.isNull():
-            pixmap = QPixmap.fromImage(self.player_image)
+        pixmap = self.ui.label_PlayerImage.pixmap()  #pega o que está no label
 
+        if pixmap is not None and not pixmap.isNull():
             if keep:
                 pixmap = pixmap.scaledToWidth(width)
             else:
                 pixmap = pixmap.scaled(width, height)
 
             self.ui.label_PlayerImage.setPixmap(pixmap)
-
-        #atualiza histórico de undo para ambos spinBoxes
-        #self.select_value(self.ui.spinBox_PlayerWidth)
-        #self.select_value(self.ui.spinBox_PlayerHeight)
     
 
     def select_ambience_sound(self):
