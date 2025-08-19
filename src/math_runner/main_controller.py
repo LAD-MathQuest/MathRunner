@@ -762,61 +762,77 @@ class MainController:
 
         func = self.ui.lineEdit_FunctionVelocity.text()
         old_text = getattr(self.ui.lineEdit_FunctionVelocity, "_last_text", "")
-        letters = {c for c in func if c.isalpha()}
-        if letters - {'t'}: 
-            QMessageBox.warning(
-                self.win,
-                "Função inválida",
-                "A função de velocidade só pode conter a variável 't'."
+        
+        try:
+            self.model.change_velocity_function(func)
+            self.plot_velocity.update_velocity(
+                self.model.get_velocity_function()
             )
+        except(KeyError):
+            QMessageBox.critical(None, "Erro", f"O texto contem variaveis diferentes de t")
             self.ui.lineEdit_FunctionVelocity.setText(old_text)
             return
-    
-        self.model.change_velocity_function(func)
-        self.plot_velocity.update_velocity(
-            self.model.get_velocity_function()
-        )
+        except(SyntaxError):
+            QMessageBox.critical(None, "Erro", f"A operação digitada não exite")
+            self.ui.lineEdit_FunctionVelocity.setText(old_text)
+            return
+        except(ZeroDivisionError):
+            QMessageBox.critical(None, "Erro", f"Não é permitido Divisões por 0")
+            self.ui.lineEdit_FunctionVelocity.setText(old_text)
+            return
         self.ui.lineEdit_FunctionVelocity._last_text = func
+
 
     #--------------------------------------------------------------------------#
     def function_track_minimum_changed(self):
 
         func = self.ui.lineEdit_FunctionTrackMinimum.text()
         old_text = getattr(self.ui.lineEdit_FunctionTrackMinimum, "_last_text", "")
-        letters = {c for c in func if c.isalpha()}
-        if letters - {'x'}: 
-            QMessageBox.warning(
-                self.win,
-                "Função inválida",
-                "A função de velocidade só pode conter a variável 'x'."
+        try:
+            self.model.change_track_minimum_function(func)
+            self.plot_track.update_boundary(
+            self.model.get_boundary_functions()
             )
+        except(KeyError):
+            QMessageBox.critical(None, "Erro", f"O texto contem variaveis diferentes de x")
             self.ui.lineEdit_FunctionTrackMinimum.setText(old_text)
             return
-        self.model.change_track_minimum_function(func)
-        self.plot_track.update_boundary(
-            self.model.get_boundary_functions()
-        )
+        except(SyntaxError):
+            QMessageBox.critical(None, "Erro", f"A operação digitada não exite")
+            self.ui.lineEdit_FunctionTrackMinimum.setText(old_text)
+            return
+        except(ZeroDivisionError):
+            QMessageBox.critical(None, "Erro", f"Não é permitido Divisões por 0")
+            self.ui.lineEdit_FunctionTrackMinimum.setText(old_text)
+            return
+        
         self.ui.lineEdit_FunctionTrackMinimum._last_text = func
+
 
     #--------------------------------------------------------------------------#
     def function_track_maximum_changed(self):
 
         func = self.ui.lineEdit_FunctionTrackMaximum.text()
         old_text = getattr(self.ui.lineEdit_FunctionTrackMaximum, "_last_text", "")
-        letters = {c for c in func if c.isalpha()}
-        if letters - {'x'}: 
-            QMessageBox.warning(
-                self.win,
-                "Função inválida",
-                "A função de velocidade só pode conter a variável 'x'."
+        try:
+            self.model.change_track_maximum_function(func)
+            self.plot_track.update_boundary(
+            self.model.get_boundary_functions()
             )
+        except(KeyError):
+            QMessageBox.critical(None, "Erro", f"O texto contem variaveis diferentes de x")
             self.ui.lineEdit_FunctionTrackMaximum.setText(old_text)
             return
-        self.model.change_track_maximum_function(func)
-        self.plot_track.update_boundary(
-            self.model.get_boundary_functions()
-        )
+        except(SyntaxError):
+            QMessageBox.critical(None, "Erro", f"A operação digitada não exite")
+            self.ui.lineEdit_FunctionTrackMaximum.setText(old_text)
+            return
+        except(ZeroDivisionError):
+            QMessageBox.critical(None, "Erro", f"Não é permitido Divisões por 0")
+            self.ui.lineEdit_FunctionTrackMaximum.setText(old_text)
+            return
         self.ui.lineEdit_FunctionTrackMaximum._last_text = func
+
     #--------------------------------------------------------------------------#
     # Internal tasks
     #--------------------------------------------------------------------------#
