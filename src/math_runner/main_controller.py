@@ -455,6 +455,13 @@ class MainController:
         meta.track_image = MetaImage()
         tools.label_to_meta_image(self.ui.label_TrackImage, meta.track_image)
 
+        #Imagem do Scoreboard em bytes
+        meta.scoreboard.image = MetaImage()
+        meta.scoreboard.image.size = (100,100) #remover essa linha depois
+        tools.label_to_meta_image(self.ui.label_ScoreboardImage, meta.scoreboard.image)
+
+
+
         # TODO: coletar outros dados da interface, ex:
         # - scoreboard_image
         # - obstáculos
@@ -550,16 +557,23 @@ class MainController:
             self.changed = True
 
     #--------------------------------------------------------------------------#
+  
     def select_scoreboard_image(self):
-        path_backgrounds = self.path_resources/'scoreboards'
-        fname = self.get_open_fname('Escolha uma Imagem', path_backgrounds, 'png')
+        path_scoreboards = self.path_resources / 'scoreboards'
+        fname = self.get_open_fname('Escolha uma Imagem', path_scoreboards, 'png')
+        
         if fname:
-            self.background_image = Path(fname)
+            label = self.ui.label_ScoreboardImage  
+            old_image = getattr(self, 'scoreboard_image', '')  
+            tools.path_image_to_label(label, fname)
 
-            pixmap = QPixmap(str(self.background_image))
-            pixmap = pixmap.scaled(228, 128, Qt.KeepAspectRatio)
-            
-            self.ui.label_BackgroundImage.setPixmap(pixmap)
+            new_image = label.pixmap().toImage()
+
+            self.add_image_undo(label, old_image, new_image, "Alterar imagem do placar")
+            self.scoreboard_image = new_image  
+            self.changed = True
+
+
 
     #--------------------------------------------------------------------------#
     def select_player_image(self):
