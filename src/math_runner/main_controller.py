@@ -72,12 +72,15 @@ class ChangeValueCommand(QUndoCommand):
         self.target.blockSignals(True)
         self.target.setValue(value)
         self.target.blockSignals(False)
-        self.engine.update_image_size()
+        if self.target == self.engine.ui.doubleSpinBox_AmbienceSoundVolume:
+            self.engine.ambience_set_volume(value)
+        else:
+            self.engine.update_image_size()
     
-class ChangeCheckBoxCommand(QUndoCommand):
-    def __init__(self, checkBox, old_value, new_value, engine, description="Alterar valor checkbox"):
+class ChangeCheckedCommand(QUndoCommand):
+    def __init__(self, target, old_value, new_value, engine, description="Alterar valor checkbox/radioButton"):
         super().__init__(description)
-        self.checkBox = checkBox
+        self.target = target
         self.old_value = old_value
         self.new_value = new_value
         self.engine = engine
@@ -88,14 +91,15 @@ class ChangeCheckBoxCommand(QUndoCommand):
         self.__set_checkBox(self.new_value)
 
     def __set_checkBox(self, value):
-        self.checkBox.blockSignals(True)
-        self.checkBox.setChecked(value)
-        self.checkBox.blockSignals(False)
+        self.target.blockSignals(True)
+        self.target.setChecked(value)
+        self.target.blockSignals(False)
         self.engine.update_image_size()
 
 class ChangeTextCommand(QUndoCommand):
-    def __init__(self, widget, old_text, new_text, description=""):
+    def __init__(self, controller, widget, old_text, new_text, description=""):
         super().__init__(description)
+        self.controller = controller
         self.widget = widget
         self.old_text = old_text
         self.new_text = new_text
@@ -104,10 +108,6 @@ class ChangeTextCommand(QUndoCommand):
         self._set_text(self.old_text)
     
     def redo(self):
-        self.line_edit.blockSignals(True)
-        self.line_edit.setText(self.new_text)
-        self.line_edit.blockSignals(False)
-        self.controller.update_velocity_from_text(self.new_text)
         self._set_text(self.new_text)
     
     def _set_text(self, text):
@@ -240,21 +240,27 @@ class MainController:
         self.player_speed = self.ui.spinBox_PlayerSpeed.value()
         self.player_keep_aspect = self.ui.checkBox_PlayerKeepAspectRatio.isChecked()
 
-         # Inicializa os valores dos textos para undo/redo
-        widgets = [(self.ui.lineEdit_GameName, self.model.meta.soft_name), (self.ui.lineEdit_Author, self.model.meta.soft_author),(self.ui.plainTextEdit_GameDescription, self.model.meta.soft_description),]
-    
+        # Inicializa os valores dos textos para undo/redo
+        widgets = [(self.ui.lineEdit_GameName, self.model.meta.soft_name), (self.ui.lineEdit_Author, self.model.meta.soft_author),(self.ui.plainTextEdit_GameDescription, self.model.meta.soft_description),
+                   (self.ui.lineEdit_FunctionVelocity, self.model.meta.velocity.get_function_orig()), (self.ui.lineEdit_FunctionTrackMinimum, self.model.meta.boundary.get_function_min_orig()),
+                   (self.ui.lineEdit_FunctionTrackMaximum, self.model.meta.boundary.get_function_max_orig())]
         for widget, default in widgets:
             if not hasattr(widget, '_last_text'):
                widget._last_text = default
 
-    
-        #define _last_value para undo funcionar na primeira alteração
+        # define _last_value para undo funcionar na primeira alteração
         self.ui.spinBox_PlayerWidth._last_value = self.player_width
         self.ui.spinBox_PlayerHeight._last_value = self.player_height
         self.ui.spinBox_PlayerSpeed._last_value = self.player_speed
         self.ui.checkBox_PlayerKeepAspectRatio._last_value = self.player_keep_aspect
+        self.ui.doubleSpinBox_AmbienceSoundVolume._last_value = self.ui.doubleSpinBox_AmbienceSoundVolume.value()
+        self.ui.doubleSpinBox_ScoreTimeBonus._last_value = self.ui.doubleSpinBox_ScoreTimeBonus.value()
+        self.ui.checkBox_TrackMaximumKills._last_value = self.ui.checkBox_TrackMaximumKills.isChecked()
+        self.ui.checkBox_TrackMinimumKills._last_value = self.ui.checkBox_TrackMinimumKills.isChecked()
+        self.ui.radioButton_HorizontalScrolling._last_value = self.ui.radioButton_HorizontalScrolling.isChecked()
+        self.ui.radioButton_VerticalScrolling._last_value = self.ui.radioButton_VerticalScrolling.isChecked()
 
-        #Criação do Undo Group
+        # Criação do Undo Group
         self.undo_group = QUndoGroup(self.win)
 
         self.connect_signals_and_slots()
@@ -326,15 +332,16 @@ class MainController:
         
         ui.pushButton_IconSelect.clicked.connect(self.select_icon)
         
-        # ui.radioButton_HorizontalScrolling
-        # ui.radioButton_VerticalScrolling
-        # ui.checkBox_TrackKills
-        # ui.doubleSpinBox_ScoreTimeBonus
+        ui.radioButton_HorizontalScrolling.toggled.connect(lambda: self.select_checked(self.ui.radioButton_VerticalScrolling))
+        ui.radioButton_VerticalScrolling.toggled.connect(lambda: self.select_checked(self.ui.radioButton_HorizontalScrolling))
+        ui.checkBox_TrackMaximumKills.stateChanged.connect(lambda value: self.select_checked(self.ui.checkBox_TrackMaximumKills))
+        ui.checkBox_TrackMinimumKills.stateChanged.connect(lambda value: self.select_checked(self.ui.checkBox_TrackMinimumKills))
+        ui.doubleSpinBox_ScoreTimeBonus.valueChanged.connect(lambda value: self.select_value(self.ui.doubleSpinBox_ScoreTimeBonus))
 
         ui.pushButton_AmbienceSoundSelect.clicked.connect(self.select_ambience_sound)
         ui.pushButton_AmbienceSoundRemove.clicked.connect(self.ambience_remove)
         ui.pushButton_AmbienceSoundPlay.clicked.connect( self.ambience_play )
-        ui.doubleSpinBox_AmbienceSoundVolume.valueChanged.connect(self.ambience_set_volume)
+        ui.doubleSpinBox_AmbienceSoundVolume.valueChanged.connect(lambda value: self.select_value(self.ui.doubleSpinBox_AmbienceSoundVolume))
 
         #--- Appearance Tab signals -------------------------------------------#
 
@@ -369,7 +376,7 @@ class MainController:
         ui.pushButton_SelectPlayerImage.clicked.connect(self.select_player_image)
         ui.spinBox_PlayerWidth.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_PlayerWidth))
         ui.spinBox_PlayerHeight.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_PlayerHeight))
-        ui.checkBox_PlayerKeepAspectRatio.stateChanged.connect(lambda value: self.select_checkBox(self.ui.checkBox_PlayerKeepAspectRatio))
+        ui.checkBox_PlayerKeepAspectRatio.stateChanged.connect(lambda value: self.select_checked(self.ui.checkBox_PlayerKeepAspectRatio))
         
         ui.spinBox_PlayerSpeed.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_PlayerSpeed))
 
@@ -378,7 +385,6 @@ class MainController:
         ui.lineEdit_FunctionVelocity    .editingFinished.connect(self.function_velocity_changed     )
         ui.lineEdit_FunctionTrackMinimum.editingFinished.connect(self.function_track_minimum_changed)
         ui.lineEdit_FunctionTrackMaximum.editingFinished.connect(self.function_track_maximum_changed)
-
 
         ui.tabWidget_Game.currentChanged.connect(self.update_undo_stack)
     #--------------------------------------------------------------------------#
@@ -526,6 +532,7 @@ class MainController:
             self.background_image = new_image
             self.changed = True
 
+    #--------------------------------------------------------------------------#
     def select_track_image(self):
         path_backgrounds = self.path_resources / 'backgrounds'
         fname = self.get_open_fname('Escolha uma Imagem', path_backgrounds, 'png')
@@ -542,6 +549,7 @@ class MainController:
             self.track_image = new_image
             self.changed = True
 
+    #--------------------------------------------------------------------------#
     def select_scoreboard_image(self):
         path_backgrounds = self.path_resources/'scoreboards'
         fname = self.get_open_fname('Escolha uma Imagem', path_backgrounds, 'png')
@@ -553,7 +561,7 @@ class MainController:
             
             self.ui.label_BackgroundImage.setPixmap(pixmap)
 
-
+    #--------------------------------------------------------------------------#
     def select_player_image(self):
         path_icon = self.path_resources / 'icons'
         fname = self.get_open_fname('Escolha uma Imagem', path_icon, 'png')
@@ -571,6 +579,7 @@ class MainController:
             self.player_image = new_image
             self.changed = True
 
+    #--------------------------------------------------------------------------#
     def update_image_size(self):    
         width = self.ui.spinBox_PlayerWidth.value()
         height = self.ui.spinBox_PlayerHeight.value()
@@ -587,36 +596,34 @@ class MainController:
             self.ui.label_PlayerImage.setPixmap(pixmap)
     
 
-    def select_ambience_sound(self):
-        path_sounds = self.path_resources/'sounds'
-        fname = self.get_open_fname('Escolha um som ambiente', path_sounds, 'mp3')
-
-        if fname:
-            fname_path = fname
-            print(fname_path)
-            self.ambience_sound_file = fname_path  
-        
-            self.ui.pushButton_AmbienceSoundPlay.setEnabled(True)
-            self.ui.pushButton_AmbienceSoundRemove.setEnabled(True)
-
-            self.changed = True
-
+    #--------------------------------------------------------------------------#
     def select_value(self, spinBox):
         new_value = spinBox.value()
-
         old_value = getattr(spinBox, "_last_value", spinBox.value())  
 
         if old_value != new_value:
             self.add_value_undo(spinBox, old_value, new_value, "ALterar valor")
         spinBox._last_value = new_value
     
-    def select_checkBox(self, checkBox):
-        new_value = checkBox.isChecked()
-        old_value = getattr(checkBox, "_last_value", new_value)
+    #--------------------------------------------------------------------------#
+    def select_checked(self, target):
+        new_value = target.isChecked()
+        old_value = getattr(target, "_last_value", new_value)
 
         if old_value != new_value:
-            self.add_checkBox_undo(checkBox, old_value, new_value, "Alterar checkbox")
-        checkBox._last_value = new_value
+            self.add_checked_undo(target, old_value, new_value, "Alterar seleção")
+        target._last_value = new_value
+
+    #--------------------------------------------------------------------------#
+    def change_text(self, widget):
+        new_text = widget.text() if hasattr(widget, 'text') else widget.toPlainText()
+        old_text = getattr(widget, '_last_text', '')
+
+        if new_text != old_text:
+            self.add_text_undo(self, widget, old_text, new_text, "Alterar texto")
+            widget._last_text = new_text
+            self.changed = True
+
     #--------------------------------------------------------------------------#
     def select_icon(self):
         path_icons = self.path_resources / 'icons'
@@ -692,16 +699,6 @@ class MainController:
         self.audio_manager.cleanup()
 
     #--------------------------------------------------------------------------#
-    def change_text(self, widget):
-        new_text = widget.text() if hasattr(widget, 'text') else widget.toPlainText()
-        old_text = getattr(widget, '_last_text', '')
-
-        if new_text != old_text:
-            self.add_text_undo(widget, old_text, new_text, "Alterar texto")
-            widget._last_text = new_text
-            self.changed = True
-
-    #--------------------------------------------------------------------------#
     def obstacles_frequency_changed(self):
         pass
 
@@ -763,6 +760,7 @@ class MainController:
         func = self.ui.lineEdit_FunctionVelocity.text()
         old_text = getattr(self.ui.lineEdit_FunctionVelocity, "_last_text", "")
         
+        self.add_text_undo(self, self.ui.lineEdit_FunctionVelocity, old_text, func, "Alterar velocidade")
         try:
             self.model.change_velocity_function(func)
             self.plot_velocity.update_velocity(
@@ -788,6 +786,8 @@ class MainController:
 
         func = self.ui.lineEdit_FunctionTrackMinimum.text()
         old_text = getattr(self.ui.lineEdit_FunctionTrackMinimum, "_last_text", "")
+        self.add_text_undo(self, self.ui.lineEdit_FunctionTrackMinimum, old_text, func, "Alterar mínimo")
+        
         try:
             self.model.change_track_minimum_function(func)
             self.plot_track.update_boundary(
@@ -811,9 +811,10 @@ class MainController:
 
     #--------------------------------------------------------------------------#
     def function_track_maximum_changed(self):
-
         func = self.ui.lineEdit_FunctionTrackMaximum.text()
-        old_text = getattr(self.ui.lineEdit_FunctionTrackMaximum, "_last_text", "")
+        old_text = getattr(self, self.ui.lineEdit_FunctionTrackMaximum, "_last_text", "")
+
+        self.add_text_undo(self.ui.lineEdit_FunctionTrackMaximum, old_text, func, "Alterar máximo")
         try:
             self.model.change_track_maximum_function(func)
             self.plot_track.update_boundary(
@@ -831,6 +832,7 @@ class MainController:
             QMessageBox.critical(None, "Erro", f"Não é permitido Divisões por 0")
             self.ui.lineEdit_FunctionTrackMaximum.setText(old_text)
             return
+  
         self.ui.lineEdit_FunctionTrackMaximum._last_text = func
 
     #--------------------------------------------------------------------------#
@@ -850,6 +852,7 @@ class MainController:
         #self.ui.tabWidget_Game   .setCurrentIndex(0)
         #self.ui.tabWidget_Objects.setCurrentIndex(0)
 
+        self.ui.doubleSpinBox_AmbienceSoundVolume.setEnabled(False)
         self.model.update_ui()
 
         self.plot_velocity.update_velocity(
@@ -930,8 +933,8 @@ class MainController:
         stack.push(command)
         
     #--------------------------------------------------------------------------#
-    def add_checkBox_undo(self, checkBox, old_value, new_value, description):
-        command = ChangeCheckBoxCommand(checkBox, old_value, new_value, self, description)
+    def add_checked_undo(self, target, old_value, new_value, description):
+        command = ChangeCheckedCommand(target, old_value, new_value, self, description)
         stack = self.undo_group.activeStack()
         stack.push(command)
     
@@ -942,10 +945,10 @@ class MainController:
         stack.push(command)
 
     #--------------------------------------------------------------------------#
-    def add_text_undo(self, widget, old_text, new_text, description): 
-        command = ChangeTextCommand(widget, old_text, new_text, description)
+    def add_text_undo(self, controller, widget, old_text, new_text, description): 
+        command = ChangeTextCommand(controller, widget, old_text, new_text, description)
         stack = self.undo_group.activeStack()
         stack.push(command)
-        widget._last_text = new_text
+
 
 #------------------------------------------------------------------------------#
