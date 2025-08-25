@@ -231,34 +231,7 @@ class MainController:
 
         self.start_new()
 
-        # Iniciando as variáveis de imagem com a imagem padrao 
-        self.background_image = self.ui.label_BackgroundImage.pixmap().toImage()
-        self.track_image = self.ui.label_TrackImage.pixmap().toImage()
-        self.player_image = self.ui.label_PlayerImage.pixmap().toImage()
-        self.player_width = self.ui.spinBox_PlayerWidth.value()
-        self.player_height = self.ui.spinBox_PlayerHeight.value()
-        self.player_speed = self.ui.spinBox_PlayerSpeed.value()
-        self.player_keep_aspect = self.ui.checkBox_PlayerKeepAspectRatio.isChecked()
-
-        # Inicializa os valores dos textos para undo/redo
-        widgets = [(self.ui.lineEdit_GameName, self.model.meta.soft_name), (self.ui.lineEdit_Author, self.model.meta.soft_author),(self.ui.plainTextEdit_GameDescription, self.model.meta.soft_description),
-                   (self.ui.lineEdit_FunctionVelocity, self.model.meta.velocity.get_function_orig()), (self.ui.lineEdit_FunctionTrackMinimum, self.model.meta.boundary.get_function_min_orig()),
-                   (self.ui.lineEdit_FunctionTrackMaximum, self.model.meta.boundary.get_function_max_orig())]
-        for widget, default in widgets:
-            if not hasattr(widget, '_last_text'):
-               widget._last_text = default
-
-        # define _last_value para undo funcionar na primeira alteração
-        self.ui.spinBox_PlayerWidth._last_value = self.player_width
-        self.ui.spinBox_PlayerHeight._last_value = self.player_height
-        self.ui.spinBox_PlayerSpeed._last_value = self.player_speed
-        self.ui.checkBox_PlayerKeepAspectRatio._last_value = self.player_keep_aspect
-        self.ui.doubleSpinBox_AmbienceSoundVolume._last_value = self.ui.doubleSpinBox_AmbienceSoundVolume.value()
-        self.ui.doubleSpinBox_ScoreTimeBonus._last_value = self.ui.doubleSpinBox_ScoreTimeBonus.value()
-        self.ui.checkBox_TrackMaximumKills._last_value = self.ui.checkBox_TrackMaximumKills.isChecked()
-        self.ui.checkBox_TrackMinimumKills._last_value = self.ui.checkBox_TrackMinimumKills.isChecked()
-        self.ui.radioButton_HorizontalScrolling._last_value = self.ui.radioButton_HorizontalScrolling.isChecked()
-        self.ui.radioButton_VerticalScrolling._last_value = self.ui.radioButton_VerticalScrolling.isChecked()
+        self.update_data()
 
         # Criação do Undo Group
         self.undo_group = QUndoGroup(self.win)
@@ -353,10 +326,10 @@ class MainController:
         ui.pushButton_SelectTrackImage.clicked.connect(self.select_track_image)
 
         ui.pushButton_SelectScoreboardImage.clicked.connect(self.select_scoreboard_image)
-        # ui.spinBox_ScoreboardImagePositionX
-        # ui.spinBox_ScoreboardImagePositionY
-        # ui.spinBox_ScoreboardImageWidth
-        # ui.spinBox_ScoreboardImageHeight
+        ui.spinBox_ScoreboardImagePositionX.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_ScoreboardImagePositionX))
+        ui.spinBox_ScoreboardImagePositionY.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_ScoreboardImagePositionY))
+        ui.spinBox_ScoreboardImageWidth.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_ScoreboardImageWidth))
+        ui.spinBox_ScoreboardImageHeight.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_ScoreboardImageHeight))
         # ui.checkBox_ScoreboardImageKeepAspectRatio
         # ui.spinBox_ScoreboardTextPositionX
         # ui.spinBox_ScoreboardTextPositionY
@@ -413,20 +386,12 @@ class MainController:
 
         if fname:
             # TODO try:
-            labelBackground = self.ui.label_BackgroundImage
-            labelTrack = self.ui.label_TrackImage
-            old_backgroundoImage = getattr(self, 'background_image', '')
-            old_trackImage = getattr(self, 'track_image', '')
-
             self.file_name = fname
             self.model.open(self.file_name)
             
+            self.clear_stacks_undo()
             self.start_view_from_model()
-
-            self.add_image_undo(labelBackground, old_backgroundoImage, labelBackground.pixmap().toImage(), 'Alterar imagem de fundo')
-            self.add_image_undo(labelTrack, old_trackImage, labelTrack.pixmap().toImage(), 'Alterar imagem do caminho de fundo')
-            self.background_image = labelBackground.pixmap().toImage()
-            self.track_image = labelTrack.pixmap().toImage()
+            self.update_data()
 
 
     #--------------------------------------------------------------------------#
@@ -573,8 +538,6 @@ class MainController:
             self.scoreboard_image = new_image  
             self.changed = True
 
-
-
     #--------------------------------------------------------------------------#
     def select_player_image(self):
         path_icon = self.path_resources / 'icons'
@@ -602,6 +565,9 @@ class MainController:
             self.add_image_undo(label, old_image, self.player_image_original.toImage(), "Alterar imagem do fundo")
             self.changed = True
     #--------------------------------------------------------------------------#
+   
+    # Deixar essa função mais generica colocando parametros para qlqr widget usar 
+
     def update_image_size(self):    
         width = self.ui.spinBox_PlayerWidth.value()
         height = self.ui.spinBox_PlayerHeight.value()
@@ -866,15 +832,13 @@ class MainController:
     #--------------------------------------------------------------------------#
     def start_new(self):
         self.model.new()
-        self.ui.tabWidget_Game   .setCurrentIndex(0)
-        self.ui.tabWidget_Objects.setCurrentIndex(0)
         self.start_view_from_model()
 
     #--------------------------------------------------------------------------#
     def start_view_from_model(self):
 
-        #self.ui.tabWidget_Game   .setCurrentIndex(0)
-        #self.ui.tabWidget_Objects.setCurrentIndex(0)
+        self.ui.tabWidget_Game   .setCurrentIndex(0)
+        self.ui.tabWidget_Objects.setCurrentIndex(0)
 
         self.ui.doubleSpinBox_AmbienceSoundVolume.setEnabled(False)
         self.model.update_ui()
@@ -974,5 +938,50 @@ class MainController:
         stack = self.undo_group.activeStack()
         stack.push(command)
 
+    #--------------------------------------------------------------------------#
+    def clear_stacks_undo(self): 
+        for i in range(self.ui.tabWidget_Game.count()):
+            self.undo_stacks[i].clear()
+    
+    #--------------------------------------------------------------------------#
+
+    # Atualiza todas as variaveis com o conteudo atual da interface
+    def update_data(self):
+        self.background_image   = self.ui.label_BackgroundImage.pixmap().toImage()
+        self.track_image        = self.ui.label_TrackImage.pixmap().toImage()
+        self.scoreboard_positionX = self.ui.spinBox_ScoreboardImagePositionX.value()
+        self.scoreboard_positionY = self.ui.spinBox_ScoreboardImagePositionY.value()
+        self.scoreboard_imageWidth = self.ui.spinBox_ScoreboardImageWidth.value()
+        self.scoreboard_imageHeight = self.ui.spinBox_ScoreboardImageHeight.value()
+
+        # Variaveis da aba player
+        self.player_image       = self.ui.label_PlayerImage.pixmap().toImage()
+        self.player_width       = self.ui.spinBox_PlayerWidth.value()
+        self.player_height      = self.ui.spinBox_PlayerHeight.value()
+        self.player_speed       = self.ui.spinBox_PlayerSpeed.value()
+        self.player_keep_aspect = self.ui.checkBox_PlayerKeepAspectRatio.isChecked()
+
+        # Inicializa os valores dos textos para undo/redo
+        widgets = [(self.ui.lineEdit_GameName, self.model.meta.soft_name), (self.ui.lineEdit_Author, self.model.meta.soft_author),(self.ui.plainTextEdit_GameDescription, self.model.meta.soft_description),
+                   (self.ui.lineEdit_FunctionVelocity, self.model.meta.velocity.get_function_orig()), (self.ui.lineEdit_FunctionTrackMinimum, self.model.meta.boundary.get_function_min_orig()),
+                   (self.ui.lineEdit_FunctionTrackMaximum, self.model.meta.boundary.get_function_max_orig())]
+        for widget, default in widgets:
+            widget._last_text = default
+
+        # define _last_value para undo funcionar na primeira alteração
+        self.ui.spinBox_PlayerWidth._last_value = self.player_width
+        self.ui.spinBox_PlayerHeight._last_value = self.player_height
+        self.ui.spinBox_PlayerSpeed._last_value = self.player_speed
+        self.ui.checkBox_PlayerKeepAspectRatio._last_value = self.player_keep_aspect
+        self.ui.doubleSpinBox_AmbienceSoundVolume._last_value = self.ui.doubleSpinBox_AmbienceSoundVolume.value()
+        self.ui.doubleSpinBox_ScoreTimeBonus._last_value = self.ui.doubleSpinBox_ScoreTimeBonus.value()
+        self.ui.checkBox_TrackMaximumKills._last_value = self.ui.checkBox_TrackMaximumKills.isChecked()
+        self.ui.checkBox_TrackMinimumKills._last_value = self.ui.checkBox_TrackMinimumKills.isChecked()
+        self.ui.radioButton_HorizontalScrolling._last_value = self.ui.radioButton_HorizontalScrolling.isChecked()
+        self.ui.radioButton_VerticalScrolling._last_value = self.ui.radioButton_VerticalScrolling.isChecked()
+        self.ui.spinBox_ScoreboardImagePositionX._last_value = self.scoreboard_positionX
+        self.ui.spinBox_ScoreboardImagePositionY._last_value = self.scoreboard_positionY
+        self.ui.spinBox_ScoreboardImageWidth._last_value = self.scoreboard_imageWidth
+        self.ui.spinBox_ScoreboardImageHeight._last_value = self.scoreboard_imageHeight
 
 #------------------------------------------------------------------------------#
