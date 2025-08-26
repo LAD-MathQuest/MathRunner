@@ -245,6 +245,8 @@ class MainController:
             self.undo_group.addStack(self.undo_stacks[i])
             if self.ui.tabWidget_Game.tabText(i) == "Velocidade":
              self.undo_stacks[i].indexChanged.connect(self.update_velocity_undo)
+            if self.ui.tabWidget_Game.tabText(i) == "Borda":
+                self.undo_stacks[i].indexChanged.connect(self.update_tracks_undo)
         self.undo_group.setActiveStack(self.undo_stacks[0])
 
     #--------------------------------------------------------------------------#
@@ -804,9 +806,9 @@ class MainController:
     #--------------------------------------------------------------------------#
     def function_track_maximum_changed(self):
         func = self.ui.lineEdit_FunctionTrackMaximum.text()
-        old_text = getattr(self, self.ui.lineEdit_FunctionTrackMaximum, "_last_text", "")
+        old_text = getattr(self.ui.lineEdit_FunctionTrackMaximum, "_last_text", "")
 
-        self.add_text_undo(self.ui.lineEdit_FunctionTrackMaximum, old_text, func, "Alterar máximo")
+        self.add_text_undo(self,self.ui.lineEdit_FunctionTrackMaximum, old_text, func, "Alterar máximo")
         try:
             self.model.change_track_maximum_function(func)
             self.plot_track.update_boundary(
@@ -949,14 +951,27 @@ class MainController:
     def update_velocity_undo(self):
         func = self.ui.lineEdit_FunctionVelocity.text()
 
-
-
-        
         self.model.change_velocity_function(func)
         self.plot_velocity.update_velocity(
         self.model.get_velocity_function()
         )
         self.ui.lineEdit_FunctionVelocity._last_text = func
+ #---------------------------------------------------------------------------#
+    def update_tracks_undo(self):
+        func1 = self.ui.lineEdit_FunctionTrackMaximum.text()
+        func2 = self.ui.lineEdit_FunctionTrackMinimum.text()
+    
+        self.model.change_track_minimum_function(func2)
+        self.plot_track.update_boundary(
+        self.model.get_boundary_functions()
+        )
+        self.model.change_track_maximum_function(func1)
+        self.plot_track.update_boundary(
+        self.model.get_boundary_functions()
+        )
+        self.ui.lineEdit_FunctionTrackMinimum._last_text = func1
+        self.ui.lineEdit_FunctionTrackMinimum._last_text = func2
+
 
     # Atualiza todas as variaveis com o conteudo atual da interface
     def update_data(self):
