@@ -975,19 +975,12 @@ class MainController:
         command = ChangeTextCommand(controller, widget, old_text, new_text, description)
         stack = self.undo_group.activeStack()
         stack.push(command)
-    #---------------------------------------------------------------------------#
-    def update_velocity_undo(self):
-        func = self.ui.lineEdit_FunctionVelocity.text()
-    
-<<<<<<< HEAD
-    #---------------------------------------------------------------------------#
+    #--------------------------------------------------------------------------#
     def update_velocity_undo(self):
         func = self.ui.lineEdit_FunctionVelocity.text()
 
 
 
-=======
->>>>>>> b42e2b975379b451d356cf4b7a96e91126e55df2
         
         self.model.change_velocity_function(func)
         self.plot_velocity.update_velocity(
