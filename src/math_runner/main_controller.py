@@ -243,6 +243,8 @@ class MainController:
         for i in range(self.ui.tabWidget_Game.count()):
             self.undo_stacks.append(QUndoStack(self.win))
             self.undo_group.addStack(self.undo_stacks[i])
+            if self.ui.tabWidget_Game.tabText(i) == "Velocidade":
+             self.undo_stacks[i].indexChanged.connect(self.update_velocity_undo)
         self.undo_group.setActiveStack(self.undo_stacks[0])
 
     #--------------------------------------------------------------------------#
@@ -943,7 +945,18 @@ class MainController:
         for i in range(self.ui.tabWidget_Game.count()):
             self.undo_stacks[i].clear()
     
-    #--------------------------------------------------------------------------#
+    #---------------------------------------------------------------------------#
+    def update_velocity_undo(self):
+        func = self.ui.lineEdit_FunctionVelocity.text()
+
+
+
+        
+        self.model.change_velocity_function(func)
+        self.plot_velocity.update_velocity(
+        self.model.get_velocity_function()
+        )
+        self.ui.lineEdit_FunctionVelocity._last_text = func
 
     # Atualiza todas as variaveis com o conteudo atual da interface
     def update_data(self):
