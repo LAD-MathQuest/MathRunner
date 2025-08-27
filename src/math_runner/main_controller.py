@@ -36,6 +36,35 @@ import pygame, os, tempfile
 sys.path.append(str(Path(__file__).parents[1]))
 
 #--------------------------------------------------------------------------------#
+class ChangeObjectCommand(QUndoCommand):
+    def __init__(self,new_object, ui, position, description="Alterar imagem"):
+        super().__init__(description)
+
+        self.position = ui.indexOf(new_object)
+        self.ui = ui
+        self.new_object = new_object
+
+    def undo(self):
+        self._remove_object(self.new_object)
+    def redo(self):
+        self._insert_object(self.new_object, self.position)
+
+    def _insert_object(self, object, position):
+        if object:
+            self.ui.insertWidget(position,object)
+            object.show()
+            
+        else:
+            self.label.clear()
+    def _remove_object(self, object):
+        if object:  
+            self.ui.removeWidget(object)
+            object.hide()
+        else:
+            self.label.clear()
+        
+
+
 class ChangeImageCommand(QUndoCommand):
     def __init__(self, label, old_image, new_image, description="Alterar imagem"):
         super().__init__(description)
@@ -224,6 +253,17 @@ class MainController:
             self.model.get_boundary_functions()
         )
 
+        # Criação do Undo Group
+        self.undo_group = QUndoGroup(self.win)
+
+        # Criação das pilhas de Undo
+        self.undo_stacks = []
+        for i in range(self.ui.tabWidget_Game.count()):
+            self.undo_stacks.append(QUndoStack(self.win))
+            self.undo_group.addStack(self.undo_stacks[i])
+        self.undo_group.setActiveStack(self.undo_stacks[0])
+
+        self.imageObstacles = []        
         self.init_objects()
 
         self.last_dir  = str(parameters.games_path)
@@ -233,8 +273,6 @@ class MainController:
 
         self.update_data()
 
-        # Criação do Undo Group
-        self.undo_group = QUndoGroup(self.win)
 
         self.connect_signals_and_slots()
 
@@ -274,7 +312,6 @@ class MainController:
     def connect_signals_and_slots(self):
 
         ui = self.ui
-
         #--- Menu signals -----------------------------------------------------#
 
         ui.action_New     .triggered.connect( self.new     )
@@ -322,7 +359,7 @@ class MainController:
 
         #--- Appearance Tab signals -------------------------------------------#
 
-        ui.pushButton_SelectBackgroundImage.clicked.connect(self.select_image)
+        ui.pushButton_SelectBackgroundImage.clicked.connect(lambda: self.select_image("backgrounds",self.ui.label_BackgroundImage,"background_image",""))
         
         # ui.checkBox_BackgroundScrolls
 
@@ -364,6 +401,7 @@ class MainController:
         ui.lineEdit_FunctionTrackMaximum.editingFinished.connect(self.function_track_maximum_changed)
 
         ui.tabWidget_Game.currentChanged.connect(self.update_undo_stack)
+        
     #--------------------------------------------------------------------------#
     # Actions
     #--------------------------------------------------------------------------#
@@ -491,21 +529,29 @@ class MainController:
     # Slots
     #--------------------------------------------------------------------------#
 
-    def select_image(self):
-        path_backgrounds = self.path_resources / 'backgrounds'
+    def select_image(self, folder, label, attr, position):
+        path_backgrounds = self.path_resources / folder
         fname = self.get_open_fname('Escolha uma Imagem', path_backgrounds, 'png')
         
         if fname:
-            label = self.ui.label_BackgroundImage
 
-            old_image = getattr(self, 'background_image', '')
-            
             tools.path_image_to_label(label, fname)
-
             new_image = label.pixmap().toImage()
-            
+
+            if isinstance (getattr(self, attr, ''),list):
+                print("'E um vetor!! :p ")
+                lista = getattr(self, attr, '')
+                old_image = getattr(lista,"__getitem__")(position)
+                lista[position] = new_image
+                
+
+
+            else : 
+ 
+                old_image = getattr(self, attr, '')
+                setattr(self,attr,new_image)
+
             self.add_image_undo(label, old_image, new_image, "Alterar imagem do fundo")
-            self.background_image = new_image
             self.changed = True
 
     #--------------------------------------------------------------------------#
@@ -701,18 +747,22 @@ class MainController:
         pass
 
     #--------------------------------------------------------------------------#
+    
     def new_obstacle_widget(self):
 
         widget = ObjectWidget(self.obstacles_area)
 
         self.obstacles_box.insertWidget(self.num_obstacles, widget)
-
+        
         bar = self.obstacles_area.verticalScrollBar()
         bar.setValue(bar.maximum())
 
         self.obstacles.append(widget)
         self.num_obstacles += 1
+        self.imageObstacles.append("")
+        widget.ui.pushButton_SelectImage.clicked.connect(lambda :self.select_image("objects",widget.ui.label_Image,"imageObstacles", self.num_obstacles-1))
 
+        self.add_object_undo(widget, self.obstacles_box, self.num_obstacles,"criacao de objeto")
         return widget
 
     #--------------------------------------------------------------------------#
@@ -941,7 +991,12 @@ class MainController:
         command = ChangeTextCommand(controller, widget, old_text, new_text, description)
         stack = self.undo_group.activeStack()
         stack.push(command)
-
+    #--------------------------------------------------------------------------#
+    def add_object_undo(self,new_object, ui, position, description): 
+        command = ChangeObjectCommand(new_object, ui, position, description)
+        stack = self.undo_group.activeStack()
+        stack.push(command)
+    
     #--------------------------------------------------------------------------#
     def clear_stacks_undo(self): 
         for i in range(self.ui.tabWidget_Game.count()):
@@ -1011,5 +1066,5 @@ class MainController:
         self.ui.spinBox_ScoreboardImagePositionY._last_value = self.scoreboard_positionY
         self.ui.spinBox_ScoreboardImageWidth._last_value = self.scoreboard_imageWidth
         self.ui.spinBox_ScoreboardImageHeight._last_value = self.scoreboard_imageHeight
-
+        
 #------------------------------------------------------------------------------#
