@@ -263,7 +263,11 @@ class MainController:
             self.undo_group.addStack(self.undo_stacks[i])
         self.undo_group.setActiveStack(self.undo_stacks[0])
 
-        self.imageObstacles = []        
+        self.imageObstacles = [] 
+        
+        #-------------GAMBIARRA-----------------#
+        self.id_imageObstacle = -1   #-------------Tentar encontrar uma solução melhor--------------#    
+
         self.init_objects()
 
         self.last_dir  = str(parameters.games_path)
@@ -286,6 +290,8 @@ class MainController:
             if self.ui.tabWidget_Game.tabText(i) == "Borda":
                 self.undo_stacks[i].indexChanged.connect(self.update_tracks_undo)
         self.undo_group.setActiveStack(self.undo_stacks[0])
+        
+        
 
     #--------------------------------------------------------------------------#
     def init_objects(self):
@@ -534,7 +540,6 @@ class MainController:
         fname = self.get_open_fname('Escolha uma Imagem', path_backgrounds, 'png')
         
         if fname:
-
             tools.path_image_to_label(label, fname)
             new_image = label.pixmap().toImage()
 
@@ -544,10 +549,7 @@ class MainController:
                 old_image = getattr(lista,"__getitem__")(position)
                 lista[position] = new_image
                 
-
-
             else : 
- 
                 old_image = getattr(self, attr, '')
                 setattr(self,attr,new_image)
 
@@ -756,11 +758,12 @@ class MainController:
         
         bar = self.obstacles_area.verticalScrollBar()
         bar.setValue(bar.maximum())
-
+        widget.ui.label_Image.setProperty("id", self.id_imageObstacle)
+        self.id_imageObstacle += 1
         self.obstacles.append(widget)
         self.num_obstacles += 1
         self.imageObstacles.append("")
-        widget.ui.pushButton_SelectImage.clicked.connect(lambda :self.select_image("objects",widget.ui.label_Image,"imageObstacles", self.num_obstacles-1))
+        widget.ui.pushButton_SelectImage.clicked.connect(lambda :self.select_image("objects",widget.ui.label_Image,"imageObstacles", widget.ui.label_Image.property("id")))
 
         self.add_object_undo(widget, self.obstacles_box, self.num_obstacles,"criacao de objeto")
         return widget
@@ -1066,5 +1069,9 @@ class MainController:
         self.ui.spinBox_ScoreboardImagePositionY._last_value = self.scoreboard_positionY
         self.ui.spinBox_ScoreboardImageWidth._last_value = self.scoreboard_imageWidth
         self.ui.spinBox_ScoreboardImageHeight._last_value = self.scoreboard_imageHeight
+        # print(len(self.obstacles))
+        for i in range(len(self.obstacles)):
+            self.imageObstacles[i] = self.obstacles[i].ui.label_Image.pixmap().toImage()
+
         
 #------------------------------------------------------------------------------#
