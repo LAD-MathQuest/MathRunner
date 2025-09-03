@@ -546,7 +546,7 @@ class MainController:
             tools.path_image_to_label(label, fname)
             new_image = label.pixmap().toImage()
 
-            self.add_image_undo(label, old_image, new_image, "Alterar imagem do caminho de fundo")
+            self.add_image_undo(label, new_image, "Alterar imagem do caminho de fundo")
 
             self.track_image = new_image
             self.changed = True
@@ -575,24 +575,25 @@ class MainController:
         
         if fname:
             label = self.ui.label_PlayerImage
-            old_image = getattr(self, 'player_image_original', None)
-            if old_image is not None:
-                old_image = old_image.toImage()
+            new_image = QPixmap(fname)
+            # old_image = getattr(self, 'player_image_original', None)
+            # if old_image is not None:
+            #     old_image = old_image.toImage()
 
-            #guarda a imagem original como QPixmap
+            # #guarda a imagem original como QPixmap
             self.player_image_original = QPixmap(fname)
 
-            #coloca no label a primeira versão
-            label.setScaledContents(False)
-            label.setAlignment(Qt.AlignCenter)
-            label.setPixmap(self.player_image_original)
+            # #coloca no label a primeira versão
+            # label.setScaledContents(False)
+            # label.setAlignment(Qt.AlignCenter)
+            # label.setPixmap(self.player_image_original)
 
             #atualiza spinBoxes
             self.ui.spinBox_PlayerWidth.setValue(self.player_image_original.width())
             self.ui.spinBox_PlayerHeight.setValue(self.player_image_original.height())
 
             self.player_image = self.player_image_original
-            self.add_image_undo(label, old_image, self.player_image_original.toImage(), "Alterar imagem do fundo")
+            self.add_image_undo(label, new_image, "Alterar imagem do fundo")
             self.changed = True
     #--------------------------------------------------------------------------#
    
@@ -656,7 +657,7 @@ class MainController:
             tools.path_image_to_label(label, fname)
             new_image = label.pixmap().toImage()
 
-            self.add_image_undo(label, old_image, new_image, "Alterar imagem do icone")
+            self.add_image_undo(label, new_image, "Alterar imagem do icone")
             self.icons_image = new_image
             self.changed = True
 
