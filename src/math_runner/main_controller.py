@@ -80,8 +80,6 @@ class MainController:
                 self.undo_stacks[i].indexChanged.connect(self.update_tracks_undo)
         self.undo_group.setActiveStack(self.undo_stacks[0])
 
-
-
     #--------------------------------------------------------------------------#
     def init_objects(self):
 
@@ -529,16 +527,14 @@ class MainController:
 
         widget = ObjectWidget(self.obstacles_area)
 
-        self.obstacles_box.insertWidget(self.num_obstacles, widget)
-
         bar = self.obstacles_area.verticalScrollBar()
         bar.setValue(bar.maximum())
-        widget.ui.label_Image.setProperty("id", self.num_obstacles)
-        self.obstacles.append(widget) # consertar
-        self.num_obstacles += 1
-        widget.ui.pushButton_SelectImage.clicked.connect(lambda :self.select_image("objects",widget.ui.label_Image,))
 
-        self.add_object_undo(widget, self.obstacles_box, self.num_obstacles,"criacao de objeto")
+        widget.ui.pushButton_SelectImage.clicked.connect(lambda :self.select_image("objects",widget.ui.label_Image))
+        self.add_object_undo(widget, self.obstacles_box, self.num_obstacles, "criacao de objeto")
+        widget.ui.pushButton_Delete.clicked.connect(lambda :self.hide_object_widget(widget, self.obstacles_box, self.obstacles_box.indexOf(widget)))
+        widget.ui.pushButton.clicked.connect(lambda :self.duplicate_object(widget, self.obstacles_box, self.obstacles_box.indexOf(widget)+1))
+
         return widget
 
     #--------------------------------------------------------------------------#
@@ -555,6 +551,33 @@ class MainController:
         self.num_collectibles += 1
 
         return widget
+
+    #--------------------------------------------------------------------------#
+
+    def hide_object_widget(self, widget, ui, position):
+        self.remove_object_undo(widget, ui, position, "remoção de objeto")
+
+    #--------------------------------------------------------------------------#
+
+    def duplicate_object(self, widget, ui, position):
+        
+        new_widget = ObjectWidget(self.obstacles_area)
+        new_widget.ui.label_Image.setPixmap(widget.ui.label_Image.pixmap())
+        new_widget.ui.spinBox_Width.setValue(widget.ui.spinBox_Width.value())
+        new_widget.ui.spinBox_Height.setValue(widget.ui.spinBox_Height.value())
+        new_widget.ui.checkBox_KeepAspectRatio.setChecked(widget.ui.checkBox_KeepAspectRatio.isChecked())
+        new_widget.ui.doubleSpinBox_Points.setValue(widget.ui.doubleSpinBox_Points.value())
+        new_widget.ui.doubleSpinBox_Volume.setValue(widget.ui.doubleSpinBox_Volume.value())
+        new_widget.sound = widget.sound
+
+        bar = self.obstacles_area.verticalScrollBar()
+        bar.setValue(bar.maximum())
+        
+        new_widget.ui.pushButton_SelectImage.clicked.connect(lambda :self.select_image("objects",new_widget.ui.label_Image))
+        self.dupicate_object_undo(new_widget, ui, position, "duplicação de objeto")
+        new_widget.ui.pushButton_Delete.clicked.connect(lambda :self.hide_object_widget(new_widget, ui, ui.indexOf(new_widget)))
+        new_widget.ui.pushButton.clicked.connect(lambda :self.duplicate_object(new_widget, ui, ui.indexOf(new_widget)+1))
+
 
     #--------------------------------------------------------------------------#
     def remove_obstacle_widget(self, obj_id):
@@ -769,7 +792,19 @@ class MainController:
         stack.push(command)
     #--------------------------------------------------------------------------#
     def add_object_undo(self,new_object, ui, position, description):
-        command = undo.ChangeObjectCommand(new_object, ui, position, description)
+        command = undo.AddObjectCommand(new_object, ui, position, self, description)
+        stack = self.undo_group.activeStack()
+        stack.push(command)
+
+    #--------------------------------------------------------------------------#
+    def remove_object_undo(self,new_object, ui, position, description):
+        command = undo.HideObjectCommand(new_object, ui, position, self, description)
+        stack = self.undo_group.activeStack()
+        stack.push(command)
+
+    #--------------------------------------------------------------------------#
+    def dupicate_object_undo(self,new_object, ui, position, description):
+        command = undo.AddObjectCommand(new_object, ui, position, self, description)
         stack = self.undo_group.activeStack()
         stack.push(command)
 
@@ -804,7 +839,7 @@ class MainController:
         self.ui.lineEdit_FunctionTrackMinimum._last_text = func2
 
 
-    # Atualiza todas as variaveis com o conteudo atual da interface
+    # Configurar para programar
     def update_data(self):
         self.background_image   = self.ui.label_BackgroundImage.pixmap().toImage()
         self.track_image        = self.ui.label_TrackImage.pixmap().toImage()

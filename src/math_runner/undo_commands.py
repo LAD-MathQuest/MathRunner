@@ -5,36 +5,62 @@ from PySide6.QtWidgets import QLineEdit, QPlainTextEdit, QTextEdit, QLabel
 from PySide6.QtCore    import Qt
 
 #--------------------------------------------------------------------------------#
-class ChangeObjectCommand(QUndoCommand):
-
+class HideObjectCommand(QUndoCommand):
     def __init__(
         self,
-        new_object,
+        object,
         ui,
         position,
+        engine,
         description="Alterar imagem"
     ):
         super().__init__(description)
 
-        self.position = ui.indexOf(new_object)
+        self.position = position
         self.ui = ui
-        self.new_object = new_object
-
+        self.object = object
+        self.engine = engine
 
     def undo(self):
-        self._remove_object(self.new_object)
-
+        self.ui.insertWidget(self.position, self.object)
+        self.object.show()
+        self.engine.num_obstacles += 1
+        self.engine.obstacles.insert(self.position, self.object)
+        
 
     def redo(self):
-        self._insert_object(self.new_object, self.position)
+        self.ui.removeWidget(self.object)
+        self.object.hide()
+        self.engine.num_obstacles -= 1
+        self.engine.obstacles.pop(self.position)
+class AddObjectCommand(QUndoCommand):
+    def __init__(
+        self,
+        object,
+        ui,
+        position,
+        engine,
+        description="Alterar imagem"
+    ):
+        super().__init__(description)
 
+        self.position = position
+        self.ui = ui
+        self.object = object
+        self.engine = engine
 
-    def _insert_object(self, object, position):
-        if object:
-            self.ui.insertWidget(position,object)
-            object.show()
-        else:
-            self.label.clear()
+    def undo(self):
+        self.ui.removeWidget(self.object)
+        self.object.hide()
+        self.engine.num_obstacles -= 1
+        self.engine.obstacles.pop(self.position)
+        
+
+    def redo(self):
+        self.ui.insertWidget(self.position, self.object)
+        self.object.show()
+        self.engine.num_obstacles += 1
+        self.engine.obstacles.insert(self.position, self.object)
 
 
 def _remove_object(self, object):
