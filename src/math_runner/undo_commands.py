@@ -62,15 +62,6 @@ class AddObjectCommand(QUndoCommand):
         self.engine.num_obstacles += 1
         self.engine.obstacles.insert(self.position, self.object)
 
-
-def _remove_object(self, object):
-        if object:
-            self.ui.removeWidget(object)
-            object.hide()
-        else:
-            self.label.clear()
-
-
 #--------------------------------------------------------------------------------#
 class ChangeImageCommand(QUndoCommand):
 
@@ -83,8 +74,6 @@ class ChangeImageCommand(QUndoCommand):
         super().__init__(description)
         self.label = label
         self.new_image = new_image
-        # self.old_image = label.pixmap().toImage()
-
 
     def undo(self):
         self.label.setPixmap(self.old_image) # Mudar o nome para
@@ -98,7 +87,6 @@ class ChangeImageCommand(QUndoCommand):
         size = self.label.size().boundedTo(self.new_image.size())
         self.label.setPixmap(self.new_image.scaled(size, aspectMode=Qt.KeepAspectRatio))
         self.label.setProperty('original_pixmap', self.new_image)
-
 
 #--------------------------------------------------------------------------------#
 class ChangeValueCommand(QUndoCommand):
