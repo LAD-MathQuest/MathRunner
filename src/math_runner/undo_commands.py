@@ -101,41 +101,6 @@ class ChangeImageCommand(QUndoCommand):
 
 
 #--------------------------------------------------------------------------------#
-class ChangeImageSpinBoxCommand(QUndoCommand):
-
-    def __init__(
-        self,
-        engine,
-        new_image,
-        description="Alterar imagem"
-    ):
-        super().__init__(description)
-        self.engine = engine
-        self.new_image = new_image
-
-         # Referências aos spinBox
-        self.spin_width = engine.ui.spinBox_PlayerWidth
-        self.spin_height = engine.ui.spinBox_PlayerHeight
-
-         # Estado antigo
-        self.old_image = engine.player_original
-        self.old_width = self.spin_width.value()
-        self.old_height = self.spin_height.value()
-
-    def undo(self):
-        self.engine.player_original = self.old_image
-        self.spin_width.setValue(self.old_width)
-        self.spin_height.setValue(self.old_height)
-        self.engine.update_image_size()
-
-    def redo(self):
-        self.engine.player_original = self.new_image
-        self.spin_width.setValue(self.new_image.width())
-        self.spin_height.setValue(self.new_image.height())
-        self.engine.update_image_size()
-
-
-#--------------------------------------------------------------------------------#
 class ChangeValueCommand(QUndoCommand):
 
     def __init__(
