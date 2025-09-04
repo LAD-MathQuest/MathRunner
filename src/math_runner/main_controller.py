@@ -368,26 +368,10 @@ class MainController:
         fname = self.get_open_fname('Escolha uma Imagem', path_icon, 'png')
 
         if fname:
-            label = self.ui.label_PlayerImage
+            
             new_image = QPixmap(fname)
-            # old_image = getattr(self, 'player_image_original', None)
-            # if old_image is not None:
-            #     old_image = old_image.toImage()
 
-            # #guarda a imagem original como QPixmap
-            self.player_image_original = QPixmap(fname)
-
-            # #coloca no label a primeira versão
-            # label.setScaledContents(False)
-            # label.setAlignment(Qt.AlignCenter)
-            # label.setPixmap(self.player_image_original)
-
-            #atualiza spinBoxes
-            self.ui.spinBox_PlayerWidth.setValue(self.player_image_original.width())
-            self.ui.spinBox_PlayerHeight.setValue(self.player_image_original.height())
-
-            self.player_image = self.player_image_original
-            self.add_image_undo(label, new_image, "Alterar imagem do fundo")
+            self.add_image_spinbox_undo(self, new_image, "Alterar imagem do fundo")
             self.changed = True
     #--------------------------------------------------------------------------#
 
@@ -398,8 +382,8 @@ class MainController:
         height = self.ui.spinBox_PlayerHeight.value()
         keep = self.ui.checkBox_PlayerKeepAspectRatio.isChecked()
 
-        if hasattr(self, "player_image_original") and not self.player_image_original.isNull():
-            pixmap = self.player_image_original
+        if self.player_original and not self.player_original.isNull():
+            pixmap = self.player_original
 
             if keep:
                 scaled = pixmap.scaledToWidth(width, Qt.SmoothTransformation)
@@ -794,6 +778,11 @@ class MainController:
         stack.push(command)
 
     #--------------------------------------------------------------------------#
+    def add_image_spinbox_undo(self, label, new_image, description):
+        command = undo.ChangeImageSpinBoxCommand(label, new_image, description)
+        stack = self.undo_group.activeStack()
+        stack.push(command)
+    #--------------------------------------------------------------------------#
     def add_value_undo(self, target, old_value, new_value, description):
         command = undo.ChangeValueCommand(target, old_value, new_value, self, description)
         stack = self.undo_group.activeStack()
@@ -875,7 +864,8 @@ class MainController:
         self.scoreboard_imageHeight = self.ui.spinBox_ScoreboardImageHeight.value()
 
         # Variaveis da aba player
-        self.player_image       = self.ui.label_PlayerImage.pixmap().toImage()
+        self.player_original      = self.ui.label_PlayerImage.pixmap()
+        self.player_image       = self.ui.label_PlayerImage.pixmap()
         self.player_width       = self.ui.spinBox_PlayerWidth.value()
         self.player_height      = self.ui.spinBox_PlayerHeight.value()
         self.player_speed       = self.ui.spinBox_PlayerSpeed.value()
