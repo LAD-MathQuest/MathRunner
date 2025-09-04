@@ -354,7 +354,10 @@ class Engine:
 
     #--------------------------------------------------------------------------#
     def new_obstacle(self):
-        '''Creates a new obstale object'''
+        '''Creates a new obstacle object'''
+
+        if not self.world.param_obstacles:
+            return
 
         ob = random.choice(self.world.param_obstacles)
         sb = self.background.get_spawn_boundaries()
@@ -362,7 +365,7 @@ class Engine:
         sprite = GameObjects.create_obstacle(ob, sb)
         rect   = sprite.rect
 
-        # Discart the sprite if it overlaps with the last one
+        # Discard the sprite if it overlaps with the last one
         if pygame.Rect.colliderect(self.last_object_rect, rect):
             sprite.kill()
             self.set_timer_obstacles(100)
@@ -375,13 +378,16 @@ class Engine:
     def new_collectible(self):
         '''Creates a new collectible object'''
 
+        if not self.world.param_collectibles:
+            return
+
         ob = random.choice(self.world.param_collectibles)
         sb = self.background.get_spawn_boundaries()
 
         sprite = GameObjects.create_collectible(ob, sb)
         rect   = sprite.rect
 
-        # Discart the sprite if it overlaps with the last one
+        # Discard the sprite if it overlaps with the last one
         if pygame.Rect.colliderect(self.last_object_rect, rect):
             sprite.kill()
             self.set_timer_collectibles(100)
@@ -424,7 +430,7 @@ class Engine:
 
     #--------------------------------------------------------------------------#
     def eval_velocity(self):
-        '''Evals velocity and displacement values'''
+        '''Eval velocity and displacement values'''
 
         self.velocity     = self.world.velocity.eval(self.elapsed_time)
         self.displacement = math.ceil(self.velocity * self.displacement_scale)
