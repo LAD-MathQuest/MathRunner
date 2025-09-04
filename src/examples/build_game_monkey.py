@@ -41,11 +41,15 @@ if __name__ == '__main__':
     # Software
     #--------------------------------------------------------------------------#
 
-    game_file_name        = 'monkey.game'
-    meta.soft_name        = 'Monkey in Danger'
-    meta.soft_author      = "Merc"
-    meta.soft_description = 'Um jogo de corrida onde o macaco deve evitar as cobras e coletar as bananas'
-    meta.soft_icon        = MetaImage.from_file(path_icons/'monkey.png')
+    game_file_name   = 'monkey.game'
+    meta.soft_name   = 'Monkey in Danger'
+    meta.soft_author = "Merc"
+    meta.soft_icon   = MetaImage.from_file(path_icons/'monkey.png')
+
+    meta.soft_description = (
+        'Um jogo de corrida onde o macaco deve evitar '
+        'as cobras e coletar as bananas'
+    )
 
     # Game
     #--------------------------------------------------------------------------#

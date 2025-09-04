@@ -19,7 +19,6 @@ from meta import (
         MetaScoreboard,
         MetaWorld,
         save_meta,
-        read_bytes_io
     )
 
 #------------------------------------------------------------------------------#
@@ -61,11 +60,15 @@ if __name__ == '__main__':
     #--------------------------------------------------------------------------#
 
     # Background
-    meta.background_image   = MetaImage.from_file(path=path_backgrounds/'tile-blue.png')
+    meta.background_image = MetaImage.from_file(
+        path=path_backgrounds/'tile-blue.png'
+    )
     meta.background_scrolls = True
 
     # Track
-    meta.track_image   = MetaImage.from_file(path=path_backgrounds/'tile-green.png',size=(400,400))
+    meta.track_image = MetaImage.from_file(
+        path=path_backgrounds/'tile-green.png'
+    )
     meta.track_scrolls = True
     meta.track_kills   = (False, False)
 

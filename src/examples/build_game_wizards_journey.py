@@ -41,11 +41,14 @@ if __name__ == '__main__':
     # Software
     #--------------------------------------------------------------------------#
 
-    game_file_name        = "wizards_journey.game"
-    meta.soft_name        = "Wizard's Journey"
-    meta.soft_author      = "Samuel Lopes"
-    meta.soft_description = "Fuja das criaturas malignas enquanto avança em uma floresta mágica"
-    meta.soft_icon        = MetaImage.from_file(path_icons/'wizards_journey.png')
+    game_file_name   = "wizards_journey.game"
+    meta.soft_name   = "Wizard's Journey"
+    meta.soft_author = "Samuel Lopes"
+    meta.soft_icon   = MetaImage.from_file(path_icons/'wizards_journey.png')
+
+    meta.soft_description = (
+        "Fuja das criaturas malignas enquanto avança em uma floresta mágica"
+    )
 
     # Game
     #--------------------------------------------------------------------------#

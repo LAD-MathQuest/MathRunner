@@ -34,11 +34,15 @@ def main():
             sys.exit(1)
 
         except PermissionError:
-            print(f"Error: You do not have permission to access file {args.world}.")
+            print("Error: You do not have permission to access "
+                 f"file {args.world}."
+            )
             sys.exit(1)
 
-        except IOError:
-            print(f"Error: An unexpected I/O error occurred while reading file {args.world}.")
+        except OSError:
+            print("Error: An unexpected I/O error occurred "
+                 f"while reading file {args.world}."
+            )
             sys.exit(1)
 
         except Exception as e:

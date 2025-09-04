@@ -41,11 +41,12 @@ if __name__ == '__main__':
     # Software
     #--------------------------------------------------------------------------#
 
-    game_file_name        = 'healthy_run.game'
-    meta.soft_name        = 'Healthy Run'
-    meta.soft_author      = "Lígia Aguiar"
+    game_file_name   = 'healthy_run.game'
+    meta.soft_name   = 'Healthy Run'
+    meta.soft_author = "Lígia Aguiar"
+    meta.soft_icon   = MetaImage.from_file(path_icons/'healthy_run.png')
+
     meta.soft_description = "A game that encourages healthy eating"
-    meta.soft_icon        = MetaImage.from_file(path_icons/'healthy_run.png')
 
     # Game
     #--------------------------------------------------------------------------#

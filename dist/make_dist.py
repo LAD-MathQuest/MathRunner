@@ -31,6 +31,7 @@ def compile_math_runner(src: Path, dist: str, sep: str) -> None:
         '--windowed'
     ])
 
+
 #------------------------------------------------------------------------------#
 def compile_infinite_run(src: Path, dist: str, sep: str) -> None:
 
@@ -47,17 +48,30 @@ def compile_infinite_run(src: Path, dist: str, sep: str) -> None:
         '--windowed'
     ])
 
-#------------------------------------------------------------------------------#
-def compile_examples(here: Path, src: Path, dist: str) -> None:
 
-    print('Compiling Examples...')
+#------------------------------------------------------------------------------#
+def compile_examples(src: Path, tgt: Path) -> None:
+
+    print('Compiling examples...')
 
     build_examples()
 
     source = src / 'games'
-    dest   = here / dist / 'games'
+    target = tgt / 'games'
+
+    shutil.copytree(source, target, dirs_exist_ok=True)
+
+
+#------------------------------------------------------------------------------#
+def copy_resources(src: Path, tgt: Path) -> None:
+
+    print('Copying resources...')
+
+    source = src / 'examples' / 'resources'
+    dest   = tgt / 'resources'
 
     shutil.copytree(source, dest, dirs_exist_ok=True)
+
 
 #------------------------------------------------------------------------------#
 def zip_distribution(dist: str) -> None:
@@ -65,6 +79,7 @@ def zip_distribution(dist: str) -> None:
     print(f'Creating {dist}.zip...')
 
     shutil.make_archive(dist, 'zip', dist)
+
 
 #------------------------------------------------------------------------------#
 def main() -> None:
@@ -79,18 +94,24 @@ def main() -> None:
         print(f'Unknown platform {sys.platform}!')
         return
 
+    dist   = f'{dist_name}-{sys.platform}-{version}'
+
     here = Path(__file__).parent
     src  = here.parent / 'src'
-    dist = f'{dist_name}-{sys.platform}-{version}'
+    tgt  = here / dist
 
     print(f'Creating a distribution {dist}...')
 
     compile_math_runner (src, dist, sep)
     compile_infinite_run(src, dist, sep)
-    compile_examples    (here, src, dist)
-    zip_distribution    (dist)
+
+    compile_examples(src, tgt)
+    copy_resources  (src, tgt)
+
+    zip_distribution(dist)
 
     print('Done')
+
 
 #------------------------------------------------------------------------------#
 if __name__ == '__main__':

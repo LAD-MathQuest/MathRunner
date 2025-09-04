@@ -34,7 +34,7 @@ To install python and run MathRunner follow the steps:
     2. Click the button `Code`
     3. Select option `Download ZIP`
 
-    On linux it is possible to use the command line
+    On Linux it is possible to use the command line
 
     ```
     wget https://github.com/LAD-MathQuest/MathRunner/archive/refs/heads/master.zip
@@ -60,9 +60,25 @@ To install python and run MathRunner follow the steps:
     ```
     uv run -m math_runner
     ```
+
 7. It is possible to play a saved game without using the interface
     ```
     uv tun -m infinite_run path_to_game_file
+    ```
+
+## Linter
+
+Para utilizar o `ruff` no VSCode instale a extensão <https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff>
+
+## Distribution
+
+To create a distribution you need to go to `dist` directory
+    ```
+    cd dist
+    ```
+and execute the `make_dist` script
+    ```
+    uv run make_dist.py
     ```
 
 ## Documentation

@@ -20,4 +20,12 @@ dev = [
     "mkdocs-material>=9.6.16",
     "mkdocstrings[python]>=0.30.0",
     "pyinstaller==6.15.*",
+    "ruff>=0.12.11",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "F",  # Pyflakes errors
+    "UP", # pyupgrade rules
 ]

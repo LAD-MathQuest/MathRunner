@@ -41,11 +41,12 @@ if __name__ == '__main__':
     # Software
     #--------------------------------------------------------------------------#
 
-    game_file_name        = 'space.game'
-    meta.soft_name        = 'Space'
-    meta.soft_author      = "Daniel Cristo"
+    game_file_name   = 'space.game'
+    meta.soft_name   = 'Space'
+    meta.soft_author = "Daniel Cristo"
+    meta.soft_icon   = MetaImage.from_file(path_icons/'space.png')
+
     meta.soft_description = 'Desvie dos Asteroides e resgate os Astronautas'
-    meta.soft_icon        = MetaImage.from_file(path_icons/'space.png')
 
     # Game
     #--------------------------------------------------------------------------#

@@ -41,11 +41,15 @@ if __name__ == '__main__':
     # Software
     #--------------------------------------------------------------------------#
 
-    game_file_name        = 'racing.game'
-    meta.soft_name        = 'Racing'
-    meta.soft_author      = "Luis D'Afonseca"
-    meta.soft_description = 'Um jogo de corrida onde o jogador deve evitar os obstáculos e coletar as joias'
-    meta.soft_icon        = MetaImage.from_file(path_icons/'racing.png')
+    game_file_name   = 'racing.game'
+    meta.soft_name   = 'Racing'
+    meta.soft_author = "Luis D'Afonseca"
+    meta.soft_icon   = MetaImage.from_file(path_icons/'racing.png')
+
+    meta.soft_description = (
+        'Um jogo de corrida onde o jogador deve evitar '
+        'os obstáculos e coletar as joias'
+    )
 
     # Game
     #--------------------------------------------------------------------------#

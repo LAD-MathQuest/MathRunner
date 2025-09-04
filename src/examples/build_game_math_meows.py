@@ -41,11 +41,15 @@ if __name__ == '__main__':
     # Software
     #--------------------------------------------------------------------------#
 
-    game_file_name        = 'math_meows.game'
-    meta.soft_name        = 'Maths & Meows'
-    meta.soft_author      = "Nandnn"
-    meta.soft_description = "Help the math teacher save the kittens, watch out for the cars!"
-    meta.soft_icon        = MetaImage.from_file(path_icons/'math_meows.png')
+    game_file_name   = 'math_meows.game'
+    meta.soft_name   = 'Maths & Meows'
+    meta.soft_author = "Nandnn"
+    meta.soft_icon   = MetaImage.from_file(path_icons/'math_meows.png')
+
+    meta.soft_description = (
+        "Help the math teacher save the kittens, "
+        "watch out for the cars!"
+    )
 
     # Game
     #--------------------------------------------------------------------------#
