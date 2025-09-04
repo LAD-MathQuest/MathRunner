@@ -10,7 +10,7 @@ class MetaObject:
     #--------------------------------------------------------------------------#
     def __init__(
         self,
-        image: MetaImage,
+        image: MetaImage = None,
         score: float = 0.0,
         sound: BytesIO | None = None,
         volume: float = 1.0
@@ -27,7 +27,7 @@ class MetaObject:
         :param volume: float
         """
 
-        self.image  = image
+        self.image  = image if image else MetaImage()
         self.score  = score
         self.sound  = sound
         self.volume = volume

@@ -530,10 +530,32 @@ class MainController:
         bar = self.obstacles_area.verticalScrollBar()
         bar.setValue(bar.maximum())
 
-        widget.ui.pushButton_SelectImage.clicked.connect(lambda :self.select_image("objects",widget.ui.label_Image))
-        self.add_object_undo(widget, self.obstacles_box, self.num_obstacles, "criacao de objeto")
-        widget.ui.pushButton_Delete.clicked.connect(lambda :self.hide_object_widget(widget, self.obstacles_box, self.obstacles_box.indexOf(widget)))
-        widget.ui.pushButton.clicked.connect(lambda :self.duplicate_object(widget, self.obstacles_box, self.obstacles_box.indexOf(widget)+1))
+        widget.ui.pushButton_SelectImage.clicked.connect(
+            lambda :self.select_image("objects",widget.ui.label_Image)
+        )
+
+        self.add_object_undo(
+            widget,
+            self.obstacles_box,
+            self.num_obstacles,
+            "criação de objeto"
+        )
+
+        widget.ui.pushButton_Delete.clicked.connect(
+            lambda :self.hide_object_widget(
+                widget,
+                self.obstacles_box,
+                self.obstacles_box.indexOf(widget)
+            )
+        )
+
+        widget.ui.pushButton.clicked.connect(
+            lambda :self.duplicate_object(
+                widget,
+                self.obstacles_box,
+                self.obstacles_box.indexOf(widget)+1
+            )
+        )
 
         return widget
 
@@ -560,7 +582,7 @@ class MainController:
     #--------------------------------------------------------------------------#
 
     def duplicate_object(self, widget, ui, position):
-        
+
         new_widget = ObjectWidget(self.obstacles_area)
         new_widget.ui.label_Image.setPixmap(widget.ui.label_Image.pixmap())
         new_widget.ui.spinBox_Width.setValue(widget.ui.spinBox_Width.value())
@@ -572,7 +594,7 @@ class MainController:
 
         bar = self.obstacles_area.verticalScrollBar()
         bar.setValue(bar.maximum())
-        
+
         new_widget.ui.pushButton_SelectImage.clicked.connect(lambda :self.select_image("objects",new_widget.ui.label_Image))
         self.dupicate_object_undo(new_widget, ui, position, "duplicação de objeto")
         new_widget.ui.pushButton_Delete.clicked.connect(lambda :self.hide_object_widget(new_widget, ui, ui.indexOf(new_widget)))
@@ -707,8 +729,12 @@ class MainController:
 
     #--------------------------------------------------------------------------#
     def confirm_deletion(self):
-        if self.changed:
-            return False
+
+        # TODO: implementar um quadro de dialogo confirmando a destruição
+        #       das alterações não salvas
+
+        # if self.changed:
+        #     return False
         return True
 
     #--------------------------------------------------------------------------#

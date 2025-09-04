@@ -42,4 +42,29 @@ class ObjectWidget(QWidget):
 
             ui.doubleSpinBox_Volume.setValue(meta.volume)
 
+
+    #--------------------------------------------------------------------------#
+    def object_to_meta(self, meta):
+
+        ui = self.ui
+
+        # Image
+        tools.label_to_meta_image(ui.label_Image, meta.image)
+
+        meta.image.size = [
+            ui.spinBox_Width .value(),
+            ui.spinBox_Height.value()
+        ]
+
+        # BUG: Corrigir o tamanho dos objetos
+        if meta.image.size[0] < 10 or meta.image.size[1] < 10:
+            print('Tamanho errado: ', meta.image.size)
+            meta.image.size = [60, 60]
+            print('Novo tamanho: ', meta.image.size)
+
+        # Score
+        meta.score = ui.doubleSpinBox_Points.value()
+
+        # TODO: Sound
+
 #------------------------------------------------------------------------------#

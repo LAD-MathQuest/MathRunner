@@ -1,6 +1,7 @@
 #------------------------------------------------------------------------------#
 
 from meta import MetaWorld
+from meta import MetaObject
 
 from .tools import label_to_meta_image
 
@@ -85,12 +86,22 @@ def update_from_view_tab_objects(meta: MetaWorld, ui, con) -> None:
 
     meta.obstacles_frequency = ui.doubleSpinBox_ObstaclesFrequency.value()
 
-    # TODO: get number od obstacles and read obstacles
+    meta.obstacles.clear()
+
+    for obj in con.obstacles:
+        meta_obj = MetaObject()
+        obj.object_to_meta(meta_obj)
+        meta.obstacles.append(meta_obj)
 
     # Collectibles
 
     meta.collectibles_frequency = ui.doubleSpinBox_CollectiblesFrequency.value()
 
-    # TODO: get number od collectibles and read collectibles
+    meta.collectibles.clear()
+
+    for obj in con.collectibles:
+        meta_obj = MetaObject()
+        obj.object_to_meta(meta_obj)
+        meta.collectibles.append(meta_obj)
 
 #------------------------------------------------------------------------------#
