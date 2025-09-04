@@ -62,15 +62,6 @@ class AddObjectCommand(QUndoCommand):
         self.engine.num_obstacles += 1
         self.engine.obstacles.insert(self.position, self.object)
 
-
-def _remove_object(self, object):
-        if object:
-            self.ui.removeWidget(object)
-            object.hide()
-        else:
-            self.label.clear()
-
-
 #--------------------------------------------------------------------------------#
 class ChangeImageCommand(QUndoCommand):
 
@@ -83,8 +74,6 @@ class ChangeImageCommand(QUndoCommand):
         super().__init__(description)
         self.label = label
         self.new_image = new_image
-        # self.old_image = label.pixmap().toImage()
-
 
     def undo(self):
         self.label.setPixmap(self.old_image) # Mudar o nome para
@@ -99,42 +88,54 @@ class ChangeImageCommand(QUndoCommand):
         self.label.setPixmap(self.new_image.scaled(size, aspectMode=Qt.KeepAspectRatio))
         self.label.setProperty('original_pixmap', self.new_image)
 
-
 #--------------------------------------------------------------------------------#
-class ChangeImageSpinBoxCommand(QUndoCommand):
 
+class ChangeImageSpinBoxCommand(QUndoCommand):
     def __init__(
-        self,
-        engine,
-        new_image,
-        description="Alterar imagem"
+            self,
+            label,
+            spin_width,
+            spin_height,
+            old_value_width,
+            old_value_height,
+            description
     ):
         super().__init__(description)
-        self.engine = engine
-        self.new_image = new_image
-
-         # Referências aos spinBox
-        self.spin_width = engine.ui.spinBox_PlayerWidth
-        self.spin_height = engine.ui.spinBox_PlayerHeight
-
-         # Estado antigo
-        self.old_image = engine.player_original
-        self.old_width = self.spin_width.value()
-        self.old_height = self.spin_height.value()
+        self.label = label
+        self.spin_width = spin_width
+        self.spin_height = spin_height
+        self.old_value_width = old_value_width
+        self.old_value_height = old_value_height
+        self.new_value_width = self.spin_width.value()
+        self.new_value_height = self.spin_height.value()
 
     def undo(self):
-        self.engine.player_original = self.old_image
-        self.spin_width.setValue(self.old_width)
-        self.spin_height.setValue(self.old_height)
-        self.engine.update_image_size()
+        self.spin_width.blockSignals(True)
+        self.spin_height.blockSignals(True)
+
+        self.spin_width.setValue(self.old_value_width)
+        self.spin_height.setValue(self.old_value_height)
+
+        self.spin_width.blockSignals(False)
+        self.spin_height.blockSignals(False)
+
+        image_scaled = self.label.property('original_pixmap').scaled(self.old_value_width, self.old_value_height, Qt.IgnoreAspectRatio)
+        self.label.setPixmap(image_scaled)
+
 
     def redo(self):
-        self.engine.player_original = self.new_image
-        self.spin_width.setValue(self.new_image.width())
-        self.spin_height.setValue(self.new_image.height())
-        self.engine.update_image_size()
+        self.spin_width.blockSignals(True)
+        self.spin_height.blockSignals(True)
 
+        self.spin_width.setValue(self.new_value_width)
+        self.spin_height.setValue(self.new_value_height)
 
+        self.spin_width.blockSignals(False)
+        self.spin_height.blockSignals(False)
+
+        image_scaled = self.label.property('original_pixmap').scaled(self.new_value_width, self.new_value_height, Qt.IgnoreAspectRatio)
+        self.label.setPixmap(image_scaled)
+        
 #--------------------------------------------------------------------------------#
 class ChangeValueCommand(QUndoCommand):
 
