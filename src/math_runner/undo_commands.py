@@ -106,33 +106,41 @@ class ChangeImageSpinBoxCommand(QUndoCommand):
     def __init__(
         self,
         engine,
-        new_image,
+        label,
+        spin_width, 
+        spin_height,
+        old_width,
+        old_height,
+        new_pixmap,
         description="Alterar imagem"
     ):
         super().__init__(description)
         self.engine = engine
-        self.new_image = new_image
-
-         # Referências aos spinBox
-        self.spin_width = engine.ui.spinBox_PlayerWidth
-        self.spin_height = engine.ui.spinBox_PlayerHeight
+        self.label = label
+        self.spin_width = spin_width
+        self.spin_height = spin_height
+        self.new_pixmap = new_pixmap
 
          # Estado antigo
-        self.old_image = engine.player_original
-        self.old_width = self.spin_width.value()
-        self.old_height = self.spin_height.value()
+        self.old_pixmap = label.pixmap()
+        self.old_width = old_width
+        self.old_height = old_height
 
     def undo(self):
-        self.engine.player_original = self.old_image
+        self.label.setPixmap(self.old_pixmap)
+        self.label.setProperty('original_pixmap', self.original_image)
+        
         self.spin_width.setValue(self.old_width)
         self.spin_height.setValue(self.old_height)
-        self.engine.update_image_size()
+        self.engine.update_image_size(self.label, self.spin_width, self.spin_height)
 
     def redo(self):
-        self.engine.player_original = self.new_image
-        self.spin_width.setValue(self.new_image.width())
-        self.spin_height.setValue(self.new_image.height())
-        self.engine.update_image_size()
+        self.label.setPixmap(self.new_pixmap)
+        self.original_image = self.label.property('original_pixmap')
+
+        self.spin_width.setValue(self.new_pixmap.width())
+        self.spin_height.setValue(self.new_pixmap.height())
+        self.engine.update_image_size(self.label, self.spin_width, self.spin_height)
 
 
 #--------------------------------------------------------------------------------#
