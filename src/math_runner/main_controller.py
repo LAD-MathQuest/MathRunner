@@ -64,9 +64,6 @@ class MainController:
         self.last_dir  = str(parameters.games_path)
         self.file_name = ''
 
-        self.ui.spinBox_PlayerWidth.setRange(20, 200)
-        self.ui.spinBox_PlayerHeight.setRange(20, 200)
-
         self.start_new()
 
         self.update_data()
@@ -137,7 +134,7 @@ class MainController:
         ui.lineEdit_Author  .editingFinished.connect(lambda: self.change_text(ui.lineEdit_Author))
         ui.plainTextEdit_GameDescription.textChanged.connect(lambda: self.change_text(ui.plainTextEdit_GameDescription))
 
-        ui.pushButton_IconSelect.clicked.connect(self.select_icon)
+        ui.pushButton_IconSelect.clicked.connect(lambda: self.select_image("icons", self.ui.label_GameIcon))
 
         ui.radioButton_HorizontalScrolling.toggled.connect(lambda: self.select_checked(self.ui.radioButton_VerticalScrolling))
         ui.radioButton_VerticalScrolling.toggled.connect(lambda: self.select_checked(self.ui.radioButton_HorizontalScrolling))
@@ -157,9 +154,9 @@ class MainController:
         # ui.checkBox_BackgroundScrolls
 
         # ui.checkBox_DrawTrack
-        ui.pushButton_SelectTrackImage.clicked.connect(self.select_track_image)
+        ui.pushButton_SelectTrackImage.clicked.connect(lambda: self.select_image("tracks", self.ui.label_TrackImage))
 
-        ui.pushButton_SelectScoreboardImage.clicked.connect(self.select_scoreboard_image)
+        ui.pushButton_SelectScoreboardImage.clicked.connect(lambda: self.select_image("scoreboards", self.ui.label_ScoreboardImage))
         ui.spinBox_ScoreboardImagePositionX.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_ScoreboardImagePositionX))
         ui.spinBox_ScoreboardImagePositionY.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_ScoreboardImagePositionY))
         ui.spinBox_ScoreboardImageWidth.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_ScoreboardImageWidth))
@@ -177,13 +174,13 @@ class MainController:
         ui.pushButton_NewObstacle   .clicked.connect(self.new_obstacle_widget   )
         ui.pushButton_NewCollectible.clicked.connect(self.new_collectible_widget)
 
-        ui.doubleSpinBox_ObstaclesFrequency.   valueChanged.connect(self.obstacles_frequency_changed   )
-        ui.doubleSpinBox_CollectiblesFrequency.valueChanged.connect(self.collectibles_frequency_changed)
+        ui.doubleSpinBox_ObstaclesFrequency.   valueChanged.connect(lambda: self.select_value(self.ui.doubleSpinBox_ObstaclesFrequency))
+        ui.doubleSpinBox_CollectiblesFrequency.valueChanged.connect(lambda: self.select_value(self.ui.doubleSpinBox_CollectiblesFrequency))
 
         ui.pushButton_SelectPlayerImage.clicked.connect(lambda: self.select_image_with_spinbox("icons", self.ui.label_PlayerImage, self.ui.spinBox_PlayerWidth, self.ui.spinBox_PlayerHeight))
-        ui.spinBox_PlayerWidth.valueChanged.connect(lambda value: self.select_spinbox_image(self.ui.label_PlayerImage, self.ui.spinBox_PlayerWidth, self.ui.spinBox_PlayerHeight))
-        ui.spinBox_PlayerHeight.valueChanged.connect(lambda value: self.select_spinbox_image(self.ui.label_PlayerImage, self.ui.spinBox_PlayerWidth, self.ui.spinBox_PlayerHeight))
-        ui.checkBox_PlayerKeepAspectRatio.stateChanged.connect(lambda value: self.select_checked(self.ui.checkBox_PlayerKeepAspectRatio))
+        ui.spinBox_PlayerWidth.valueChanged.connect(lambda: self.select_value_spinbox(self.ui.spinBox_PlayerWidth, self.ui.spinBox_PlayerHeight, self.ui.label_PlayerImage, self.ui.checkBox_PlayerKeepAspectRatio))
+        ui.spinBox_PlayerHeight.valueChanged.connect(lambda: self.select_value_spinbox(self.ui.spinBox_PlayerWidth, self.ui.spinBox_PlayerHeight, self.ui.label_PlayerImage, self.ui.checkBox_PlayerKeepAspectRatio))
+        ui.checkBox_PlayerKeepAspectRatio.stateChanged.connect(lambda: self.select_keep_aspect(self.ui.checkBox_PlayerKeepAspectRatio, self.ui.spinBox_PlayerHeight))
 
         ui.spinBox_PlayerSpeed.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_PlayerSpeed))
 
@@ -228,7 +225,6 @@ class MainController:
             self.start_view_from_model()
             self.update_data()
 
-
     #--------------------------------------------------------------------------#
     def save(self):
         meta = MetaWorld()
@@ -246,21 +242,9 @@ class MainController:
                 meta.game_ambience_volume = 0.7
             except Exception as e:
                 self.error_box("Erro", f"Falha ao carregar som de ambiente:\n{e}")
-
-        #Imagem de fundo em bytes
-        meta.background_image = MetaImage()
-        tools.label_to_meta_image(self.ui.label_BackgroundImage, meta.background_image)
-
-        #Imagem da pista em bytes
-        meta.track_image = MetaImage()
-        tools.label_to_meta_image(self.ui.label_TrackImage, meta.track_image)
-
-        #Imagem do Scoreboard em bytes
-        meta.scoreboard.image = MetaImage()
-        meta.scoreboard.image.size = (100,100) #remover essa linha depois
-        tools.label_to_meta_image(self.ui.label_ScoreboardImage, meta.scoreboard.image)
-
-
+        else:
+            meta.game_ambience = None
+            meta.game_ambience_volume = 0.5
 
         # TODO: coletar outros dados da interface, ex:
         # - scoreboard_image
@@ -333,81 +317,29 @@ class MainController:
             self.changed = True
 
     #--------------------------------------------------------------------------#
-    def select_track_image(self):
-        path_backgrounds = self.path_resources / 'backgrounds'
-        fname = self.get_open_fname('Escolha uma Imagem', path_backgrounds, 'png')
-
-        if fname:
-            label = self.ui.label_TrackImage
-
-            old_image = getattr(self, 'track_image', '')
-            tools.path_image_to_label(label, fname)
-            new_image = label.pixmap().toImage()
-
-            self.add_image_undo(label, new_image, "Alterar imagem do caminho de fundo")
-
-            self.track_image = new_image
-            self.changed = True
-
-    #--------------------------------------------------------------------------#
-
-    def select_scoreboard_image(self):
-        path_scoreboards = self.path_resources / 'scoreboards'
-        fname = self.get_open_fname('Escolha uma Imagem', path_scoreboards, 'png')
-
-        if fname:
-            label = self.ui.label_ScoreboardImage
-            old_image = getattr(self, 'scoreboard_image', '')
-            tools.path_image_to_label(label, fname)
-
-            new_image = label.pixmap().toImage()
-
-            self.add_image_undo(label, old_image, new_image, "Alterar imagem do placar")
-            self.scoreboard_image = new_image
-            self.changed = True
-
-    #--------------------------------------------------------------------------#
     def select_image_with_spinbox(self, folder, label, spin_width, spin_height):
-        path_icon = self.path_resources / folder
-        fname = self.get_open_fname('Escolha uma Imagem', path_icon, 'png')
+        path = self.path_resources / folder
+        fname = self.get_open_fname('Escolha uma Imagem', path, 'png')
         old_width = getattr(spin_width, "_last_value", "")
         old_height = getattr(spin_height, "_last_value", "")
 
         if fname:
-            
             new_image = QPixmap(fname)
 
-            self.add_image_spinbox_undo(self, label, spin_width, spin_height, old_width, old_height, new_image, "Alterar imagem do fundo")
+            self.add_image_spinbox_undo(label, spin_width, spin_height, new_image, old_width, old_height, "Alterar imagem do fundo")
             self.changed = True
+
     #--------------------------------------------------------------------------#
-
-    # Deixar essa função mais generica colocando parametros para qlqr widget usar
-
-    def update_image_size(self, label, spin_width, spin_height):
-        width = spin_width.value()
-        height = spin_height.value()
-        keep = self.ui.checkBox_PlayerKeepAspectRatio.isChecked()
-
-        if label:
-
-            if keep:
-                spin_height.setEnabled(False)
-                scaled = label.pixmap().scaledToWidth(width, Qt.SmoothTransformation)
-                spin_height.blockSignals(True)
-                spin_height.setValue(scaled.height())
-                spin_height.blockSignals(False)
-            else:
-                spin_height.setEnabled(True)
-                scaled = label.pixmap().scaled(width, height, Qt.IgnoreAspectRatio, Qt.SmoothTransformation)
-
-            label.setPixmap(scaled)
-    #--------------------------------------------------------------------------#
-
-    def select_spinbox_image(self, label, spin_width, spin_height):
+    def select_value_spinbox(self, spin_width, spin_height, label, keep_aspect):
         old_width = getattr(spin_width, "_last_value", "")
         old_height = getattr(spin_height, "_last_value", "")
 
-        self.add_image_spinbox_undo(self, label, spin_width, spin_height, old_width, old_height, label.pixmap(), "Alterar imagem do fundo")
+        self.add_spinBox_undo(spin_width, spin_height, old_width, old_height, label, keep_aspect, "Alterar Valor")
+
+    #--------------------------------------------------------------------------#
+    def select_keep_aspect(self, keep, spin_height):
+        old_state = getattr(keep, "_last_value", "")
+        self.add_keep_aspect_undo(keep, spin_height, old_state, description="Alterar manter proporção")
 
     #--------------------------------------------------------------------------#
     def select_value(self, spinBox):
@@ -435,22 +367,6 @@ class MainController:
         if new_text != old_text:
             self.add_text_undo(self, widget, old_text, new_text, "Alterar texto")
             widget._last_text = new_text
-            self.changed = True
-
-    #--------------------------------------------------------------------------#
-    def select_icon(self):
-        path_icons = self.path_resources / 'icons'
-        fname = self.get_open_fname('Escolha um Icone', path_icons, 'png')
-
-        if fname:
-            label = self.ui.label_GameIcon
-
-            old_image = getattr(self, 'icon_image', '')
-            tools.path_image_to_label(label, fname)
-            new_image = label.pixmap().toImage()
-
-            self.add_image_undo(label, new_image, "Alterar imagem do icone")
-            self.icons_image = new_image
             self.changed = True
 
     #--------------------------------------------------------------------------#
@@ -528,8 +444,50 @@ class MainController:
         bar = self.obstacles_area.verticalScrollBar()
         bar.setValue(bar.maximum())
 
+        widget.ui.spinBox_Width._last_value = widget.ui.spinBox_Width.value()
+        widget.ui.spinBox_Height._last_value = widget.ui.spinBox_Height.value()
+        widget.ui.checkBox_KeepAspectRatio._last_value = widget.ui.checkBox_KeepAspectRatio.isChecked()
+        widget.ui.doubleSpinBox_Points._last_value = widget.ui.doubleSpinBox_Points.value()
+        widget.ui.doubleSpinBox_Volume._last_value = widget.ui.doubleSpinBox_Volume.value()
+
+        widget.type = 'obstacle'
+
         widget.ui.pushButton_SelectImage.clicked.connect(
-            lambda :self.select_image("objects",widget.ui.label_Image)
+            lambda :self.select_image_with_spinbox(
+                "objects", 
+                widget.ui.label_Image, 
+                widget.ui.spinBox_Width, 
+                widget.ui.spinBox_Height
+            )
+        )
+
+        widget.ui.spinBox_Width.valueChanged.connect(
+            lambda: self.select_value_spinbox(
+                widget.ui.spinBox_Width,
+                widget.ui.spinBox_Height,
+                widget.ui.label_Image,
+                widget.ui.checkBox_KeepAspectRatio
+            )
+        )
+        
+        widget.ui.spinBox_Height.valueChanged.connect(
+            lambda: self.select_value_spinbox(
+                widget.ui.spinBox_Width,
+                widget.ui.spinBox_Height,
+                widget.ui.label_Image,
+                widget.ui.checkBox_KeepAspectRatio
+            )
+        )
+
+        widget.ui.checkBox_KeepAspectRatio.stateChanged.connect(
+            lambda: self.select_keep_aspect(
+                widget.ui.checkBox_KeepAspectRatio, 
+                widget.ui.spinBox_Height
+            )
+        )
+
+        widget.ui.doubleSpinBox_Points.valueChanged.connect(
+            lambda: self.select_value(widget.ui.doubleSpinBox_Points)
         )
 
         self.add_object_undo(
@@ -543,7 +501,8 @@ class MainController:
             lambda :self.hide_object_widget(
                 widget,
                 self.obstacles_box,
-                self.obstacles_box.indexOf(widget)
+                self.obstacles_box.indexOf(widget),
+
             )
         )
 
@@ -562,13 +521,78 @@ class MainController:
 
         widget = ObjectWidget(self.collectibles_area)
 
-        self.collectibles_box.insertWidget(self.num_collectibles, widget)
-
         bar = self.collectibles_area.verticalScrollBar()
         bar.setValue(bar.maximum())
 
-        self.collectibles.append(widget)
-        self.num_collectibles += 1
+        widget.ui.spinBox_Width._last_value = widget.ui.spinBox_Width.value()
+        widget.ui.spinBox_Height._last_value = widget.ui.spinBox_Height.value()
+        widget.ui.checkBox_KeepAspectRatio._last_value = widget.ui.checkBox_KeepAspectRatio.isChecked()
+        widget.ui.doubleSpinBox_Points._last_value = widget.ui.doubleSpinBox_Points.value()
+        widget.ui.doubleSpinBox_Volume._last_value = widget.ui.doubleSpinBox_Volume.value()
+
+        widget.type = 'collectible'
+
+        widget.ui.pushButton_SelectImage.clicked.connect(
+            lambda :self.select_image_with_spinbox(
+                "objects", 
+                widget.ui.label_Image, 
+                widget.ui.spinBox_Width, 
+                widget.ui.spinBox_Height
+            )
+        )
+
+        widget.ui.spinBox_Width.valueChanged.connect(
+            lambda: self.select_value_spinbox(
+                widget.ui.spinBox_Width,
+                widget.ui.spinBox_Height,
+                widget.ui.label_Image,
+                widget.ui.checkBox_KeepAspectRatio
+            )
+        )
+        
+        widget.ui.spinBox_Height.valueChanged.connect(
+            lambda: self.select_value_spinbox(
+                widget.ui.spinBox_Width,
+                widget.ui.spinBox_Height,
+                widget.ui.label_Image,
+                widget.ui.checkBox_KeepAspectRatio
+            )
+        )
+
+        widget.ui.checkBox_KeepAspectRatio.stateChanged.connect(
+            lambda: self.select_keep_aspect(
+                widget.ui.checkBox_KeepAspectRatio, 
+                widget.ui.spinBox_Height
+            )
+        )
+
+        widget.ui.doubleSpinBox_Points.valueChanged.connect(
+            lambda: self.select_value(widget.ui.doubleSpinBox_Points)
+        )
+
+        self.add_object_undo(
+            widget,
+            self.collectibles_box,
+            self.num_collectibles,
+            "criação de objeto"
+        )
+
+        widget.ui.pushButton_Delete.clicked.connect(
+            lambda :self.hide_object_widget(
+                widget,
+                self.collectibles_box,
+                self.collectibles_box.indexOf(widget),
+
+            )
+        )
+
+        widget.ui.pushButton.clicked.connect(
+            lambda :self.duplicate_object(
+                widget,
+                self.collectibles_box,
+                self.collectibles_box.indexOf(widget)+1
+            )
+        )
 
         return widget
 
@@ -589,9 +613,7 @@ class MainController:
         new_widget.ui.doubleSpinBox_Points.setValue(widget.ui.doubleSpinBox_Points.value())
         new_widget.ui.doubleSpinBox_Volume.setValue(widget.ui.doubleSpinBox_Volume.value())
         new_widget.sound = widget.sound
-
-        bar = self.obstacles_area.verticalScrollBar()
-        bar.setValue(bar.maximum())
+        new_widget.type = widget.type
 
         new_widget.ui.pushButton_SelectImage.clicked.connect(lambda :self.select_image("objects",new_widget.ui.label_Image))
         self.dupicate_object_undo(new_widget, ui, position, "duplicação de objeto")
@@ -769,8 +791,20 @@ class MainController:
         stack.push(command)
 
     #--------------------------------------------------------------------------#
-    def add_image_spinbox_undo(self, engine, label, spin_width, spin_height, old_width, old_height, new_image, description):
-        command = undo.ChangeImageSpinBoxCommand(engine, label, spin_width, spin_height, old_width, old_height, new_image, description)
+    def add_image_spinbox_undo(self, label, spin_width, spin_height, new_image, old_width, old_height, description):
+        command = undo.ChangeSpinBoxImageCommand(label, spin_width, spin_height, new_image, old_width, old_height, description)
+        stack = self.undo_group.activeStack()
+        stack.push(command)
+
+    #--------------------------------------------------------------------------#
+    def add_keep_aspect_undo(self, keep, spin_height, old_state, description):
+        command = undo.ChangeKeepImageCommand(keep, spin_height, old_state, description)
+        stack = self.undo_group.activeStack()
+        stack.push(command)
+
+    #--------------------------------------------------------------------------#
+    def add_spinBox_undo(self, spin_width, spin_height, old_width, old_height, label, keep_aspect, description):
+        command = undo.ChangeSpinBoxValueCommand(spin_width, spin_height, old_width, old_height, label, keep_aspect, description)
         stack = self.undo_group.activeStack()
         stack.push(command)
     #--------------------------------------------------------------------------#
@@ -848,20 +882,7 @@ class MainController:
 
     # Configurar para programar
     def update_data(self):
-        self.background_image   = self.ui.label_BackgroundImage.pixmap().toImage()
-        self.track_image        = self.ui.label_TrackImage.pixmap().toImage()
-        self.scoreboard_positionX = self.ui.spinBox_ScoreboardImagePositionX.value()
-        self.scoreboard_positionY = self.ui.spinBox_ScoreboardImagePositionY.value()
-        self.scoreboard_imageWidth = self.ui.spinBox_ScoreboardImageWidth.value()
-        self.scoreboard_imageHeight = self.ui.spinBox_ScoreboardImageHeight.value()
-
-        # Variaveis da aba player
-        self.player_original      = self.ui.label_PlayerImage.pixmap()
-        self.player_image       = self.ui.label_PlayerImage.pixmap()
-        self.player_width       = self.ui.spinBox_PlayerWidth.value()
-        self.player_height      = self.ui.spinBox_PlayerHeight.value()
-        self.player_speed       = self.ui.spinBox_PlayerSpeed.value()
-        self.player_keep_aspect = self.ui.checkBox_PlayerKeepAspectRatio.isChecked()
+        #---------------ABA GERAL-------------------#
 
         # Inicializa os valores dos textos para undo/redo
         widgets = [(self.ui.lineEdit_GameName, self.model.meta.soft_name), (self.ui.lineEdit_Author, self.model.meta.soft_author),(self.ui.plainTextEdit_GameDescription, self.model.meta.soft_description),
@@ -870,22 +891,54 @@ class MainController:
         for widget, default in widgets:
             widget._last_text = default
 
-        # define _last_value para undo funcionar na primeira alteração
-        self.ui.spinBox_PlayerHeight.setEnabled(False)
-        self.ui.spinBox_PlayerWidth._last_value = self.player_width
-        self.ui.spinBox_PlayerHeight._last_value = self.player_height
-        self.ui.spinBox_PlayerSpeed._last_value = self.player_speed
-        self.ui.checkBox_PlayerKeepAspectRatio._last_value = self.player_keep_aspect
+        #Atualiza os atributos das widget da aba geral 
         self.ui.doubleSpinBox_AmbienceSoundVolume._last_value = self.ui.doubleSpinBox_AmbienceSoundVolume.value()
         self.ui.doubleSpinBox_ScoreTimeBonus._last_value = self.ui.doubleSpinBox_ScoreTimeBonus.value()
         self.ui.checkBox_TrackMaximumKills._last_value = self.ui.checkBox_TrackMaximumKills.isChecked()
         self.ui.checkBox_TrackMinimumKills._last_value = self.ui.checkBox_TrackMinimumKills.isChecked()
         self.ui.radioButton_HorizontalScrolling._last_value = self.ui.radioButton_HorizontalScrolling.isChecked()
         self.ui.radioButton_VerticalScrolling._last_value = self.ui.radioButton_VerticalScrolling.isChecked()
+        
+        #---------------ABA APARÊNCIA-------------------#
+
+        # Variaveis da aba aparencia
+        self.scoreboard_positionX = self.ui.spinBox_ScoreboardImagePositionX.value()
+        self.scoreboard_positionY = self.ui.spinBox_ScoreboardImagePositionY.value()
+        self.scoreboard_imageWidth = self.ui.spinBox_ScoreboardImageWidth.value()
+        self.scoreboard_imageHeight = self.ui.spinBox_ScoreboardImageHeight.value()
+
+        #Atualiza os atributos das widget da aba aparencia 
         self.ui.spinBox_ScoreboardImagePositionX._last_value = self.scoreboard_positionX
         self.ui.spinBox_ScoreboardImagePositionY._last_value = self.scoreboard_positionY
         self.ui.spinBox_ScoreboardImageWidth._last_value = self.scoreboard_imageWidth
         self.ui.spinBox_ScoreboardImageHeight._last_value = self.scoreboard_imageHeight
+
+        #---------------ABA OBJETOS-------------------#
+
+        # Variaveis da aba player
+        self.player_width       = self.ui.spinBox_PlayerWidth.value()
+        self.player_height      = self.ui.spinBox_PlayerHeight.value()
+        self.player_speed       = self.ui.spinBox_PlayerSpeed.value()
+        self.player_keep_aspect = self.ui.checkBox_PlayerKeepAspectRatio.isChecked()
+        self.obstacles_frequency = self.ui.doubleSpinBox_ObstaclesFrequency.value()
+        self.collectibles_frequency = self.ui.doubleSpinBox_CollectiblesFrequency.value()
+
+        #Atualiza os atributos das widget da aba Objetos 
+        self.ui.spinBox_PlayerHeight.setEnabled(False)
+        self.ui.spinBox_PlayerWidth._last_value = self.player_width
+        self.ui.spinBox_PlayerHeight._last_value = self.player_height
+        self.ui.spinBox_PlayerSpeed._last_value = self.player_speed
+        self.ui.checkBox_PlayerKeepAspectRatio._last_value = self.player_keep_aspect
+        self.ui.doubleSpinBox_ObstaclesFrequency._last_value = self.obstacles_frequency
+        self.ui.doubleSpinBox_CollectiblesFrequency._last_value = self.collectibles_frequency
+
+        for i in range(self.num_obstacles):
+            obj = self.obstacles_box.itemAt(i).widget()
+            obj.ui.spinBox_Width._last_value = obj.ui.spinBox_Width.value()
+            obj.ui.spinBox_Height._last_value = obj.ui.spinBox_Height.value()
+            obj.ui.checkBox_KeepAspectRatio._last_value = obj.ui.checkBox_KeepAspectRatio.isChecked()
+            obj.ui.doubleSpinBox_Points._last_value = obj.ui.doubleSpinBox_Points.value()
+            obj.ui.doubleSpinBox_Volume._last_value = obj.ui.doubleSpinBox_Volume.value()
 
 
 #------------------------------------------------------------------------------#
