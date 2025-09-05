@@ -190,7 +190,6 @@ class ChangeSpinBoxValueCommand(QUndoCommand):
     def undo(self):
         image_scaled = self.image_original.scaled(self.old_width, self.old_height, aspectMode=Qt.IgnoreAspectRatio)
         self.label.setPixmap(image_scaled)
-        print("Altura: ", self.old_height)
         self.spin_width.blockSignals(True)
         self.spin_height.blockSignals(True)
         self.spin_width.setValue(self.old_width)
@@ -316,7 +315,6 @@ class ChangeCheckedCommand(QUndoCommand):
         self.target.blockSignals(True)
         self.target.setChecked(value)
         self.target.blockSignals(False)
-        self.engine.update_image_size()
 
 #--------------------------------------------------------------------------------#
 class ChangeTextCommand(QUndoCommand):

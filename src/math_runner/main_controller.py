@@ -155,22 +155,19 @@ class MainController:
 
         ui.pushButton_SelectBackgroundImage.clicked.connect(lambda: self.select_image("backgrounds",self.ui.label_BackgroundImage))
 
-        # ui.checkBox_BackgroundScrolls
+        ui.checkBox_BackgroundImageScrolls.stateChanged.connect(lambda value: self.select_checked(self.ui.checkBox_BackgroundImageScrolls))
 
-        # ui.checkBox_DrawTrack
-        ui.pushButton_SelectTrackImage.clicked.connect(lambda: self.select_image("tracks", self.ui.label_TrackImage))
+        ui.checkBox_DrawTrack.stateChanged.connect(lambda value: self.select_checked(self.ui.checkBox_DrawTrack))
 
-        ui.pushButton_SelectScoreboardImage.clicked.connect(lambda: self.select_image("scoreboards", self.ui.label_ScoreboardImage))
+        ui.pushButton_SelectTrackImage.clicked.connect(lambda: self.select_image("backgrounds", self.ui.label_TrackImage))
+
+        ui.pushButton_SelectScoreboardImage.clicked.connect(lambda: self.select_image_with_spinbox("scoreboards", self.ui.label_ScoreboardImage, self.ui.spinBox_ScoreboardImageWidth, self.ui.spinBox_ScoreboardImageHeight))
         ui.spinBox_ScoreboardImagePositionX.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_ScoreboardImagePositionX))
         ui.spinBox_ScoreboardImagePositionY.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_ScoreboardImagePositionY))
-        ui.spinBox_ScoreboardImageWidth.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_ScoreboardImageWidth))
-        ui.spinBox_ScoreboardImageHeight.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_ScoreboardImageHeight))
         ui.pushButton.clicked.connect(self.configure_scoreboard_text)
-        # ui.spinBox_ScoreboardImagePositionX.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_ScoreboardImagePositionX))
-        # ui.spinBox_ScoreboardImagePositionY.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_ScoreboardImagePositionY))
-        # ui.spinBox_ScoreboardImageWidth.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_ScoreboardImageWidth))
-        # ui.spinBox_ScoreboardImageHeight.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_ScoreboardImageHeight))
-        # ui.checkBox_ScoreboardImageKeepAspectRatio
+        ui.spinBox_ScoreboardImageWidth.valueChanged.connect(lambda: self.select_value_spinbox(self.ui.spinBox_ScoreboardImageWidth, self.ui.spinBox_ScoreboardImageHeight, self.ui.label_ScoreboardImage, self.ui.checkBox_ScoreboardImageKeepAspectRatio))
+        ui.spinBox_ScoreboardImageHeight.valueChanged.connect(lambda: self.select_value_spinbox(self.ui.spinBox_ScoreboardImageWidth, self.ui.spinBox_ScoreboardImageHeight, self.ui.label_ScoreboardImage, self.ui.checkBox_ScoreboardImageKeepAspectRatio))
+        ui.checkBox_ScoreboardImageKeepAspectRatio.stateChanged.connect(lambda: self.select_keep_aspect(self.ui.checkBox_ScoreboardImageKeepAspectRatio, self.ui.spinBox_ScoreboardImageHeight))
         # ui.spinBox_ScoreboardTextPositionX
         # ui.spinBox_ScoreboardTextPositionY
         # ui.spinBox_ScoreboardTextWidth
@@ -1002,12 +999,17 @@ class MainController:
         self.scoreboard_positionY = self.ui.spinBox_ScoreboardImagePositionY.value()
         self.scoreboard_imageWidth = self.ui.spinBox_ScoreboardImageWidth.value()
         self.scoreboard_imageHeight = self.ui.spinBox_ScoreboardImageHeight.value()
+        self.background_scrolls = self.ui.checkBox_BackgroundImageScrolls.isChecked()
+        self.draw_track = self.ui.checkBox_DrawTrack.isChecked()
 
         #Atualiza os atributos das widget da aba aparencia 
+        self.ui.spinBox_ScoreboardImageHeight.setEnabled(False)
         self.ui.spinBox_ScoreboardImagePositionX._last_value = self.scoreboard_positionX
         self.ui.spinBox_ScoreboardImagePositionY._last_value = self.scoreboard_positionY
         self.ui.spinBox_ScoreboardImageWidth._last_value = self.scoreboard_imageWidth
         self.ui.spinBox_ScoreboardImageHeight._last_value = self.scoreboard_imageHeight
+        self.ui.checkBox_BackgroundImageScrolls._last_value = self.background_scrolls
+        self.ui.checkBox_DrawTrack._last_value = self.draw_track
 
         #---------------ABA OBJETOS-------------------#
 
