@@ -31,8 +31,10 @@ class EvalFunctionError(Exception):
 
 #------------------------------------------------------------------------------#
 def eval_function(values: npt.NDArray, func: str, var_name: str) -> npt.NDArray:
+
     try:
         ff = ne.evaluate(func, local_dict={var_name:values, 'e':np.e, 'pi':np.pi})
+
     except KeyError:
         raise EvalFunctionError(f"O texto contém variáveis diferentes de {var_name}")
 
@@ -42,7 +44,7 @@ def eval_function(values: npt.NDArray, func: str, var_name: str) -> npt.NDArray:
     except ZeroDivisionError:
         raise EvalFunctionError("Não é permitido divisões por 0")  
     
-    if np.isnan(np.sum(ff)):
+    if not np.isfinite(np.sum(ff)):
         raise EvalFunctionError("A expressão não pode ser avaliada")
       
     if type(values) is np.ndarray and values.size != 1 and ff.size == 1:
@@ -53,19 +55,22 @@ def eval_function(values: npt.NDArray, func: str, var_name: str) -> npt.NDArray:
 #------------------------------------------------------------------------------#
 #------------------------------------------------------------------------------#
 
-translation = [['^',       '**'     ],
-               ['sen',     'sin'    ],
-               ['tg',      'tan'    ],
-               ['arcsen',  'arcsin' ],
-               ['arctg',   'arctan' ],
-               ['arctg2',  'arctan2'],
-               ['senh',    'sinh'   ],
-               ['tgh',     'tanh'   ],
-               ['arcsenh', 'arcsinh'],
-               ['arctgh',  'arctanh'],
-               ['ln',      'log'    ],
-               ['raiz',    'sqrt'   ],
-               ['módulo',  'abs'    ]]
+translation = [
+    ['^',       '**'     ],
+    ['sen',     'sin'    ],
+    ['tg',      'tan'    ],
+    ['arcsen',  'arcsin' ],
+    ['arctg',   'arctan' ],
+    ['arctg2',  'arctan2'],
+    ['senh',    'sinh'   ],
+    ['tgh',     'tanh'   ],
+    ['arcsenh', 'arcsinh'],
+    ['arctgh',  'arctanh'],
+    ['ln',      'log'    ],
+    ['raiz',    'sqrt'   ],
+    ['módulo',  'abs'    ],
+    ['modulo',  'abs'    ],
+]
 
 #------------------------------------------------------------------------------#
 def pt_to_numexpr(func: str) -> str:
