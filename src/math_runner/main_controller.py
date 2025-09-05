@@ -1,7 +1,7 @@
 #------------------------------------------------------------------------------#
 
-from PySide6.QtGui     import QPalette, QPixmap, QUndoGroup, QUndoStack
-from PySide6.QtWidgets import QApplication, QFileDialog, QMessageBox, QVBoxLayout
+from PySide6.QtGui     import QPalette, QPixmap, QUndoGroup, QUndoStack, QFont, QFontDatabase, QColor
+from PySide6.QtWidgets import QApplication, QFileDialog, QMessageBox, QVBoxLayout, QColorDialog
 from PySide6.QtCore    import Qt, QTimer
 
 from pathlib import Path
@@ -9,6 +9,7 @@ from io      import BytesIO
 
 from meta import MetaWorld, save_meta
 from meta.meta_world import MetaImage
+from meta.meta_scoreboard import MetaScoreboard
 from meta.math_function import EvalFunctionError
 
 from . import parameters
@@ -20,6 +21,8 @@ from .object_widget import ObjectWidget
 from .plot_velocity import PlotVelocity
 from .plot_track    import PlotTrack
 from .audio_manager import AudioManager
+from .scoreboard_dialog import ScoreboardDialog
+
 
 #------------------------------------------------------------------------------#
 class MainController:
@@ -35,6 +38,7 @@ class MainController:
 
         self.model = MainModel(self)
         self.audio_manager = AudioManager()
+        self.meta = MetaScoreboard()
 
         color = self.win.palette().color(QPalette.Window)
 
@@ -161,6 +165,11 @@ class MainController:
         ui.spinBox_ScoreboardImagePositionY.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_ScoreboardImagePositionY))
         ui.spinBox_ScoreboardImageWidth.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_ScoreboardImageWidth))
         ui.spinBox_ScoreboardImageHeight.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_ScoreboardImageHeight))
+        ui.pushButton.clicked.connect(self.configure_scoreboard_text)
+        # ui.spinBox_ScoreboardImagePositionX.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_ScoreboardImagePositionX))
+        # ui.spinBox_ScoreboardImagePositionY.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_ScoreboardImagePositionY))
+        # ui.spinBox_ScoreboardImageWidth.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_ScoreboardImageWidth))
+        # ui.spinBox_ScoreboardImageHeight.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_ScoreboardImageHeight))
         # ui.checkBox_ScoreboardImageKeepAspectRatio
         # ui.spinBox_ScoreboardTextPositionX
         # ui.spinBox_ScoreboardTextPositionY
@@ -242,9 +251,21 @@ class MainController:
                 meta.game_ambience_volume = 0.7
             except Exception as e:
                 self.error_box("Erro", f"Falha ao carregar som de ambiente:\n{e}")
-        else:
-            meta.game_ambience = None
-            meta.game_ambience_volume = 0.5
+
+         # # --- Fonte em bytes ---
+        # font_path = getattr(self, "scoreboard_font_path", None)
+        # if font_path:
+        #     meta.scoreboard.text_font = tools.font_path_to_bytes(font_path)
+        # else:
+        #     meta.scoreboard.text_font = None
+
+
+        # --- Estilo do texto ---
+        meta.scoreboard.text_font_size = int(getattr(self, "scoreboard_font_size", self.meta.text_font_size or 14))
+        meta.scoreboard.text_spacing = float(getattr(self, "scoreboard_text_spacing", 1.2))
+        meta.scoreboard.text_fgcolor = tools.qcolor_to_tuple(getattr(self, "scoreboard_fg", QColor(255, 255, 255)))
+        meta.scoreboard.text_bgcolor = tools.qcolor_to_tuple(getattr(self, "scoreboard_bg", QColor(0, 0, 0, 150)))
+
 
         # TODO: coletar outros dados da interface, ex:
         # - scoreboard_image
@@ -315,6 +336,50 @@ class MainController:
 
             self.add_image_undo(label, new_image, "Alterar imagem do fundo")
             self.changed = True
+
+    #--------------------------------------------------------------------------#
+    def configure_scoreboard_text(self):
+        dialog = ScoreboardDialog(self, self.win)
+        if dialog.exec():
+            self.update_scoreboard_preview()
+
+    #--------------------------------------------------------------------------#
+    def update_scoreboard_preview(self):
+
+        preview_text = "Text Example"
+
+        font_path = getattr(self, "scoreboard_font_path", None)
+        font_size = getattr(self, "scoreboard_font_size", self.meta.text_font_size or 14)
+        
+        fg = getattr(self, "scoreboard_fg", QColor(255, 255, 255))       # branco
+        bg = getattr(self, "scoreboard_bg", QColor(0, 0, 0, 150))        # preto semi-transparente
+
+        # Carrega a fonte escolhida (ou volta para Arial se não conseguir)
+        if font_path:
+            font_id = QFontDatabase.addApplicationFont(font_path)
+            if font_id != -1:
+                family = QFontDatabase.applicationFontFamilies(font_id)[0]
+                font = QFont(family, font_size)
+            else:
+                font = QFont("Arial", font_size)
+        else:
+            font = QFont("Arial", font_size)
+
+        #Aplica no label da interface principal
+        self.ui.label_ScoreboardExample.setFont(font)
+        self.ui.label_ScoreboardExample.setText(preview_text)
+        self.ui.label_ScoreboardExample.setStyleSheet(
+            f"color: rgba({fg.red()},{fg.green()},{fg.blue()},{fg.alpha()});"
+            f"background-color: rgba({bg.red()},{bg.green()},{bg.blue()},{bg.alpha()});"
+        )
+
+        self.scoreboard_font = font
+        self.scoreboard_font_size = font_size
+        self.scoreboard_fg = fg
+        self.scoreboard_bg = bg
+
+
+
 
     #--------------------------------------------------------------------------#
     def select_image_with_spinbox(self, folder, label, spin_width, spin_height):
@@ -722,6 +787,25 @@ class MainController:
             self.model.get_boundary_functions()
         )
 
+        # --- Config do Scoreboard via diálogo ---
+        font_data = self.meta.text_font
+        font_size = self.meta.text_font_size or 14
+
+        if font_data:
+            font = tools.bytes_to_qfont(font_data, font_size)
+        else:
+            font = QFont("Arial", font_size)
+
+        self.ui.label_ScoreboardExample.setFont(font)
+
+        # Cores vindas do meta
+        fg = self.meta.text_fgcolor or (255, 255, 255, 255)   # branco
+        bg = self.meta.text_bgcolor or (0, 0, 0, 150)        # preto semi-transparente
+
+        self.scoreboard_fg = QColor(*fg)
+        self.scoreboard_bg = QColor(*bg)
+
+        self.update_scoreboard_preview()
         self.changed = False
 
     #--------------------------------------------------------------------------#
@@ -847,6 +931,13 @@ class MainController:
         command = undo.AddObjectCommand(new_object, ui, position, self, description)
         stack = self.undo_group.activeStack()
         stack.push(command)
+
+     #--------------------------------------------------------------------------#
+    def add_scoreboard_text_undo(self, attr_name, old_value, new_value, description):
+        command = undo.ChangeScoreboardTextCommand(self, attr_name, old_value, new_value, description)
+        stack = self.undo_group.activeStack()
+        stack.push(command)
+    
 
     #--------------------------------------------------------------------------#
     def clear_stacks_undo(self):

@@ -185,26 +185,23 @@ class ChangeSpinBoxValueCommand(QUndoCommand):
     def undo(self):
         image_scaled = self.image_original.scaled(self.old_width, self.old_height, aspectMode=Qt.IgnoreAspectRatio)
         self.label.setPixmap(image_scaled)
-
+        print("Altura: ", self.old_height)
         self.spin_width.blockSignals(True)
         self.spin_height.blockSignals(True)
         self.spin_width.setValue(self.old_width)
         self.spin_height.setValue(self.old_height)
         self.spin_width.blockSignals(False)
         self.spin_height.blockSignals(False)
-        self.spin_width._last_value = self.old_width
-        self.spin_height._last_value = self.old_height
 
     def redo(self):
         self.image_original = self.label.property('original_pixmap')
 
         if self.keep_aspect.isChecked():
-            self.new_height += (self.new_width - self.old_width) * (self.old_height / self.old_width)
+            self.new_height = (self.new_width) * (self.old_height / self.old_width)
         
         image_scaled = self.image_original.scaled(self.new_width, self.new_height, aspectMode=Qt.IgnoreAspectRatio)
 
         self.label.setPixmap(image_scaled)
-        
         self.spin_width.blockSignals(True)
         self.spin_height.blockSignals(True)
         self.spin_width.setValue(image_scaled.width())
@@ -398,3 +395,19 @@ class ChangeSoundCommand(QUndoCommand):
         self.controller.changed = True
 
 #------------------------------------------------------------------------------#
+
+class ChangeScoreboardTextCommand(QUndoCommand):
+    def __init__(self, controller, attr_name, old_value, new_value, description="Alterar texto do placar"):
+        super().__init__(description)
+        self.controller = controller
+        self.attr_name = attr_name
+        self.old_value = old_value
+        self.new_value = new_value
+
+    def undo(self):
+        setattr(self.controller, self.attr_name, self.old_value)
+        self.controller.update_scoreboard_preview()
+
+    def redo(self):
+        setattr(self.controller, self.attr_name, self.new_value)
+        self.controller.update_scoreboard_preview()
