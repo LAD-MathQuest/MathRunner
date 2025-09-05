@@ -43,7 +43,7 @@ def eval_function(values: npt.NDArray, func: str, var_name: str) -> npt.NDArray:
         raise EvalFunctionError("Não é permitido divisões por 0")  
     
     if np.isnan(np.sum(ff)):
-        raise EvalFunctionError("As expressão não pode ser avaliada")
+        raise EvalFunctionError("A expressão não pode ser avaliada")
       
     if type(values) is np.ndarray and values.size != 1 and ff.size == 1:
         ff = np.full(values.shape, ff)
