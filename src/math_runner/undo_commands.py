@@ -145,7 +145,12 @@ class ChangeSpinBoxImageCommand(QUndoCommand):
         self.old_image = self.label.pixmap()
         self.original_image = self.label.property('original_pixmap')
             
-        # size = self.label.size().boundedTo(self.new_image.size())
+        
+        #------------------RESOLVER O MAIS RAPIDO POSSIVEL-----------------------------------------------------#
+        self.new_image = 300 if self.new_image.width() > 300 else self.new_image.width()
+        self.new_image = 300 if self.new_image.height() > 300 else self.new_image.height()
+        #-------------------------------------------------------------------------------------------------------#
+
         self.label.setPixmap(self.new_image)
         self.label.setProperty('original_pixmap', self.new_image)
 
