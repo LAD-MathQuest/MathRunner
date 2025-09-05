@@ -9,6 +9,7 @@ from io      import BytesIO
 
 from meta import MetaWorld, save_meta
 from meta.meta_world import MetaImage
+from meta.math_function import EvalFunctionError
 
 from . import parameters
 from . import tools
@@ -608,54 +609,38 @@ class MainController:
 
         func = self.ui.lineEdit_FunctionVelocity.text()
         old_text = getattr(self.ui.lineEdit_FunctionVelocity, "_last_text", "")
-
-        self.add_text_undo(self, self.ui.lineEdit_FunctionVelocity, old_text, func, "Alterar velocidade")
+        
+        
         try:
             self.model.change_velocity_function(func)
-            self.plot_velocity.update_velocity(
-                self.model.get_velocity_function()
-            )
-        except(KeyError):
-            QMessageBox.critical(None, "Erro", f"O texto contem variaveis diferentes de t")
+            self.plot_velocity.update_velocity(self.model.get_velocity_function())
+
+            self.add_text_undo(self, self.ui.lineEdit_FunctionVelocity, old_text, func, "Alterar velocidade")
+            self.ui.lineEdit_FunctionVelocity._last_text = func
+
+        except EvalFunctionError as e:
+            QMessageBox.critical(None, "Erro", e.message)
             self.ui.lineEdit_FunctionVelocity.setText(old_text)
-            return
-        except(SyntaxError):
-            QMessageBox.critical(None, "Erro", f"A operação digitada não exite")
-            self.ui.lineEdit_FunctionVelocity.setText(old_text)
-            return
-        except(ZeroDivisionError):
-            QMessageBox.critical(None, "Erro", f"Não é permitido Divisões por 0")
-            self.ui.lineEdit_FunctionVelocity.setText(old_text)
-            return
-        self.ui.lineEdit_FunctionVelocity._last_text = func
+        
+        
 
 
-    #--------------------------------------------------------------------------#
+    #-------------------------------------------------------------------------#
     def function_track_minimum_changed(self):
-
         func = self.ui.lineEdit_FunctionTrackMinimum.text()
         old_text = getattr(self.ui.lineEdit_FunctionTrackMinimum, "_last_text", "")
-        self.add_text_undo(self, self.ui.lineEdit_FunctionTrackMinimum, old_text, func, "Alterar mínimo")
 
         try:
             self.model.change_track_minimum_function(func)
-            self.plot_track.update_boundary(
-            self.model.get_boundary_functions()
-            )
-        except(KeyError):
-            QMessageBox.critical(None, "Erro", f"O texto contem variaveis diferentes de x")
-            self.ui.lineEdit_FunctionTrackMinimum.setText(old_text)
-            return
-        except(SyntaxError):
-            QMessageBox.critical(None, "Erro", f"A operação digitada não exite")
-            self.ui.lineEdit_FunctionTrackMinimum.setText(old_text)
-            return
-        except(ZeroDivisionError):
-            QMessageBox.critical(None, "Erro", f"Não é permitido Divisões por 0")
-            self.ui.lineEdit_FunctionTrackMinimum.setText(old_text)
-            return
+            self.plot_track.update_boundary(self.model.get_boundary_functions())
 
-        self.ui.lineEdit_FunctionTrackMinimum._last_text = func
+            
+            self.add_text_undo(self, self.ui.lineEdit_FunctionTrackMinimum, old_text, func, "Alterar mínimo")
+            self.ui.lineEdit_FunctionTrackMinimum._last_text = func
+
+        except EvalFunctionError as f:
+            QMessageBox.critical(None, "Erro", f.message)
+            self.ui.lineEdit_FunctionTrackMinimum.setText(old_text)
 
 
     #--------------------------------------------------------------------------#
@@ -663,26 +648,19 @@ class MainController:
         func = self.ui.lineEdit_FunctionTrackMaximum.text()
         old_text = getattr(self.ui.lineEdit_FunctionTrackMaximum, "_last_text", "")
 
-        self.add_text_undo(self,self.ui.lineEdit_FunctionTrackMaximum, old_text, func, "Alterar máximo")
         try:
             self.model.change_track_maximum_function(func)
-            self.plot_track.update_boundary(
-            self.model.get_boundary_functions()
-            )
-        except(KeyError):
-            QMessageBox.critical(None, "Erro", f"O texto contem variaveis diferentes de x")
-            self.ui.lineEdit_FunctionTrackMaximum.setText(old_text)
-            return
-        except(SyntaxError):
-            QMessageBox.critical(None, "Erro", f"A operação digitada não exite")
-            self.ui.lineEdit_FunctionTrackMaximum.setText(old_text)
-            return
-        except(ZeroDivisionError):
-            QMessageBox.critical(None, "Erro", f"Não é permitido Divisões por 0")
-            self.ui.lineEdit_FunctionTrackMaximum.setText(old_text)
-            return
+            self.plot_track.update_boundary(self.model.get_boundary_functions())
 
-        self.ui.lineEdit_FunctionTrackMaximum._last_text = func
+            
+            self.add_text_undo(self, self.ui.lineEdit_FunctionTrackMaximum, old_text, func, "Alterar mínimo")
+            self.ui.lineEdit_FunctionTrackMaximum._last_text = func
+
+        except EvalFunctionError as g:
+            QMessageBox.critical(None, "Erro", g.message)
+            self.ui.lineEdit_FunctionTrackMaximum.setText(old_text)
+
+    #--------------------------------------------------------------------------#
 
     #--------------------------------------------------------------------------#
     # Internal tasks
@@ -829,29 +807,30 @@ class MainController:
             self.undo_stacks[i].clear()
 
  #---------------------------------------------------------------------------#
-    def update_velocity_undo(self):
-        func = self.ui.lineEdit_FunctionVelocity.text()
-
-        self.model.change_velocity_function(func)
-        self.plot_velocity.update_velocity(
-        self.model.get_velocity_function()
-        )
-        self.ui.lineEdit_FunctionVelocity._last_text = func
- #---------------------------------------------------------------------------#
     def update_tracks_undo(self):
         func1 = self.ui.lineEdit_FunctionTrackMaximum.text()
         func2 = self.ui.lineEdit_FunctionTrackMinimum.text()
-
+    
         self.model.change_track_minimum_function(func2)
-        self.plot_track.update_boundary(
-        self.model.get_boundary_functions()
-        )
+
         self.model.change_track_maximum_function(func1)
         self.plot_track.update_boundary(
         self.model.get_boundary_functions()
         )
-        self.ui.lineEdit_FunctionTrackMinimum._last_text = func1
+        self.ui.lineEdit_FunctionTrackMaximum._last_text = func1
         self.ui.lineEdit_FunctionTrackMinimum._last_text = func2
+    #--------------------------------------------------------------------------#
+
+    def update_velocity_undo(self):
+            func = self.ui.lineEdit_FunctionVelocity.text()
+
+            self.model.change_velocity_function(func)
+            self.plot_velocity.update_velocity(
+            self.model.get_velocity_function()
+            )
+            self.ui.lineEdit_FunctionVelocity._last_text = func
+ #---------------------------------------------------------------------------#
+
 
 
     # Configurar para programar

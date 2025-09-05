@@ -22,11 +22,29 @@ def parse_function(func: str) -> str:
 
     return func
 
+
+class EvalFunctionError(Exception):
+    def __init__(self, message):
+        self.message = message
+        super().__init__(self.message)
+
+
 #------------------------------------------------------------------------------#
 def eval_function(values: npt.NDArray, func: str, var_name: str) -> npt.NDArray:
+    try:
+        ff = ne.evaluate(func, local_dict={var_name:values, 'e':np.e, 'pi':np.pi})
+    except KeyError:
+        raise EvalFunctionError(f"O texto contém variáveis diferentes de {var_name}")
 
-    ff = ne.evaluate(func, local_dict={var_name:values, 'e':np.e, 'pi':np.pi})
+    except (SyntaxError, ValueError):
+        raise EvalFunctionError("A operação digitada não existe")  
 
+    except ZeroDivisionError:
+        raise EvalFunctionError("Não é permitido divisões por 0")  
+    
+    if np.isnan(np.sum(ff)):
+        raise EvalFunctionError("As expressão não pode ser avaliada")
+      
     if type(values) is np.ndarray and values.size != 1 and ff.size == 1:
         ff = np.full(values.shape, ff)
 
