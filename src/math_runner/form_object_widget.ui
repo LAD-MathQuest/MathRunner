@@ -133,8 +133,8 @@
            <widget class="QSpinBox" name="spinBox_Width">
             <property name="minimumSize">
              <size>
-              <width>60</width>
-              <height>0</height>
+              <width>1</width>
+              <height>1</height>
              </size>
             </property>
             <property name="alignment">
@@ -158,8 +158,8 @@
             </property>
             <property name="minimumSize">
              <size>
-              <width>60</width>
-              <height>0</height>
+              <width>1</width>
+              <height>1</height>
              </size>
             </property>
             <property name="alignment">
