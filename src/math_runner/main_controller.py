@@ -509,8 +509,8 @@ class MainController:
         bar = self.obstacles_area.verticalScrollBar()
         bar.setValue(bar.maximum())
 
-        widget.ui.spinBox_Width._last_value = widget.ui.spinBox_Width.value()
-        widget.ui.spinBox_Height._last_value = widget.ui.spinBox_Height.value()
+        widget.ui.spinBox_Width._last_value = 1 if widget.ui.label_Image.pixmap().width() < 1 else widget.ui.label_Image.pixmap().width()
+        widget.ui.spinBox_Height._last_value = 1 if widget.ui.label_Image.pixmap().height() < 1 else widget.ui.label_Image.pixmap().height()
         widget.ui.checkBox_KeepAspectRatio._last_value = widget.ui.checkBox_KeepAspectRatio.isChecked()
         widget.ui.doubleSpinBox_Points._last_value = widget.ui.doubleSpinBox_Points.value()
         widget.ui.doubleSpinBox_Volume._last_value = widget.ui.doubleSpinBox_Volume.value()
@@ -589,8 +589,8 @@ class MainController:
         bar = self.collectibles_area.verticalScrollBar()
         bar.setValue(bar.maximum())
 
-        widget.ui.spinBox_Width._last_value = widget.ui.spinBox_Width.value()
-        widget.ui.spinBox_Height._last_value = widget.ui.spinBox_Height.value()
+        widget.ui.spinBox_Width._last_value = 1 if widget.ui.label_Image.pixmap().width() < 1 else widget.ui.label_Image.pixmap().width()
+        widget.ui.spinBox_Height._last_value = 1 if widget.ui.label_Image.pixmap().width() < 1 else widget.ui.label_Image.pixmap().width()
         widget.ui.checkBox_KeepAspectRatio._last_value = widget.ui.checkBox_KeepAspectRatio.isChecked()
         widget.ui.doubleSpinBox_Points._last_value = widget.ui.doubleSpinBox_Points.value()
         widget.ui.doubleSpinBox_Volume._last_value = widget.ui.doubleSpinBox_Volume.value()

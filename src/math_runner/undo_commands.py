@@ -195,7 +195,6 @@ class ChangeSpinBoxValueCommand(QUndoCommand):
 
     def redo(self):
         self.image_original = self.label.property('original_pixmap')
-
         if self.keep_aspect.isChecked():
             self.new_height = (self.new_width) * (self.old_height / self.old_width)
         
