@@ -515,6 +515,11 @@ class MainController:
         widget.ui.doubleSpinBox_Points._last_value = widget.ui.doubleSpinBox_Points.value()
         widget.ui.doubleSpinBox_Volume._last_value = widget.ui.doubleSpinBox_Volume.value()
 
+        #------------------RESOLVER ISSO O MAIS RAPIDO POSSIVEL-----------------------------------------------------#
+        widget.ui.spinBox_Width.setMaximum(300)
+        widget.ui.spinBox_Height.setMaximum(300)
+        #-----------------------------------------------------------------------#
+
         widget.type = 'obstacle'
 
         widget.ui.pushButton_SelectImage.clicked.connect(
