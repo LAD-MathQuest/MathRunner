@@ -80,3 +80,9 @@ def play_sound(parent, path, vol):
     player.play()
 
 #------------------------------------------------------------------------------#
+
+def qcolor_to_tuple(qcolor):
+    #Converte QColor para tupla (r,g,b,a) ou None
+    if qcolor is None:
+        return None
+    return (qcolor.red(), qcolor.green(), qcolor.blue(), qcolor.alpha())

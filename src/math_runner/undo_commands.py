@@ -293,3 +293,19 @@ class ChangeSoundCommand(QUndoCommand):
         self.controller.changed = True
 
 #------------------------------------------------------------------------------#
+
+class ChangeScoreboardTextCommand(QUndoCommand):
+    def __init__(self, controller, attr_name, old_value, new_value, description="Alterar texto do placar"):
+        super().__init__(description)
+        self.controller = controller
+        self.attr_name = attr_name
+        self.old_value = old_value
+        self.new_value = new_value
+
+    def undo(self):
+        setattr(self.controller, self.attr_name, self.old_value)
+        self.controller.update_scoreboard_preview()
+
+    def redo(self):
+        setattr(self.controller, self.attr_name, self.new_value)
+        self.controller.update_scoreboard_preview()
