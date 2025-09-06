@@ -134,7 +134,7 @@ class MainController:
         ui.lineEdit_Author  .editingFinished.connect(lambda: self.change_text(ui.lineEdit_Author))
         ui.plainTextEdit_GameDescription.textChanged.connect(lambda: self.change_text(ui.plainTextEdit_GameDescription))
 
-        ui.pushButton_IconSelect.clicked.connect(self.select_icon)
+        #ui.pushButton_IconSelect.clicked.connect(self.select_icon)
 
         ui.radioButton_HorizontalScrolling.toggled.connect(lambda: self.select_checked(self.ui.radioButton_VerticalScrolling))
         ui.radioButton_VerticalScrolling.toggled.connect(lambda: self.select_checked(self.ui.radioButton_HorizontalScrolling))
@@ -142,10 +142,10 @@ class MainController:
         ui.checkBox_TrackMinimumKills.stateChanged.connect(lambda value: self.select_checked(self.ui.checkBox_TrackMinimumKills))
         ui.doubleSpinBox_ScoreTimeBonus.valueChanged.connect(lambda value: self.select_value(self.ui.doubleSpinBox_ScoreTimeBonus))
 
-        ui.pushButton_AmbienceSoundSelect.clicked.connect(self.select_ambience_sound)
-        ui.pushButton_AmbienceSoundRemove.clicked.connect(self.ambience_remove)
-        ui.pushButton_AmbienceSoundPlay.clicked.connect( self.ambience_play )
-        ui.doubleSpinBox_AmbienceSoundVolume.valueChanged.connect(lambda value: self.select_value(self.ui.doubleSpinBox_AmbienceSoundVolume))
+        #ui.pushButton_AmbienceSoundSelect.clicked.connect(self.select_ambience_sound)
+        #ui.pushButton_AmbienceSoundRemove.clicked.connect(self.ambience_remove)
+        #ui.pushButton_AmbienceSoundPlay.clicked.connect( self.ambience_play )
+        #ui.doubleSpinBox_AmbienceSoundVolume.valueChanged.connect(lambda value: self.select_value(self.ui.doubleSpinBox_AmbienceSoundVolume))
 
         #--- Appearance Tab signals -------------------------------------------#
 
