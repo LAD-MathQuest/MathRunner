@@ -26,8 +26,12 @@ class ObjectWidget(QWidget):
         # Image
         tools.meta_image_to_label(ui.label_Image, meta.image)
 
+        ui.spinBox_Width.blockSignals(True)
+        ui.spinBox_Height.blockSignals(True)
         ui.spinBox_Width .setValue(meta.image.size[0])
         ui.spinBox_Height.setValue(meta.image.size[1])
+        ui.spinBox_Width.blockSignals(False)
+        ui.spinBox_Height.blockSignals(False)
         ui.checkBox_KeepAspectRatio.setChecked(True)
 
         # Score

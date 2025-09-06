@@ -506,8 +506,9 @@ class MainController:
         bar = self.obstacles_area.verticalScrollBar()
         bar.setValue(bar.maximum())
 
-        widget.ui.spinBox_Width._last_value = 1 if widget.ui.label_Image.pixmap().width() < 1 else widget.ui.label_Image.pixmap().width()
-        widget.ui.spinBox_Height._last_value = 1 if widget.ui.label_Image.pixmap().height() < 1 else widget.ui.label_Image.pixmap().height()
+        widget.ui.spinBox_Width._last_value = 1
+        widget.ui.spinBox_Height._last_value = 1
+
         widget.ui.checkBox_KeepAspectRatio._last_value = widget.ui.checkBox_KeepAspectRatio.isChecked()
         widget.ui.doubleSpinBox_Points._last_value = widget.ui.doubleSpinBox_Points.value()
         widget.ui.doubleSpinBox_Volume._last_value = widget.ui.doubleSpinBox_Volume.value()
@@ -591,8 +592,9 @@ class MainController:
         bar = self.collectibles_area.verticalScrollBar()
         bar.setValue(bar.maximum())
 
-        widget.ui.spinBox_Width._last_value = 1 if widget.ui.label_Image.pixmap().width() < 1 else widget.ui.label_Image.pixmap().width()
-        widget.ui.spinBox_Height._last_value = 1 if widget.ui.label_Image.pixmap().width() < 1 else widget.ui.label_Image.pixmap().width()
+        widget.ui.spinBox_Width._last_value = 1 
+        widget.ui.spinBox_Height._last_value = 1
+
         widget.ui.checkBox_KeepAspectRatio._last_value = widget.ui.checkBox_KeepAspectRatio.isChecked()
         widget.ui.doubleSpinBox_Points._last_value = widget.ui.doubleSpinBox_Points.value()
         widget.ui.doubleSpinBox_Volume._last_value = widget.ui.doubleSpinBox_Volume.value()
@@ -682,9 +684,56 @@ class MainController:
         new_widget.sound = widget.sound
         new_widget.type = widget.type
 
-        new_widget.ui.pushButton_SelectImage.clicked.connect(lambda :self.select_image("objects",new_widget.ui.label_Image))
+        new_widget.ui.label_Image.setProperty('original_pixmap', widget.ui.label_Image.property('original_pixmap'))
+        new_widget.ui.spinBox_Width._last_value = new_widget.ui.spinBox_Width.value()
+        new_widget.ui.spinBox_Height._last_value = new_widget.ui.spinBox_Height.value()
+
+        new_widget.ui.checkBox_KeepAspectRatio._last_value = new_widget.ui.checkBox_KeepAspectRatio.isChecked()
+        new_widget.ui.doubleSpinBox_Points._last_value = new_widget.ui.doubleSpinBox_Points.value()
+        new_widget.ui.doubleSpinBox_Volume._last_value = new_widget.ui.doubleSpinBox_Volume.value()
+
+        new_widget.ui.pushButton_SelectImage.clicked.connect(
+            lambda :self.select_image_with_spinbox(
+                "objects", 
+                new_widget.ui.label_Image, 
+                new_widget.ui.spinBox_Width, 
+                new_widget.ui.spinBox_Height
+            )
+        )
+
+        new_widget.ui.spinBox_Width.valueChanged.connect(
+            lambda: self.select_value_spinbox(
+                new_widget.ui.spinBox_Width,
+                new_widget.ui.spinBox_Height,
+                new_widget.ui.label_Image,
+                new_widget.ui.checkBox_KeepAspectRatio
+            )
+        )
+        
+        new_widget.ui.spinBox_Height.valueChanged.connect(
+            lambda: self.select_value_spinbox(
+                new_widget.ui.spinBox_Width,
+                new_widget.ui.spinBox_Height,
+                new_widget.ui.label_Image,
+                new_widget.ui.checkBox_KeepAspectRatio
+            )
+        )
+
+        new_widget.ui.checkBox_KeepAspectRatio.stateChanged.connect(
+            lambda: self.select_keep_aspect(
+                new_widget.ui.checkBox_KeepAspectRatio, 
+                new_widget.ui.spinBox_Height
+            )
+        )
+
+        new_widget.ui.doubleSpinBox_Points.valueChanged.connect(
+            lambda: self.select_value(new_widget.ui.doubleSpinBox_Points)
+        )
+
         self.dupicate_object_undo(new_widget, ui, position, "duplicação de objeto")
+
         new_widget.ui.pushButton_Delete.clicked.connect(lambda :self.hide_object_widget(new_widget, ui, ui.indexOf(new_widget)))
+
         new_widget.ui.pushButton.clicked.connect(lambda :self.duplicate_object(new_widget, ui, ui.indexOf(new_widget)+1))
 
 
@@ -1032,6 +1081,7 @@ class MainController:
 
         for i in range(self.num_obstacles):
             obj = self.obstacles_box.itemAt(i).widget()
+
             obj.ui.spinBox_Width._last_value = obj.ui.spinBox_Width.value()
             obj.ui.spinBox_Height._last_value = obj.ui.spinBox_Height.value()
             obj.ui.checkBox_KeepAspectRatio._last_value = obj.ui.checkBox_KeepAspectRatio.isChecked()

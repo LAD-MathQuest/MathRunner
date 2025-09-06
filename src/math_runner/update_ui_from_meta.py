@@ -109,9 +109,12 @@ def update_view_tab_objects(meta: MetaWorld, ui, con) -> None:
     player = meta.player
 
     meta_image_to_label(ui.label_PlayerImage, player.image)
-
+    ui.spinBox_PlayerWidth .blockSignals(True)
+    ui.spinBox_PlayerHeight.blockSignals(True)
     ui.spinBox_PlayerWidth. setValue(player.image.size[0])
     ui.spinBox_PlayerHeight.setValue(player.image.size[1])
+    ui.spinBox_PlayerWidth .blockSignals(False)
+    ui.spinBox_PlayerHeight.blockSignals(False)
     ui.spinBox_PlayerSpeed .setValue(meta.player_speed)
 
     ui.checkBox_PlayerKeepAspectRatio.setChecked(True)
