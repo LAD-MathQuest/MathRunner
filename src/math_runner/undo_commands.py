@@ -24,15 +24,23 @@ class HideObjectCommand(QUndoCommand):
     def undo(self):
         self.ui.insertWidget(self.position, self.object)
         self.object.show()
-        self.engine.num_obstacles += 1
-        self.engine.obstacles.insert(self.position, self.object)
+        if(self.object.type == 'obstacle'):
+            self.engine.num_obstacles += 1
+            self.engine.obstacles.insert(self.position, self.object)
+        elif(self.object.type == 'collectible'):
+            self.engine.num_collectibles += 1
+            self.engine.collectibles.insert(self.position, self.object)
         
 
     def redo(self):
         self.ui.removeWidget(self.object)
         self.object.hide()
-        self.engine.num_obstacles -= 1
-        self.engine.obstacles.pop(self.position)
+        if(self.object.type == 'obstacle'):
+            self.engine.num_obstacles -= 1
+            self.engine.obstacles.pop(self.position)
+        elif(self.object.type == 'collectible'):
+            self.engine.num_collectibles -= 1
+            self.engine.collectibles.pop(self.position)
 class AddObjectCommand(QUndoCommand):
     def __init__(
         self,
@@ -52,24 +60,22 @@ class AddObjectCommand(QUndoCommand):
     def undo(self):
         self.ui.removeWidget(self.object)
         self.object.hide()
-        self.engine.num_obstacles -= 1
-        self.engine.obstacles.pop(self.position)
-        
+        if(self.object.type == 'obstacle'):
+            self.engine.num_obstacles -= 1
+            self.engine.obstacles.pop(self.position)
+        elif(self.object.type == 'collectible'):
+            self.engine.num_collectibles -= 1
+            self.engine.collectibles.pop(self.position)
 
     def redo(self):
         self.ui.insertWidget(self.position, self.object)
         self.object.show()
-        self.engine.num_obstacles += 1
-        self.engine.obstacles.insert(self.position, self.object)
-
-
-def _remove_object(self, object):
-        if object:
-            self.ui.removeWidget(object)
-            object.hide()
-        else:
-            self.label.clear()
-
+        if(self.object.type == 'obstacle'):
+            self.engine.num_obstacles += 1
+            self.engine.obstacles.insert(self.position, self.object)
+        elif(self.object.type == 'collectible'):
+            self.engine.num_collectibles += 1
+            self.engine.collectibles.insert(self.position, self.object)
 
 #--------------------------------------------------------------------------------#
 class ChangeImageCommand(QUndoCommand):
@@ -99,41 +105,160 @@ class ChangeImageCommand(QUndoCommand):
         self.label.setPixmap(self.new_image.scaled(size, aspectMode=Qt.KeepAspectRatio))
         self.label.setProperty('original_pixmap', self.new_image)
 
-
 #--------------------------------------------------------------------------------#
-class ChangeImageSpinBoxCommand(QUndoCommand):
-
+class ChangeSpinBoxImageCommand(QUndoCommand):
     def __init__(
         self,
-        engine,
+        label,
+        spin_width,
+        spin_height,
         new_image,
+        old_width,
+        old_height,
         description="Alterar imagem"
     ):
         super().__init__(description)
-        self.engine = engine
+        self.label = label
+        self.spin_width = spin_width
+        self.spin_height = spin_height
         self.new_image = new_image
 
-         # Referências aos spinBox
-        self.spin_width = engine.ui.spinBox_PlayerWidth
-        self.spin_height = engine.ui.spinBox_PlayerHeight
-
          # Estado antigo
-        self.old_image = engine.player_original
-        self.old_width = self.spin_width.value()
-        self.old_height = self.spin_height.value()
+        self.old_width = old_width
+        self.old_height = old_height
 
     def undo(self):
-        self.engine.player_original = self.old_image
+        self.label.setPixmap(self.old_image)
+        self.label.setProperty('original_pixmap', self.original_image)
+
+        self.spin_width.blockSignals(True)
+        self.spin_height.blockSignals(True)    
         self.spin_width.setValue(self.old_width)
         self.spin_height.setValue(self.old_height)
-        self.engine.update_image_size()
+        self.spin_width.blockSignals(False)
+        self.spin_height.blockSignals(False)
 
+        self.spin_width._last_value = self.old_width
+        self.spin_height._last_value = self.old_height
+        
     def redo(self):
-        self.engine.player_original = self.new_image
+        self.old_image = self.label.pixmap()
+        self.original_image = self.label.property('original_pixmap')
+            
+        
+        #------------------RESOLVER O MAIS RAPIDO POSSIVEL-----------------------------------------------------#
+        width = 300 if self.new_image.width() > 300 else self.new_image.width()
+        height = 300 if self.new_image.height() > 300 else self.new_image.height()
+        #-------------------------------------------------------------------------------------------------------#
+
+        self.label.setPixmap(self.new_image.scaled(width, height, Qt.IgnoreAspectRatio))
+        self.label.setProperty('original_pixmap', self.new_image)
+
+        self.spin_width.blockSignals(True)
+        self.spin_height.blockSignals(True)
         self.spin_width.setValue(self.new_image.width())
         self.spin_height.setValue(self.new_image.height())
-        self.engine.update_image_size()
+        self.spin_width.blockSignals(False)
+        self.spin_height.blockSignals(False)
 
+        self.spin_width._last_value = self.new_image.width()
+        self.spin_height._last_value = self.new_image.height()
+
+#--------------------------------------------------------------------------------#
+class ChangeSpinBoxValueCommand(QUndoCommand):
+    def __init__(
+        self,
+        spin_width,
+        spin_height,
+        old_width,
+        old_height,
+        label,
+        keep_aspect,
+        description="Alterar valor"
+    ):
+        super().__init__(description)
+        self.spin_width = spin_width
+        self.spin_height = spin_height
+        self.old_width = old_width
+        self.old_height = old_height
+        self.label = label
+        self.keep_aspect = keep_aspect
+
+        self.new_width = spin_width.value()
+        self.new_height = spin_height.value()
+
+    def undo(self):
+        image_scaled = self.image_original.scaled(self.old_width, self.old_height, aspectMode=Qt.IgnoreAspectRatio)
+        self.label.setPixmap(image_scaled)
+        self.spin_width.blockSignals(True)
+        self.spin_height.blockSignals(True)
+        self.spin_width.setValue(self.old_width)
+        self.spin_height.setValue(self.old_height)
+        self.spin_width.blockSignals(False)
+        self.spin_height.blockSignals(False)
+
+    def redo(self):
+        self.image_original = self.label.property('original_pixmap')
+        
+        old_width = self.old_width
+        old_height = self.old_height
+
+        if self.old_width == 0:
+            old_width = self.image_original.width()
+        if self.old_height == 0:
+            old_height = self.image_original.height()
+
+        if self.keep_aspect.isChecked():
+            self.new_height = (self.new_width) * (old_height / old_width)
+        
+        image_scaled = self.image_original.scaled(self.new_width, self.new_height, aspectMode=Qt.IgnoreAspectRatio)
+
+        self.label.setPixmap(image_scaled)
+        self.spin_width.blockSignals(True)
+        self.spin_height.blockSignals(True)
+        self.spin_width.setValue(image_scaled.width())
+        self.spin_height.setValue(image_scaled.height())
+        self.spin_width.blockSignals(False)
+        self.spin_height.blockSignals(False)
+        self.spin_width._last_value = image_scaled.width()
+        self.spin_height._last_value = image_scaled.height()
+
+#--------------------------------------------------------------------------------#
+class ChangeKeepImageCommand(QUndoCommand):
+    def __init__(
+        self,
+        keep,
+        spin_height,
+        old_state,
+        description="Alterar manter proporção"
+    ):
+        super().__init__(description)
+        self.keep = keep
+        self.spin_height = spin_height
+        self.old_state = old_state
+        self.new_state = keep.isChecked()
+    
+    def undo(self):
+        self.keep.blockSignals(True)
+        self.keep.setChecked(self.old_state)
+        self.keep.blockSignals(False)
+        if self.old_state:
+            self.spin_height.setEnabled(False)
+        else:
+            self.spin_height.setEnabled(True)
+        self.keep._last_value = self.old_state
+
+    def redo(self):
+        self.keep.blockSignals(True)
+        self.keep.setChecked(self.new_state)
+        self.keep.blockSignals(False)
+        if self.new_state:
+            self.spin_height.setEnabled(False)
+        else:
+            self.spin_height.setEnabled(True)
+        self.keep._last_value = self.new_state
+
+    
 
 #--------------------------------------------------------------------------------#
 class ChangeValueCommand(QUndoCommand):
@@ -168,9 +293,6 @@ class ChangeValueCommand(QUndoCommand):
 
         if self.target == self.engine.ui.doubleSpinBox_AmbienceSoundVolume:
             self.engine.ambience_set_volume(value)
-        else:
-            self.engine.update_image_size()
-
 
 #--------------------------------------------------------------------------------#
 class ChangeCheckedCommand(QUndoCommand):
@@ -202,7 +324,6 @@ class ChangeCheckedCommand(QUndoCommand):
         self.target.blockSignals(True)
         self.target.setChecked(value)
         self.target.blockSignals(False)
-        self.engine.update_image_size()
 
 #--------------------------------------------------------------------------------#
 class ChangeTextCommand(QUndoCommand):
@@ -285,3 +406,19 @@ class ChangeSoundCommand(QUndoCommand):
         self.controller.changed = True
 
 #------------------------------------------------------------------------------#
+
+class ChangeScoreboardTextCommand(QUndoCommand):
+    def __init__(self, controller, attr_name, old_value, new_value, description="Alterar texto do placar"):
+        super().__init__(description)
+        self.controller = controller
+        self.attr_name = attr_name
+        self.old_value = old_value
+        self.new_value = new_value
+
+    def undo(self):
+        setattr(self.controller, self.attr_name, self.old_value)
+        self.controller.update_scoreboard_preview()
+
+    def redo(self):
+        setattr(self.controller, self.attr_name, self.new_value)
+        self.controller.update_scoreboard_preview()
