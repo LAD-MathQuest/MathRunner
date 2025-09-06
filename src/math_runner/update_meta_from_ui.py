@@ -1,8 +1,10 @@
 #------------------------------------------------------------------------------#
 
 from meta import MetaWorld, MetaObject, MetaImage
+from PySide6.QtGui import QColor
 
 from .tools import label_to_meta_image
+from .tools import qcolor_to_tuple
 
 #------------------------------------------------------------------------------#
 def update_meta_from_ui(meta: MetaWorld, ui, con) -> None:
@@ -72,6 +74,11 @@ def update_from_view_tab_appearance(meta: MetaWorld, ui, con) -> None:
         ui.spinBox_ScoreboardImagePositionX.value(),
         ui.spinBox_ScoreboardImagePositionY.value()
     ]
+
+    meta.scoreboard.text_font_size = int(getattr(con, "scoreboard_font_size", meta.scoreboard.text_font_size or 14))
+    meta.scoreboard.text_spacing   = float(getattr(con, "scoreboard_text_spacing", 1.2))
+    meta.scoreboard.text_fgcolor   = qcolor_to_tuple(getattr(con, "scoreboard_fg", QColor(255, 255, 255)))
+    meta.scoreboard.text_bgcolor   = qcolor_to_tuple(getattr(con, "scoreboard_bg", QColor(0, 0, 0, 150)))
 
 #------------------------------------------------------------------------------#
 def update_from_view_tab_objects(meta: MetaWorld, ui, con) -> None:
