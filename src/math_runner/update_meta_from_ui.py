@@ -58,12 +58,10 @@ def update_from_view_tab_appearance(meta: MetaWorld, ui, con) -> None:
     meta.scoreboard.image = MetaImage()
     label_to_meta_image(ui.label_ScoreboardImage, meta.scoreboard.image)
 
-    meta.scoreboard.size = [
-        ui.spinBox_ScoreboardImageHeight.value(),
-        ui.spinBox_ScoreboardImageWidth .value()
+    meta.scoreboard.image.size = [
+        ui.spinBox_ScoreboardImageWidth .value(),
+        ui.spinBox_ScoreboardImageHeight.value()
     ]
-
-    print(meta.scoreboard.size)
 
     meta.scoreboard.text_position = [
         ui.spinBox_ScoreboardTextPositionX.value(),

@@ -79,14 +79,20 @@ def update_view_tab_appearance(meta: MetaWorld, ui, con) -> None:
     pos = score.text_position
     ui.spinBox_ScoreboardTextPositionX.setValue(pos[0])
     ui.spinBox_ScoreboardTextPositionY.setValue(pos[1])
+    
 
     if score.image:
         pos  = score.image_position
         size = score.image.size
         ui.spinBox_ScoreboardImagePositionX.setValue(pos [0])
         ui.spinBox_ScoreboardImagePositionY.setValue(pos [1])
+        
+        ui.spinBox_ScoreboardImageHeight.blockSignals(True)
+        ui.spinBox_ScoreboardImageWidth .blockSignals(True)
         ui.spinBox_ScoreboardImageHeight   .setValue(size[0])
         ui.spinBox_ScoreboardImageWidth    .setValue(size[1])
+        ui.spinBox_ScoreboardImageHeight.blockSignals(False)
+        ui.spinBox_ScoreboardImageWidth .blockSignals(False)
 
     ui.checkBox_ScoreboardImageKeepAspectRatio.setChecked(True)
 
