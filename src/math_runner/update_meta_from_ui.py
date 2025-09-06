@@ -1,7 +1,6 @@
 #------------------------------------------------------------------------------#
 
-from meta import MetaWorld
-from meta import MetaObject
+from meta import MetaWorld, MetaObject, MetaImage
 
 from .tools import label_to_meta_image
 
@@ -56,7 +55,15 @@ def update_from_view_tab_appearance(meta: MetaWorld, ui, con) -> None:
 
     # Scoreboard
 
-    # TODO: read scoreboard information
+    meta.scoreboard.image = MetaImage()
+    label_to_meta_image(ui.label_ScoreboardImage, meta.scoreboard.image)
+
+    meta.scoreboard.size = [
+        ui.spinBox_ScoreboardImageHeight.value(),
+        ui.spinBox_ScoreboardImageWidth .value()
+    ]
+
+    print(meta.scoreboard.size)
 
     meta.scoreboard.text_position = [
         ui.spinBox_ScoreboardTextPositionX.value(),

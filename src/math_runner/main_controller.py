@@ -347,7 +347,7 @@ class MainController:
 
         font_path = getattr(self, "scoreboard_font_path", None)
         font_size = getattr(self, "scoreboard_font_size", self.meta.text_font_size or 14)
-        
+
         fg = getattr(self, "scoreboard_fg", QColor(255, 255, 255))       # branco
         bg = getattr(self, "scoreboard_bg", QColor(0, 0, 0, 150))        # preto semi-transparente
 
@@ -380,15 +380,26 @@ class MainController:
 
     #--------------------------------------------------------------------------#
     def select_image_with_spinbox(self, folder, label, spin_width, spin_height):
-        path = self.path_resources / folder
+
+        path  = self.path_resources / folder
         fname = self.get_open_fname('Escolha uma Imagem', path, 'png')
-        old_width = getattr(spin_width, "_last_value", "")
+
+        old_width  = getattr(spin_width,  "_last_value", "")
         old_height = getattr(spin_height, "_last_value", "")
 
         if fname:
             new_image = QPixmap(fname)
 
-            self.add_image_spinbox_undo(label, spin_width, spin_height, new_image, old_width, old_height, "Alterar imagem do fundo")
+            self.add_image_spinbox_undo(
+                label,
+                spin_width,
+                spin_height,
+                new_image,
+                old_width,
+                old_height,
+                "Alterar imagem do fundo"
+            )
+
             self.changed = True
 
     #--------------------------------------------------------------------------#
@@ -522,9 +533,9 @@ class MainController:
 
         widget.ui.pushButton_SelectImage.clicked.connect(
             lambda :self.select_image_with_spinbox(
-                "objects", 
-                widget.ui.label_Image, 
-                widget.ui.spinBox_Width, 
+                "objects",
+                widget.ui.label_Image,
+                widget.ui.spinBox_Width,
                 widget.ui.spinBox_Height
             )
         )
@@ -537,7 +548,7 @@ class MainController:
                 widget.ui.checkBox_KeepAspectRatio
             )
         )
-        
+
         widget.ui.spinBox_Height.valueChanged.connect(
             lambda: self.select_value_spinbox(
                 widget.ui.spinBox_Width,
@@ -549,7 +560,7 @@ class MainController:
 
         widget.ui.checkBox_KeepAspectRatio.stateChanged.connect(
             lambda: self.select_keep_aspect(
-                widget.ui.checkBox_KeepAspectRatio, 
+                widget.ui.checkBox_KeepAspectRatio,
                 widget.ui.spinBox_Height
             )
         )
@@ -592,7 +603,7 @@ class MainController:
         bar = self.collectibles_area.verticalScrollBar()
         bar.setValue(bar.maximum())
 
-        widget.ui.spinBox_Width._last_value = 1 
+        widget.ui.spinBox_Width._last_value = 1
         widget.ui.spinBox_Height._last_value = 1
 
         widget.ui.checkBox_KeepAspectRatio._last_value = widget.ui.checkBox_KeepAspectRatio.isChecked()
@@ -603,9 +614,9 @@ class MainController:
 
         widget.ui.pushButton_SelectImage.clicked.connect(
             lambda :self.select_image_with_spinbox(
-                "objects", 
-                widget.ui.label_Image, 
-                widget.ui.spinBox_Width, 
+                "objects",
+                widget.ui.label_Image,
+                widget.ui.spinBox_Width,
                 widget.ui.spinBox_Height
             )
         )
@@ -618,7 +629,7 @@ class MainController:
                 widget.ui.checkBox_KeepAspectRatio
             )
         )
-        
+
         widget.ui.spinBox_Height.valueChanged.connect(
             lambda: self.select_value_spinbox(
                 widget.ui.spinBox_Width,
@@ -630,7 +641,7 @@ class MainController:
 
         widget.ui.checkBox_KeepAspectRatio.stateChanged.connect(
             lambda: self.select_keep_aspect(
-                widget.ui.checkBox_KeepAspectRatio, 
+                widget.ui.checkBox_KeepAspectRatio,
                 widget.ui.spinBox_Height
             )
         )
@@ -694,9 +705,9 @@ class MainController:
 
         new_widget.ui.pushButton_SelectImage.clicked.connect(
             lambda :self.select_image_with_spinbox(
-                "objects", 
-                new_widget.ui.label_Image, 
-                new_widget.ui.spinBox_Width, 
+                "objects",
+                new_widget.ui.label_Image,
+                new_widget.ui.spinBox_Width,
                 new_widget.ui.spinBox_Height
             )
         )
@@ -709,7 +720,7 @@ class MainController:
                 new_widget.ui.checkBox_KeepAspectRatio
             )
         )
-        
+
         new_widget.ui.spinBox_Height.valueChanged.connect(
             lambda: self.select_value_spinbox(
                 new_widget.ui.spinBox_Width,
@@ -721,7 +732,7 @@ class MainController:
 
         new_widget.ui.checkBox_KeepAspectRatio.stateChanged.connect(
             lambda: self.select_keep_aspect(
-                new_widget.ui.checkBox_KeepAspectRatio, 
+                new_widget.ui.checkBox_KeepAspectRatio,
                 new_widget.ui.spinBox_Height
             )
         )
@@ -760,8 +771,8 @@ class MainController:
 
         func = self.ui.lineEdit_FunctionVelocity.text()
         old_text = getattr(self.ui.lineEdit_FunctionVelocity, "_last_text", "")
-        
-        
+
+
         try:
             self.model.change_velocity_function(func)
             self.plot_velocity.update_velocity(self.model.get_velocity_function())
@@ -772,8 +783,8 @@ class MainController:
         except EvalFunctionError as e:
             QMessageBox.critical(None, "Erro", e.message)
             self.ui.lineEdit_FunctionVelocity.setText(old_text)
-        
-        
+
+
 
 
     #-------------------------------------------------------------------------#
@@ -785,7 +796,7 @@ class MainController:
             self.model.change_track_minimum_function(func)
             self.plot_track.update_boundary(self.model.get_boundary_functions())
 
-            
+
             self.add_text_undo(self, self.ui.lineEdit_FunctionTrackMinimum, old_text, func, "Alterar mínimo")
             self.ui.lineEdit_FunctionTrackMinimum._last_text = func
 
@@ -803,7 +814,7 @@ class MainController:
             self.model.change_track_maximum_function(func)
             self.plot_track.update_boundary(self.model.get_boundary_functions())
 
-            
+
             self.add_text_undo(self, self.ui.lineEdit_FunctionTrackMaximum, old_text, func, "Alterar mínimo")
             self.ui.lineEdit_FunctionTrackMaximum._last_text = func
 
@@ -926,8 +937,27 @@ class MainController:
         stack.push(command)
 
     #--------------------------------------------------------------------------#
-    def add_image_spinbox_undo(self, label, spin_width, spin_height, new_image, old_width, old_height, description):
-        command = undo.ChangeSpinBoxImageCommand(label, spin_width, spin_height, new_image, old_width, old_height, description)
+    def add_image_spinbox_undo(
+            self,
+            label,
+            spin_width,
+            spin_height,
+            new_image,
+            old_width,
+            old_height,
+            description
+        ):
+
+        command = undo.ChangeSpinBoxImageCommand(
+            label,
+            spin_width,
+            spin_height,
+            new_image,
+            old_width,
+            old_height,
+            description
+        )
+
         stack = self.undo_group.activeStack()
         stack.push(command)
 
@@ -988,7 +1018,7 @@ class MainController:
         command = undo.ChangeScoreboardTextCommand(self, attr_name, old_value, new_value, description)
         stack = self.undo_group.activeStack()
         stack.push(command)
-    
+
 
     #--------------------------------------------------------------------------#
     def clear_stacks_undo(self):
@@ -999,7 +1029,7 @@ class MainController:
     def update_tracks_undo(self):
         func1 = self.ui.lineEdit_FunctionTrackMaximum.text()
         func2 = self.ui.lineEdit_FunctionTrackMinimum.text()
-    
+
         self.model.change_track_minimum_function(func2)
 
         self.model.change_track_maximum_function(func1)
@@ -1033,14 +1063,14 @@ class MainController:
         for widget, default in widgets:
             widget._last_text = default
 
-        #Atualiza os atributos das widget da aba geral 
+        #Atualiza os atributos das widget da aba geral
         self.ui.doubleSpinBox_AmbienceSoundVolume._last_value = self.ui.doubleSpinBox_AmbienceSoundVolume.value()
         self.ui.doubleSpinBox_ScoreTimeBonus._last_value = self.ui.doubleSpinBox_ScoreTimeBonus.value()
         self.ui.checkBox_TrackMaximumKills._last_value = self.ui.checkBox_TrackMaximumKills.isChecked()
         self.ui.checkBox_TrackMinimumKills._last_value = self.ui.checkBox_TrackMinimumKills.isChecked()
         self.ui.radioButton_HorizontalScrolling._last_value = self.ui.radioButton_HorizontalScrolling.isChecked()
         self.ui.radioButton_VerticalScrolling._last_value = self.ui.radioButton_VerticalScrolling.isChecked()
-        
+
         #---------------ABA APARÊNCIA-------------------#
 
         # Variaveis da aba aparencia
@@ -1051,7 +1081,7 @@ class MainController:
         self.background_scrolls = self.ui.checkBox_BackgroundImageScrolls.isChecked()
         self.draw_track = self.ui.checkBox_DrawTrack.isChecked()
 
-        #Atualiza os atributos das widget da aba aparencia 
+        #Atualiza os atributos das widget da aba aparencia
         self.ui.spinBox_ScoreboardImageHeight.setEnabled(False)
         self.ui.spinBox_ScoreboardImagePositionX._last_value = self.scoreboard_positionX
         self.ui.spinBox_ScoreboardImagePositionY._last_value = self.scoreboard_positionY
@@ -1070,7 +1100,7 @@ class MainController:
         self.obstacles_frequency = self.ui.doubleSpinBox_ObstaclesFrequency.value()
         self.collectibles_frequency = self.ui.doubleSpinBox_CollectiblesFrequency.value()
 
-        #Atualiza os atributos das widget da aba Objetos 
+        #Atualiza os atributos das widget da aba Objetos
         self.ui.spinBox_PlayerHeight.setEnabled(False)
         self.ui.spinBox_PlayerWidth._last_value = self.player_width
         self.ui.spinBox_PlayerHeight._last_value = self.player_height
