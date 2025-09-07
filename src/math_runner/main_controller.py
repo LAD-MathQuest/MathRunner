@@ -139,7 +139,7 @@ class MainController:
         ui.plainTextEdit_GameDescription.focusOutEvent = lambda event:(self.change_plainText(ui.plainTextEdit_GameDescription, description="Alterar descrição"),
         QPlainTextEdit.focusOutEvent(ui.plainTextEdit_GameDescription, event))
 
-        ui.pushButton_IconSelect.clicked.connect(self.select_icon)
+        ui.pushButton_IconSelect.clicked.connect(lambda: self.select_image("icons",self.ui.label_GameIcon))
 
         ui.radioButton_HorizontalScrolling.toggled.connect(lambda: self.select_checked(self.ui.radioButton_VerticalScrolling))
         ui.radioButton_VerticalScrolling.toggled.connect(lambda: self.select_checked(self.ui.radioButton_HorizontalScrolling))
