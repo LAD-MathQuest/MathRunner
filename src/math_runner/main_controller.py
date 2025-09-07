@@ -1,7 +1,7 @@
 #------------------------------------------------------------------------------#
 
 from PySide6.QtGui     import QPalette, QPixmap, QUndoGroup, QUndoStack, QFont, QFontDatabase, QColor
-from PySide6.QtWidgets import QApplication, QFileDialog, QMessageBox, QVBoxLayout, QColorDialog
+from PySide6.QtWidgets import QApplication, QFileDialog, QMessageBox, QVBoxLayout, QColorDialog, QPlainTextEdit
 from PySide6.QtCore    import Qt, QTimer
 
 from pathlib import Path
@@ -136,7 +136,8 @@ class MainController:
 
         ui.lineEdit_GameName.editingFinished.connect(lambda: self.change_text(ui.lineEdit_GameName))
         ui.lineEdit_Author  .editingFinished.connect(lambda: self.change_text(ui.lineEdit_Author))
-        ui.plainTextEdit_GameDescription.textChanged.connect(lambda: self.change_text(ui.plainTextEdit_GameDescription))
+        ui.plainTextEdit_GameDescription.focusOutEvent = lambda event:(self.change_plainText(ui.plainTextEdit_GameDescription, description="Alterar descrição"),
+        QPlainTextEdit.focusOutEvent(ui.plainTextEdit_GameDescription, event))
 
         #ui.pushButton_IconSelect.clicked.connect(self.select_icon)
 
@@ -434,6 +435,12 @@ class MainController:
 
     #--------------------------------------------------------------------------#
     def change_text(self, widget):
+        if isinstance(widget, QPlainTextEdit):
+            # Para evitar reset do cursor a cada mudança
+            widget._last_text = widget.toPlainText()
+            self.changed = True
+            return
+
         new_text = widget.text() if hasattr(widget, 'text') else widget.toPlainText()
         old_text = getattr(widget, '_last_text', '')
 
@@ -441,6 +448,7 @@ class MainController:
             self.add_text_undo(self, widget, old_text, new_text, "Alterar texto")
             widget._last_text = new_text
             self.changed = True
+
 
     #--------------------------------------------------------------------------#
     def select_ambience_sound(self):
@@ -766,6 +774,14 @@ class MainController:
         self.collectibles.pop(obj_id)
         self.num_collectibles -= 1
 
+    #--------------------------------------------------------------------------#
+    def change_plainText(self, widget: QPlainTextEdit, description="Alterar texto"):
+        new_text = widget.toPlainText()
+        old_text = getattr(widget, "_last_text", "")
+        if new_text != old_text:
+            self.add_text_undo(self, widget, old_text, new_text, description)
+            widget._last_text = new_text
+            self.changed = True
     #--------------------------------------------------------------------------#
     def function_velocity_changed(self):
 
