@@ -61,13 +61,13 @@ if __name__ == '__main__':
 
     # Background
     meta.background_image = MetaImage.from_file(size=(1500,1500),
-        path=path_backgrounds/'space.png'
+        path=path_backgrounds/'tile-space.png'
     )
     meta.background_scrolls = True
 
     # Track
-    meta.track_image = MetaImage(
-        color=(0,0,255)
+    meta.track_image = MetaImage.from_file(size=(1500,1500),
+        path=path_backgrounds/'space.png'
     )
     meta.track_scrolls = False
     meta.track_kills   = (False, False)

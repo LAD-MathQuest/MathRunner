@@ -132,6 +132,7 @@ class MainController:
         ui.action_About   .triggered.connect( self.about   )
         ui.action_Contents.triggered.connect( self.help    )
 
+
         #--- Game Tab signals -------------------------------------------------#
 
         ui.lineEdit_GameName.editingFinished.connect(lambda: self.change_text(ui.lineEdit_GameName))
