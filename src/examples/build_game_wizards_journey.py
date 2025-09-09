@@ -73,7 +73,7 @@ if __name__ == '__main__':
     meta.track_kills   = (False, False)
 
     # Scoreboard
-    imag_score = MetaImage(size=(230,100),
+    imag_score = MetaImage(size=(300,150),
         color=(55,55,55)
     )
     meta.scoreboard = MetaScoreboard(

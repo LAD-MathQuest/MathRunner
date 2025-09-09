@@ -79,7 +79,7 @@ if __name__ == '__main__':
     meta.max_width = 3
 
     # Scoreboard
-    imag_score = MetaImage.from_file(size=(390,160),
+    imag_score = MetaImage.from_file(size=(390,180),
         path=path_scoreboards/'frame_neon.png'
     )
     meta.scoreboard = MetaScoreboard(

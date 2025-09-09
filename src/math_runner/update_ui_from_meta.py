@@ -89,8 +89,8 @@ def update_view_tab_appearance(meta: MetaWorld, ui, con) -> None:
         
         ui.spinBox_ScoreboardImageHeight.blockSignals(True)
         ui.spinBox_ScoreboardImageWidth .blockSignals(True)
-        ui.spinBox_ScoreboardImageHeight   .setValue(size[0])
-        ui.spinBox_ScoreboardImageWidth    .setValue(size[1])
+        ui.spinBox_ScoreboardImageWidth    .setValue(size[0])
+        ui.spinBox_ScoreboardImageHeight   .setValue(size[1])
         ui.spinBox_ScoreboardImageHeight.blockSignals(False)
         ui.spinBox_ScoreboardImageWidth .blockSignals(False)
 

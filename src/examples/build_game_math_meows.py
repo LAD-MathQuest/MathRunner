@@ -111,7 +111,7 @@ if __name__ == '__main__':
     meta.obstacles = []
 
     cars  = ['blue', 'red', 'green']
-    sizes = [(115,60), (115,65), (112,63)]
+    sizes = [(230,110), (230,110), (230,110)]
 
     for ii in range(3):
 
@@ -133,7 +133,7 @@ if __name__ == '__main__':
 
     for ii in range(1,3):
 
-        imag_collectible = MetaImage.from_file(size=(80,50),
+        imag_collectible = MetaImage.from_file(size=(150,150),
             path=path_objects/f'cat-{ii}.png',
         )
         collectible = MetaObject(
