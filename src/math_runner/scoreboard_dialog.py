@@ -6,6 +6,7 @@ from .form_scoreboard import Ui_Dialog
 
 from . import tools
 from . import undo_commands as undo
+from pathlib import Path
 
 
 class ScoreboardDialog(QDialog, Ui_Dialog):
@@ -29,6 +30,7 @@ class ScoreboardDialog(QDialog, Ui_Dialog):
         self.pushButton.clicked.connect(self.choose_font_color)     # Cor da fonte
         self.pushButton_2.clicked.connect(self.choose_bg_color)     # Cor de fundo
         self.spinBox.valueChanged.connect(self.update_preview)      # tamanho da fonte
+        self.pushButton_3.clicked.connect(self.choose_font_file)  # Selecionar arquivo de fonte
 
         self.update_preview()
 
@@ -53,18 +55,18 @@ class ScoreboardDialog(QDialog, Ui_Dialog):
     
     #--------------------------------------------------------------------------#
     
-        # def choose_font_file(self):
-    #     fname, _ = QFileDialog.getOpenFileName(
-    #         self,
-    #         "Escolher arquivo de fonte",
-    #         str(Path(__file__).parents[1]/'examples/resources/fonts'),
-    #         "Fontes (*.ttf *.otf)"
-    #     )
-    #     if fname:
-    #  
-    #         self.controller.scoreboard_font_path = fname
-    #         # força atualizar o preview no label principal
-    #         self.update_preview()
+    def choose_font_file(self):
+        fname, _ = QFileDialog.getOpenFileName(
+            self,
+            "Escolher arquivo de fonte",
+            str(Path(__file__).parents[1]/'examples/resources/fonts'),
+            "Fontes (*.ttf *.otf)"
+        )
+        if fname:
+     
+            self.controller.scoreboard_font_path = fname
+            # força atualizar o preview no label principal
+            self.update_preview()
 
     
     #--------------------------------------------------------------------------#

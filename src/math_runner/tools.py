@@ -6,6 +6,9 @@ from PySide6.QtGui        import QPixmap, QColor
 from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
 
 from meta import MetaImage
+from pathlib import Path
+from PySide6.QtGui import QFontDatabase, QFont
+from PySide6.QtCore import QByteArray
 
 #------------------------------------------------------------------------------#
 def path_image_to_label(label, path) -> None:
@@ -86,3 +89,20 @@ def qcolor_to_tuple(qcolor):
     if qcolor is None:
         return None
     return (qcolor.red(), qcolor.green(), qcolor.blue(), qcolor.alpha())
+
+#------------------------------------------------------------------------------#
+def font_file_to_bytes(font_path):
+    #Lê arquivo de fonte e retorna bytes ou None
+    if not font_path:
+        return None
+    with open(font_path, 'rb') as f:
+        return f.read()
+#------------------------------------------------------------------------------#
+def bytes_to_qfont(font_bytes, font_size):
+    if not font_bytes:
+        return QFont("Arial", font_size)
+    font_id = QFontDatabase.addApplicationFontFromData(QByteArray(font_bytes))
+    if font_id != -1:
+        family = QFontDatabase.applicationFontFamilies(font_id)[0]
+        return QFont(family, font_size)
+    return QFont("Arial", font_size)

@@ -2,6 +2,7 @@
 
 import pygame
 import pygame.freetype
+import io
 
 from . import parameters as gp
 
@@ -97,7 +98,9 @@ class OnScreenText_Table:
         if not font:
             font = gp.DEFAULT_FONT
 
-        self.font        = pygame.freetype.Font(font, font_size)
+        if isinstance(font, bytes):
+            font = io.BytesIO(font)
+        self.font = pygame.freetype.Font(font, font_size)
         self.font.origin = True
         self.font.pad    = True
 

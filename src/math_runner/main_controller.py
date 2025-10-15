@@ -15,7 +15,6 @@ from meta.math_function import EvalFunctionError
 from . import parameters
 from . import tools
 from . import undo_commands as undo
-from .game_thread import GameThread
 
 from .main_model    import MainModel
 from .object_widget import ObjectWidget
@@ -252,12 +251,12 @@ class MainController:
             except Exception as e:
                 self.error_box("Erro", f"Falha ao carregar som de ambiente:\n{e}")
 
-         # # --- Fonte em bytes ---
-        # font_path = getattr(self, "scoreboard_font_path", None)
-        # if font_path:
-        #     meta.scoreboard.text_font = tools.font_path_to_bytes(font_path)
-        # else:
-        #     meta.scoreboard.text_font = None
+         # --- Fonte em bytes ---
+        font_path = getattr(self, "scoreboard_font_path", None)
+        if font_path:
+            meta.scoreboard.text_font = tools.font_file_to_bytes(font_path)
+        else:
+            meta.scoreboard.text_font = None
 
 
         # --- Estilo do texto ---
@@ -298,9 +297,7 @@ class MainController:
     def run(self):
         self.block_ui()
         self.model.update_meta()
-        self.game_thread = GameThread(self.model)
-        self.game_thread.finished.connect(self.unblock_ui)
-        self.game_thread.start()
+        self.model.run()
 
     #--------------------------------------------------------------------------#
     def build(self):
@@ -531,8 +528,6 @@ class MainController:
 
         widget.ui.spinBox_Width._last_value = 1
         widget.ui.spinBox_Height._last_value = 1
-
-        widget.ui.doubleSpinBox_Points.setValue(0)
 
         widget.ui.checkBox_KeepAspectRatio._last_value = widget.ui.checkBox_KeepAspectRatio.isChecked()
         widget.ui.doubleSpinBox_Points._last_value = widget.ui.doubleSpinBox_Points.value()
@@ -904,12 +899,7 @@ class MainController:
 
     #--------------------------------------------------------------------------#
     def block_ui(self):
-        self.win.setEnabled(False)
-
-    #--------------------------------------------------------------------------#
-
-    def unblock_ui(self):
-        self.win.setEnabled(True)
+        pass
 
     #--------------------------------------------------------------------------#
     def clear_obstacle_widgets(self):

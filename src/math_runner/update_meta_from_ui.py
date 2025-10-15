@@ -5,6 +5,7 @@ from PySide6.QtGui import QColor
 
 from .tools import label_to_meta_image
 from .tools import qcolor_to_tuple
+from .tools import font_file_to_bytes  
 
 #------------------------------------------------------------------------------#
 def update_meta_from_ui(meta: MetaWorld, ui, con) -> None:
@@ -79,6 +80,14 @@ def update_from_view_tab_appearance(meta: MetaWorld, ui, con) -> None:
     meta.scoreboard.text_spacing   = float(getattr(con, "scoreboard_text_spacing", 1.2))
     meta.scoreboard.text_fgcolor   = qcolor_to_tuple(getattr(con, "scoreboard_fg", QColor(255, 255, 255)))
     meta.scoreboard.text_bgcolor   = qcolor_to_tuple(getattr(con, "scoreboard_bg", QColor(0, 0, 0, 150)))
+
+
+    # Salva os bytes da fonte personalizada, se houver
+    font_path = getattr(con, "scoreboard_font_path", None)
+    if font_path:
+        meta.scoreboard.text_font = font_file_to_bytes(font_path)
+    else:
+        meta.scoreboard.text_font = None
 
 #------------------------------------------------------------------------------#
 def update_from_view_tab_objects(meta: MetaWorld, ui, con) -> None:
