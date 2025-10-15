@@ -15,6 +15,7 @@ from meta.math_function import EvalFunctionError
 from . import parameters
 from . import tools
 from . import undo_commands as undo
+from .game_thread import GameThread
 
 from .main_model    import MainModel
 from .object_widget import ObjectWidget
@@ -297,7 +298,9 @@ class MainController:
     def run(self):
         self.block_ui()
         self.model.update_meta()
-        self.model.run()
+        self.game_thread = GameThread(self.model)
+        self.game_thread.finished.connect(self.unblock_ui)
+        self.game_thread.start()
 
     #--------------------------------------------------------------------------#
     def build(self):
@@ -901,7 +904,12 @@ class MainController:
 
     #--------------------------------------------------------------------------#
     def block_ui(self):
-        pass
+        self.win.setEnabled(False)
+
+    #--------------------------------------------------------------------------#
+
+    def unblock_ui(self):
+        self.win.setEnabled(True)
 
     #--------------------------------------------------------------------------#
     def clear_obstacle_widgets(self):
