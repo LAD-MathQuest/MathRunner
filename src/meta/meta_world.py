@@ -67,7 +67,7 @@ class MetaWorld:
         #----------------------------------------------------------------------#
 
         color  = (200,32,57)
-        points = 10
+        points = 0
 
         self.obstacles_frequency = 4 # Average occurrences per second
         self.obstacles = []

@@ -529,6 +529,8 @@ class MainController:
         widget.ui.spinBox_Width._last_value = 1
         widget.ui.spinBox_Height._last_value = 1
 
+        widget.ui.doubleSpinBox_Points.setValue(0)
+
         widget.ui.checkBox_KeepAspectRatio._last_value = widget.ui.checkBox_KeepAspectRatio.isChecked()
         widget.ui.doubleSpinBox_Points._last_value = widget.ui.doubleSpinBox_Points.value()
         widget.ui.doubleSpinBox_Volume._last_value = widget.ui.doubleSpinBox_Volume.value()
