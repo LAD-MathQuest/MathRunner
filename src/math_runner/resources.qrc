@@ -1,0 +1,17 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>resources/icons/theme/document-new.png</file>
+    <file>resources/icons/theme/document-open.png</file>
+    <file>resources/icons/theme/document-revert.png</file>
+    <file>resources/icons/theme/document-save-as.png</file>
+    <file>resources/icons/theme/document-save.png</file>
+    <file>resources/icons/theme/edit-redo.png</file>
+    <file>resources/icons/theme/edit-undo.png</file>
+    <file>resources/icons/theme/exit.png</file>
+    <file>resources/icons/theme/help-about.png</file>
+    <file>resources/icons/theme/help-contextual.png</file>
+    <file>resources/icons/theme/info.png</file>
+    <file>resources/icons/theme/media-playback-start.png</file>
+    <file>resources/icons/theme/system-run.png</file>
+  </qresource>
+</RCC>
