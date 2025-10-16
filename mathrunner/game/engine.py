@@ -271,6 +271,12 @@ class Engine:
         rect.center = self.display.get_rect().center
         font.render_to(self.display, rect, None, (200,200,200))
 
+        font2 = pygame.freetype.Font(gp.DEFAULT_FONT, (size)-30)
+        rect = font2.get_rect('Aperte Qualquer Tecla Para Começar')
+        rect.centery = self.display.get_rect().centery +130
+        rect.centerx = self.display.get_rect().centerx
+        font2.render_to(self.display, rect, None, (200,200,200))
+
     #--------------------------------------------------------------------------#
     def draw_starting(self):
         '''Draws the game starting message'''

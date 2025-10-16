@@ -14,6 +14,7 @@ def draw_help(surf, name, description, vertical):
         surf(surface):    Surface to draw the help message to
         name(str):        Game name
         description(str): Game description
+        Autor(str): Game creator
         vertical(bool):   True if game scrolls vertially
     '''
 
