@@ -1,0 +1,78 @@
+%------------------------------------------------------------------------------%
+\section{Margens}
+
+%------------------------------------------------------------------------------%
+\begin{frame}{As Funções de Cada Margem}
+\begin{itemize}[<+->]
+  \item Cada margem é definida por uma função
+  \item Essas funções dependem do deslocamento $x$ medido em porcentagem da tela
+  \item As margens não podem sair da tela, as funções precisam estar entre 0 e 100
+  \item A margem mínima (esquerda ou de baixo) padrão é
+  \[
+    \text{Mínimo}(x) = 35
+  \]
+  \item A margem máxima (direita ou de cima) padrão é
+  \[
+    \text{Máximo}(x) = 65
+  \]
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------------------------------------%
+\begin{frame}[t]{Borda}
+  \begin{enumerate}[<+->]
+    \item Selecione a aba \code{Borda}
+  \end{enumerate}
+  \vspace{\stretch{100}}%
+  \centering%
+  \onslide<1>{\fbox{\includegraphics{painel}}}%
+  \onslide<1>{\drawrect{blue}{10.7,7.5}{1.5,0.75}}%
+  \smallskip
+\end{frame}
+
+%------------------------------------------------------------------------------%
+\framedgraphic{Margens}{aba-borda}{~}
+
+%------------------------------------------------------------------------------%
+\framedgraphic{Margem de Baixo}{aba-borda}
+{%
+  \drawrect{blue}{2.8,2.5}{11.1,0.3}%
+  \drawfillrect{lightgray}{2.6,3.5}{11,4}%
+  \addtext{11}{2.8,4}{
+    Vamos mudar o mínimo para
+    \[
+      \text{Mímimo}(x)
+      = 15.2 + 10\sin\left(\frac{x}{80}\right) + 5\sin\left(\frac{x}{20}\right)
+    \]
+    \hspace{10mm} = \code{15.2 + 10*sen(x/80) + 5*sen(x/20)}
+
+  }%
+}
+
+%------------------------------------------------------------------------------%
+\framedgraphic{Margem de Cima}{aba-borda}
+{%
+  \drawrect{blue}{2.8,2.5}{11.1,0.3}%
+  \drawfillrect{lightgray}{2.6,3.5}{11,4}%
+  \addtext{11}{2.8,4}{
+    Vamos mudar o máximo para
+    \[
+    \text{Máximo}(x) = 86.8 = \text{\code{86.8}}
+    \]
+  }%
+}
+
+%------------------------------------------------------------------------------%
+\begin{frame}[t]{Jogando}
+  \begin{enumerate}
+    \item Clique em executar o jogo
+    \item Use a tecla \;\texttt{Q}\; para sair do jogo
+  \end{enumerate}
+  \vspace{\stretch{100}}%
+  \centering%
+  \fbox{\includegraphics{painel}}%
+  \drawrect{blue}{9.65,6.42}{0.8,0.8}%
+  \smallskip
+\end{frame}
+
+%------------------------------------------------------------------------------%

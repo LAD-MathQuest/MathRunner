@@ -63,7 +63,7 @@ To install python and run MathRunner follow the steps:
 
 7. It is possible to play a saved game without using the interface
     ```
-    uv tun -m infinite_run path_to_game_file
+    uv run -m infinite_run path_to_game_file
     ```
 
 ## Linter

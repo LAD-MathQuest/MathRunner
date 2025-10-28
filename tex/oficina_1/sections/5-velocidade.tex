@@ -1,0 +1,43 @@
+%------------------------------------------------------------------------------%
+\section{Velocidade}
+
+%------------------------------------------------------------------------------%
+\begin{frame}{A Função Velocidade}
+\begin{itemize}[<+->]
+  \item A velocidade do jogo é controlada por uma função
+  \item Essa função depende do tempo $t$ em segundos
+  \item A velocidade não pode ser negativa
+  \item A função padrão é
+  \[
+    v(t) = 25 + 2t
+  \]
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------------------------------------%
+\framedgraphic{Velocidade Padrão}{vel-default}{}
+
+%------------------------------------------------------------------------------%
+\begin{frame}[t]{Velocidade}
+  \begin{enumerate}[<+->]
+    \item Selecione a aba \code{Velocidade}
+  \end{enumerate}
+  \vspace{\stretch{100}}%
+  \centering%
+  \onslide<1>{\fbox{\includegraphics{painel}}}%
+  \onslide<1>{\drawrect{blue}{8.6,7.5}{2.2,0.75}}%
+  \smallskip
+\end{frame}
+
+%------------------------------------------------------------------------------%
+\framedgraphic{Velocidade}{aba-velocidade}{~}
+
+%------------------------------------------------------------------------------%
+\framedgraphic{Velocidade}{aba-velocidade}
+{%
+  \drawrect{blue}{2.4,2.5}{11.5,0.3}%
+  \drawfillrect{lightgray}{8,5.5}{5.6,1.6}%
+  \addtext{6}{8.3,5.8}{Vamos manter essa velocidade\\por enquanto}%
+}
+
+%------------------------------------------------------------------------------%

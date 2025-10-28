@@ -1,5 +1,11 @@
 site_name: MathRunner
 
+nav:
+  - MathRunner: index.md
+  - Como criar um jogo: tutorial/criar_jogo.md
+  - Licença em inglês: license.md
+  - Licença em português: license-pt-br.md
+
 theme:
   name: "material"
   palette:
@@ -21,9 +27,3 @@ plugins:
         python:
           options:
             docstring_style: google
-nav:
-  - MathRunner: index.md
-  - Como criar um jogo: tutorial/criar_jogo.md
-  - Código: src/codigo.md
-  - Licença em inglês: license.md
-  - Licença em português: license-pt-br.md

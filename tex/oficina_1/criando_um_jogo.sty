@@ -1,0 +1,259 @@
+%------------------------------------------------------------------------------%
+% Luis Alberto D'Afonseca
+% luis.dafonseca@gmail.com
+%------------------------------------------------------------------------------%
+%
+% Add a frame with one figure
+% \framedgraphic{title}{filename}{text}
+%
+% Add a full image frame
+% \backgroundgraphic{title}{filename}{text}
+%
+% Add block
+% \addtext{size}{x,y}{text}
+%
+% Add a figure on a fixed position
+% \addgraphic{size}{x,y}{filename}
+%
+% Add a boxed figure on a fixed position
+% \addboxedgraphic{size}{x,y}{color}{filename}
+%
+% Add a hiden figure on a fixed position
+% \hidegraphic{size}{x,y}{filename}
+%
+% Add a filled rectangle
+% \drawfillrect{color}{xo,yo}{dx,dy}
+%
+% Add a rounded rectangle
+% \drawroundrect{color}{xo,yo}{dx,dy}
+%
+% Add a circle
+% \drawcircle{color}{x,y}{radius}
+%
+%------------------------------------------------------------------------------%
+
+% Adding packages
+%------------------------------------------------------------------------------%
+
+% Packages to pt_BR localization
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[brazil]{babel}
+\RequirePackage[T1]{fontenc}
+\RequirePackage{ae}
+\RequirePackage{indentfirst}
+\RequirePackage{icomma}
+
+% Some extra packages
+\RequirePackage{microtype}
+\RequirePackage{tikz}
+\RequirePackage[centerlast]{subfigure}
+\RequirePackage[overlay,absolute]{textpos}
+\RequirePackage[nomessages]{fp}
+\RequirePackage{tabto}
+
+% Formatting
+%------------------------------------------------------------------------------%
+
+% Choosing beamer theme
+\usetheme{default}
+\usecolortheme{whale}
+
+\definecolor{themeblue}{rgb}{0.1993,0.1993,0.6953}
+\definecolor{lightgray}{gray}{0.9}
+\definecolor{links}{HTML}{2A1B81}
+\definecolor{bgquestion}{HTML}{133e3d}
+\definecolor{bgexample}{HTML}{0d5959}
+\definecolor{bgproof}{gray}{0.3}
+
+\setbeamerfont{institute}{size=\large}
+\setbeamerfont{date}{size=\small}
+
+\setbeamercolor{block title}{bg=frametitle.bg,fg=frametitle.fg}
+\setbeamercolor{block body}{bg=lightgray}
+
+% Add page numbering
+\setbeamertemplate{footline}[frame number]
+
+% Remove visual pollution
+\setbeamertemplate{sidebar left}{}
+\beamertemplatenavigationsymbolsempty
+
+% Rename content frame
+\AtBeginDocument{\renewcommand{\contentsname}{Conteúdo}}
+
+% Add a outline frame at each section
+\AtBeginSection{
+  \begin{frame}{\contentsname}
+    \setlength{\parskip}{1pt}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+% Adding a frame at each subsection
+\AtBeginSubsection{
+  \begin{frame}{~}
+    \emph{\Large \subsecname}
+  \end{frame}
+}
+
+\hypersetup{colorlinks,linkcolor=,urlcolor=links}
+
+% Choosing a nice font
+\usepackage{libertine}
+\usefonttheme{serif}
+
+% Sets line spacing
+\renewcommand{\baselinestretch}{1.1}
+
+\setlength{\mathindent}{5mm}
+\everymath{\displaystyle}
+
+\setlength{\TPVertModule}{0.11111\paperheight}
+
+\renewcommand{\emph}[1]{{\color{blue}{#1}}}
+\newcommand{\memph} [1]{{\color{blue}\bm{#1}}}
+
+% Set vertical space on align
+\setlength{\jot}{8pt}
+
+% New commands
+%------------------------------------------------------------------------------%
+
+% Add a frame with one figure
+\newcommand{\framedgraphic}[3]%
+{%
+  \begin{frame}{#1}%
+    \begin{center}%
+      \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{#2}%
+    \end{center}%
+    #3%
+  \end{frame}%
+}
+
+% Add a full image frame
+\newcommand{\backgroundgraphic}[3]%
+{%
+  {%
+  \usebackgroundtemplate{%
+    \tikz[overlay,remember picture] \node[at=(current page.center)]%
+    {\includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio]{#2}};}%
+  \begin{frame}[plain]{#1}%
+  #3%
+  \end{frame}%
+  }%
+}
+
+\newenvironment{question}{%
+  \addtocounter{exemplo}{1}%
+  \setbeamercolor{frametitle}{bg=bgquestion}%
+  \begin{frame}{Exemplo \theexemplo}
+}{%
+  \end{frame}
+}
+
+\newenvironment{resolution}[1]{%
+  \setbeamercolor{frametitle}{bg=bgexample}%
+  \begin{frame}{Exemplo \theexemplo{} -- #1}
+}{%
+  \end{frame}
+}
+
+\newenvironment{proofframe}[1]{%
+  \setbeamercolor{frametitle}{bg=bgproof}%
+  \begin{frame}{#1}
+}{%
+  \end{frame}
+}
+
+%------------------------------------------------------------------------------%
+
+% Add block
+\newcommand{\addtext}[3]%
+{%
+  \begin{textblock}{#1}(#2)%
+  #3%
+  \end{textblock}%
+}
+
+% Add a figure on a fixed position
+\newcommand{\addgraphic}[3]%
+{%
+  \begin{textblock}{#1}(#2)%
+    \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{#3}%
+  \end{textblock}%
+}
+
+% Add a boxed figure on a fixed position
+\newcommand{\addboxedgraphic}[4]%
+{%
+  \begin{textblock}{#1}(#2)%
+    \fcolorbox{#3}{white}{%
+      \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{#4}%
+      }%
+  \end{textblock}%
+}
+
+% Add a hiden figure on a fixed position
+\newcommand{\hidegraphic}[3]%
+{%
+    \begin{textblock}{#1}(#2)%
+    \colorbox{lightgray}{%
+      \phantom{\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{#3}}%
+      }%
+    \end{textblock}%
+}
+
+%------------------------------------------------------------------------------%
+
+\def\getfirst#1,#2\relax{{#1}}
+\def\getsecond#1,#2\relax{{#2}}
+
+% Add a filled rectangle
+\newcommand{\drawfillrect}[3]%
+{%
+  \FPeval{\xpos}{     {\getfirst#2\relax}  }%
+  \FPeval{\xoff}{     {\getfirst#3\relax}  }%
+  \FPeval{\ypos}{ 9 - {\getsecond#2\relax} }%
+  \FPeval{\yoff}{ 0 - {\getsecond#3\relax} }%
+  \begin{tikzpicture}[remember picture,overlay,shift={(current page.south west)}]%
+    \fill[#1] (\xpos,\ypos) rectangle ++(\xoff,\yoff);%
+  \end{tikzpicture}%
+}
+
+% Add a rectangle
+\newcommand{\drawrect}[3]%
+{%
+  \FPeval{\xpos}{     {\getfirst#2\relax}  }%
+  \FPeval{\xoff}{     {\getfirst#3\relax}  }%
+  \FPeval{\ypos}{ 9 - {\getsecond#2\relax} }%
+  \FPeval{\yoff}{ 0 - {\getsecond#3\relax} }%
+  \begin{tikzpicture}[remember picture,overlay,shift={(current page.south west)}]%
+    \draw[color=#1,line width=0.5mm] (\xpos,\ypos) rectangle ++(\xoff,\yoff);%
+  \end{tikzpicture}%
+}
+
+% Add a rounded rectangle
+\newcommand{\drawroundrect}[3]%
+{%
+  \FPeval{\xpos}{     {\getfirst#2\relax}  }%
+  \FPeval{\xoff}{     {\getfirst#3\relax}  }%
+  \FPeval{\ypos}{ 9 - {\getsecond#2\relax} }%
+  \FPeval{\yoff}{ 0 - {\getsecond#3\relax} }%
+  \begin{tikzpicture}[remember picture,overlay,shift={(current page.south west)}]%
+    \draw[color=#1,line width=0.5mm,rounded corners=11pt] (\xpos,\ypos) rectangle ++(\xoff,\yoff);%
+  \end{tikzpicture}%
+}
+
+% Add a circle
+\newcommand{\drawcircle}[3]%
+{%
+  \FPeval{\xpos}{     {\getfirst#2\relax}  }%
+  \FPeval{\ypos}{ 9 - {\getsecond#2\relax} }%
+  \begin{tikzpicture}[remember picture,overlay,shift={(current page.south west)}]%
+    \draw[color=#1,line width=0.5mm] (\xpos,\ypos) circle(#3);%
+  \end{tikzpicture}%
+}
+
+%------------------------------------------------------------------------------%
+\endinput
+%------------------------------------------------------------------------------%

@@ -1,0 +1,306 @@
+%------------------------------------------------------------------------------%
+\section{Objetos}
+
+%------------------------------------------------------------------------------%
+\begin{frame}{Objetos}
+  \begin{itemize}[<+->]
+    \setlength\itemsep{1em}
+    \item Jogador
+    \item Obstáculos    \tabto{26mm} -- destroem o jogado caso sejam tocados
+    \item Colecionáveis \tabto{26mm} -- são coletados para acumular pontos
+  \end{itemize}
+\end{frame}
+
+%------------------------------------------------------------------------------%
+\begin{frame}[t]{Definindo o Jogador}
+  \begin{enumerate}[<+->]
+    \setlength\itemsep{1em}
+    \item Selecione a aba \code{Objetos}
+    \item Selecione a aba \code{Jogador}
+  \end{enumerate}
+  \vspace{\stretch{100}}%
+  \centering%
+  \fbox{\includegraphics[width=0.6\linewidth]{painel-objetos}}%
+  \onslide<1->{\drawrect{blue}{6.9,6.85}{1.7,0.6}}%
+  \onslide<2> {\drawrect{blue}{4.2,7.65}{1.7,0.6}}%
+  \smallskip
+\end{frame}
+
+%------------------------------------------------------------------------------%
+\framedgraphic{Jogador}{aba-objetos-jogador}{~}
+
+%------------------------------------------------------------------------------%
+\framedgraphic{Jogador}{aba-objetos-jogador}
+{%
+  \drawrect{blue}{3.45,2.9}{1.1,0.3}%
+  \drawfillrect{lightgray}{6.2,2.7}{7.7,4.6}%
+  %
+  \addtext{8}{6.4,3}{Pressione o botão \code{Editar Imagem}}%
+}
+
+%------------------------------------------------------------------------------%
+\framedgraphic{Jogador}{aba-objetos-jogador}
+{%
+  \drawrect{blue}{3.45,2.9}{1.1,0.3}%
+  \drawfillrect{lightgray}{6.2,2.7}{7.7,4.6}%
+  %
+  \addtext{8}{6.4,3}{Pressione o botão \code{Editar Imagem}}%
+  %
+  \addtext{8}{6.4,4.05}{Selecione o arquivo \code{submarine}}%
+}
+
+%------------------------------------------------------------------------------%
+\framedgraphic{Jogador}{aba-objetos-jogador}
+{%
+  \drawrect{blue}{3.45,3.15}{2.8,0.3}%
+  \drawfillrect{lightgray}{6.2,2.7}{7.7,4.6}%
+  %
+  \addtext{8}{6.4,3}{Pressione o botão \code{Editar Imagem}}%
+  %
+  \addtext{8}{6.4,4.05}{Selecione o arquivo \code{submarine}}%
+  %
+  \addtext{8}{6.4,5.05}{Defina o tamanho como \code{120}, mantendo a proporção}%
+}
+
+%------------------------------------------------------------------------------%
+\framedgraphic{Jogador}{aba-objetos-jogador}
+{%
+  \drawrect{blue}{3.5,3.4}{1.15,0.3}%
+  \drawfillrect{lightgray}{6.2,2.7}{7.7,4.6}%
+  %
+  \addtext{8}{6.4,3}{Pressione o botão \code{Editar Imagem}}%
+  %
+  \addtext{8}{6.4,4.05}{Selecione o arquivo \code{submarine}}%
+  %
+  \addtext{8}{6.4,5.05}{Defina o tamanho como \code{120}, mantendo a proporção}%
+  %
+  \addtext{8}{6.4,6.6}{Defina a velocidade como \code{800}}%
+}
+
+%------------------------------------------------------------------------------%
+\begin{frame}{Obstáculos}
+  \begin{itemize}[<+->]
+    \setlength\itemsep{1em}
+    \item Frequência dos obstáculos -- quando obstáculos aparecem por segundo
+    \item Lista de obstáculos
+  \end{itemize}
+\end{frame}
+
+%------------------------------------------------------------------------------%
+\begin{frame}[t]{Definindo os Obstáculos}
+  \begin{enumerate}[<+->]
+    \setlength\itemsep{1em}
+    \item Selecione a aba \code{Objetos}
+    \item Selecione a aba \code{Obstáculos}
+  \end{enumerate}
+  \vspace{\stretch{100}}%
+  \centering%
+  \fbox{\includegraphics[width=0.6\linewidth]{painel-objetos}}%
+  \onslide<1->{\drawrect{blue}{6.9,6.85}{1.7,0.6}}%
+  \onslide<2> {\drawrect{blue}{5.8,7.65}{2,0.6}}%
+  \smallskip
+\end{frame}
+
+%------------------------------------------------------------------------------%
+\framedgraphic{Obstáculos}{aba-objetos-obstaculos}{~}
+
+%------------------------------------------------------------------------------%
+\framedgraphic{Frequência dos Obstáculos}{aba-objetos-obstaculos}
+{%
+  \drawrect{blue}{3.45,2.8}{0.7,0.3}%
+  \drawfillrect{lightgray}{6.2,2.7}{7.7,4.6}%
+  %
+  \addtext{8}{6.4,3}{Defina a frequência como \code{3}}%
+}
+
+%------------------------------------------------------------------------------%
+\framedgraphic{Obstáculos}{aba-objetos-obstaculos}
+{%
+  \drawrect{blue}{3.6,3.35}{1.32,0.3}%
+  \drawfillrect{lightgray}{6.2,2.7}{7.7,4.6}%
+  %
+  \addtext{8}{6.4,3}{Pressione o botão \code{Editar Imagem}}%
+}
+
+%------------------------------------------------------------------------------%
+\framedgraphic{Obstáculos}{aba-objetos-obstaculos}
+{%
+  \drawrect{blue}{3.6,3.35}{1.32,0.3}%
+  \drawfillrect{lightgray}{6.2,2.7}{7.7,4.6}%
+  %
+  \addtext{8}{6.4,3}{Pressione o botão \code{Editar Imagem}}%
+  %
+  \addtext{8}{6.4,4.05}{Selecione o arquivo \code{mine}}%
+}
+
+%------------------------------------------------------------------------------%
+\framedgraphic{Obstáculos}{aba-objetos-obstaculos}
+{%
+  \drawrect{blue}{4.9,3.35}{2,0.3}%
+  \drawfillrect{lightgray}{6.2,2.7}{7.7,4.6}%
+  %
+  \addtext{8}{6.4,3}{Pressione o botão \code{Editar Imagem}}%
+  %
+  \addtext{8}{6.4,4.05}{Selecione o arquivo \code{mine}}%
+  %
+  \addtext{8}{6.4,5.05}{Defina o tamanho como \code{50}, mantendo a proporção}%
+}
+
+%------------------------------------------------------------------------------%
+\framedgraphic{Obstáculos}{aba-objetos-obstaculos}
+{%
+  \drawrect{blue}{3.6,3.62}{1.51,0.3}%
+  \drawfillrect{lightgray}{6.2,2.7}{7.7,4.6}%
+  %
+  \addtext{8}{6.4,3}{Pressione o botão \code{Editar Imagem}}%
+  %
+  \addtext{8}{6.4,4.05}{Selecione o arquivo \code{mine}}%
+  %
+  \addtext{8}{6.4,5.05}{Defina o tamanho como \code{50}, mantendo a proporção}%
+  %
+  \addtext{8}{6.4,6.6}{Defina pontos como \code{0}}%
+}
+
+%------------------------------------------------------------------------------%
+\framedgraphic{Deletando Obstáculos}{aba-objetos-obstaculos}
+{%
+  \drawrect{blue}{12.1,5.75}{1.3,0.3}%
+  \drawfillrect{lightgray}{6.2,2.7}{7.7,2}%
+  %
+  \addtext{8}{6.4,3.5}{Delete todos os outros obstáculos}
+}
+
+%------------------------------------------------------------------------------%
+\begin{frame}{Colecionáveis}
+  \begin{itemize}
+    \setlength\itemsep{1em}
+    \item Frequência dos colecionáveis -- quando colecionáveis aparecem por segundo
+    \item Lista de colecionáveis
+  \end{itemize}
+\end{frame}
+
+%------------------------------------------------------------------------------%
+\begin{frame}[t]{Definindo os Colecionáveis}
+  \begin{enumerate}[<+->]
+    \setlength\itemsep{1em}
+    \item Selecione a aba \code{Objetos}
+    \item Selecione a aba \code{Colecionáveis}
+  \end{enumerate}
+  \vspace{\stretch{100}}%
+  \centering%
+  \fbox{\includegraphics[width=0.6\linewidth]{painel-objetos}}%
+  \onslide<1->{\drawrect{blue}{6.9,6.85}{1.7,0.6}}%
+  \onslide<2> {\drawrect{blue}{7.75,7.665}{2.3,0.6}}%
+  \smallskip
+\end{frame}
+
+%------------------------------------------------------------------------------%
+\framedgraphic{Colecionáveis}{aba-objetos-colecionaveis}{~}
+
+%------------------------------------------------------------------------------%
+\framedgraphic{Frequência dos Colecionáveis}{aba-objetos-colecionaveis}
+{%
+  \drawrect{blue}{3.59,2.8}{0.7,0.3}%
+  \drawfillrect{lightgray}{6.2,2.7}{7.7,4.6}%
+  %
+  \addtext{8}{6.4,3}{Defina a frequência como \code{1}}%
+}
+
+%------------------------------------------------------------------------------%
+\framedgraphic{Primeiro Colecionável}{aba-objetos-colecionaveis}
+{%
+  \drawrect{blue}{3.6,3.35}{1.32,0.3}%
+  \drawfillrect{lightgray}{6.2,2.7}{7.7,4.6}%
+  %
+  \addtext{8}{6.4,3}{Pressione o botão \code{Editar Imagem}}%
+}
+
+%------------------------------------------------------------------------------%
+\framedgraphic{Primeiro Colecionável}{aba-objetos-colecionaveis}
+{%
+  \drawrect{blue}{3.6,3.35}{1.32,0.3}%
+  \drawfillrect{lightgray}{6.2,2.7}{7.7,4.6}%
+  %
+  \addtext{8}{6.4,3}{Pressione o botão \code{Editar Imagem}}%
+  %
+  \addtext{8}{6.4,4.05}{Selecione o arquivo \code{diver-01}}%
+}
+
+%------------------------------------------------------------------------------%
+\framedgraphic{Primeiro Colecionável}{aba-objetos-colecionaveis}
+{%
+  \drawrect{blue}{4.9,3.35}{2,0.3}%
+  \drawfillrect{lightgray}{6.2,2.7}{7.7,4.6}%
+  %
+  \addtext{8}{6.4,3}{Pressione o botão \code{Editar Imagem}}%
+  %
+  \addtext{8}{6.4,4.05}{Selecione o arquivo \code{diver-01}}%
+  %
+  \addtext{8}{6.4,5.05}{Defina o tamanho como \code{90}, mantendo a proporção}%
+}
+
+%------------------------------------------------------------------------------%
+\framedgraphic{Primeiro Colecionável}{aba-objetos-colecionaveis}
+{%
+  \drawrect{blue}{3.6,3.62}{1.51,0.3}%
+  \drawfillrect{lightgray}{6.2,2.7}{7.7,4.6}%
+  %
+  \addtext{8}{6.4,3}{Pressione o botão \code{Editar Imagem}}%
+  %
+  \addtext{8}{6.4,4.05}{Selecione o arquivo \code{diver-01}}%
+  %
+  \addtext{8}{6.4,5.05}{Defina o tamanho como \code{90}, mantendo a proporção}%
+  %
+  \addtext{8}{6.4,6.6}{Defina pontos como \code{100}}%
+}
+
+%------------------------------------------------------------------------------%
+\framedgraphic{Segundo Colecionável}{aba-objetos-colecionaveis}
+{%
+  \drawrect{blue}{3.6,4.88}{1.32,0.3}%
+  \drawfillrect{lightgray}{6.2,2.7}{7.7,4.6}%
+  %
+  \addtext{8}{6.4,3}{Pressione o botão \code{Editar Imagem}}%
+}
+
+%------------------------------------------------------------------------------%
+\framedgraphic{Segundo Colecionável}{aba-objetos-colecionaveis}
+{%
+  \drawrect{blue}{3.6,4.88}{1.32,0.3}%
+  \drawfillrect{lightgray}{6.2,2.7}{7.7,4.6}%
+  %
+  \addtext{8}{6.4,3}{Pressione o botão \code{Editar Imagem}}%
+  %
+  \addtext{8}{6.4,4.05}{Selecione o arquivo \code{diver-02}}%
+}
+
+%------------------------------------------------------------------------------%
+\framedgraphic{Segundo Colecionável}{aba-objetos-colecionaveis}
+{%
+  \drawrect{blue}{4.9,4.88}{2,0.3}%
+  \drawfillrect{lightgray}{6.2,2.7}{7.7,4.6}%
+  %
+  \addtext{8}{6.4,3}{Pressione o botão \code{Editar Imagem}}%
+  %
+  \addtext{8}{6.4,4.05}{Selecione o arquivo \code{diver-02}}%
+  %
+  \addtext{8}{6.4,5.05}{Defina o tamanho como \code{90}, mantendo a proporção}%
+}
+
+%------------------------------------------------------------------------------%
+\framedgraphic{Segundo Colecionável}{aba-objetos-colecionaveis}
+{%
+  \drawrect{blue}{3.6,5.155}{1.51,0.3}%
+  \drawfillrect{lightgray}{6.2,2.7}{7.7,4.6}%
+  %
+  \addtext{8}{6.4,3}{Pressione o botão \code{Editar Imagem}}%
+  %
+  \addtext{8}{6.4,4.05}{Selecione o arquivo \code{diver-02}}%
+  %
+  \addtext{8}{6.4,5.05}{Defina o tamanho como \code{90}, mantendo a proporção}%
+  %
+  \addtext{8}{6.4,6.6}{Defina pontos como \code{100}}%
+}
+
+
+%------------------------------------------------------------------------------%

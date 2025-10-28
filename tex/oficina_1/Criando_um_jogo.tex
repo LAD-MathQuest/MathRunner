@@ -1,0 +1,43 @@
+%------------------------------------------------------------------------------%
+\documentclass[fleqn,utf8,aspectratio=169,12pt]{beamer}
+
+\usepackage{criando_um_jogo}
+\usepackage{array}
+
+\graphicspath{{./figs/},{./asy/}}
+
+\newcommand{\code}[1]{\emph{\texttt{#1}}}
+\setlength{\fboxsep}{0pt}
+
+\title{MathRunner -- Criando Um Jogo}
+\author{Projeto MathRunner}
+\date{CEFET-MG}
+
+%------------------------------------------------------------------------------%
+\begin{document}
+
+\begin{frame}
+  \titlepage
+  \addtext{4}{0.3,8.6}{\scriptsize\today}
+%  \addtext{8}{10.2,8.4}{\tiny\url{\materialurl}}
+%  \addtext{4}{14.2,6.8}{\href{\materialurl}{\qrcode[height=15mm]{\materialurl}}}
+\end{frame}
+
+%------------------------------------------------------------------------------%
+
+\include{./sections/1-introducao}
+\include{./sections/2-jogo}
+\include{./sections/3-aparencia}
+\include{./sections/4-objetos}
+\include{./sections/5-velocidade}
+\include{./sections/6-margens}
+\include{./sections/7-funcoes}
+
+%------------------------------------------------------------------------------%
+\begin{frame}
+  \titlepage
+\end{frame}
+
+%------------------------------------------------------------------------------%
+\end{document}
+%------------------------------------------------------------------------------%

@@ -1,0 +1,148 @@
+%------------------------------------------------------------------------------%
+% Mathematical packages and configuration
+%
+% Luis Alberto D'Afonseca
+% luis.dafonseca@gmail.com
+%------------------------------------------------------------------------------%
+
+% Adding packages
+%------------------------------------------------------------------------------%
+
+% More mathematical symbols
+\@ifclassloaded{beamer}{}{
+  \RequirePackage[fleqn]{amsmath}
+}
+\RequirePackage{amsthm}
+\RequirePackage{amsfonts}
+\RequirePackage{amssymb}
+\RequirePackage{latexsym}
+\RequirePackage{bm}
+\RequirePackage{xfrac}
+\RequirePackage{mathtools}
+\RequirePackage{nccmath}
+\RequirePackage{array}
+
+\allowdisplaybreaks
+
+% Redefine \(\) to display style
+%------------------------------------------------------------------------------%
+
+\let\@om\(
+\let\@cm\)
+\renewcommand{\(}{\@om\displaystyle\,}
+\renewcommand{\)}{\,\@cm}
+
+% New commands
+%------------------------------------------------------------------------------%
+
+% Translating mathematical function names to Portuguese
+\let\sin\relax
+\let\csc\relax
+\let\tan\relax
+\let\cot\relax
+
+\DeclareMathOperator{\sin}{sen}
+\DeclareMathOperator{\tan}{tg}
+\DeclareMathOperator{\cot}{cot}
+\DeclareMathOperator{\csc}{cossec}
+
+\let\sinh\relax
+\let\tanh\relax
+\let\coth\relax
+
+\DeclareMathOperator{\sinh}{senh}
+\DeclareMathOperator{\tanh}{tgh}
+\DeclareMathOperator{\coth}{coth}
+\DeclareMathOperator{\sech}{sech}
+\DeclareMathOperator{\csch}{cossech}
+
+\let\arcsin\relax
+\let\arctan\relax
+
+\DeclareMathOperator{\arcsin}{arcsen}
+\DeclareMathOperator{\arctan}{arctg}
+\DeclareMathOperator{\arccot}{arccot}
+\DeclareMathOperator{\arcsec}{arcsec}
+\DeclareMathOperator{\arccsc}{arccossec}
+
+\DeclareMathOperator{\sinc}{sinc}
+
+% Common numerical sets
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\@ifclassloaded{beamer}{}{\newcommand{\C}{\mathbb{C}}}
+
+\let\Re\relax  \DeclareMathOperator{\Re}{Re}
+\let\Im\relax  \DeclareMathOperator{\Im}{Im}
+
+\let\parallel\relax
+\newcommand{\parallel}{\mathbin{\!/\mkern-5mu/\!}}
+
+\newcommand{\st}{\mathrel{}\big/\mathrel{}}
+
+\DeclarePairedDelimiter{\@abs}    {\lvert} {\rvert}
+\DeclarePairedDelimiter{\@norm}   {\lVert} {\rVert}
+\DeclarePairedDelimiter{\@ceil}   {\lceil} {\rceil}
+\DeclarePairedDelimiter{\@floor}  {\lfloor}{\rfloor}
+\DeclarePairedDelimiter{\@prodint}{\langle}{\rangle}
+
+\newcommand*{\abs}    [1]{\@ifstar{\@abs{#1}}    {\@abs*{#1}}}
+\newcommand*{\norm}   [1]{\@ifstar{\@norm{#1}}   {\@norm*{#1}}}
+\newcommand*{\ceil}   [1]{\@ifstar{\@ceil{#1}}   {\@ceil*{#1}}}
+\newcommand*{\floor}  [1]{\@ifstar{\@floor{#1}}  {\@floor*{#1}}}
+\newcommand*{\prodint}[1]{\@ifstar{\@prodint{#1}}{\@prodint*{#1}}}
+
+% Define the evaluation operator
+\newcommand{\evalat}[2]{\bigg\rvert_{#1}^{#2}}
+
+\newcommand{\hpm}{\hphantom{-}}
+
+% Algebra Linear
+%------------------------------------------------------------------------------%
+
+% Command to define minor complement
+\newcommand{\@overbar}[1]{\mkern 1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern 1.5mu}
+\newcommand{\minor}[1]{\@overbar{#1}}
+
+\let\parallel\relax
+\newcommand{\parallel}{\mathbin{\!/\mkern-5mu/\!}}
+
+\DeclareMathOperator{\tr}  {tr}
+\DeclareMathOperator{\ger} {ger}
+\DeclareMathOperator{\pos} {pos}
+\DeclareMathOperator{\nul} {nul}
+\DeclareMathOperator{\nuc} {Nuc}
+\DeclareMathOperator{\im}  {Im}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\inv} {inv}
+\DeclareMathOperator{\proj}{proj}
+
+% Fourier
+%------------------------------------------------------------------------------%
+
+\newcommand{\fourier}{\mathcal{F}}
+\newcommand{\carac}[1]{\chi_{_{#1}}}
+\newcommand{\hatcarac}[1]{\hat{\chi}_{_{#1}}}
+
+\DeclareMathOperator{\heaviside}{H}
+\DeclareMathOperator{\ramp}{G}
+\DeclareMathOperator{\sign}{sgn}
+
+% International System of Units
+%------------------------------------------------------------------------------%
+
+\RequirePackage{siunitx}
+
+\sisetup{output-decimal-marker={,}}
+
+\newcommand{\reais}[1]{%
+  \SI[round-precision=2,
+      round-mode=places,
+      round-integer-to-decimal]{#1}[R\$\,]{}%
+}
+
+%------------------------------------------------------------------------------%
+\endinput
+%------------------------------------------------------------------------------%
