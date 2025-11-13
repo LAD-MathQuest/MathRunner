@@ -28,8 +28,8 @@ def update_view_tab_game(meta: MetaWorld, ui, con) -> None:
     else:
         ui.radioButton_HorizontalScrolling.setChecked(True)
 
-    ui.checkBox_TrackMinimumKills.setChecked(meta.track_kills[0])
-    ui.checkBox_TrackMaximumKills.setChecked(meta.track_kills[1])
+    ui.checkBox_BoundaryMinimumKills.setChecked(meta.boundary_kills[0])
+    ui.checkBox_BoundaryMaximumKills.setChecked(meta.boundary_kills[1])
 
     ui.doubleSpinBox_ScoreTimeBonus.setValue(meta.game_time_bonus)
 
@@ -52,19 +52,19 @@ def update_view_tab_appearance(meta: MetaWorld, ui, con) -> None:
 
     ui.checkBox_BackgroundImageScrolls.setChecked(meta.background_scrolls)
 
-    # Track
+    # Boundary
 
-    meta_image_to_label(ui.label_TrackImage, meta.track_image)
+    meta_image_to_label(ui.label_BoundaryImage, meta.boundary_image)
 
-    if meta.track_image:
-        ui.checkBox_DrawTrack         .setChecked(True)
-        ui.pushButton_SelectTrackImage.setEnabled(True)
+    if meta.boundary_image:
+        ui.checkBox_DrawBoundary         .setChecked(True)
+        ui.pushButton_SelectBoundaryImage.setEnabled(True)
 
     else:
-        ui.checkBox_DrawTrack         .setChecked(False)
-        ui.pushButton_SelectTrackImage.setEnabled(False)
+        ui.checkBox_DrawBoundary         .setChecked(False)
+        ui.pushButton_SelectBoundaryImage.setEnabled(False)
 
-    # TODO: store track boundary lines
+    # TODO: store boundary lines
     # meta.min_color
     # meta.max_color
     # meta.min_width
@@ -153,7 +153,7 @@ def update_view_tab_boundary(meta: MetaWorld, ui, con) -> None:
 
     boundary = meta.boundary
 
-    ui.lineEdit_FunctionTrackMinimum.setText(boundary.get_function_min_orig())
-    ui.lineEdit_FunctionTrackMaximum.setText(boundary.get_function_max_orig())
+    ui.lineEdit_FunctionBoundaryMinimum.setText(boundary.get_function_min_orig())
+    ui.lineEdit_FunctionBoundaryMaximum.setText(boundary.get_function_max_orig())
 
 #------------------------------------------------------------------------------#

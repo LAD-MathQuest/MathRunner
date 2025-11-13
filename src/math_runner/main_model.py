@@ -68,7 +68,7 @@ class MainModel:
         self.meta.velocity.set_function(func)
 
     #--------------------------------------------------------------------------#
-    def change_track_minimum_function(self, func) -> None:
+    def change_boundary_minimum_function(self, func) -> None:
         self.meta.boundary.set_function_min(func)
 
     #--------------------------------------------------------------------------#

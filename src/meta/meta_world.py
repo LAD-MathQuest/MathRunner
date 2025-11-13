@@ -45,10 +45,10 @@ class MetaWorld:
         self.background_image   = MetaImage(color=(39,38,67))
         self.background_scrolls = False
 
-        # If track_image if null the game will not draw the track
-        self.track_image   = MetaImage(color=(38,90,90))
-        self.track_scrolls = False
-        self.track_kills   = (False, False)
+        # If boundary_image if null the game will not draw the boundary
+        self.boundary_image   = MetaImage(color=(38,90,90))
+        self.boundary_scrolls = False
+        self.boundary_kills   = (False, False)
 
         self.min_color = None
         self.max_color = None

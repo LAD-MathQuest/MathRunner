@@ -19,7 +19,7 @@ from . import undo_commands as undo
 from .main_model    import MainModel
 from .object_widget import ObjectWidget
 from .plot_velocity import PlotVelocity
-from .plot_track    import PlotTrack
+from .plot_boundary    import PlotBoundary
 from .audio_manager import AudioManager
 from .scoreboard_dialog import ScoreboardDialog
 
@@ -47,7 +47,7 @@ class MainController:
             color,
             self.model.get_velocity_function()
         )
-        self.plot_track= PlotTrack(
+        self.plot_boundary= PlotBoundary(
             self.ui.plotBoundary,
             color,
             self.model.get_boundary_functions()
@@ -83,7 +83,7 @@ class MainController:
             if self.ui.tabWidget_Game.tabText(i) == "Velocidade":
              self.undo_stacks[i].indexChanged.connect(self.update_velocity_undo)
             if self.ui.tabWidget_Game.tabText(i) == "Borda":
-                self.undo_stacks[i].indexChanged.connect(self.update_tracks_undo)
+                self.undo_stacks[i].indexChanged.connect(self.update_boundary_undo)
         self.undo_group.setActiveStack(self.undo_stacks[0])
 
     #--------------------------------------------------------------------------#
@@ -145,8 +145,8 @@ class MainController:
 
         ui.radioButton_HorizontalScrolling.toggled.connect(lambda: self.select_checked(self.ui.radioButton_VerticalScrolling))
         ui.radioButton_VerticalScrolling.toggled.connect(lambda: self.select_checked(self.ui.radioButton_HorizontalScrolling))
-        ui.checkBox_TrackMaximumKills.stateChanged.connect(lambda value: self.select_checked(self.ui.checkBox_TrackMaximumKills))
-        ui.checkBox_TrackMinimumKills.stateChanged.connect(lambda value: self.select_checked(self.ui.checkBox_TrackMinimumKills))
+        ui.checkBox_BoundaryMaximumKills.stateChanged.connect(lambda value: self.select_checked(self.ui.checkBox_BoundaryMaximumKills))
+        ui.checkBox_BoundaryMinimumKills.stateChanged.connect(lambda value: self.select_checked(self.ui.checkBox_BoundaryMinimumKills))
         ui.doubleSpinBox_ScoreTimeBonus.valueChanged.connect(lambda value: self.select_value(self.ui.doubleSpinBox_ScoreTimeBonus))
 
         #ui.pushButton_AmbienceSoundSelect.clicked.connect(self.select_ambience_sound)
@@ -160,9 +160,9 @@ class MainController:
 
         ui.checkBox_BackgroundImageScrolls.stateChanged.connect(lambda value: self.select_checked(self.ui.checkBox_BackgroundImageScrolls))
 
-        ui.checkBox_DrawTrack.stateChanged.connect(lambda value: self.select_checked(self.ui.checkBox_DrawTrack))
+        ui.checkBox_DrawBoundary.stateChanged.connect(lambda value: self.select_checked(self.ui.checkBox_DrawBoundary))
 
-        ui.pushButton_SelectTrackImage.clicked.connect(lambda: self.select_image("backgrounds", self.ui.label_TrackImage))
+        ui.pushButton_SelectBoundaryImage.clicked.connect(lambda: self.select_image("backgrounds", self.ui.label_BoundaryImage))
 
         ui.pushButton_SelectScoreboardImage.clicked.connect(lambda: self.select_image_with_spinbox("scoreboards", self.ui.label_ScoreboardImage, self.ui.spinBox_ScoreboardImageWidth, self.ui.spinBox_ScoreboardImageHeight))
         ui.spinBox_ScoreboardImagePositionX.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_ScoreboardImagePositionX))
@@ -196,8 +196,8 @@ class MainController:
         #--- Velocity and Boundary Tabs signals -------------------------------#
 
         ui.lineEdit_FunctionVelocity    .editingFinished.connect(self.function_velocity_changed     )
-        ui.lineEdit_FunctionTrackMinimum.editingFinished.connect(self.function_track_minimum_changed)
-        ui.lineEdit_FunctionTrackMaximum.editingFinished.connect(self.function_track_maximum_changed)
+        ui.lineEdit_FunctionBoundaryMinimum.editingFinished.connect(self.function_boundary_minimum_changed)
+        ui.lineEdit_FunctionBoundaryMaximum.editingFinished.connect(self.function_boundary_minimum_changed)
 
         # Reset scales buttons (from UI)
         try:
@@ -228,7 +228,7 @@ class MainController:
     #--------------------------------------------------------------------------#
     def on_reset_boundary_scales(self) -> None:
         try:
-            self.plot_track.reset_scales()
+            self.plot_boundary.reset_scales()
         except Exception as e:
             print("Failed to reset boundary scales:", e)
 
@@ -843,39 +843,39 @@ class MainController:
 
 
     #-------------------------------------------------------------------------#
-    def function_track_minimum_changed(self):
-        func = self.ui.lineEdit_FunctionTrackMinimum.text()
-        old_text = getattr(self.ui.lineEdit_FunctionTrackMinimum, "_last_text", "")
+    def function_boundary_minimum_changed(self):
+        func = self.ui.lineEdit_FunctionBoundaryMinimum.text()
+        old_text = getattr(self.ui.lineEdit_FunctionBoundaryMinimum, "_last_text", "")
 
         try:
-            self.model.change_track_minimum_function(func)
-            self.plot_track.update_boundary(self.model.get_boundary_functions())
+            self.model.change_boundary_minimum_function(func)
+            self.plot_boundary.update_boundary(self.model.get_boundary_functions())
 
 
-            self.add_text_undo(self, self.ui.lineEdit_FunctionTrackMinimum, old_text, func, "Alterar mínimo")
-            self.ui.lineEdit_FunctionTrackMinimum._last_text = func
+            self.add_text_undo(self, self.ui.lineEdit_FunctionBoundaryMinimum, old_text, func, "Alterar mínimo")
+            self.ui.lineEdit_FunctionBoundaryMinimum._last_text = func
 
         except EvalFunctionError as f:
             QMessageBox.critical(None, "Erro", f.message)
-            self.ui.lineEdit_FunctionTrackMinimum.setText(old_text)
+            self.ui.lineEdit_FunctionBoundaryMinimum.setText(old_text)
 
 
     #--------------------------------------------------------------------------#
-    def function_track_maximum_changed(self):
-        func = self.ui.lineEdit_FunctionTrackMaximum.text()
-        old_text = getattr(self.ui.lineEdit_FunctionTrackMaximum, "_last_text", "")
+    def function_boundary_maximum_changed(self):
+        func = self.ui.lineEdit_FunctionBoundaryMaximum.text()
+        old_text = getattr(self.ui.lineEdit_FunctionBoundaryMaximum, "_last_text", "")
 
         try:
-            self.model.change_track_maximum_function(func)
-            self.plot_track.update_boundary(self.model.get_boundary_functions())
+            self.model.change_boundary_maximum_function(func)
+            self.plot_boundary.update_boundary(self.model.get_boundary_functions())
 
 
-            self.add_text_undo(self, self.ui.lineEdit_FunctionTrackMaximum, old_text, func, "Alterar mínimo")
-            self.ui.lineEdit_FunctionTrackMaximum._last_text = func
+            self.add_text_undo(self, self.ui.lineEdit_FunctionBoundaryMaximum, old_text, func, "Alterar mínimo")
+            self.ui.lineEdit_FunctionBoundaryMaximum._last_text = func
 
         except EvalFunctionError as g:
             QMessageBox.critical(None, "Erro", g.message)
-            self.ui.lineEdit_FunctionTrackMaximum.setText(old_text)
+            self.ui.lineEdit_FunctionBoundaryMaximum.setText(old_text)
 
     #--------------------------------------------------------------------------#
 
@@ -900,7 +900,7 @@ class MainController:
         self.plot_velocity.update_velocity(
             self.model.get_velocity_function()
         )
-        self.plot_track.update_boundary(
+        self.plot_boundary.update_boundary(
             self.model.get_boundary_functions()
         )
 
@@ -1081,20 +1081,20 @@ class MainController:
             self.undo_stacks[i].clear()
 
  #---------------------------------------------------------------------------#
-    def update_tracks_undo(self):
+    def update_boundary_undo(self):
         # Defensive: widgets may be deleted during shutdown; catch RuntimeError
         try:
-            func1 = self.ui.lineEdit_FunctionTrackMaximum.text()
-            func2 = self.ui.lineEdit_FunctionTrackMinimum.text()
+            func1 = self.ui.lineEdit_FunctionBoundaryMaximum.text()
+            func2 = self.ui.lineEdit_FunctionBoundaryMinimum.text()
 
-            self.model.change_track_minimum_function(func2)
+            self.model.change_boundary_minimum_function(func2)
 
-            self.model.change_track_maximum_function(func1)
-            self.plot_track.update_boundary(
+            self.model.change_boundary_maximum_function(func1)
+            self.plot_boundary.update_boundary(
                 self.model.get_boundary_functions()
             )
-            self.ui.lineEdit_FunctionTrackMaximum._last_text = func1
-            self.ui.lineEdit_FunctionTrackMinimum._last_text = func2
+            self.ui.lineEdit_FunctionBoundaryMaximum._last_text = func1
+            self.ui.lineEdit_FunctionBoundaryMinimum._last_text = func2
         except RuntimeError:
             # Qt object already deleted during shutdown; ignore
             return
@@ -1127,16 +1127,16 @@ class MainController:
 
         # Inicializa os valores dos textos para undo/redo
         widgets = [(self.ui.lineEdit_GameName, self.model.meta.soft_name), (self.ui.lineEdit_Author, self.model.meta.soft_author),(self.ui.plainTextEdit_GameDescription, self.model.meta.soft_description),
-                   (self.ui.lineEdit_FunctionVelocity, self.model.meta.velocity.get_function_orig()), (self.ui.lineEdit_FunctionTrackMinimum, self.model.meta.boundary.get_function_min_orig()),
-                   (self.ui.lineEdit_FunctionTrackMaximum, self.model.meta.boundary.get_function_max_orig())]
+                   (self.ui.lineEdit_FunctionVelocity, self.model.meta.velocity.get_function_orig()), (self.ui.lineEdit_FunctionBoundaryMinimum, self.model.meta.boundary.get_function_min_orig()),
+                   (self.ui.lineEdit_FunctionBoundaryMaximum, self.model.meta.boundary.get_function_max_orig())]
         for widget, default in widgets:
             widget._last_text = default
 
         #Atualiza os atributos das widget da aba geral
         self.ui.doubleSpinBox_AmbienceSoundVolume._last_value = self.ui.doubleSpinBox_AmbienceSoundVolume.value()
         self.ui.doubleSpinBox_ScoreTimeBonus._last_value = self.ui.doubleSpinBox_ScoreTimeBonus.value()
-        self.ui.checkBox_TrackMaximumKills._last_value = self.ui.checkBox_TrackMaximumKills.isChecked()
-        self.ui.checkBox_TrackMinimumKills._last_value = self.ui.checkBox_TrackMinimumKills.isChecked()
+        self.ui.checkBox_BoundaryMaximumKills._last_value = self.ui.checkBox_BoundaryMaximumKills.isChecked()
+        self.ui.checkBox_BoundaryMinimumKills._last_value = self.ui.checkBox_BoundaryMinimumKills.isChecked()
         self.ui.radioButton_HorizontalScrolling._last_value = self.ui.radioButton_HorizontalScrolling.isChecked()
         self.ui.radioButton_VerticalScrolling._last_value = self.ui.radioButton_VerticalScrolling.isChecked()
 
@@ -1148,7 +1148,7 @@ class MainController:
         self.scoreboard_imageWidth = self.ui.spinBox_ScoreboardImageWidth.value()
         self.scoreboard_imageHeight = self.ui.spinBox_ScoreboardImageHeight.value()
         self.background_scrolls = self.ui.checkBox_BackgroundImageScrolls.isChecked()
-        self.draw_track = self.ui.checkBox_DrawTrack.isChecked()
+        self.draw_boundary = self.ui.checkBox_DrawBoundary.isChecked()
 
         #Atualiza os atributos das widget da aba aparencia
         self.ui.spinBox_ScoreboardImageHeight.setEnabled(False)
@@ -1157,7 +1157,7 @@ class MainController:
         self.ui.spinBox_ScoreboardImageWidth._last_value = self.scoreboard_imageWidth
         self.ui.spinBox_ScoreboardImageHeight._last_value = self.scoreboard_imageHeight
         self.ui.checkBox_BackgroundImageScrolls._last_value = self.background_scrolls
-        self.ui.checkBox_DrawTrack._last_value = self.draw_track
+        self.ui.checkBox_DrawBoundary._last_value = self.draw_boundary
 
         #---------------ABA OBJETOS-------------------#
 
