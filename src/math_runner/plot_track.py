@@ -14,6 +14,8 @@ class PlotTrack:
     #--------------------------------------------------------------------------#
     def __init__(self, plot, color, boundary: BoundaryFunctions) -> None:
 
+        
+        self.plot = plot
         self.boundary = boundary
 
         plot.setBackground(color)
@@ -95,5 +97,21 @@ class PlotTrack:
                            self.plot_boundary_max_data.yData)
 
         self.plot_boundary_aux_data.setData(xx, y_aux)
+
+    #--------------------------------------------------------------------------#
+    def reset_scales(self) -> None:
+        #Reseta os intervalos da visualização para os padrões e atualiza os dados
+        #desconecta os sinais temporariamente para evitar ajustes recursivos
+        try:
+            self.plot.sigRangeChanged.disconnect(self.on_range_changed)
+        except Exception:
+            pass
+
+        self.plot.setXRange(0, PLOT_MAX_X, padding=0)
+        self.plot.setYRange(0, PLOT_MAX_F, padding=0)
+
+        #reconnecta os sinais e atualiza os dados
+        self.plot.sigRangeChanged.connect(self.on_range_changed)
+        self.update_data(0, PLOT_MAX_X)
 
 #------------------------------------------------------------------------------#

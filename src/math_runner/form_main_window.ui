@@ -1649,6 +1649,16 @@
           <item row="1" column="1">
            <widget class="QLineEdit" name="lineEdit_FunctionVelocity"/>
           </item>
+          <item row="2" column="0" colspan="2">
+           <widget class="QPushButton" name="pushButton_ResetVelocityScales">
+            <property name="text">
+             <string>Zerar escalas</string>
+            </property>
+            <property name="toolTip">
+             <string>Restaurar escalas padrão do gráfico de velocidade</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
@@ -1737,8 +1747,18 @@
           </item>
          </layout>
         </item>
-        <item>
-         <widget class="PlotWidget" name="plotBoundary" native="true">
+  <item>
+   <widget class="QPushButton" name="pushButton_ResetBoundaryScales">
+    <property name="text">
+     <string>Zerar escalas</string>
+    </property>
+    <property name="toolTip">
+     <string>Restaurar escalas padrão do gráfico de borda</string>
+    </property>
+   </widget>
+  </item>
+  <item>
+   <widget class="PlotWidget" name="plotBoundary" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>

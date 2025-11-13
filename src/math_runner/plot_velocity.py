@@ -14,6 +14,9 @@ class PlotVelocity:
     #--------------------------------------------------------------------------#
     def __init__(self, plot, color, velocity: VelocityFunction):
 
+        
+        self.plot = plot
+
         self.velocity = velocity
 
         plot.setBackground(color)
@@ -70,5 +73,21 @@ class PlotVelocity:
 
         self.plot_raw_data.setData(tt, raw)
         self.plot_vel_data.setData(tt, vel)
+
+    #--------------------------------------------------------------------------#
+    def reset_scales(self) -> None:
+        #Reseta os intervalos da visualização para os padrões e atualiza os dados
+        #desconecta os sinais temporariamente para evitar ajustes recursivos
+        try:
+            self.plot.sigRangeChanged.disconnect(self.on_range_changed)
+        except Exception:
+            pass
+
+        self.plot.setXRange(0, PLOT_MAX_T, padding=0)
+        self.plot.setYRange(0, PLOT_MAX_V, padding=0)
+
+        #reconnecta os sinais e atualiza os dados
+        self.plot.sigRangeChanged.connect(self.on_range_changed)
+        self.update_data(0, PLOT_MAX_T)
 
 #------------------------------------------------------------------------------#

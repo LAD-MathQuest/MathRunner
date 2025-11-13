@@ -53,6 +53,7 @@ class MainController:
             self.model.get_boundary_functions()
         )
 
+
         # Criação do Undo Group
         self.undo_group = QUndoGroup(self.win)
 
@@ -198,6 +199,16 @@ class MainController:
         ui.lineEdit_FunctionTrackMinimum.editingFinished.connect(self.function_track_minimum_changed)
         ui.lineEdit_FunctionTrackMaximum.editingFinished.connect(self.function_track_maximum_changed)
 
+        # Reset scales buttons (from UI)
+        try:
+            ui.pushButton_ResetVelocityScales.clicked.connect(self.on_reset_velocity_scales)
+        except Exception:
+            pass
+        try:
+            ui.pushButton_ResetBoundaryScales.clicked.connect(self.on_reset_boundary_scales)
+        except Exception:
+            pass
+
         ui.tabWidget_Game.currentChanged.connect(self.update_undo_stack)
 
     #--------------------------------------------------------------------------#
@@ -206,6 +217,20 @@ class MainController:
 
     def update_undo_stack(self, index):
         self.undo_group.setActiveStack(self.undo_stacks[index])
+
+    #--------------------------------------------------------------------------#
+    def on_reset_velocity_scales(self) -> None:
+        try:
+            self.plot_velocity.reset_scales()
+        except Exception as e:
+            print("Failed to reset velocity scales:", e)
+
+    #--------------------------------------------------------------------------#
+    def on_reset_boundary_scales(self) -> None:
+        try:
+            self.plot_track.reset_scales()
+        except Exception as e:
+            print("Failed to reset boundary scales:", e)
 
     #--------------------------------------------------------------------------#
     def new(self):
@@ -291,6 +316,19 @@ class MainController:
     #--------------------------------------------------------------------------#
     def exit(self):
         if self.confirm_deletion():
+            # Disconnect undo stack signals to avoid callbacks running after widgets
+            # have been destroyed during application shutdown. This prevents
+            # RuntimeError: Internal C++ object ... already deleted.
+            try:
+                for stack in getattr(self, 'undo_stacks', []):
+                    try:
+                        stack.indexChanged.disconnect()
+                    except Exception:
+                        # ignore if already disconnected or not connected
+                        pass
+            except Exception:
+                pass
+
             QApplication.quit()
 
     #--------------------------------------------------------------------------#
@@ -1044,27 +1082,41 @@ class MainController:
 
  #---------------------------------------------------------------------------#
     def update_tracks_undo(self):
-        func1 = self.ui.lineEdit_FunctionTrackMaximum.text()
-        func2 = self.ui.lineEdit_FunctionTrackMinimum.text()
+        # Defensive: widgets may be deleted during shutdown; catch RuntimeError
+        try:
+            func1 = self.ui.lineEdit_FunctionTrackMaximum.text()
+            func2 = self.ui.lineEdit_FunctionTrackMinimum.text()
 
-        self.model.change_track_minimum_function(func2)
+            self.model.change_track_minimum_function(func2)
 
-        self.model.change_track_maximum_function(func1)
-        self.plot_track.update_boundary(
-        self.model.get_boundary_functions()
-        )
-        self.ui.lineEdit_FunctionTrackMaximum._last_text = func1
-        self.ui.lineEdit_FunctionTrackMinimum._last_text = func2
+            self.model.change_track_maximum_function(func1)
+            self.plot_track.update_boundary(
+                self.model.get_boundary_functions()
+            )
+            self.ui.lineEdit_FunctionTrackMaximum._last_text = func1
+            self.ui.lineEdit_FunctionTrackMinimum._last_text = func2
+        except RuntimeError:
+            # Qt object already deleted during shutdown; ignore
+            return
+        except Exception:
+            # Keep other exceptions visible for debugging but avoid crashing
+            return
     #--------------------------------------------------------------------------#
 
     def update_velocity_undo(self):
+        try:
             func = self.ui.lineEdit_FunctionVelocity.text()
 
             self.model.change_velocity_function(func)
             self.plot_velocity.update_velocity(
-            self.model.get_velocity_function()
+                self.model.get_velocity_function()
             )
             self.ui.lineEdit_FunctionVelocity._last_text = func
+        except RuntimeError:
+            # Qt object already deleted during shutdown; ignore
+            return
+        except Exception:
+            return
  #---------------------------------------------------------------------------#
 
 
