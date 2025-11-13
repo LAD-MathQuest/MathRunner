@@ -15,10 +15,11 @@ from .background  import Background
 #------------------------------------------------------------------------------#
 
 # Game status
-STATUS_WELCOME  = 0
-STATUS_STARTING = 1
-STATUS_PLAYING  = 2
-STATUS_GAMEOVER = 3
+STATUS_WELCOME   = 0
+STATUS_COUNTDOWN = 1
+STATUS_STARTING  = 2
+STATUS_PLAYING   = 3
+STATUS_GAMEOVER  = 4
 
 # Exception used to quit the game
 class QuitGame(Exception):
@@ -206,7 +207,11 @@ class Engine:
                         break
                     else:
                         self.show_help()
+
+                
                 else:
+                    
+                
                     break
 
         SoundMixer.play_music()
@@ -214,13 +219,14 @@ class Engine:
     #--------------------------------------------------------------------------#
     def game_loop(self):
         '''The main game loop'''
-
+        
         self.status = STATUS_PLAYING
 
         SoundMixer.play_music()
 
         pygame.event.clear()
-
+        self.countdown()
+        pygame.event.clear()
         while True:
             for event in pygame.event.get():
 
@@ -268,7 +274,11 @@ class Engine:
         if self.status == STATUS_WELCOME:
             self.draw_welcome()
 
+        elif self.status == STATUS_COUNTDOWN:
+            self.countdown()
+
         elif self.status == STATUS_STARTING:
+            
             self.draw_starting()
 
         elif self.status == STATUS_GAMEOVER:
@@ -291,10 +301,11 @@ class Engine:
 
         font2 = pygame.freetype.Font(gp.DEFAULT_FONT, (size)-30)
         rect = font2.get_rect('Aperte Qualquer Tecla Para Começar')
+        
         rect.centery = self.display.get_rect().centery +130
         rect.centerx = self.display.get_rect().centerx
         font2.render_to(self.display, rect, None, (200,200,200))
-
+        
     #--------------------------------------------------------------------------#
     def draw_starting(self):
         '''Draws the game starting message'''
@@ -436,3 +447,23 @@ class Engine:
         self.displacement = math.ceil(self.velocity * self.displacement_scale)
 
 #------------------------------------------------------------------------------#
+    def countdown(self):
+       
+        font = pygame.freetype.Font(gp.DEFAULT_FONT, 120)
+
+    # Redesenha o fundo e elementos do jogo antes da contagem
+        self.draw()
+
+        for i in range(3, 0, -1):
+            # redesenha o fundo a cada número (sem textos antigos)
+            self.draw()
+            
+            texto = str(i)
+            rect = font.get_rect(texto)
+            rect.center = self.display.get_rect().center
+
+            # renderiza o número grande no centro
+            font.render_to(self.display, rect, texto, (255, 255, 255))
+
+            self.flip()
+            pygame.time.wait(1000)  # espera 1 segundo
