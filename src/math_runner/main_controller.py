@@ -570,11 +570,9 @@ class MainController:
         widget.ui.checkBox_KeepAspectRatio._last_value = widget.ui.checkBox_KeepAspectRatio.isChecked()
         widget.ui.doubleSpinBox_Points._last_value = widget.ui.doubleSpinBox_Points.value()
         widget.ui.doubleSpinBox_Volume._last_value = widget.ui.doubleSpinBox_Volume.value()
-
-        #------------------RESOLVER ISSO O MAIS RAPIDO POSSIVEL-----------------------------------------------------#
-        widget.ui.spinBox_Width.setMaximum(300)
-        widget.ui.spinBox_Height.setMaximum(300)
-        #-----------------------------------------------------------------------#
+        widget.ui.label_AlertSize.setVisible(True)
+        widget.ui.label_AlertSize.setText("⚠")
+        widget.ui.label_AlertSize.setToolTip("Tamanho do obstaculo maior do que o espaço disponivel no jogo.")
 
         widget.type = 'obstacle'
 
@@ -1186,6 +1184,3 @@ class MainController:
             obj.ui.checkBox_KeepAspectRatio._last_value = obj.ui.checkBox_KeepAspectRatio.isChecked()
             obj.ui.doubleSpinBox_Points._last_value = obj.ui.doubleSpinBox_Points.value()
             obj.ui.doubleSpinBox_Volume._last_value = obj.ui.doubleSpinBox_Volume.value()
-
-
-#------------------------------------------------------------------------------#

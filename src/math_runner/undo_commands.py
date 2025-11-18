@@ -144,14 +144,8 @@ class ChangeSpinBoxImageCommand(QUndoCommand):
     def redo(self):
         self.old_image = self.label.pixmap()
         self.original_image = self.label.property('original_pixmap')
-            
-        
-        #------------------RESOLVER O MAIS RAPIDO POSSIVEL-----------------------------------------------------#
-        width = 300 if self.new_image.width() > 300 else self.new_image.width()
-        height = 300 if self.new_image.height() > 300 else self.new_image.height()
-        #-------------------------------------------------------------------------------------------------------#
 
-        self.label.setPixmap(self.new_image.scaled(width, height, Qt.IgnoreAspectRatio))
+        self.label.setPixmap(self.new_image.scaled(self.new_image.width(), self.new_image.height(), Qt.IgnoreAspectRatio))
         self.label.setProperty('original_pixmap', self.new_image)
 
         self.spin_width.blockSignals(True)
