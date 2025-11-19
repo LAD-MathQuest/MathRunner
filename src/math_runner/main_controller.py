@@ -195,9 +195,14 @@ class MainController:
 
         #--- Velocity and Boundary Tabs signals -------------------------------#
 
-        ui.lineEdit_FunctionVelocity    .editingFinished.connect(self.function_velocity_changed     )
-        ui.lineEdit_FunctionBoundaryMinimum.editingFinished.connect(self.function_boundary_minimum_changed)
-        ui.lineEdit_FunctionBoundaryMaximum.editingFinished.connect(self.function_boundary_minimum_changed)
+        ui.lineEdit_FunctionVelocity    .editingFinished.connect(lambda: self.function_velocity_changed (typing = False) )
+        ui.lineEdit_FunctionVelocity    .textEdited.connect(lambda: self.function_velocity_changed (typing = True) )
+
+        ui.lineEdit_FunctionBoundaryMinimum.editingFinished.connect(lambda: self.function_boundary_minimum_changed(typing = False))
+        ui.lineEdit_FunctionBoundaryMinimum.textEdited.connect(lambda: self.function_boundary_minimum_changed(typing = True))
+
+        ui.lineEdit_FunctionBoundaryMaximum.editingFinished.connect(lambda: self.function_boundary_maximum_changed(typing = False))
+        ui.lineEdit_FunctionBoundaryMaximum.textEdited.connect(lambda: self.function_boundary_maximum_changed(typing = True))
 
         # Reset scales buttons (from UI)
         try:
@@ -820,7 +825,7 @@ class MainController:
             widget._last_text = new_text
             self.changed = True
     #--------------------------------------------------------------------------#
-    def function_velocity_changed(self):
+    def function_velocity_changed(self, typing = False):
 
         func = self.ui.lineEdit_FunctionVelocity.text()
         old_text = getattr(self.ui.lineEdit_FunctionVelocity, "_last_text", "")
@@ -830,18 +835,18 @@ class MainController:
             self.model.change_velocity_function(func)
             self.plot_velocity.update_velocity(self.model.get_velocity_function())
 
-            self.add_text_undo(self, self.ui.lineEdit_FunctionVelocity, old_text, func, "Alterar velocidade")
-            self.ui.lineEdit_FunctionVelocity._last_text = func
+            if not typing:
+                self.add_text_undo(self, self.ui.lineEdit_FunctionVelocity, old_text, func, "Alterar velocidade")
+                self.ui.lineEdit_FunctionVelocity._last_text = func
 
         except EvalFunctionError as e:
-            QMessageBox.critical(None, "Erro", e.message)
-            self.ui.lineEdit_FunctionVelocity.setText(old_text)
-
-
-
+            if not typing: 
+                QMessageBox.critical(self.win, "Erro", e.message)
+                self.ui.lineEdit_FunctionVelocity.setText(old_text)
+            pass
 
     #-------------------------------------------------------------------------#
-    def function_boundary_minimum_changed(self):
+    def function_boundary_minimum_changed(self, typing = False):
         func = self.ui.lineEdit_FunctionBoundaryMinimum.text()
         old_text = getattr(self.ui.lineEdit_FunctionBoundaryMinimum, "_last_text", "")
 
@@ -849,17 +854,18 @@ class MainController:
             self.model.change_boundary_minimum_function(func)
             self.plot_boundary.update_boundary(self.model.get_boundary_functions())
 
-
-            self.add_text_undo(self, self.ui.lineEdit_FunctionBoundaryMinimum, old_text, func, "Alterar mínimo")
-            self.ui.lineEdit_FunctionBoundaryMinimum._last_text = func
+            if not typing:
+                self.add_text_undo(self, self.ui.lineEdit_FunctionBoundaryMinimum, old_text, func, "Alterar mínimo")
+                self.ui.lineEdit_FunctionBoundaryMinimum._last_text = func
 
         except EvalFunctionError as f:
-            QMessageBox.critical(None, "Erro", f.message)
-            self.ui.lineEdit_FunctionBoundaryMinimum.setText(old_text)
-
+            if not typing:
+                QMessageBox.critical(self.win, "Erro", f.message)
+                self.ui.lineEdit_FunctionBoundaryMinimum.setText(old_text)
+            pass
 
     #--------------------------------------------------------------------------#
-    def function_boundary_maximum_changed(self):
+    def function_boundary_maximum_changed(self, typing = False):
         func = self.ui.lineEdit_FunctionBoundaryMaximum.text()
         old_text = getattr(self.ui.lineEdit_FunctionBoundaryMaximum, "_last_text", "")
 
@@ -867,13 +873,15 @@ class MainController:
             self.model.change_boundary_maximum_function(func)
             self.plot_boundary.update_boundary(self.model.get_boundary_functions())
 
-
-            self.add_text_undo(self, self.ui.lineEdit_FunctionBoundaryMaximum, old_text, func, "Alterar mínimo")
-            self.ui.lineEdit_FunctionBoundaryMaximum._last_text = func
+            if not typing:
+                self.add_text_undo(self, self.ui.lineEdit_FunctionBoundaryMaximum, old_text, func, "Alterar mínimo")
+                self.ui.lineEdit_FunctionBoundaryMaximum._last_text = func
 
         except EvalFunctionError as g:
-            QMessageBox.critical(None, "Erro", g.message)
-            self.ui.lineEdit_FunctionBoundaryMaximum.setText(old_text)
+            if not typing:
+                QMessageBox.critical(self.win, "Erro", g.message)
+                self.ui.lineEdit_FunctionBoundaryMaximum.setText(old_text)
+            pass
 
     #--------------------------------------------------------------------------#
 

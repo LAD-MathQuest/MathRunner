@@ -11,6 +11,11 @@ from .parameters          import production, infinite_run_exe
 from .update_meta_from_ui import update_meta_from_ui
 from .update_ui_from_meta import update_ui_from_meta
 
+from meta.math_function import EvalFunctionError
+from PySide6.QtWidgets import QMessageBox
+import numpy as np
+
+
 #------------------------------------------------------------------------------#
 class MainModel:
 
@@ -45,7 +50,17 @@ class MainModel:
 
     #--------------------------------------------------------------------------#
     def run(self) -> None:
+        # Antes de rodar, valida as funções
+        try:
+        # verifica se gera erro 
+            self.meta.velocity.eval(np.array([0.0]))
+            self.meta.boundary.eval_min(np.array([0.0]))
+            self.meta.boundary.eval_max(np.array([0.0]))
 
+        except EvalFunctionError as e:
+            QMessageBox.critical(self.win, "Erro", e.message)
+            return  # impede o jogo de rodar
+        
         temp = tempfile.NamedTemporaryFile(
             mode   = 'wb',
             prefix = 'meta_',
@@ -72,7 +87,7 @@ class MainModel:
         self.meta.boundary.set_function_min(func)
 
     #--------------------------------------------------------------------------#
-    def change_track_maximum_function(self, func) -> None:
+    def change_boundary_maximum_function(self, func) -> None:
         self.meta.boundary.set_function_max(func)
 
     #--------------------------------------------------------------------------#

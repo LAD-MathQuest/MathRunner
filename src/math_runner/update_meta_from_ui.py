@@ -26,8 +26,8 @@ def update_from_view_tab_game(meta: MetaWorld, ui, con) -> None:
     meta.game_vertical = ui.radioButton_VerticalScrolling.isChecked()
 
     meta.track_kills = [
-        ui.checkBox_TrackMinimumKills.isChecked(),
-        ui.checkBox_TrackMaximumKills.isChecked()
+        ui.checkBox_BoundaryMinimumKills.isChecked(),
+        ui.checkBox_BoundaryMaximumKills.isChecked()
     ]
 
     meta.game_time_bonus = ui.doubleSpinBox_ScoreTimeBonus.value()
@@ -45,10 +45,10 @@ def update_from_view_tab_appearance(meta: MetaWorld, ui, con) -> None:
 
     # Track
 
-    if ui.checkBox_DrawTrack.isChecked():
-        label_to_meta_image(ui.label_TrackImage, meta.track_image)
+    if ui.checkBox_DrawBoundary.isChecked():
+        label_to_meta_image(ui.label_BoundaryImage, meta.boundary_image)
     else:
-        meta.track_image = None
+        meta.boundary_image = None
 
     # TODO: read track boundary lines
     # meta.min_color =
