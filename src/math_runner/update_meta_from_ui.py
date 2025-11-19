@@ -50,7 +50,7 @@ def update_from_view_tab_appearance(meta: MetaWorld, ui, con) -> None:
     else:
         meta.boundary_image = None
 
-    # TODO: read track boundary lines
+    # TODO: read track boundary line
     # meta.min_color =
     # meta.max_color =
     # meta.min_width =

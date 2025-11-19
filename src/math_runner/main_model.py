@@ -52,7 +52,7 @@ class MainModel:
     def run(self) -> None:
         # Antes de rodar, valida as funções
         try:
-        # verifica se gera erro 
+        # verifica se função esta incorreta ou imcompleta
             self.meta.velocity.eval(np.array([0.0]))
             self.meta.boundary.eval_min(np.array([0.0]))
             self.meta.boundary.eval_max(np.array([0.0]))

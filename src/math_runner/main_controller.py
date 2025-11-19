@@ -880,9 +880,8 @@ class MainController:
         except EvalFunctionError as g:
             if not typing:
                 QMessageBox.critical(self.win, "Erro", g.message)
-                self.ui.lineEdit_FunctionBoundaryMaximum.setText(old_text)
+                self.ui.lineEdit_FunctionBoundaryMaximum.setText(old_text)  
             pass
-
     #--------------------------------------------------------------------------#
 
     #--------------------------------------------------------------------------#
