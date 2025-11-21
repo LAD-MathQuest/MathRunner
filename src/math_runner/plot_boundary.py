@@ -9,7 +9,7 @@ PLOT_MAX_X = 100
 PLOT_MAX_F = 100
 
 #------------------------------------------------------------------------------#
-class PlotTrack:
+class PlotBoundary:
 
     #--------------------------------------------------------------------------#
     def __init__(self, plot, color, boundary: BoundaryFunctions) -> None:
