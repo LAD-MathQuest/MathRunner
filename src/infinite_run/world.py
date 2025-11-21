@@ -107,10 +107,10 @@ class GameWorld:
         self.background_image   = surface_from_meta_image(meta.background_image)
         self.background_scrolls = meta.background_scrolls
 
-        # Track
-        self.track_image   = surface_from_meta_image(meta.track_image)
-        self.track_scrolls = meta.track_scrolls
-        self.track_kills   = meta.track_kills
+        # Boundary
+        self.boundary_image   = surface_from_meta_image(meta.boundary_image)
+        self.boundary_scrolls = meta.boundary_scrolls
+        self.boundary_kills   = meta.boundary_kills
 
         self.min_color = meta.min_color
         self.max_color = meta.max_color

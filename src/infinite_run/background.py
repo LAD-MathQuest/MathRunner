@@ -15,12 +15,12 @@ class Background:
             vertical
         )
 
-        self.draw_track = bool(world.track_image)
+        self.draw_boundary = bool(world.boundary_image)
 
-        if self.draw_track:
-            self.track = ScrollingImage(
-                world.track_image,
-                world.track_scrolls,
+        if self.draw_boundary:
+            self.boundary = ScrollingImage(
+                world.boundary_image,
+                world.boundary_scrolls,
                 vertical
             )
 
@@ -37,16 +37,16 @@ class Background:
         self.background.update(displacement)
         self.boundaries.update(displacement)
 
-        if self.draw_track:
-            self.track.update(displacement)
+        if self.draw_boundary:
+            self.boundary.update(displacement)
 
     #--------------------------------------------------------------------------#
     def draw(self, surf):
 
         self.background.draw(surf)
 
-        if self.draw_track:
-            self.track.draw_with_mask(surf, self.boundaries.mask())
+        if self.draw_boundary:
+            self.boundary.draw_with_mask(surf, self.boundaries.mask())
 
         if self.min_color: 
             self.boundaries.draw_min_line(

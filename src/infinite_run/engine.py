@@ -138,7 +138,7 @@ class Engine:
         GameObjects.create_player(self.world.param_player,
                                   self.world.player_speed,
                                   self.background.get_player_boundaries(),
-                                  self.world.track_kills)
+                                  self.world.boundary_kills)
 
         self.last_object_rect = pygame.Rect(0,0,0,0)
 
