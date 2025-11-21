@@ -17,6 +17,7 @@ class PlotTrack:
         
         self.plot = plot
         self.boundary = boundary
+        self.securityValue = 0.00000000000000000000000000000000000000000000000001
 
         plot.setBackground(color)
         plot.setTitle('Fronteiras' )
@@ -33,11 +34,11 @@ class PlotTrack:
         pen_aux = pg.mkPen(None)
         brush   = pg.mkBrush(color=(100, 100, 160))
 
-        p_min_raw = pg.PlotDataItem(np.array((0, PLOT_MAX_X)), np.array((10, 10)), pen=pen_raw)
-        p_max_raw = pg.PlotDataItem(np.array((0, PLOT_MAX_X)), np.array((90, 90)), pen=pen_raw)
-        p_min     = pg.PlotDataItem(np.array((0, PLOT_MAX_X)), np.array((10, 10)), pen=pen_min)
-        p_max     = pg.PlotDataItem(np.array((0, PLOT_MAX_X)), np.array((90, 90)), pen=pen_max)
-        p_aux     = pg.PlotDataItem(np.array((0, PLOT_MAX_X)), np.array((90, 90)), pen=pen_aux)
+        p_min_raw = pg.PlotDataItem(np.array((self.securityValue, PLOT_MAX_X)), np.array((10, 10)), pen=pen_raw)
+        p_max_raw = pg.PlotDataItem(np.array((self.securityValue, PLOT_MAX_X)), np.array((90, 90)), pen=pen_raw)
+        p_min     = pg.PlotDataItem(np.array((self.securityValue, PLOT_MAX_X)), np.array((10, 10)), pen=pen_min)
+        p_max     = pg.PlotDataItem(np.array((self.securityValue, PLOT_MAX_X)), np.array((90, 90)), pen=pen_max)
+        p_aux     = pg.PlotDataItem(np.array((self.securityValue, PLOT_MAX_X)), np.array((90, 90)), pen=pen_aux)
         pfill     = pg.FillBetweenItem(p_min, p_aux, brush=brush)
 
         plot.addItem(p_min_raw)
@@ -61,7 +62,7 @@ class PlotTrack:
         x_min, x_max = view_range[0]
 
         if x_min < 0:
-            x_min = 0
+            x_min = self.securityValue
             x_max = max(x_max, 1)
 
             plot.sigRangeChanged.disconnect(self.on_range_changed)
@@ -74,7 +75,7 @@ class PlotTrack:
     def update_boundary(self, boundary: BoundaryFunctions) -> None:
 
         self.boundary = boundary
-        self.update_data(0, PLOT_MAX_X)
+        self.update_data(self.securityValue, PLOT_MAX_X)
 
     #--------------------------------------------------------------------------#
     def update_data(self, x_min: float, x_max: float) -> None:
@@ -112,6 +113,6 @@ class PlotTrack:
 
         #reconnecta os sinais e atualiza os dados
         self.plot.sigRangeChanged.connect(self.on_range_changed)
-        self.update_data(0, PLOT_MAX_X)
+        self.update_data(self.securityValue, PLOT_MAX_X)
 
 #------------------------------------------------------------------------------#
