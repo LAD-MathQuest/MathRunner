@@ -697,7 +697,7 @@ class MainController:
         widget.ui.doubleSpinBox_Volume._last_value = widget.ui.doubleSpinBox_Volume.value()
         widget.ui.label_AlertSize.setVisible(False)
         widget.ui.label_AlertSize.setText("⚠")
-        widget.ui.label_AlertSize.setToolTip("Tamanho do obstaculo maior do que o espaço disponivel no jogo.")
+        widget.ui.label_AlertSize.setToolTip("Tamanho do colecionável maior do que o espaço disponivel no jogo.")
         widget.ui.label_AlertSize.setStyleSheet("font-size: 16px;")
 
         widget.type = 'collectible'
