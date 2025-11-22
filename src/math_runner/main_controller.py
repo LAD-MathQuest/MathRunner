@@ -473,6 +473,10 @@ class MainController:
         new_value = target.isChecked()
         old_value = getattr(target, "_last_value", new_value)
 
+        if(target == self.ui.checkBox_DrawBoundary):
+            # Se desmarcou o desenho da borda, desabilita os controles relacionados
+            self.ui.pushButton_SelectBoundaryImage.setEnabled(new_value)
+
         if old_value != new_value:
             self.add_checked_undo(target, old_value, new_value, "Alterar seleção")
         target._last_value = new_value
