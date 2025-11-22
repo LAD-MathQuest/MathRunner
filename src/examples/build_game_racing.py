@@ -68,12 +68,12 @@ if __name__ == '__main__':
     )
     meta.background_scrolls = True
 
-    # Track
-    meta.track_image = MetaImage.from_file(size=(100,100),
+    # Boundary
+    meta.boundary_image = MetaImage.from_file(size=(100,100),
         path=path_backgrounds/'racing_track.png',
     )
-    meta.track_scrolls = True
-    meta.track_kills   = (False, False)
+    meta.boundary_scrolls = True
+    meta.boundary_kills   = (False, False)
 
     meta.min_color = (0, 0, 0)
     meta.max_color = (0, 0, 0)

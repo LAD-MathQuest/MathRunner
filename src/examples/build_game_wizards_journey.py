@@ -67,10 +67,10 @@ if __name__ == '__main__':
     )
     meta.background_scrolls = True
 
-    # Track
-    meta.track_image   = False
-    meta.track_scrolls = False
-    meta.track_kills   = (False, False)
+    # Boundary
+    meta.boundary_image   = False
+    meta.boundary_scrolls = False
+    meta.boundary_kills   = (False, False)
 
     # Scoreboard
     imag_score = MetaImage(size=(300,150),

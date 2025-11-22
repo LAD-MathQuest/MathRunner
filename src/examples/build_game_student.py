@@ -68,12 +68,12 @@ if __name__ == '__main__':
     )
     meta.background_scrolls = False
 
-    # Track
-    meta.track_image   = MetaImage(
+    # Boundary
+    meta.boundary_image   = MetaImage(
         color=(102,153,153)
     )
-    meta.track_scrolls = False
-    meta.track_kills   = (False, False)
+    meta.boundary_scrolls = False
+    meta.boundary_kills   = (False, False)
 
     meta.min_color = None
     meta.max_color = None

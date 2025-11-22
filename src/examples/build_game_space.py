@@ -65,12 +65,12 @@ if __name__ == '__main__':
     )
     meta.background_scrolls = True
 
-    # Track
-    meta.track_image = MetaImage.from_file(size=(1500,1500),
+    # Boundary
+    meta.boundary_image = MetaImage.from_file(size=(1500,1500),
         path=path_backgrounds/'space.png'
     )
-    meta.track_scrolls = False
-    meta.track_kills   = (False, False)
+    meta.boundary_scrolls = False
+    meta.boundary_kills   = (False, False)
 
     # Scoreboard
     imag_score = MetaImage.from_file(size=(450,180),
