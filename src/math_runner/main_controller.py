@@ -15,6 +15,7 @@ from meta.math_function import EvalFunctionError
 from . import parameters
 from . import tools
 from . import undo_commands as undo
+from .game_thread import GameThread
 
 from .main_model    import MainModel
 from .object_widget import ObjectWidget
@@ -85,6 +86,8 @@ class MainController:
             if self.ui.tabWidget_Game.tabText(i) == "Borda":
                 self.undo_stacks[i].indexChanged.connect(self.update_boundary_undo)
         self.undo_group.setActiveStack(self.undo_stacks[0])
+
+        # print((self.plot_boundary.diff_boundary()*1920)/100)
 
     #--------------------------------------------------------------------------#
     def init_objects(self):
@@ -187,9 +190,13 @@ class MainController:
         ui.doubleSpinBox_CollectiblesFrequency.valueChanged.connect(lambda: self.select_value(self.ui.doubleSpinBox_CollectiblesFrequency))
 
         ui.pushButton_SelectPlayerImage.clicked.connect(lambda: self.select_image_with_spinbox("icons", self.ui.label_PlayerImage, self.ui.spinBox_PlayerWidth, self.ui.spinBox_PlayerHeight))
-        ui.spinBox_PlayerWidth.valueChanged.connect(lambda: self.select_value_spinbox(self.ui.spinBox_PlayerWidth, self.ui.spinBox_PlayerHeight, self.ui.label_PlayerImage, self.ui.checkBox_PlayerKeepAspectRatio))
-        ui.spinBox_PlayerHeight.valueChanged.connect(lambda: self.select_value_spinbox(self.ui.spinBox_PlayerWidth, self.ui.spinBox_PlayerHeight, self.ui.label_PlayerImage, self.ui.checkBox_PlayerKeepAspectRatio))
+        ui.spinBox_PlayerWidth.valueChanged.connect(lambda: self.select_value_spinbox(self.ui.spinBox_PlayerWidth, self.ui.spinBox_PlayerHeight, self.ui.label_PlayerImage, self.ui.checkBox_PlayerKeepAspectRatio, ui.label_PlayerAlertSize))
+        ui.spinBox_PlayerHeight.valueChanged.connect(lambda: self.select_value_spinbox(self.ui.spinBox_PlayerWidth, self.ui.spinBox_PlayerHeight, self.ui.label_PlayerImage, self.ui.checkBox_PlayerKeepAspectRatio, ui.label_PlayerAlertSize))
         ui.checkBox_PlayerKeepAspectRatio.stateChanged.connect(lambda: self.select_keep_aspect(self.ui.checkBox_PlayerKeepAspectRatio, self.ui.spinBox_PlayerHeight))
+        ui.label_PlayerAlertSize.setVisible(False)
+        ui.label_PlayerAlertSize.setText("⚠")
+        ui.label_PlayerAlertSize.setToolTip("Tamanho do jogador maior do que o espaço disponivel no jogo.")
+        ui.label_PlayerAlertSize.setStyleSheet("font-size: 16px;")
 
         ui.spinBox_PlayerSpeed.valueChanged.connect(lambda value: self.select_value(self.ui.spinBox_PlayerSpeed))
 
@@ -340,7 +347,9 @@ class MainController:
     def run(self):
         self.block_ui()
         self.model.update_meta()
-        self.model.run()
+        self.game_thread = GameThread(self.model)
+        self.game_thread.finished.connect(self.unblock_ui)
+        self.game_thread.start()
 
     #--------------------------------------------------------------------------#
     def build(self):
@@ -448,9 +457,28 @@ class MainController:
             self.changed = True
 
     #--------------------------------------------------------------------------#
-    def select_value_spinbox(self, spin_width, spin_height, label, keep_aspect):
+
+    def compara_tamanho(self, width, height):
+
+        fmin = self.plot_boundary.diff_boundary()[0]
+        fmax = self.plot_boundary.diff_boundary()[1]
+
+
+        if(self.ui.radioButton_HorizontalScrolling.isChecked()):
+            plot_height = (fmax - fmin)*1080/100
+
+            return height > plot_height
+        else:
+            plot_width = (fmax - fmin)*1920/100
+            return width > plot_width
+
+    #--------------------------------------------------------------------------#
+    def select_value_spinbox(self, spin_width, spin_height, label, keep_aspect, alert_label):
         old_width = getattr(spin_width, "_last_value", "")
         old_height = getattr(spin_height, "_last_value", "")
+
+        alert_label.setVisible(self.compara_tamanho(spin_width.value(), spin_height.value()))
+
 
         self.add_spinBox_undo(spin_width, spin_height, old_width, old_height, label, keep_aspect, "Alterar Valor")
 
@@ -474,7 +502,7 @@ class MainController:
         old_value = getattr(target, "_last_value", new_value)
 
         if(target == self.ui.checkBox_DrawBoundary):
-            # Se desmarcou o desenho da borda, desabilita os controles relacionados
+            # Se desmarcou o desenho da borda, desabilita o botão de seleção de imagem
             self.ui.pushButton_SelectBoundaryImage.setEnabled(new_value)
 
         if old_value != new_value:
@@ -579,9 +607,11 @@ class MainController:
         widget.ui.checkBox_KeepAspectRatio._last_value = widget.ui.checkBox_KeepAspectRatio.isChecked()
         widget.ui.doubleSpinBox_Points._last_value = widget.ui.doubleSpinBox_Points.value()
         widget.ui.doubleSpinBox_Volume._last_value = widget.ui.doubleSpinBox_Volume.value()
-        widget.ui.label_AlertSize.setVisible(True)
+        widget.ui.label_AlertSize.setVisible(False)
         widget.ui.label_AlertSize.setText("⚠")
         widget.ui.label_AlertSize.setToolTip("Tamanho do obstaculo maior do que o espaço disponivel no jogo.")
+        widget.ui.label_AlertSize.setStyleSheet("font-size: 16px;")
+
 
         widget.type = 'obstacle'
 
@@ -599,7 +629,8 @@ class MainController:
                 widget.ui.spinBox_Width,
                 widget.ui.spinBox_Height,
                 widget.ui.label_Image,
-                widget.ui.checkBox_KeepAspectRatio
+                widget.ui.checkBox_KeepAspectRatio,
+                widget.ui.label_AlertSize
             )
         )
 
@@ -608,7 +639,8 @@ class MainController:
                 widget.ui.spinBox_Width,
                 widget.ui.spinBox_Height,
                 widget.ui.label_Image,
-                widget.ui.checkBox_KeepAspectRatio
+                widget.ui.checkBox_KeepAspectRatio,
+                widget.ui.label_AlertSize
             )
         )
 
@@ -663,6 +695,10 @@ class MainController:
         widget.ui.checkBox_KeepAspectRatio._last_value = widget.ui.checkBox_KeepAspectRatio.isChecked()
         widget.ui.doubleSpinBox_Points._last_value = widget.ui.doubleSpinBox_Points.value()
         widget.ui.doubleSpinBox_Volume._last_value = widget.ui.doubleSpinBox_Volume.value()
+        widget.ui.label_AlertSize.setVisible(False)
+        widget.ui.label_AlertSize.setText("⚠")
+        widget.ui.label_AlertSize.setToolTip("Tamanho do obstaculo maior do que o espaço disponivel no jogo.")
+        widget.ui.label_AlertSize.setStyleSheet("font-size: 16px;")
 
         widget.type = 'collectible'
 
@@ -680,7 +716,8 @@ class MainController:
                 widget.ui.spinBox_Width,
                 widget.ui.spinBox_Height,
                 widget.ui.label_Image,
-                widget.ui.checkBox_KeepAspectRatio
+                widget.ui.checkBox_KeepAspectRatio,
+                widget.ui.label_AlertSize
             )
         )
 
@@ -689,7 +726,8 @@ class MainController:
                 widget.ui.spinBox_Width,
                 widget.ui.spinBox_Height,
                 widget.ui.label_Image,
-                widget.ui.checkBox_KeepAspectRatio
+                widget.ui.checkBox_KeepAspectRatio,
+                widget.ui.label_AlertSize
             )
         )
 
@@ -868,6 +906,8 @@ class MainController:
                 self.ui.lineEdit_FunctionBoundaryMinimum.setText(old_text)
             pass
 
+        # print(self.plot_boundary.diff_boundary())
+
     #--------------------------------------------------------------------------#
     def function_boundary_maximum_changed(self, typing = False):
         func = self.ui.lineEdit_FunctionBoundaryMaximum.text()
@@ -946,7 +986,11 @@ class MainController:
 
     #--------------------------------------------------------------------------#
     def block_ui(self):
-        pass
+        self.win.setEnabled(False)
+    #--------------------------------------------------------------------------#
+
+    def unblock_ui(self):
+        self.win.setEnabled(True)
 
     #--------------------------------------------------------------------------#
     def clear_obstacle_widgets(self):
