@@ -30,7 +30,7 @@
        <bool>true</bool>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="tabGame">
        <property name="enabled">
@@ -1675,17 +1675,26 @@
           <item row="1" column="1">
            <widget class="QLineEdit" name="lineEdit_FunctionVelocity"/>
           </item>
-          <item row="2" column="0" colspan="2">
-           <widget class="QPushButton" name="pushButton_ResetVelocityScales">
-            <property name="toolTip">
-             <string>Restaurar escalas padrão do gráfico de velocidade</string>
-            </property>
-            <property name="text">
-             <string>Zerar escalas</string>
-            </property>
-           </widget>
-          </item>
          </layout>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_ResetVelocityScales">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string>Restaurar escalas padrão do gráfico de velocidade</string>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::LayoutDirection::RightToLeft</enum>
+          </property>
+          <property name="text">
+           <string>Zerar escalas</string>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="PlotWidget" name="plotVelocity" native="true">
@@ -1775,8 +1784,17 @@
         </item>
         <item>
          <widget class="QPushButton" name="pushButton_ResetBoundaryScales">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="toolTip">
            <string>Restaurar escalas padrão do gráfico de borda</string>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::LayoutDirection::RightToLeft</enum>
           </property>
           <property name="text">
            <string>Zerar escalas</string>
