@@ -119,14 +119,12 @@ class PlotBoundary:
 
     def diff_boundary(self) -> np.ndarray:
         #Retorna a diferença entre as fronteiras máxima e mínima em função de x
-        xx = np.linspace(self.securityValue, PLOT_MAX_X, 1000)
+        xx = np.linspace(self.securityValue, 100*PLOT_MAX_X, 1000)
 
         fmin = self.boundary.eval_min_raw(xx)
         fmax = self.boundary.eval_max_raw(xx)
+        diff = fmax - fmin
 
-        min_value = np.max(fmin)
-        max_value = np.min(fmax)
-
-        return (min_value, max_value)
+        return min(diff)
 
 #------------------------------------------------------------------------------#

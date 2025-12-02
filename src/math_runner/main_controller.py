@@ -460,16 +460,14 @@ class MainController:
 
     def compara_tamanho(self, width, height):
 
-        fmin = self.plot_boundary.diff_boundary()[0]
-        fmax = self.plot_boundary.diff_boundary()[1]
-
+        value_max = self.plot_boundary.diff_boundary()
 
         if(self.ui.radioButton_HorizontalScrolling.isChecked()):
-            plot_height = (fmax - fmin)*1080/100
+            plot_height = value_max*1080/100
 
             return height > plot_height
         else:
-            plot_width = (fmax - fmin)*1920/100
+            plot_width = value_max*1920/100
             return width > plot_width
 
     #--------------------------------------------------------------------------#
